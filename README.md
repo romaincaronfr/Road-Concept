@@ -1,2 +1,3 @@
-# enssat-projet-gl
-Projet de Génie Logiciel 
+# Road-Concept
+ENSSAT Software engineering project.
+Simulation of road traffic.
