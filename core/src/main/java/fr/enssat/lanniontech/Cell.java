@@ -22,6 +22,10 @@ public class Cell {
     }
 
     public void setOccupied(Vehicle occupied) {
+        if(occupied != null && this.occupied != null)
+        {
+
+        }
         this.occupied = occupied;
     }
 

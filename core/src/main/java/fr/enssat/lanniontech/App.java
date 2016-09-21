@@ -14,9 +14,10 @@ public class App {
         Position A = new Position(40,0);
         Position B = new Position(40,0.001);
         SingleLaneRoad SR = new SingleLaneRoad(A,B);
-        Vehicle V = new Vehicle(SR.getLane().getEntryCell(),4.2,1);
+        SR.loop();
+        Vehicle V = new Vehicle(SR.getLane().getEntryCell(),4.5,1);
         V.log();
-        V.move(1);
+        V.move(0.1);
         V.log();
     }
 

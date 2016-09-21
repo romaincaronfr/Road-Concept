@@ -34,10 +34,11 @@ public class Vehicle {
     }
 
     public void log(){
-        System.out.println(dDone);
-        System.out.println(dCarr);
-        System.out.println(cells.size());
-        System.out.println(dCavt);
+        System.out.println("distance: "+dDone);
+        System.out.println("car pos in last cell: "+dCarr);
+        System.out.println("number of cell occupied: "+cells.size());
+        System.out.println("car pos in first cell: "+dCavt);
+        System.out.println("-----------------------------------------");
     }
 
     public void move(double time){

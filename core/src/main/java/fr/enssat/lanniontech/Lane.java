@@ -23,6 +23,11 @@ public class Lane {
         }
     }
 
+    public void loop(){
+        cells[0].setPrevCell(cells[cells.length-1]);
+        cells[cells.length-1].setNextCell(cells[0]);
+    }
+
     public Cell getEntryCell(){
         return cells[0];
     }
