@@ -8,7 +8,8 @@
     <artifactId>road-concept-core</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>fr.enssat.lanniontech.Road Concept Core</name>
+    <name>Road Concept Core</name>
+    <packaging>jar</packaging>
 
     <properties>
     </properties>
