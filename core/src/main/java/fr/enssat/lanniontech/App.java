@@ -14,11 +14,13 @@ public class App {
         Position A = new Position(40,0);
         Position B = new Position(40,0.001);
         SingleLaneRoad SR = new SingleLaneRoad(A,B);
-        SR.loop();
-        Vehicle V = new Vehicle(SR.getLane().getEntryCell(),4.5,1);
+        System.out.println(Position.length(A,B));
+        Vehicle V = new Vehicle(1,SR.getLane(),81,4,1);
         V.log();
-        V.move(0.1);
-        V.log();
+        for (int i = 0; i<10;i++){
+            V.move(10);
+            V.log();
+        }
     }
 
     public static int foo() {

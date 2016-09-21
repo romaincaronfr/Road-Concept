@@ -12,7 +12,4 @@ public class SingleLaneRoad extends Road {
         return lane;
     }
 
-    public void loop() {
-        lane.loop();
-    }
 }
