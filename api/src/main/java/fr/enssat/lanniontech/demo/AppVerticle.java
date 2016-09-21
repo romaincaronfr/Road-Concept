@@ -12,6 +12,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 
 
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public class AppVerticle extends AbstractVerticle {
         router.put("/products/:productID").handler(this::handleAddProduct);
         router.get("/products").handler(this::handleListProducts);
         router.get("/").handler(this::defaultEntryPoint);
+        router.route("/static/*").handler(StaticHandler.create());
+
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8080);
     }
