@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class AppVerticle extends AbstractVerticle {
 
-
     private Map<String, JsonObject> products = new HashMap<>();
 
     @Override
@@ -36,8 +35,11 @@ public class AppVerticle extends AbstractVerticle {
         router.put("/products/:productID").handler(this::handleAddProduct);
         router.get("/products").handler(this::handleListProducts);
         router.get("/").handler(this::defaultEntryPoint);
-        router.route("/static/*").handler(StaticHandler.create());
 
+        StaticHandler staticHandler = StaticHandler.create();
+        staticHandler.setCachingEnabled(false); //TODO remove in production mode
+        staticHandler.setAllowRootFileSystemAccess(true);
+        router.route("/doc/*").handler(staticHandler);
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
     }
