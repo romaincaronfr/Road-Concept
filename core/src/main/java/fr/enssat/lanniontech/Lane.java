@@ -37,4 +37,38 @@ public class Lane {
     public Lane getNextLane(){
         return nextLane;
     }
+
+    public double getDistanceToNext(FrontBackSide side){
+        int pos = vehiclesSides.indexOf(side);
+        if (pos==vehiclesSides.size()-1) {
+            return length - side.pos + nextLane.getDistanceToFirst();
+        }else {
+            return vehiclesSides.get(pos + 1).pos - side.pos;
+        }
+    }
+
+    public double getDistanceToFirst(){
+        if (vehiclesSides.size()==0){
+            return length;
+        }else{
+            return vehiclesSides.get(0).pos;
+        }
+    }
+
+    public double getNextCarSpeed(FrontBackSide side) {
+        int pos = vehiclesSides.indexOf(side);
+        if (pos==vehiclesSides.size()-1) {
+            return nextLane.getSpeedOfFirst();
+        }else {
+            return vehiclesSides.get(pos + 1).myVehicle.getSpeed();
+        }
+    }
+
+    public double getSpeedOfFirst(){
+        if (vehiclesSides.size()==0){
+            return length;
+        }else{
+            return vehiclesSides.get(0).myVehicle.getSpeed();
+        }
+    }
 }
