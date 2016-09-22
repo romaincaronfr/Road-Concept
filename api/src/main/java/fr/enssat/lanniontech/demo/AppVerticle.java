@@ -5,6 +5,7 @@ package fr.enssat.lanniontech.demo;
  * http://vertx.io/blog/my-first-vert-x-3-application/
  */
 
+import fr.enssat.lanniontech.utils.Configuration;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
@@ -38,7 +39,7 @@ public class AppVerticle extends AbstractVerticle {
         router.route("/static/*").handler(StaticHandler.create());
 
 
-        vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+        vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
     }
 
     private void defaultEntryPoint(RoutingContext routingContext) {
