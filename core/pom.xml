@@ -6,12 +6,14 @@
 
     <groupId>fr.enssat.lanniontech</groupId>
     <artifactId>road-concept-core</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
 
     <name>Road Concept Core</name>
     <packaging>jar</packaging>
 
     <properties>
+        <logback.version>1.1.7</logback.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <build>
@@ -22,7 +24,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.7</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->
@@ -31,7 +33,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
-            <version>4.12</version>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 

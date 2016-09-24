@@ -91,3 +91,5 @@ local.properties
 
 
 .DS_Store
+
+*.suml

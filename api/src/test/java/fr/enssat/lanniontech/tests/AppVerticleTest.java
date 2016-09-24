@@ -37,7 +37,7 @@ public class AppVerticleTest {
         vertx.createHttpClient().getNow(8080, "localhost", "/",
                 response -> {
                     response.handler(body -> {
-                        context.assertTrue(body.toString().contains("API"));
+                         context.assertTrue(body.toString().contains("API"));
                         async.complete();
                     });
                 });
