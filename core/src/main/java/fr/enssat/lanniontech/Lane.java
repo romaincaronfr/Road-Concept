@@ -1,18 +1,15 @@
 package fr.enssat.lanniontech;
 
 import java.util.ArrayList;
-import java.util.prefs.BackingStoreException;
 
 public class Lane {
     private Lane nextLane;
-    private Lane prevLane;
     private ArrayList<FrontBackSide> vehiclesSides;
     private double length;
 
     Lane(double length){
         this.length = length;
         nextLane = this;
-        prevLane = this;
         vehiclesSides = new ArrayList<FrontBackSide>();
     }
 
