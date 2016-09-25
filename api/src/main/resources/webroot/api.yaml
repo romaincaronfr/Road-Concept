@@ -220,6 +220,63 @@ paths:
           description: L'ID de la carte n'existe pas.
           schema:
             $ref: '#/definitions/Error'
+            
+  /import:
+    post:
+      summary: Import de carte
+      description: |
+        Permet d'importer des cartes
+      parameters:
+        - name: username
+          in: formData
+          description: Login du client
+          required: true
+          type: string
+          format: username
+        - name: password
+          in: formData
+          description: Mot de passe du client
+          required: true
+          type: string
+          format: password
+        - name: mapID
+          in: formData
+          description: ID de la map dans lequelle importer ces données
+          required: true
+          type: string
+        - name: mapFile
+          in: formData
+          required: true
+          description: Fichier à importer
+          type: file
+        - name: type
+          in: formData
+          required: true
+          description: Type de carte à importer (OSM, GoogleMap, ...). Pour le moment uniquement OSM.
+          type: string
+      tags:
+        - Import
+      responses:
+        201:
+          description: Réponse de succés d'ajout. La map a bien été importée.
+          schema:
+            $ref: "#/definitions/SuccessMsg"
+        401:
+          description: Une authentification est nécessaire pour accéder à la ressource.
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: La syntaxe de la requête est erronée.
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: L'utilisateur n'est pas autorisé à importer dans cette carte.
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: L'ID de la carte n'existe pas.
+          schema:
+            $ref: '#/definitions/Error'
 
 definitions:
   Error:
