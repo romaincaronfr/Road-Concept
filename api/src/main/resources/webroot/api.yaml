@@ -181,19 +181,19 @@ paths:
         Supprime la carte d'un utilisateur.
       parameters:
         - name: username
-          in: formData
+          in: query
           description: Login du client
           required: true
           type: string
           format: username
         - name: password
-          in: formData
+          in: query
           description: Mot de passe du client
           required: true
           type: string
           format: password
         - name: mapID
-          in: formData
+          in: query
           description: L'ID de la map
           required: true
           type: string
@@ -247,4 +247,3 @@ definitions:
         format: int32
       message:
         type: boolean
-        
