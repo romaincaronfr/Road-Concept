@@ -50,14 +50,21 @@ paths:
                 img_url:
                   type: string
                   description: URL de l'image associé à cette carte
+                countryBorders:
+                  type: boolean
+                  description: L'utilisateur a-t-il demandé à avoir les frontières sur sa carte ?
         401:
           description: Une authentification est nécessaire pour accéder à la ressource.
           schema:
             $ref: '#/definitions/Error'
+        400:
+          description: La syntaxe de la requête est erronée.
+          schema:
+            $ref: '#/definitions/Error'
     post:
-      summary: Obtenir les cartes d'un utilisateur
+      summary: Créer une nouvelle carte
       description: |
-        Donne la liste des cartes d'un utilisateur, le fichier contient toutes les informations de base de chaques cartes.
+        Permet de créer une nouvelle carte pour un utilisateur.
       parameters:
         - name: username
           in: formData
@@ -89,12 +96,128 @@ paths:
       tags:
         - Maps
       responses:
-        200:
+        201:
           description: Réponse de succés d'ajout. Le message contient l'ID de la nouvelle map.
           schema:
-            $ref: "#/definitions/Success"
+            $ref: "#/definitions/SuccessMsg"
         401:
           description: Une authentification est nécessaire pour accéder à la ressource.
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: La syntaxe de la requête est erronée.
+          schema:
+            $ref: '#/definitions/Error'
+
+    put:
+      summary: Modifier une carte.
+      description: |
+        Modification des informations d'une carte d'un utilisateur.
+      parameters:
+        - name: username
+          in: formData
+          description: Login du client
+          required: true
+          type: string
+          format: username
+        - name: password
+          in: formData
+          description: Mot de passe du client
+          required: true
+          type: string
+          format: password
+        - name: mapID
+          in: formData
+          description: L'ID de la map
+          required: true
+          type: string
+        - name: mapName
+          in: formData
+          description: Nom à modifier de la carte
+          required: false
+          type: string
+        - name: mapCountryBorder
+          in: formData
+          description: La map doit-elle contenir les frontières des pays ?
+          required: false
+          type: boolean
+        - name: mapDeleteImg
+          in: formData
+          required: false
+          description: Si il y avait une image personnalisée. Faut-il la supprimer ?
+          type: boolean
+        - name: mapIMG
+          in: formData
+          required: false
+          description: Une image optionnelle pour représenter la map
+          type: file
+      tags:
+        - Maps
+      responses:
+        200:
+          description: Réponse de succés. La map a été modifiée.
+          schema:
+            $ref: "#/definitions/SuccessBool"
+        401:
+          description: Une authentification est nécessaire pour accéder à la ressource.
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: L'utilisateur n'est pas autorisé à modifier cette carte.
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: La syntaxe de la requête est erronée.
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: L'ID de la carte n'existe pas.
+          schema:
+            $ref: '#/definitions/Error'
+
+    delete:
+      summary: Supprimer une carte
+      description: |
+        Supprime la carte d'un utilisateur.
+      parameters:
+        - name: username
+          in: formData
+          description: Login du client
+          required: true
+          type: string
+          format: username
+        - name: password
+          in: formData
+          description: Mot de passe du client
+          required: true
+          type: string
+          format: password
+        - name: mapID
+          in: formData
+          description: L'ID de la map
+          required: true
+          type: string
+      tags:
+        - Maps
+      responses:
+        200:
+          description: Réponse de succés. Map supprimé du serveur.
+          schema:
+            $ref: "#/definitions/SuccessBool"
+        401:
+          description: Une authentification est nécessaire pour accéder à la ressource.
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: L'utilisateur n'est pas autorisé à supprimer cette carte.
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: La syntaxe de la requête est erronée.
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: L'ID de la carte n'existe pas.
           schema:
             $ref: '#/definitions/Error'
 
@@ -108,7 +231,7 @@ definitions:
       message:
         type: string
 
-  Success:
+  SuccessMsg:
     type: object
     properties:
       code:
@@ -116,3 +239,12 @@ definitions:
         format: int32
       message:
         type: string
+  SuccessBool:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: boolean
+        
