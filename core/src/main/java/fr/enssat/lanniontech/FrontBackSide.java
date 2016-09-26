@@ -19,7 +19,7 @@ public class FrontBackSide extends Side {
     }
 
 
-    public double getdistanceToNextCar() {
+    public double getDistanceToNextCar() {
         return myLane.getDistanceToNext(this);
     }
 

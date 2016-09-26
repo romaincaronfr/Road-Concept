@@ -15,4 +15,8 @@ public class Position {
         double dX = (A.lon-B.lon)*Math.cos(((A.lat+B.lat)/2)*Math.PI/180);
         return Others.round(Math.sqrt(dX*dX+dY*dY)*1000*40000/360,1);
     }
+
+    public String toString(){
+        return "Longitude: " + lon + " , Latitude: " + lat;
+    }
 }

@@ -14,14 +14,14 @@ public class App {
         SingleLaneRoad SR = new SingleLaneRoad(A,B);
         System.out.println(Position.length(A,B));
         Vehicle V1 = new Vehicle(1,SR.getLane(),0,4,100);
-        Vehicle V2 = new Vehicle(2,SR.getLane(),10,4,90);
-        for (int i = 0; i<200;i++){
-            V1.updateSpeed();
-            V2.updateSpeed();
-            V1.updatePos(0.01);
-            V2.updatePos(0.01);
+        //Vehicle V2 = new Vehicle(2,SR.getLane(),10,4,90);
+        for (int i = 0; i<20;i++){
+            V1.updateAcceleration();
+            //V2.updateAcceleration();
+            V1.updatePos(0.1);
+            //V2.updatePos(0.01);
             V1.log();
-            V2.log();
+            //V2.log();
         }
     }
 

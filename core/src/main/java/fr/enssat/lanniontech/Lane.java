@@ -3,14 +3,18 @@ package fr.enssat.lanniontech;
 import java.util.ArrayList;
 
 public class Lane {
+    private Road myRoad;
     private Lane nextLane;
     private ArrayList<FrontBackSide> vehiclesSides;
     private double length;
+    private double width;
 
-    Lane(double length){
+    Lane(Road myRoad,double length){
+        this.myRoad = myRoad;
         this.length = length;
         nextLane = this;
         vehiclesSides = new ArrayList<FrontBackSide>();
+        width = 3.5;
     }
 
     public double getLength() {
@@ -67,5 +71,9 @@ public class Lane {
         }else{
             return vehiclesSides.get(0).myVehicle.getSpeed();
         }
+    }
+
+    public Position getPosition(double pos){
+        return myRoad.getPosition(this,pos,width/2);
     }
 }

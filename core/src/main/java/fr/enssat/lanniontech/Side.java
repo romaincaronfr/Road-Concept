@@ -10,4 +10,8 @@ public class Side {
         this.pos = pos;
         this.myLane = myLane;
     }
+
+    public double getPos(){
+        return pos;
+    }
 }

@@ -17,6 +17,15 @@ public class Vehicle {
     private double s0 = 2;      //minimum distance between two cars
 
 
+    /**
+     * constructor of a vehicle, place the newly created vehicle on the desired lane
+     *
+     * @param ID identifier for the vehicle
+     * @param start lane where the vehicle is placed
+     * @param startPos position in the lane of the new vehicle
+     * @param length length of the vehicle
+     * @param speed maximum speed of the vehicle
+     */
     Vehicle(int ID,Lane start,double startPos,double length,double speed){
         this.ID = ID;
         this.length = length;
@@ -34,32 +43,58 @@ public class Vehicle {
         //System.out.println("frontSide pos: "+frontSide.pos);
         System.out.println("Acceleration: " + A);
         System.out.println("distance to next car: "+distanceToNextCar());
+        System.out.println("Position: " + getGPSPosition());
         System.out.println("-----------------------------------------");
     }
 
-    public void updateSpeed(){
+    /**
+     * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
+     */
+    public void updateAcceleration(){
         double Sa = this.distanceToNextCar();
         double Sprime = s0 +Va*T+(Va*(Va-nextCarSpeed()))/(2*Math.sqrt(a*b));
         A=a*(1-Math.pow(Va/v0,lambda)-Math.pow(Sprime/Sa,2));
     }
 
+    /**
+     * this method will return the distance to the next car
+     * @return
+     */
     private double distanceToNextCar() {
-        return frontSide.getdistanceToNextCar();
+        return frontSide.getDistanceToNextCar();
     }
 
+    /**
+     * this method will return the speed of the car toward
+     * @return
+     */
     private double nextCarSpeed(){
         return frontSide.getNextCarSpeed();
     }
 
+    /**
+     * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
+     * @param time
+     */
     public void updatePos(double time){
         double dDone = Va*time;
-        Va+=A*time;
         this.distanceDone += dDone;
         backSide.move(dDone);
         frontSide.move(dDone);
+        Va+=A*time;
     }
 
     public double getSpeed(){
         return Va;
+    }
+
+    public Position getGPSPosition(){
+        double pos= frontSide.getPos()-length/2;
+        if(frontSide.getPos()>=0){
+            return frontSide.myLane.getPosition(pos);
+        }else{
+            pos = backSide.getPos()+length/2;
+            return backSide.myLane.getPosition(pos);
+        }
     }
 }

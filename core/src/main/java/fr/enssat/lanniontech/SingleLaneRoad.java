@@ -5,7 +5,7 @@ public class SingleLaneRoad extends Road {
 
     SingleLaneRoad(Position A,Position B){
         super(A,B);
-        lane = new Lane(this.length);
+        lane = new Lane(this,this.length);
     }
 
     public Lane getLane(){
