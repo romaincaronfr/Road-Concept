@@ -1,9 +1,6 @@
 package fr.enssat.lanniontech.entities;
 
-/**
- * Created by Romain on 26/09/2016.
- */
-public enum  TypeEnum {
+public enum MapObjectType {
 
     ROUTE_SIMPLE(1),
     ROUTE_2X2(2),
@@ -13,7 +10,7 @@ public enum  TypeEnum {
 
     private int id;
 
-    TypeEnum(int id) {
+    MapObjectType(int id) {
         this.id = id;
     }
 

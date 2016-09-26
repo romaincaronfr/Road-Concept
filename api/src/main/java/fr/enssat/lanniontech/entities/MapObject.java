@@ -1,34 +1,32 @@
 package fr.enssat.lanniontech.entities;
 
 import java.util.List;
+import java.util.UUID;
 
-/**
- * Created by Romain on 26/09/2016.
- */
 public class MapObject {
 
-    private Integer mapID;
-    private Integer objectID;
+    private UUID mapUUID;
+    private UUID objectUUID;
     private Properties properties;
     private List<GPSPoints> geometry;
 
     public MapObject() {
     }
 
-    public Integer getMapID() {
-        return mapID;
+    public UUID getMapUUID() {
+        return mapUUID;
     }
 
-    public void setMapID(Integer mapID) {
-        this.mapID = mapID;
+    public void setMapUUID(UUID mapUUID) {
+        this.mapUUID = mapUUID;
     }
 
-    public Integer getObjectID() {
-        return objectID;
+    public UUID getObjectUUID() {
+        return objectUUID;
     }
 
-    public void setObjectID(Integer objectID) {
-        this.objectID = objectID;
+    public void setObjectUUID(UUID objectUUID) {
+        this.objectUUID = objectUUID;
     }
 
     public Properties getProperties() {

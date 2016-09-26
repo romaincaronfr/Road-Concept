@@ -1,33 +1,30 @@
 package fr.enssat.lanniontech.entities;
 
-/**
- * Created by Romain on 26/09/2016.
- */
 public class Properties {
 
-    private TypeEnum type;
-    private int maxSpeed;
+    private MapObjectType type;
+    private Integer maxSpeed; // may be null
     private String name;
     private boolean bridge;
-    private int redLightTime;
-    private int roundaboutLanes;
+    private Integer redLightTimeS; // may be null
+    private Integer roundaboutLanes; // may be null
 
     public Properties() {
     }
 
-    public TypeEnum getType() {
+    public MapObjectType getType() {
         return type;
     }
 
-    public void setType(TypeEnum type) {
+    public void setType(MapObjectType type) {
         this.type = type;
     }
 
-    public int getMaxSpeed() {
+    public Integer getMaxSpeed() {
         return maxSpeed;
     }
 
-    public void setMaxSpeed(int maxSpeed) {
+    public void setMaxSpeed(Integer maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
 
@@ -47,19 +44,31 @@ public class Properties {
         this.bridge = bridge;
     }
 
-    public int getRedLightTime() {
-        return redLightTime;
+    public Integer getRedLightTimeS() {
+        if (type != MapObjectType.FEU_ROUGE) {
+            throw new IllegalArgumentException("Uniquement dans le cas d'un feu rouge !");
+        }
+        return redLightTimeS;
     }
 
-    public void setRedLightTime(int redLightTime) {
-        this.redLightTime = redLightTime;
+    public void setRedLightTimeS(Integer redLightTimeS) {
+        if (type != MapObjectType.FEU_ROUGE) {
+            throw new IllegalArgumentException("Uniquement dans le cas d'un feu rouge !");
+        }
+        this.redLightTimeS = redLightTimeS;
     }
 
-    public int getRoundaboutLanes() {
+    public Integer getRoundaboutLanes() {
+        if (type != MapObjectType.CARREFOUR_GIRATOIRE) {
+            throw new IllegalArgumentException("Uniquement dans le cas d'un carrefour giratoire !");
+        }
         return roundaboutLanes;
     }
 
-    public void setRoundaboutLanes(int roundaboutLanes) {
+    public void setRoundaboutLanes(Integer roundaboutLanes) {
+        if (type != MapObjectType.CARREFOUR_GIRATOIRE) {
+            throw new IllegalArgumentException("Uniquement dans le cas d'un carrefour giratoire !");
+        }
         this.roundaboutLanes = roundaboutLanes;
     }
 }
