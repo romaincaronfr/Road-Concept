@@ -209,11 +209,3 @@ definitions:
       message:
         type: string
 
-  SuccessBool:
-    type: object
-    properties:
-      code:
-        type: integer
-        format: int32
-      message:
-        type: boolean
