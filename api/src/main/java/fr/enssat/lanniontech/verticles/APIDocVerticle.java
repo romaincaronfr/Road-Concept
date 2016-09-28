@@ -1,7 +1,5 @@
 package fr.enssat.lanniontech.verticles;
 
-import fr.enssat.lanniontech.demo.TestLogs;
-import fr.enssat.lanniontech.utils.Configuration;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
@@ -20,16 +18,10 @@ public class APIDocVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-
-        LOGGER.debug("Entrée dans start de APIDocVerticle");
-
         StaticHandler staticHandler = StaticHandler.create();
         staticHandler.setCachingEnabled(false); //TODO remove in production mode
         staticHandler.setAllowRootFileSystemAccess(true);
         router.route("/doc/*").handler(staticHandler);
-
-        vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
-
     }
 
 }

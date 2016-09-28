@@ -8,9 +8,6 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 
-/**
- * Created by maelig on 27/09/2016.
- */
 public class AuthenticationVerticle extends AbstractVerticle {
 
     private AuthenticationService authenticationService = new AuthenticationService();
@@ -27,11 +24,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/login").blockingHandler(routingContext -> {
 
             // Do something that might take some time synchronously (db access)
-            System.out.println("@@@ routingContext -> " + routingContext);
-            System.out.println("@@@ routingContext.getBodyAsJson -> " + routingContext.getBodyAsJson());
-            System.out.println("@@@ routingContext.getBodyAsString -> " + routingContext.getBodyAsString());
-
-
             String login = routingContext.getBodyAsJson().getString("login");
             String password = routingContext.getBodyAsJson().getString("password");
 
@@ -40,9 +32,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
             // Now end the request
             routingContext.response().end("User " + login + " authenticated ? " + result);
         });
-
-        vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
-
 
     }
 }
