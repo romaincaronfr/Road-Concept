@@ -1,4 +1,8 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.roadElements;
+
+import fr.enssat.lanniontech.positioning.Position;
+
+//todo reverse inheritance
 
 public class SingleLaneRoadSection extends RoadSection {
 

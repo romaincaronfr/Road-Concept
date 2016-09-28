@@ -1,8 +1,5 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.positioning;
 
-/**
- * Created by 4r3 on 25/09/16.
- */
 public class PosFunction {
     private double alat;
     private double blat;
@@ -14,7 +11,7 @@ public class PosFunction {
 
 
 
-    PosFunction(Position P1,Position P2,double length){
+    public PosFunction(Position P1, Position P2, double length){
         //calculate the parrameters
         blat = P1.lat;
         alat = (P2.lat - P1.lat)/length;

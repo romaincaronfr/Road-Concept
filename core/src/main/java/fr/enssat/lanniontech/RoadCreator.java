@@ -1,12 +1,13 @@
 package fr.enssat.lanniontech;
 
+import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.roadElements.RoadSection;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by 4r3 on 28/09/16.
- */
+
 public class RoadCreator {
     private Map<Position,RoadSection> emptyRoadEdges;
     private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
@@ -24,8 +25,7 @@ public class RoadCreator {
         if(emptyRoadEdges.containsKey(A)){
             RS2=emptyRoadEdges.get(A);
 
-            assembleRoads(RS1,RS2,A);
-
+            assembleRoadsSection(RS1,RS2,A);
             emptyRoadEdges.remove(A);
         }else{
             emptyRoadEdges.put(A,RS1);
@@ -34,8 +34,7 @@ public class RoadCreator {
         if(emptyRoadEdges.containsKey(B)){
             emptyRoadEdges.get(B);
 
-            assembleRoads(RS1,RS2,B);
-
+            assembleRoadsSection(RS1,RS2,B);
             emptyRoadEdges.remove(B);
         }else{
             emptyRoadEdges.put(B,RS1);
@@ -43,7 +42,9 @@ public class RoadCreator {
         return RS1;
     }
 
-    private void assembleRoads(RoadSection RS1,RoadSection RS2,Position P){
+
+
+    private void assembleRoadsSection(RoadSection RS1,RoadSection RS2,Position P){
         RS2.getLeftLane(P).setNextLane(RS1.getRigthLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRigthLane(P));
     }

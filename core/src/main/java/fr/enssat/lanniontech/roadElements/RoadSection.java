@@ -1,16 +1,19 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.roadElements;
+
+import fr.enssat.lanniontech.positioning.PosFunction;
+import fr.enssat.lanniontech.positioning.Position;
 
 public class RoadSection {
-    protected Position A;
-    protected Position B;
-    protected double length;
+    private Position A;
+    private Position B;
+    double length;
 
     private Lane laneA; //this lane is on rigth side in A -> B scenario
     private Lane laneB; //this lane is on left side in A -> B scenario
     private PosFunction f;
 
 
-    RoadSection(Position A, Position B) {
+    public RoadSection(Position A, Position B) {
         this.A = A;
         this.B = B;
         length = Position.length(A,B);
@@ -44,17 +47,19 @@ public class RoadSection {
 
     public Lane getRigthLane(Position P){
         if(P==A){
+            System.out.println("R->A");
             return laneA;
         }else{
+            System.out.println("R->B");
             return laneB;
         }
     }
 
     public Lane getLeftLane(Position P){
         if(P==B){
-            return laneB;
-        }else{
             return laneA;
+        }else{
+            return laneB;
         }
     }
 
@@ -64,5 +69,17 @@ public class RoadSection {
 
     public Lane getLaneB() {
         return laneB;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public Position getA() {
+        return A;
+    }
+
+    public Position getB() {
+        return B;
     }
 }

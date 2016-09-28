@@ -1,4 +1,6 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.vehicleElements;
+
+import fr.enssat.lanniontech.roadElements.Lane;
 
 public class Side {
     protected double pos;
@@ -13,5 +15,9 @@ public class Side {
 
     public double getPos(){
         return pos;
+    }
+
+    public Vehicle getMyVehicle() {
+        return myVehicle;
     }
 }

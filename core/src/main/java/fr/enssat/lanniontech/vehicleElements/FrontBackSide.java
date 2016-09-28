@@ -1,5 +1,7 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.vehicleElements;
 
+
+import fr.enssat.lanniontech.roadElements.Lane;
 
 public class FrontBackSide extends Side {
 

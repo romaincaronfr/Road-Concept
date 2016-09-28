@@ -1,5 +1,8 @@
 package fr.enssat.lanniontech;
 
+import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.roadElements.RoadSection;
+import fr.enssat.lanniontech.vehicleElements.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +20,7 @@ public class App {
         DDE.addRoadSection(B,C);
         System.out.println(Position.length(A,B)+Position.length(B,C));
 
-        Vehicle V1 = new Vehicle(1,RS.getLaneB(),0,4,40);
+        Vehicle V1 = new Vehicle(1,RS.getLaneA(),0,4,40);
         V1.log();
 
 

@@ -1,4 +1,7 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.vehicleElements;
+
+import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.roadElements.Lane;
 
 public class Vehicle {
     private final double length;
@@ -26,7 +29,7 @@ public class Vehicle {
      * @param length length of the vehicle
      * @param speed maximum speed of the vehicle
      */
-    Vehicle(int ID,Lane start,double startPos,double length,double speed){
+    public Vehicle(int ID, Lane start, double startPos, double length, double speed){
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;

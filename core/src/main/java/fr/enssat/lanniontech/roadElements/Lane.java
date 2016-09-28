@@ -1,4 +1,7 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.roadElements;
+
+import fr.enssat.lanniontech.vehicleElements.FrontBackSide;
+import fr.enssat.lanniontech.positioning.Position;
 
 import java.util.ArrayList;
 
@@ -28,7 +31,9 @@ public class Lane {
     public void getIn(FrontBackSide side) {
         int i = 0;
         System.out.println(vehiclesSides.size());
-        while(i<vehiclesSides.size()&&side.pos>vehiclesSides.get(i).pos)
+        while(i<vehiclesSides.size()
+                &&
+                side.getPos()>vehiclesSides.get(i).getPos())
         {
             i++;
         }
@@ -42,17 +47,25 @@ public class Lane {
     public double getDistanceToNext(FrontBackSide side){
         int pos = vehiclesSides.indexOf(side);
         if (pos==vehiclesSides.size()-1) {
-            return length - side.pos + nextLane.getDistanceToFirst();
+            if(nextLane==null){
+                return length - side.getPos();
+            }else{
+                return length - side.getPos() + nextLane.getDistanceToFirst();
+            }
         }else {
-            return vehiclesSides.get(pos + 1).pos - side.pos;
+            return vehiclesSides.get(pos + 1).getPos() - side.getPos();
         }
     }
 
     public double getDistanceToFirst(){
         if (vehiclesSides.size()==0){
-            return length;
+            if(nextLane==null){
+                return length;
+            }else{
+                return nextLane.getDistanceToFirst();
+            }
         }else{
-            return vehiclesSides.get(0).pos;
+            return vehiclesSides.get(0).getPos();
         }
     }
 
@@ -61,7 +74,7 @@ public class Lane {
         if (pos==vehiclesSides.size()-1) {
             return nextLane.getSpeedOfFirst();
         }else {
-            return vehiclesSides.get(pos + 1).myVehicle.getSpeed();
+            return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
     }
 
@@ -73,7 +86,7 @@ public class Lane {
                 return nextLane.getSpeedOfFirst();
             }
         }else{
-            return vehiclesSides.get(0).myVehicle.getSpeed();
+            return vehiclesSides.get(0).getMyVehicle().getSpeed();
         }
     }
 
