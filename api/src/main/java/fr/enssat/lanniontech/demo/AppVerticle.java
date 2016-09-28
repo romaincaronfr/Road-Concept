@@ -1,9 +1,5 @@
 package fr.enssat.lanniontech.demo;
 
-/**
- * Created by maelig on 20/09/2016.
- * http://vertx.io/blog/my-first-vert-x-3-application/
- */
 
 import fr.enssat.lanniontech.utils.Configuration;
 import io.vertx.core.AbstractVerticle;
@@ -19,6 +15,9 @@ import io.vertx.ext.web.handler.StaticHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * http://vertx.io/blog/my-first-vert-x-3-application/
+ */
 public class AppVerticle extends AbstractVerticle {
 
     private Map<String, JsonObject> products = new HashMap<>();

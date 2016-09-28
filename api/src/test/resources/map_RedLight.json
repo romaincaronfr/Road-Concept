@@ -1,0 +1,23 @@
+{
+  "mapID": 123,
+  "objects": [
+    {
+      "mapID": 123,
+      "objectID": 14,
+      "properties": {
+        "type": 5,
+        "bridge": false,
+        "name": "Feu rouge pour faire chier",
+        "redLightTime": 40
+      },
+      "geometry": {
+        "coordinates": [
+          {
+            "latitude": 4.54559326171875,
+            "longitude": 45.754109791149865
+          }
+        ]
+      }
+    }
+  ]
+}
