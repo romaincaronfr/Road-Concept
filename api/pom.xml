@@ -73,6 +73,11 @@
             <version>${vertx-unit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-mongo-client</artifactId>
+            <version>3.3.3</version>
+        </dependency>
     </dependencies>
 
     <build>
