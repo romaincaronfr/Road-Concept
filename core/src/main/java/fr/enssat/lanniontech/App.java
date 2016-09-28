@@ -11,18 +11,28 @@ public class App {
     public static void main (String[] args){
         Position A = new Position(40,0);
         Position B = new Position(40,0.01);
-        SingleLaneRoad SR = new SingleLaneRoad(A,B);
-        System.out.println(Position.length(A,B));
-        Vehicle V1 = new Vehicle(1,SR.getLane(),0,4,100);
+        Position C = new Position(40.01,0.02);
+        RoadCreator DDE = new RoadCreator();
+        RoadSection RS = DDE.addRoadSection(A,B);
+        DDE.addRoadSection(B,C);
+        System.out.println(Position.length(A,B)+Position.length(B,C));
+
+        Vehicle V1 = new Vehicle(1,RS.getLaneB(),0,4,40);
+        V1.log();
+
+
+
         //Vehicle V2 = new Vehicle(2,SR.getLane(),10,4,90);
+        /*
         for (int i = 0; i<20;i++){
             V1.updateAcceleration();
             //V2.updateAcceleration();
             V1.updatePos(0.1);
-            //V2.updatePos(0.01);
+            //V2.updatePos(0.1);
             V1.log();
             //V2.log();
         }
+        */
     }
 
     public static int foo() {

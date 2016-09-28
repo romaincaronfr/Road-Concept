@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech;
 
-public class Road {
+public class RoadSection {
     protected Position A;
     protected Position B;
     protected double length;
@@ -10,10 +10,12 @@ public class Road {
     private PosFunction f;
 
 
-    Road(Position A, Position B) {
+    RoadSection(Position A, Position B) {
         this.A = A;
         this.B = B;
         length = Position.length(A,B);
+        laneA = new Lane(this,length,null);
+        laneB = new Lane(this,length,null);
         f = new PosFunction(A,B,length);
     }
 
@@ -38,5 +40,29 @@ public class Road {
         }else{
             return f.get(length-pos,-widthPos);
         }
+    }
+
+    public Lane getRigthLane(Position P){
+        if(P==A){
+            return laneA;
+        }else{
+            return laneB;
+        }
+    }
+
+    public Lane getLeftLane(Position P){
+        if(P==B){
+            return laneB;
+        }else{
+            return laneA;
+        }
+    }
+
+    public Lane getLaneA(){
+        return laneA;
+    }
+
+    public Lane getLaneB() {
+        return laneB;
     }
 }
