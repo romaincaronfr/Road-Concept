@@ -18,6 +18,7 @@
         <junit.version>4.12</junit.version>
         <vertx-unit.version>3.3.3</vertx-unit.version>
         <apache-httpclient.version>4.5.2</apache-httpclient.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
 
     </properties>
 
@@ -32,11 +33,6 @@
             <artifactId>vertx-web</artifactId>
             <version>${vertx.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-auth-jdbc</artifactId>
-            <version>${vertx.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -44,7 +40,11 @@
             <version>${apache-httpclient.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>

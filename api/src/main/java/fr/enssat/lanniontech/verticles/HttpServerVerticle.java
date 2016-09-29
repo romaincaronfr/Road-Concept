@@ -30,6 +30,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
 
     private void configureHandlers(Router router) {
+        router.route().handler(CorsHandler.create("*")); // Allows cross domain origin request. Necessary to test requests with another Swagger server.
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
