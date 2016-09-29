@@ -17,6 +17,8 @@
         <vertx.version>3.3.3</vertx.version>
         <junit.version>4.12</junit.version>
         <vertx-unit.version>3.3.3</vertx-unit.version>
+        <apache-httpclient.version>4.5.2</apache-httpclient.version>
+
     </properties>
 
     <dependencies>
@@ -34,6 +36,12 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-auth-jdbc</artifactId>
             <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${apache-httpclient.version}</version>
         </dependency>
 
 

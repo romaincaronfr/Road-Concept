@@ -16,7 +16,7 @@ public class PrivateTestVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        router.route(HttpMethod.POST, "/api/test").handler(routingContext -> {
+        router.route(HttpMethod.GET, "/api/test").handler(routingContext -> {
             String userName = routingContext.user().principal().getString("username");
             routingContext.response().end("USERNAME = " + userName);
         });

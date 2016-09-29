@@ -1,12 +1,14 @@
 package fr.enssat.lanniontech.verticles;
 
+import fr.enssat.lanniontech.entities.User;
 import fr.enssat.lanniontech.services.AuthenticationService;
-import fr.enssat.lanniontech.utils.Configuration;
+import fr.enssat.lanniontech.utils.JSONSerializer;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.StaticHandler;
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthenticationException;
+
 
 public class AuthenticationVerticle extends AbstractVerticle {
 
@@ -23,15 +25,20 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
         router.route(HttpMethod.POST, "/login").blockingHandler(routingContext -> {
 
-            // Do something that might take some time synchronously (db access)
-            String login = routingContext.getBodyAsJson().getString("login");
+            String userName = routingContext.getBodyAsJson().getString("login");
             String password = routingContext.getBodyAsJson().getString("password");
-
-            boolean result = authenticationService.login(login, password);
-
-            // Now end the request
-            routingContext.response().end("User " + login + " authenticated ? " + result);
+            try {
+                User user = authenticationService.login(userName, password); // Insure the user credentials are valid
+                routingContext.session().put("me", user);
+                routingContext.response().setStatusCode(HttpStatus.SC_ACCEPTED).end(JSONSerializer.toJSON(user));
+            } catch (AuthenticationException e) {
+                routingContext.response().setStatusCode(HttpStatus.SC_FORBIDDEN).end();
+            }
         });
 
+        router.route(HttpMethod.POST, "/logout").handler(routingContext -> {
+            routingContext.session().destroy();
+            routingContext.response().setStatusCode(HttpStatus.SC_NO_CONTENT).end();
+        });
     }
 }
