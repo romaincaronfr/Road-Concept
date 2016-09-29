@@ -19,7 +19,7 @@
         <vertx-unit.version>3.3.3</vertx-unit.version>
         <apache-httpclient.version>4.5.2</apache-httpclient.version>
         <commons-lang3.version>3.4</commons-lang3.version>
-
+        <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
     </properties>
 
     <dependencies>
@@ -38,6 +38,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${apache-httpclient.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax-ws-rs-api.version}</version>
         </dependency>
 
         <dependency>

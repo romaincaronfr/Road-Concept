@@ -7,6 +7,7 @@ import fr.enssat.lanniontech.services.AuthenticationService;
 import fr.enssat.lanniontech.utils.Constants;
 import fr.enssat.lanniontech.utils.JSONSerializer;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -14,6 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.MediaType;
 
 public class AuthenticationVerticle extends AbstractVerticle {
 
@@ -41,7 +44,10 @@ public class AuthenticationVerticle extends AbstractVerticle {
             JsonObject body = routingContext.getBodyAsJson();
             if (body == null || StringUtils.isBlank(body.getString("username")) || StringUtils.isBlank(body.getString("password"))) {
                 String message = "Username and password can't be null, empty or blank.";
-                routingContext.response().setStatusCode(HttpStatus.SC_BAD_REQUEST).end(JSONSerializer.toJSON(new RestException(HttpStatus.SC_BAD_REQUEST, message)));
+                routingContext.response()
+                        .setStatusCode(HttpStatus.SC_BAD_REQUEST)
+                        .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                        .end(JSONSerializer.toJSON(new RestException(HttpStatus.SC_BAD_REQUEST, message)));
             } else {
                 String userName = body.getString(INPUT_JSON_USERNAME);
                 String password = body.getString(INPUT_JSON_PASSWORD);
