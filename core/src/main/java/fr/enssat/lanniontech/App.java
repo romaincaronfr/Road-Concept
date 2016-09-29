@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech;
 
 import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.roadElements.Road;
 import fr.enssat.lanniontech.roadElements.RoadSection;
 import fr.enssat.lanniontech.vehicleElements.Vehicle;
 import org.slf4j.Logger;
@@ -15,12 +16,23 @@ public class App {
         Position A = new Position(40,0);
         Position B = new Position(40,0.01);
         Position C = new Position(40.01,0.02);
+        Position D = new Position(40.02,0.02);
         RoadCreator DDE = new RoadCreator();
+
+        /**
         RoadSection RS = DDE.addRoadSection(A,B);
         DDE.addRoadSection(B,C);
-        System.out.println(Position.length(A,B)+Position.length(B,C));
+        DDE.addRoadSection(C,D);
+         **/
 
-        Vehicle V1 = new Vehicle(1,RS.getLaneA(),0,4,40);
+        Road R= DDE.addRoad(A,B,42);
+        DDE.addRoadSectionToRoad(B,C,42);
+        DDE.addRoadSectionToRoad(C,D,42);
+
+        System.out.println(Position.length(A,B)+Position.length(B,C)+Position.length(C,D));
+
+        RoadSection RS = R.get(0);
+        Vehicle V1 = new Vehicle(1,RS.getLaneA(),0,1,40);
         V1.log();
 
 

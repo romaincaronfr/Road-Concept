@@ -62,7 +62,7 @@ public class Lane {
             if(nextLane==null){
                 return length;
             }else{
-                return nextLane.getDistanceToFirst();
+                return length+nextLane.getDistanceToFirst();
             }
         }else{
             return vehiclesSides.get(0).getPos();

@@ -5,7 +5,8 @@ import fr.enssat.lanniontech.positioning.Position;
 import java.util.ArrayList;
 
 public class Road {
-    private String id;
+    private int id;
+    private String name;
     private double maxSpeed;
     private ArrayList<RoadSection> sections;
     private double length;
@@ -13,12 +14,17 @@ public class Road {
     private Position A;
     private Position B;
 
-    Road(String id,double maxSpeed){
+    public Road(int id){
+        this(id,50);
+    }
+
+    public Road(int id, double maxSpeed){
         this.id = id;
         this.maxSpeed=maxSpeed;
         this.sections = new ArrayList<RoadSection>();
         this.length = 0;
         this.timeWeigth = 0;
+        this.name = "";
         A = null;
         B = null;
     }
@@ -50,6 +56,14 @@ public class Road {
             sections.add(sections.size(),newSection);
         } else return;
         updateRoad();
+    }
+
+    public RoadSection get(int i){
+        return sections.get(i);
+    }
+
+    public int size(){
+        return sections.size();
     }
 
 }

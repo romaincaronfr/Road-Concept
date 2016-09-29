@@ -1,21 +1,22 @@
 package fr.enssat.lanniontech;
 
 import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.roadElements.Road;
 import fr.enssat.lanniontech.roadElements.RoadSection;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class RoadCreator {
     private Map<Position,RoadSection> emptyRoadEdges;
     private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
     private ArrayList<RoadSection> roadSections;
+    private Map<Integer,Road> roads;
 
     RoadCreator(){
         emptyRoadEdges = new HashMap<Position, RoadSection>();
         roadSections = new ArrayList<RoadSection>();
+        roads = new HashMap<Integer, Road>();
     }
 
     public RoadSection addRoadSection(Position A, Position B){
@@ -39,10 +40,30 @@ public class RoadCreator {
         }else{
             emptyRoadEdges.put(B,RS1);
         }
+        System.out.println(emptyRoadEdges);
         return RS1;
     }
 
+    public Road addRoad(Position A,Position B,int id){
+        Road R = new Road(id);
+        R.addSection(addRoadSection(A,B));
+        roads.put(id,R);
+        return R;
+    }
 
+    public Road addRoadSectionToRoad(Position A, Position B,int id){
+        Road R = roads.get(id);
+        if (R==null){
+            R = addRoad(A,B,id);
+        }else{
+            R.addSection(addRoadSection(A,B));
+        }
+        return R;
+    }
+
+    public Road getRoad(int id){
+        return roads.get(id);
+    }
 
     private void assembleRoadsSection(RoadSection RS1,RoadSection RS2,Position P){
         RS2.getLeftLane(P).setNextLane(RS1.getRigthLane(P));

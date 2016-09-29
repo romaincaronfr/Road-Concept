@@ -47,10 +47,8 @@ public class RoadSection {
 
     public Lane getRigthLane(Position P){
         if(P==A){
-            System.out.println("R->A");
             return laneA;
         }else{
-            System.out.println("R->B");
             return laneB;
         }
     }
