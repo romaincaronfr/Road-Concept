@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.verticles;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import fr.enssat.lanniontech.utils.Configuration;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
@@ -25,6 +26,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         vertx.deployVerticle(new APIDocVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
+        vertx.deployVerticle(new PrivateTestVerticle(router));
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
     }
@@ -34,11 +36,12 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
-        
+        CustomAuthProvider authProvider = new CustomAuthProvider();
         router.route().handler(UserSessionHandler.create(authProvider));
 
         AuthHandler basicAuthHandler = BasicAuthHandler.create(authProvider);
-        // All requests to paths starting with '/private/' will be protected
+        // All requests to paths starting with '/api/' will be protected
         router.route("/api/*").handler(basicAuthHandler);
+      //  router.route("/api/*").handler(new CustomAuthHandler(authProvider));
     }
 }
