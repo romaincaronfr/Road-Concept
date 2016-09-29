@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.verticles;
 
-import fr.enssat.lanniontech.utils.Configuration;
+import fr.enssat.lanniontech.utils.Constants;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.*;
@@ -13,6 +13,9 @@ public class HttpServerVerticle extends AbstractVerticle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
+    private static final int KB = 1024;
+    private static final int MB = 1024 * KB;
+
     @Override
     public void start() {
         Router router = Router.router(vertx);
@@ -23,17 +26,18 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new AuthenticationVerticle(router));
         vertx.deployVerticle(new PrivateTestVerticle(router));
 
-        vertx.createHttpServer().requestHandler(router::accept).listen(Configuration.serverPort);
+        vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
     }
 
     private void configureHandlers(Router router) {
-        router.route().handler(BodyHandler.create());
+        router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
+        // Require authentication for all path starting "/api"
         router.route("/api/*").handler(routingContext -> {
-            if (routingContext.session() == null || routingContext.session().get("me") == null) {
-                routingContext.response().setStatusCode(HttpStatus.SC_FORBIDDEN).end();
+            if (routingContext.session() == null || routingContext.session().get(Constants.SESSION_CURRENT_USER) == null) {
+                routingContext.response().setStatusCode(HttpStatus.SC_UNAUTHORIZED).end();
             }
         });
     }

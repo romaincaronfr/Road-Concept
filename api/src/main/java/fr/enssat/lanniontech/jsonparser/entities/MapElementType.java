@@ -21,8 +21,8 @@ public enum MapElementType {
     }
 
     @JsonCreator
-    public static MapElementType forValue( int id) {
-        for (MapElementType type: MapElementType.values()) {
+    public static MapElementType forValue(int id) {
+        for (MapElementType type : MapElementType.values()) {
             if (type.getJsonID() == id) {
                 return type;
             }

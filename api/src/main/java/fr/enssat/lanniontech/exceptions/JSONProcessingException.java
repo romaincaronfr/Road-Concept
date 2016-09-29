@@ -2,11 +2,40 @@ package fr.enssat.lanniontech.exceptions;
 
 public class JSONProcessingException extends RuntimeException {
 
-    public JSONProcessingException(String fileName, Throwable cause) {
-        super("An unexpected error occured while processing '" + fileName + "'.", cause);
+    /**
+     * Constructs a new JSONProcessingException with default message.
+     */
+    public JSONProcessingException() {
+        super();
     }
 
-    public JSONProcessingException(Throwable cause) {
+    /**
+     * Constructs a new JSONProcessingException with specified detail message.
+     *
+     * @param message
+     */
+    public JSONProcessingException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructs a new JSONProcessingException with specified detail message
+     * and nested Throwable.
+     *
+     * @param message
+     * @param cause
+     */
+    public JSONProcessingException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Constructs a new JSONProcessingException with specified nested Throwable
+     * and default message.
+     *
+     * @param cause
+     */
+    public JSONProcessingException(final Throwable cause) {
         super(cause);
     }
 }
