@@ -4,7 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
 
-
+// TODO: Remove this verticle when the authenticate methods are tested
 public class PrivateTestVerticle extends AbstractVerticle {
 
     private Router router;

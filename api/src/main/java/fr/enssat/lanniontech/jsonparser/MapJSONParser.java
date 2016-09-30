@@ -1,7 +1,5 @@
 package fr.enssat.lanniontech.jsonparser;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.exceptions.JSONProcessingException;
 import fr.enssat.lanniontech.jsonparser.entities.MapJSON;
@@ -9,6 +7,9 @@ import fr.enssat.lanniontech.jsonparser.entities.MapJSON;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * JSON Parser for JSON object representing a map. The MAPJson objet is used to represent a map between the API and the appliation front end.
+ */
 public class MapJSONParser {
 
     /**
