@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.verticles;
 
-import fr.enssat.lanniontech.utils.Configuration;
+import fr.enssat.lanniontech.utils.Constants;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoClient;
@@ -17,8 +17,8 @@ public class MongoVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         JsonObject mongoconfig = new JsonObject()
-                .put("connection_string", Configuration.mongoUrl)
-                .put("db_name", Configuration.dbName);
+                .put("connection_string", Constants.mongoUrl)
+                .put("db_name", Constants.dbName);
 
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoconfig);
 
