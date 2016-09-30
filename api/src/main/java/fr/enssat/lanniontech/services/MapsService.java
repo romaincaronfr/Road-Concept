@@ -1,7 +1,10 @@
 package fr.enssat.lanniontech.services;
 
 import fr.enssat.lanniontech.entities.MapInfo;
+import fr.enssat.lanniontech.jsonparser.MapJSONParser;
+import fr.enssat.lanniontech.jsonparser.entities.Map;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +35,12 @@ public class MapsService {
         result.add(map2);
         result.add(map3);
         return result;
+    }
+
+    public Map getMap(int currentUserID, int mapID) {
+        //TODO: Retrive data from db. Now is just example data
+        File json = new File("src/test/resources/map_all.json");
+        Map map = MapJSONParser.unmarshall(json);
+        return map;
     }
 }

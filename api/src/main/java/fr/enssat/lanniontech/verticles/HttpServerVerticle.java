@@ -27,7 +27,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         vertx.deployVerticle(new APIDocVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
-        vertx.deployVerticle(new GeneralMapsVerticle(router));
+        vertx.deployVerticle(new MapsVerticle(router));
 
         vertx.deployVerticle(new PrivateTestVerticle(router)); //FIXME remove it
 

@@ -10,30 +10,18 @@ public class Properties {
     private Integer redLightTime; // May be null
 
     public Integer getRoundaboutLanes() {
-        if (type != MapElementType.ROUNDABOUT) {
-            throw new IllegalArgumentException("Disponible uniquement pour les carrefour giratoires");
-        }
         return roundaboutLanes;
     }
 
     public void setRoundaboutLanes(Integer roundaboutLanes) {
-        if (type != MapElementType.ROUNDABOUT) {
-            throw new IllegalArgumentException("Disponible uniquement pour les carrefour giratoires");
-        }
         this.roundaboutLanes = roundaboutLanes;
     }
 
     public Integer getRedLightTime() {
-        if (type != MapElementType.RED_LIGHT) {
-            throw new IllegalArgumentException("Temps d'attente uniquement disponible pour un feu rouge.");
-        }
         return redLightTime;
     }
 
     public void setRedLightTime(Integer redLightTime) {
-        if (type != MapElementType.RED_LIGHT) {
-            throw new IllegalArgumentException("Temps d'attente uniquement disponible pour un feu rouge.");
-        }
         this.redLightTime = redLightTime;
     }
 
@@ -46,16 +34,10 @@ public class Properties {
     }
 
     public Integer getMaxSpeed() {
-        if (type == MapElementType.RED_LIGHT) {
-            throw new IllegalArgumentException("Pas de vitesse maximale sur un feu rouge");
-        }
         return maxSpeed;
     }
 
     public void setMaxSpeed(Integer maxSpeed) {
-        if (type == MapElementType.RED_LIGHT) {
-            throw new IllegalArgumentException("Pas de vitesse maximale sur un feu rouge");
-        }
         this.maxSpeed = maxSpeed;
     }
 

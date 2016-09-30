@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.verticles;
 
 import fr.enssat.lanniontech.entities.MapInfo;
 import fr.enssat.lanniontech.entities.User;
+import fr.enssat.lanniontech.jsonparser.entities.Map;
 import fr.enssat.lanniontech.services.MapsService;
 import fr.enssat.lanniontech.utils.Constants;
 import fr.enssat.lanniontech.utils.JSONSerializer;
@@ -16,22 +17,22 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-public class GeneralMapsVerticle extends AbstractVerticle {
+public class MapsVerticle extends AbstractVerticle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeneralMapsVerticle.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapsVerticle.class);
 
     private MapsService mapsService = new MapsService();
 
     private Router router;
 
-    public GeneralMapsVerticle(Router router) {
+    public MapsVerticle(Router router) {
         this.router = router;
     }
 
     @Override
     public void start() {
 
-        router.route(HttpMethod.GET, "/api/maps").blockingHandler(routingContext -> {
+        router.route(HttpMethod.GET, "/api/maps").handler(routingContext -> {
             try {
                 int currentUserID = ((User) routingContext.session().get(Constants.SESSION_CURRENT_USER)).getId();
                 List<MapInfo> data = mapsService.getAllMapsInfo(currentUserID);
@@ -40,6 +41,22 @@ public class GeneralMapsVerticle extends AbstractVerticle {
                         .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                         .end(JSONSerializer.toJSON(JSONSerializer.toJSON(data)));
             } catch (Exception e) {
+                routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR).end(); //TODO: Add a "unexpected exception to return a rest exception
+            }
+        });
+
+        router.route(HttpMethod.GET, "/api/maps/:mapID").handler(routingContext -> {
+            try {
+                int currentUserID = ((User) routingContext.session().get(Constants.SESSION_CURRENT_USER)).getId();
+                int mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
+                // TODO: Check mapID incorrect (400)
+                // TODO: Check mapID pour 404
+                Map map = mapsService.getMap(currentUserID, mapID);
+                routingContext.response()
+                        .setStatusCode(HttpStatus.SC_ACCEPTED)
+                        .putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                        .end(JSONSerializer.toJSON(JSONSerializer.toJSON(map)));
+            } catch  (Exception e) {
                 e.printStackTrace();
                 routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR).end(); //TODO: Add a "unexpected exception to return a rest exception
             }

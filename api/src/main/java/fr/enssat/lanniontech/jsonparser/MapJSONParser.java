@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.jsonparser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.exceptions.JSONProcessingException;
-import fr.enssat.lanniontech.jsonparser.entities.MapJSON;
+import fr.enssat.lanniontech.jsonparser.entities.Map;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,18 +17,18 @@ public class MapJSONParser {
      */
     private static ObjectMapper MAPPER = new ObjectMapper();
 
-    public static MapJSON unmarshall(File json) throws JSONProcessingException {
+    public static Map unmarshall(File json) throws JSONProcessingException {
         try {
-            return MAPPER.readValue(json, MapJSON.class);
+            return MAPPER.readValue(json, Map.class);
         } catch (IOException e) {
             e.printStackTrace();
             throw new JSONProcessingException("file " + json.getName(), e);
         }
     }
 
-    public static MapJSON unmarshall(String json) throws JSONProcessingException {
+    public static Map unmarshall(String json) throws JSONProcessingException {
         try {
-            return MAPPER.readValue(json, MapJSON.class);
+            return MAPPER.readValue(json, Map.class);
         } catch (IOException e) {
             throw new JSONProcessingException("string input", e);
         }

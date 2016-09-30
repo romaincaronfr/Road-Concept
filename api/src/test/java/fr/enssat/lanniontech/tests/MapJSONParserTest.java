@@ -1,7 +1,7 @@
 package fr.enssat.lanniontech.tests;
 
 import fr.enssat.lanniontech.jsonparser.entities.MapElementType;
-import fr.enssat.lanniontech.jsonparser.entities.MapJSON;
+import fr.enssat.lanniontech.jsonparser.entities.Map;
 import fr.enssat.lanniontech.jsonparser.MapJSONParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class MapJSONParserTest {
             File json = new File("src/test/resources/map_all.json");
             Assert.assertNotNull(json);
 
-            MapJSON result = MapJSONParser.unmarshall(json);
+            Map result = MapJSONParser.unmarshall(json);
             Assert.assertNotNull(result);
 
             Assert.assertEquals(123,result.getId());
@@ -78,7 +78,7 @@ public class MapJSONParserTest {
         try {
             File json = new File("src/test/resources/map_RedLight.json");
             Assert.assertNotNull(json);
-            MapJSON result = MapJSONParser.unmarshall(json);
+            Map result = MapJSONParser.unmarshall(json);
             Assert.assertNotNull(result);
 
             Assert.assertEquals(5, result.getElements().get(0).getProperties().getType().getJsonID());
@@ -100,7 +100,7 @@ public class MapJSONParserTest {
         try {
             File json = new File("src/test/resources/map_road.json");
             Assert.assertNotNull(json);
-            MapJSON result = MapJSONParser.unmarshall(json);
+            Map result = MapJSONParser.unmarshall(json);
             Assert.assertNotNull(result);
 
             Assert.assertEquals(2, result.getElements().get(0).getProperties().getType().getJsonID());
@@ -119,7 +119,7 @@ public class MapJSONParserTest {
         try {
             File json = new File("src/test/resources/map_roundabout.json");
             Assert.assertNotNull(json);
-            MapJSON result = MapJSONParser.unmarshall(json);
+            Map result = MapJSONParser.unmarshall(json);
             Assert.assertNotNull(result);
 
             Assert.assertEquals(123, result.getElements().get(0).getMapID());

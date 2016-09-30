@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class MapJSON {
+public class Map {
 
     @JsonProperty(value = "mapID")
     private int id;
@@ -26,6 +26,5 @@ public class MapJSON {
     public void setElements(List<MapElement> elements) {
         this.elements = elements;
     }
-
 
 }

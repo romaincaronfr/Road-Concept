@@ -39,7 +39,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         /**
          * The login route *DO NOT* contains "/api" in its path since it *MUST* be accessible when the user is not logged in.
          */
-        router.route(HttpMethod.POST, "/login").blockingHandler(routingContext -> {
+        router.route(HttpMethod.POST, "/login").handler(routingContext -> {
 
             JsonObject body = routingContext.getBodyAsJson();
             if (body == null || StringUtils.isBlank(body.getString("username")) || StringUtils.isBlank(body.getString("password"))) {
