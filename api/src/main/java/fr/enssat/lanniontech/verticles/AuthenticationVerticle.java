@@ -54,7 +54,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
                 try {
                     User user = authenticationService.login(userName, password); // Insure the user credentials are valid
                     routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
-                    routingContext.response().setStatusCode(HttpStatus.SC_ACCEPTED).end();
+                    routingContext.response().setStatusCode(HttpStatus.SC_NO_CONTENT).end();
                 } catch (AuthenticationException e) {
                     routingContext.response().setStatusCode(HttpStatus.SC_FORBIDDEN).end();
                 }

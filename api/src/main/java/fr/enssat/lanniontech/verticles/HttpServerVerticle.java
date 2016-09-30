@@ -27,7 +27,9 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         vertx.deployVerticle(new APIDocVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
-        vertx.deployVerticle(new PrivateTestVerticle(router));
+        vertx.deployVerticle(new GeneralMapsVerticle(router));
+
+        vertx.deployVerticle(new PrivateTestVerticle(router)); //FIXME remove it
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
     }
@@ -39,10 +41,14 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 
         // Require authentication for all path starting "/api"
+
         router.route("/api/*").handler(routingContext -> {
             if (routingContext.session() == null || routingContext.session().get(Constants.SESSION_CURRENT_USER) == null) {
                 routingContext.response().setStatusCode(HttpStatus.SC_UNAUTHORIZED).end();
+            } else {
+                routingContext.next();
             }
         });
+
     }
 }

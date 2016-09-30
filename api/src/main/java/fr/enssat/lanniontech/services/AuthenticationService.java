@@ -7,6 +7,9 @@ public class AuthenticationService {
 
     public User login(String login, String password) throws AuthenticationException {
         //TODO check the db
-        return new User(login);
+        User user = new User();
+        user.setId(1);
+        user.setUserName(login);
+        return user;
     }
 }

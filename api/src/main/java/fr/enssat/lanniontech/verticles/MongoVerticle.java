@@ -17,8 +17,8 @@ public class MongoVerticle extends AbstractVerticle {
     @Override
     public void start() throws Exception {
         JsonObject mongoconfig = new JsonObject()
-                .put("connection_string", Constants.mongoUrl)
-                .put("db_name", Constants.dbName);
+                .put("connection_string", Constants.MONGODB_SERVER_URL)
+                .put("db_name", Constants.MONGODB_DATABASE_NAME);
 
         MongoClient mongoClient = MongoClient.createShared(vertx, mongoconfig);
 
