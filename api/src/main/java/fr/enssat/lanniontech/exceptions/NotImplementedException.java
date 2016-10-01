@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.exceptions;
 /**
  * Thrown to indicate that a block of code has not been implemented.
  */
-public class NotImplementedException extends RuntimeException {
+public class NotImplementedException extends RoadConceptException {
 
     /**
      * Constructs a new NotImplementedException with default message.

@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.verticles;
 
+import fr.enssat.lanniontech.repositories.connectors.SQLDatabaseConnector;
 import fr.enssat.lanniontech.utilities.Constants;
 import fr.enssat.lanniontech.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
@@ -22,6 +23,8 @@ public class HttpServerVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
 
+        SQLDatabaseConnector.configure(Constants.ACTIVE_SGBD);
+
         configureGlobalHandlers(router);
 
         vertx.deployVerticle(new APIDocVerticle(router));
@@ -32,10 +35,11 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
 
     private void configureGlobalHandlers(Router router) {
-       // router.route().handler(CorsHandler.create("*")); // Allows cross domain origin request. Necessary to test requests with another Swagger server.
+        // router.route().handler(CorsHandler.create("*")); // Allows cross domain origin request. Necessary to test requests with another Swagger server.
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
-        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
+
 
         // Require authentication for all path starting "/api"
         router.route("/api/*").handler(routingContext -> {

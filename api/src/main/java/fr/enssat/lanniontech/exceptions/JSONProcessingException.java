@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.exceptions;
 
-public class JSONProcessingException extends RuntimeException {
+public class JSONProcessingException extends RoadConceptException {
 
     /**
      * Constructs a new JSONProcessingException with default message.

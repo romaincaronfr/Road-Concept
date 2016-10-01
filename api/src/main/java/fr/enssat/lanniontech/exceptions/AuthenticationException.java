@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.exceptions;
 
-public class AuthenticationException extends RuntimeException {
+public class AuthenticationException extends RoadConceptException {
 
     /**
      * Constructs a new AuthenticationException with default message.

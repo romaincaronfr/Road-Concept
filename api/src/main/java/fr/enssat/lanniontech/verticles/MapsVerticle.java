@@ -52,7 +52,7 @@ public class MapsVerticle extends AbstractVerticle {
         } catch (UnconsistentException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "The authenticated user and the given map ID are not consistent.");
         } catch (Exception e) {
-            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext,e);
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
@@ -60,9 +60,9 @@ public class MapsVerticle extends AbstractVerticle {
         try {
             User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
             List<MapInfo> maps = mapService.getAllMapsInfo(currentUser);
-            HttpResponseBuilder.buildOkResponse(routingContext,maps);
+            HttpResponseBuilder.buildOkResponse(routingContext, maps);
         } catch (Exception e) {
-            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext,e);
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 }

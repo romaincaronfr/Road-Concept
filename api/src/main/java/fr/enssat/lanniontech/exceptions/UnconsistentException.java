@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.exceptions;
 
-public class UnconsistentException extends RuntimeException {
+public class UnconsistentException extends RoadConceptException {
 
     /**
      * Constructs a new AuthenticationException with default message.

@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.entities;
 
-public class User {
+public class User implements Entity {
 
     private int id;
     private String userName;

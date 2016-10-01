@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.entities;
 
-public class MapInfo {
+public class MapInfo implements Entity{
 
     private int id;
     private String name;

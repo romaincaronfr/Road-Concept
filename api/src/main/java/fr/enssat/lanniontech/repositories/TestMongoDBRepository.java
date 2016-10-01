@@ -2,12 +2,11 @@ package fr.enssat.lanniontech.repositories;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.enssat.lanniontech.jsonparser.MapJSONParser;
 import fr.enssat.lanniontech.jsonparser.entities.Map;
-import fr.enssat.lanniontech.repositories.connectors.MongoDBConnector;
+import fr.enssat.lanniontech.repositories.connectors.SQLDatabaseConnector;
 import fr.enssat.lanniontech.services.MapService;
 import fr.enssat.lanniontech.utilities.Constants;
 import fr.enssat.lanniontech.utilities.JSONSerializer;
@@ -17,8 +16,24 @@ import java.util.Random;
 
 public class TestMongoDBRepository {
 
+    public static void main(String[] args) {
+        //  MongoDatabase db = SQLDatabaseConnector.getMongoDBClient().getDatabase(Constants.MONGODB_DATABASE_NAME);
+        //  MongoCollection<Document> collection = db.getCollection("test");
+        //  collection.drop();
+
+        TestMongoDBRepository repository = new TestMongoDBRepository();
+
+        Map map = new MapService().getMap(null, 1); // Fake data
+        map.setId(new Random().nextInt());
+        repository.insertMap(map, "test"); // "test" collection *MUST* already exist
+
+        Map fromMongo = repository.getMap(-1513300328, "test");
+        System.out.println("fromMongo id => " + fromMongo.getId());
+
+    }
+
     public void insertMap(Map map, String collectionName) {
-        try (MongoClient mongo = MongoDBConnector.getConnection()) { // try-with-resource block, don't need to call mongo.close()
+        try (MongoClient mongo = SQLDatabaseConnector.getMongoDBClient()) { // try-with-resource block, don't need to call mongo.close()
             MongoDatabase db = mongo.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(collectionName);
 
@@ -31,7 +46,7 @@ public class TestMongoDBRepository {
 
     public Map getMap(int id, String collectionName) {
         Map map = null;
-        try (MongoClient mongo = MongoDBConnector.getConnection()) {
+        try (MongoClient mongo = SQLDatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = mongo.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(collectionName);
 
@@ -50,21 +65,5 @@ public class TestMongoDBRepository {
             }
         }
         return map;
-    }
-
-    public static void main(String[] args) {
-        //  MongoDatabase db = MongoDBConnector.getConnection().getDatabase(Constants.MONGODB_DATABASE_NAME);
-        //  MongoCollection<Document> collection = db.getCollection("test");
-        //  collection.drop();
-
-        TestMongoDBRepository repository = new TestMongoDBRepository();
-
-        Map map = new MapService().getMap(null, 1); // Fake data
-        map.setId(new Random().nextInt());
-        repository.insertMap(map, "test"); // "test" collection *MUST* already exist
-
-        Map fromMongo = repository.getMap(-1513300328, "test");
-        System.out.println("fromMongo id => " + fromMongo.getId());
-
     }
 }

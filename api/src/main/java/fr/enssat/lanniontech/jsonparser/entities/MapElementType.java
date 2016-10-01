@@ -17,11 +17,6 @@ public enum MapElementType {
         this.jsonID = jsonID;
     }
 
-    @JsonValue
-    public int getJsonID() {
-        return jsonID;
-    }
-
     @JsonCreator
     public static MapElementType forValue(int id) {
         for (MapElementType type : MapElementType.values()) {
@@ -30,5 +25,10 @@ public enum MapElementType {
             }
         }
         throw new IllegalArgumentException("Invalid value: " + id);
+    }
+
+    @JsonValue
+    public int getJsonID() {
+        return jsonID;
     }
 }
