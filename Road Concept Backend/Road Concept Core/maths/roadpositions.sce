@@ -19,32 +19,73 @@ function traceRoad()
     fXYz(x,y,z)
 endfunction
 
+function roadInter()
+    clf;
+    isoview(-3,-3,3,3)
+    plot2d(0,0,rect=[-3,-3,3,3]); 
+    n=0;
+    x1=0;
+    y1=0;
+    bt=0;
+    for n=1:2
+        [bt,x1(n),y1(n)]=xclick()
+        plot(x1(n),y1(n),"ro");
+    end
+    
+    z1=calcZ(x1,y1)
+    [fX1,fY1]=fXYz(x1,y1,z1)
+    tracefXYzw(fX1,fY1,z1,0,"b")
+    
+    x2=0;
+    y2=0;
+    bt=0;
+    for n=1:2
+        [bt,x2(n),y2(n)]=xclick()
+        plot(x2(n),y2(n),"go");
+    end
+    z2=calcZ(x1,y1)
+    [fX2,fY2]=fXYz(x2,y2,z2)
+    tracefXYzw(fX2,fY2,z2,0,"m")
+    
+    
+    findInter(fX1,fY1,fX2,fY2)
+endfunction
+
 function [z]=calcZ(x,y)
     z(1)=0;
     z(2)=sqrt((x(1)-x(2))^2+(y(1)-y(2))^2);
 endfunction
 
-function fXYz(x,y,z)
+function [fXz,fYz]=fXYz(x,y,z)
     fXz(1)=x(1)
     fXz(2)=(x(2)-x(1))/z(2)
     fYz(1)=y(1)
     fYz(2)=(y(2)-y(1))/z(2)
+    fXz(3)=fYz(2)
+    fYz(3)=-fXz(2)
+    
+endfunction
+
+function tracefXYzw(fX,fY,z,w,c)
     k=1
-    for n=0:0.1:z(2)
-        Xz(k)=fXz(1)+n*fXz(2)
-        Yz(k)=fYz(1)+n*fYz(2)
+    for n=0:0.01:z(2)
+        Xz(k)=fX(1)+n*fX(2)+w*fX(3)
+        Yz(k)=fY(1)+n*fY(2)+w*fY(3)
         k=k+1
     end
     
-    vx=fXz(2)
-    vy=fYz(2);
-    
-    vxp=vy*0.5
-    vyp=-vx*0.5
-    
-    plot(Xz+vxp,Yz+vyp,"y");
+    plot(Xz,Yz,c);
+endfunction
+
+function findInter(fX1,fY1,fX2,fY2)
+    M1=[fX1(2),-fX2(2);fY1(2),-fY2(2)]
+    R1=[fX2(1)-fX1(1);fY2(1)-fY1(1)]
+    disp(M1)
+    disp(R1)
     
     
 endfunction
 
-traceRoad();
+roadInter();
+
+//traceRoad();
