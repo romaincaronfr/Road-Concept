@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.jsonparser.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MapElementType {
 
@@ -16,6 +17,7 @@ public enum MapElementType {
         this.jsonID = jsonID;
     }
 
+    @JsonValue
     public int getJsonID() {
         return jsonID;
     }

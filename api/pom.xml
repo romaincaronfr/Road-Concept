@@ -20,6 +20,7 @@
         <apache-httpclient.version>4.5.2</apache-httpclient.version>
         <commons-lang3.version>3.4</commons-lang3.version>
         <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
+        <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,12 @@
             <groupId>io.vertx</groupId>
             <artifactId>vertx-web</artifactId>
             <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>${mongo-java-driver.version}</version>
         </dependency>
 
         <dependency>
@@ -86,11 +93,6 @@
             <artifactId>vertx-unit</artifactId>
             <version>${vertx-unit.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-mongo-client</artifactId>
-            <version>3.3.3</version>
         </dependency>
     </dependencies>
 

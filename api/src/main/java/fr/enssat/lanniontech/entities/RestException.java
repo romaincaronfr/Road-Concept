@@ -3,19 +3,14 @@ package fr.enssat.lanniontech.entities;
 public class RestException {
 
     private int code;
-    private String message;
+    private String cause;
 
-    public RestException(int code, String message) {
-        this.code = code;
-        this.message = message;
+    public String getCause() {
+        return cause;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCause(String cause) {
+        this.cause = cause;
     }
 
     public int getCode() {

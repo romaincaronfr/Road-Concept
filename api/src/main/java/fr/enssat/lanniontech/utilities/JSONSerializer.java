@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.utils;
+package fr.enssat.lanniontech.utilities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
