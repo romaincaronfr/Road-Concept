@@ -7,6 +7,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
@@ -35,11 +36,10 @@ public class HttpServerVerticle extends AbstractVerticle {
     }
 
     private void configureGlobalHandlers(Router router) {
-        // router.route().handler(CorsHandler.create("*")); // Allows cross domain origin request. Necessary to test requests with another Swagger server.
+        router.route().handler(CorsHandler.create("*")); // Allows cross domain origin request
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
-
 
         // Require authentication for all path starting "/api"
         router.route("/api/*").handler(routingContext -> {

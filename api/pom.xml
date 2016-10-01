@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql-jdbc.version}</version>
+            <version>${postgresql.version}</version>
         </dependency>
 
         <dependency>
