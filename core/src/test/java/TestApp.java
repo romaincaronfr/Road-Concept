@@ -1,4 +1,4 @@
-import fr.enssat.lanniontech.App;
+import fr.enssat.lanniontech.Simulator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -6,6 +6,6 @@ public class TestApp {
 
     @Test
     public void test() {
-        Assert.assertTrue(App.foo() == 4);
+        Assert.assertTrue(Simulator.foo() == 4);
     }
 }

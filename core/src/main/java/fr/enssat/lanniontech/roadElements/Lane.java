@@ -30,7 +30,7 @@ public class Lane {
 
     public void getIn(FrontBackSide side) {
         int i = 0;
-        System.out.println(vehiclesSides.size());
+        //System.out.println(vehiclesSides.size());
         while(i<vehiclesSides.size()
                 &&
                 side.getPos()>vehiclesSides.get(i).getPos())
@@ -72,7 +72,11 @@ public class Lane {
     public double getNextCarSpeed(FrontBackSide side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos==vehiclesSides.size()-1) {
-            return nextLane.getSpeedOfFirst();
+            if(nextLane==null){
+                return 0;
+            }else {
+                return nextLane.getSpeedOfFirst();
+            }
         }else {
             return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
