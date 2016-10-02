@@ -7,13 +7,13 @@ import fr.enssat.lanniontech.roadElements.RoadSection;
 import java.util.*;
 
 
-public class RoadCreator {
+public class RoadManager {
     private Map<Position,RoadSection> emptyRoadEdges;
     private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
     private ArrayList<RoadSection> roadSections;
     private Map<Integer,Road> roads;
 
-    RoadCreator(){
+    RoadManager(){
         emptyRoadEdges = new HashMap<Position, RoadSection>();
         roadSections = new ArrayList<RoadSection>();
         roads = new HashMap<Integer, Road>();
@@ -25,7 +25,6 @@ public class RoadCreator {
         roadSections.add(RS1);
         if(emptyRoadEdges.containsKey(A)){
             RS2=emptyRoadEdges.get(A);
-
             assembleRoadsSection(RS1,RS2,A);
             emptyRoadEdges.remove(A);
         }else{
@@ -34,7 +33,6 @@ public class RoadCreator {
 
         if(emptyRoadEdges.containsKey(B)){
             emptyRoadEdges.get(B);
-
             assembleRoadsSection(RS1,RS2,B);
             emptyRoadEdges.remove(B);
         }else{
@@ -46,6 +44,8 @@ public class RoadCreator {
 
     public Road addRoad(Position A,Position B,int id){
         Road R = new Road(id);
+        System.out.println(A);
+        System.out.println(B);
         R.addSection(addRoadSection(A,B));
         roads.put(id,R);
         return R;

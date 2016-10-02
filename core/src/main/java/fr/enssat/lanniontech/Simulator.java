@@ -2,12 +2,9 @@ package fr.enssat.lanniontech;
 
 import fr.enssat.lanniontech.positioning.Position;
 import fr.enssat.lanniontech.roadElements.Road;
-import fr.enssat.lanniontech.vehicleElements.Vehicle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Timer;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -17,42 +14,44 @@ public class Simulator implements Runnable {
 
     private static Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
-    private RoadCreator RC;
+    private RoadManager roadManager;
+    private PositionManager positionManager;
+    private VehicleManager vehicleManager;
+
     private double progress;
     private Thread simulatorThread;
     private double length;
     private double precision;
-    private ArrayList<Vehicle> vehicles;
     private ReentrantReadWriteLock l;
     private long startTime;
     private long stopTime;
 
     public Simulator(){
-        Position A = new Position(40,0);
-        Position B = new Position(40,0.01);
-        Position C = new Position(40.01,0.02);
-        Position D = new Position(40.02,0.02);
-
-        vehicles = new ArrayList<Vehicle>();
-
         l = new ReentrantReadWriteLock();
 
-        RC = new RoadCreator();
+        roadManager = new RoadManager();
+        positionManager = new PositionManager();
+        vehicleManager = new VehicleManager();
 
-        Road R= RC.addRoad(A,B,42);
-        RC.addRoadSectionToRoad(B,C,42);
-        RC.addRoadSectionToRoad(C,D,42);
+
+        Position A = positionManager.addPosition(40,0);
+        Position B = positionManager.addPosition(40,0.1);
+        Position C = positionManager.addPosition(40.1,0.1);
+        Position D = positionManager.addPosition(40.1,0);
+
+        Road R= roadManager.addRoad(A,B,0);
+        roadManager.addRoadSectionToRoad(B,C,0);
+        roadManager.addRoadSectionToRoad(C,D,0);
+        //roadManager.addRoad(D,A,1);
+
+        vehicleManager.addToSpawnArea(R);
+
+        for (int i = 0; i < 100; i++) {
+            System.out.println(vehicleManager.addVehicle());
+        }
+
 
         progress=0;
-
-        vehicles.add(new Vehicle(1,R.get(0).getLaneA(),0,1,40));
-        vehicles.add(new Vehicle(2,R.get(1).getLaneA(),100,1,20));
-        vehicles.add(new Vehicle(3,R.get(2).getLaneB(),0,1,40));
-        vehicles.add(new Vehicle(3,R.get(1).getLaneB(),0,1,10));
-        vehicles.add(new Vehicle(3,R.get(0).getLaneB(),0,1,30));
-
-
-
 
         simulatorThread = new Thread(this);
     }
@@ -71,17 +70,11 @@ public class Simulator implements Runnable {
     }
 
     public void run(){
-        long step = (int)(length/precision);
+        long step = (long)(length/precision);
         WriteLock wl = l.writeLock();
         for (long i = 0; i < step ; i++) {
 
-            for (int j = 0; j < vehicles.size(); j++) {
-                vehicles.get(j).updateAcceleration();
-            }
-
-            for (int j = 0; j < vehicles.size() ; j++) {
-                vehicles.get(j).updatePos(precision);
-            }
+            vehicleManager.newStep(precision);
 
             wl.lock();
             try{
@@ -90,6 +83,7 @@ public class Simulator implements Runnable {
                 wl.unlock();
             }
         }
+        progress = 1;
         stopTime = System.currentTimeMillis();
     }
 
@@ -129,13 +123,18 @@ public class Simulator implements Runnable {
 
         Sim.launchSimulation(24*3600,0.1);
 
-        Sim.waitForEnd();
+        while(Sim.getProgress()<1){
+            System.out.println("Sim time: " + Sim.getDuration());
+            System.out.println("Sim progress: " + 100*Sim.getProgress());
+            System.out.println("------------------------------------------------");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        //Sim.waitForEnd();
 
         System.out.println(Sim.getDuration());
     }
-
-    public static int foo() {
-        LOG.debug("foo() returns 4");
-        return 4;
-    } //For junit test
 }

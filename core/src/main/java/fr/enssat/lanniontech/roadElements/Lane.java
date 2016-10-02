@@ -101,4 +101,19 @@ public class Lane {
     public void setNextLane(Lane nextLane) {
         this.nextLane = nextLane;
     }
+
+    public boolean rangeIsFree(double start,double end){
+        int i=0;
+        double pos;
+        while (i<vehiclesSides.size()){
+            pos=vehiclesSides.get(i).getPos();
+            if(pos>=start&&pos<=end){
+                return false;
+            }else if(pos>end){
+                return true;
+            }
+            i++;
+        }
+        return true;
+    }
 }

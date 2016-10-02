@@ -3,6 +3,8 @@ package fr.enssat.lanniontech.vehicleElements;
 import fr.enssat.lanniontech.positioning.Position;
 import fr.enssat.lanniontech.roadElements.Lane;
 
+import java.util.ArrayList;
+
 public class Vehicle {
     private final double length;
     private double distanceDone;// in m
@@ -18,6 +20,8 @@ public class Vehicle {
     private double lambda = 4;
     private double v0;          //desired speed
     private double s0 = 2;      //minimum distance between two cars
+    private long time;
+    private ArrayList<Position> positionHistory;
 
 
     /**
@@ -29,13 +33,16 @@ public class Vehicle {
      * @param length length of the vehicle
      * @param speed maximum speed of the vehicle
      */
-    public Vehicle(int ID, Lane start, double startPos, double length, double speed){
+    public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime){
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
         this.v0 = speed;
         this.frontSide = new FrontBackSide(length+startPos,this,start);
         this.backSide = new FrontBackSide(startPos,this,start);
+        this.time = initialTime;
+        positionHistory = new ArrayList<Position>();
+        positionHistory.add(getGPSPosition());
     }
 
     public void log(){
@@ -84,6 +91,9 @@ public class Vehicle {
         this.distanceDone += dDone;
         backSide.move(dDone);
         frontSide.move(dDone);
+        time++;
+        //todo add only 1/X position in history
+        positionHistory.add(getGPSPosition());
         Va+=A*time;
     }
 
@@ -93,11 +103,16 @@ public class Vehicle {
 
     public Position getGPSPosition(){
         double pos= frontSide.getPos()-length/2;
+        Position posGPS;
         if(frontSide.getPos()>=0){
-            return frontSide.myLane.getPosition(pos);
+            posGPS = frontSide.myLane.getPosition(pos);
         }else{
             pos = backSide.getPos()+length/2;
-            return backSide.myLane.getPosition(pos);
+            posGPS = backSide.myLane.getPosition(pos);
         }
+        posGPS.setTime(time);
+        return posGPS;
     }
+
+
 }
