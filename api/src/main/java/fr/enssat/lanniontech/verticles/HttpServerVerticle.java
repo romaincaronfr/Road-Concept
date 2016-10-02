@@ -48,6 +48,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         corsHandler.allowedHeader("Set-Cookie");
         corsHandler.allowedHeader("Access-Control-Allow-Origin");
         corsHandler.allowedHeader("Access-Control-Allow-Headers");
+        corsHandler.allowCredentials(true);
         router.route().handler(corsHandler); // Allows cross domain origin request
 
 
