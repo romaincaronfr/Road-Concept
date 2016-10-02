@@ -42,13 +42,14 @@ public class Simulator implements Runnable {
         Road R= roadManager.addRoad(A,B,0);
         roadManager.addRoadSectionToRoad(B,C,0);
         roadManager.addRoadSectionToRoad(C,D,0);
-        //roadManager.addRoad(D,A,1);
+        roadManager.addRoadSectionToRoad(D,A,0);
 
         vehicleManager.addToSpawnArea(R);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             System.out.println(vehicleManager.addVehicle());
         }
+        System.out.println(vehicleManager.getVehiclesNumber());
 
 
         progress=0;
@@ -72,9 +73,17 @@ public class Simulator implements Runnable {
     public void run(){
         long step = (long)(length/precision);
         WriteLock wl = l.writeLock();
+        int j=1;
         for (long i = 0; i < step ; i++) {
 
-            vehicleManager.newStep(precision);
+            if(j==100){
+                vehicleManager.newStep(precision,true);
+                j=1;
+            }else{
+                vehicleManager.newStep(precision,false);
+                j++;
+            }
+
 
             wl.lock();
             try{
@@ -121,11 +130,17 @@ public class Simulator implements Runnable {
     public static void main (String[] args){
         Simulator Sim = new Simulator();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Sim.launchSimulation(24*3600,0.1);
 
         while(Sim.getProgress()<1){
             System.out.println("Sim time: " + Sim.getDuration());
-            System.out.println("Sim progress: " + 100*Sim.getProgress());
+            System.out.println("Sim progress: " + Tools.round(100*Sim.getProgress(),3));
             System.out.println("------------------------------------------------");
             try {
                 Thread.sleep(500);

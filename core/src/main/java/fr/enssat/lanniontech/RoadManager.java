@@ -9,11 +9,11 @@ import java.util.*;
 
 public class RoadManager {
     private Map<Position,RoadSection> emptyRoadEdges;
-    private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
+    //private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
     private ArrayList<RoadSection> roadSections;
     private Map<Integer,Road> roads;
 
-    RoadManager(){
+    public RoadManager(){
         emptyRoadEdges = new HashMap<Position, RoadSection>();
         roadSections = new ArrayList<RoadSection>();
         roads = new HashMap<Integer, Road>();
@@ -32,7 +32,7 @@ public class RoadManager {
         }
 
         if(emptyRoadEdges.containsKey(B)){
-            emptyRoadEdges.get(B);
+            RS2=emptyRoadEdges.get(B);
             assembleRoadsSection(RS1,RS2,B);
             emptyRoadEdges.remove(B);
         }else{

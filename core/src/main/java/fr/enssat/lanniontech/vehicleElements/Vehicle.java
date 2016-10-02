@@ -86,14 +86,15 @@ public class Vehicle {
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
      * @param time
      */
-    public void updatePos(double time){
+    public void updatePos(double time,boolean log){
         double dDone = Va*time;
         this.distanceDone += dDone;
         backSide.move(dDone);
         frontSide.move(dDone);
         time++;
-        //todo add only 1/X position in history
-        positionHistory.add(getGPSPosition());
+        if(log){
+            positionHistory.add(getGPSPosition());
+        }
         Va+=A*time;
     }
 

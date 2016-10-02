@@ -57,13 +57,17 @@ public class VehicleManager {
         return true;
     }
 
-    public void newStep(double precision) {
+    public void newStep(double precision,boolean log) {
         for (int j = 0; j < activeVehicles.size(); j++) {
             activeVehicles.get(j).updateAcceleration();
         }
 
         for (int j = 0; j < activeVehicles.size() ; j++) {
-            activeVehicles.get(j).updatePos(precision);
+            activeVehicles.get(j).updatePos(precision,log);
         }
+    }
+
+    public int getVehiclesNumber() {
+        return activeVehicles.size();
     }
 }
