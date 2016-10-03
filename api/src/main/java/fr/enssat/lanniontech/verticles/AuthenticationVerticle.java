@@ -69,12 +69,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
             String password = requestBody.getString(INPUT_JSON_PASSWORD);
             User user = authenticationService.login(userName, password); // Insure the user credentials are valid
 
-            /**
-             * Client using JavaScript can not get the 'Set Cookie' header value, so we must send the value into the JSON object.
-             * The client will then send it back as a header.
-             */
-            user.setAuthenticationToken(routingContext.session().id());
-
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
