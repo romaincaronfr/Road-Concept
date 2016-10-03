@@ -5,10 +5,6 @@ var apiURL = "localhost:8080";
 Backbone.Collection.prototype.absURL = "http://localhost:8080";
 var loginToken = null;
 
-var setHeader = function (xhr) {
-    console.log('call setHeader');
-    xhr.setRequestHeader('Cookie', 'vertx-web.session=' + loginToken);
-}
 
 $.ajaxSetup({
     xhrFields: {
@@ -16,11 +12,14 @@ $.ajaxSetup({
     },
     crossDomain: true,
     error : function(jqXHR, textStatus, errorThrown) {
+        console.log("error ajax");
         if (jqXHR.status == 401) {
+            console.log('error 401');
             app.router.navigate('', { trigger: true });
         }
     }
 });
+
 if (loginToken) {
     $.ajax({
             url: "http://" + apiURL + "/login",

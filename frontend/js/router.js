@@ -5,7 +5,8 @@
 app.Router = Backbone.Router.extend({
 
     routes: {
-        "": "login"
+        "": "login",
+        "map": "map"
     },
 
     initialize: function () {
@@ -18,6 +19,10 @@ app.Router = Backbone.Router.extend({
         console.log('reusing home views');
         app.loginView.delegateEvents(); // delegate events when the views is recycled
         //this.$content.html(app.loginView.el);
+    },
+
+    map: function() {
+        app.mapView = new app.mapView();
     }
 
     

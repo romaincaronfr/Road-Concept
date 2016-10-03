@@ -20,6 +20,30 @@ app.loginView = Backbone.View.extend({
 
     clickOnSubmitLogin:function (){
         console.log("click on submit");
+        $.ajax({
+                url: "http://" + apiURL + "/login",
+                type: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "username": $('#exampleInputEmail1').val(),
+                    "password": $('#exampleInputPassword1').val()
+                })
+            })
+            .done(function (data, textStatus, jqXHR) {
+                console.log("HTTP Request Succeeded: " + jqXHR.status);
+                console.log(data);
+                app.router.navigate('map', { trigger: true });
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("HTTP Request Failed");
+                $('#alertLogin').removeClass('hidden');
+            })
+            .always(function () {
+                /* ... */
+            });
     }
 
 });
