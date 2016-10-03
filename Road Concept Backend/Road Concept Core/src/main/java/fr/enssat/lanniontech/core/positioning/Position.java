@@ -1,5 +1,5 @@
-package fr.enssat.lanniontech.positioning;
-import fr.enssat.lanniontech.Tools;
+package fr.enssat.lanniontech.core.positioning;
+import fr.enssat.lanniontech.core.Tools;
 
 import java.lang.Math;
 

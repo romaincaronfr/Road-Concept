@@ -1,8 +1,8 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.core;
 
-import fr.enssat.lanniontech.positioning.Position;
-import fr.enssat.lanniontech.roadElements.Road;
-import fr.enssat.lanniontech.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Road;
+import fr.enssat.lanniontech.core.roadElements.RoadSection;
 
 import java.util.*;
 

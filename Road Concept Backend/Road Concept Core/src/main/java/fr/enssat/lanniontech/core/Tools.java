@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.core;
 
 public class Tools {
     public static double round(double value, int places) {

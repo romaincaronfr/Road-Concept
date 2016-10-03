@@ -1,9 +1,9 @@
-package fr.enssat.lanniontech;
+package fr.enssat.lanniontech.core;
 
-import fr.enssat.lanniontech.roadElements.Lane;
-import fr.enssat.lanniontech.roadElements.Road;
-import fr.enssat.lanniontech.roadElements.RoadSection;
-import fr.enssat.lanniontech.vehicleElements.Vehicle;
+import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.roadElements.Road;
+import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 
 import java.util.ArrayList;
 import java.util.Random;

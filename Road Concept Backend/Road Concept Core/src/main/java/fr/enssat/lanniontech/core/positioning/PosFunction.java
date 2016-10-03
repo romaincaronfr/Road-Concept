@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.positioning;
+package fr.enssat.lanniontech.core.positioning;
 
 public class PosFunction {
     private double alat;

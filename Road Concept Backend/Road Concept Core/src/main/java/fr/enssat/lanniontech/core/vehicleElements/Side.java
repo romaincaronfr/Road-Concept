@@ -1,6 +1,6 @@
-package fr.enssat.lanniontech.vehicleElements;
+package fr.enssat.lanniontech.core.vehicleElements;
 
-import fr.enssat.lanniontech.roadElements.Lane;
+import fr.enssat.lanniontech.core.roadElements.Lane;
 
 public class Side {
     protected double pos;

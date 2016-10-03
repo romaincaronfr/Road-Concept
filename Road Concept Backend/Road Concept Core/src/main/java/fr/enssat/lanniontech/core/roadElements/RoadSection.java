@@ -1,7 +1,7 @@
-package fr.enssat.lanniontech.roadElements;
+package fr.enssat.lanniontech.core.roadElements;
 
-import fr.enssat.lanniontech.positioning.PosFunction;
-import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.PosFunction;
+import fr.enssat.lanniontech.core.positioning.Position;
 
 public class RoadSection {
     private Position A;

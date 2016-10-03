@@ -1,7 +1,7 @@
-package fr.enssat.lanniontech.roadElements;
+package fr.enssat.lanniontech.core.roadElements;
 
-import fr.enssat.lanniontech.vehicleElements.FrontBackSide;
-import fr.enssat.lanniontech.positioning.Position;
+import fr.enssat.lanniontech.core.vehicleElements.FrontBackSide;
+import fr.enssat.lanniontech.core.positioning.Position;
 
 import java.util.ArrayList;
 
