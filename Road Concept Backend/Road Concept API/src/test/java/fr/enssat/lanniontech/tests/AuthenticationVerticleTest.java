@@ -1,14 +1,10 @@
 package fr.enssat.lanniontech.tests;
 
-import fr.enssat.lanniontech.verticles.AuthenticationVerticle;
+import fr.enssat.lanniontech.api.verticles.AuthenticationVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
-import io.vertx.ext.web.handler.AuthHandler;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 //@RunWith(VertxUnitRunner.class)
 public class AuthenticationVerticleTest {

@@ -91,6 +91,12 @@
             <version>${jackson.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>fr.enssat.lanniontech</groupId>
+            <artifactId>road-concept-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>
@@ -131,8 +137,8 @@
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>io.vertx.core.Starter</Main-Class>
-                                        <Main-Verticle>fr.enssat.lanniontech.verticles.HttpServerVerticle</Main-Verticle>
+                                        <Main-Class>io.vertx.core.Launcher</Main-Class>
+                                        <Main-Verticle>fr.enssat.lanniontech.api.verticles.HttpServerVerticle</Main-Verticle>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
