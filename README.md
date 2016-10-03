@@ -20,13 +20,16 @@ Se placer dans le dossier ```developper-bin```
 $ cd developper-bin/
 ```
 Démarrer la base de données MongoDB. En fonction de votre système d'exploitation :
+
+
 GNU/Linux Ubuntu
 ```sh
-$ ./start_MongoDB_Mac.sh
+$ ./start_MongoDB_Ubuntu.sh
+
 ```
 Apple mac OS
 ```sh
-$ ./start_MongoDB_Ubuntu.sh
+$ ./start_MongoDB_Mac.sh
 ```
 Lors de la première éxécution, il est possible de devoir donner les droits d'éxécutions aux scripts :
 ```sh
@@ -38,13 +41,13 @@ A ce stade, il reste à compiler la partie serveur du projet et à déployer le 
 $ ./deploy.sh
 ```
 Ce script va :
-    * Build [Road Concept Core]
-    * Build [Road Concept API]
-    * Déployer le serveur HTTP [Vert.x], écoutant par défaut sur le port ```8080```
+* Build ```Road Concept Core```
+* Build ```Road Concept API```
+* Déployer le serveur HTTP ```Vert.x```, écoutant par défaut sur le port ```8080```
     
-La documentation de l'API est disponible sur ```http://localhost:8080/doc```
+[Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc```
 
-En mode "developpement", le projet est configuré pour utiliser une base de données SQL embarquée (SQLite3). Il est possible de modifier la configuration pour utiliser une base de données PostgreSQL.
+En mode "developpement", le projet est configuré pour utiliser une base de données SQL embarquée (```SQLite3```). Il est possible de modifier la configuration pour utiliser une base de données ```PostgreSQL```.
 
 
 **Free Software, Hell Yeah!**
@@ -55,3 +58,4 @@ En mode "developpement", le projet est configuré pour utiliser une base de donn
    [Maven]: <https://maven.apache.org/>
    [Oracle JDK8]: <http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html>
    [MongoDB]: <https://www.mongodb.com/>
+   [Documentation API]: <http://localhost:8080/doc/>
