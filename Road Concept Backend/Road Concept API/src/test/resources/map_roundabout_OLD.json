@@ -1,0 +1,70 @@
+{
+  "mapID": 123,
+  "objectID": 13,
+  "properties": {
+    "type": 4,
+    "maxSpeed": 40,
+    "name": "Magnifique rond poind de la mort",
+    "roundaboutLanes": 2
+  },
+  "geometry": {
+    "coordinates": [
+      {
+        "latitude": 6.305146515369415,
+        "longitude": 45.89396215331486
+      },
+      {
+        "latitude": 6.305031180381775,
+        "longitude": 45.89389868253603
+      },
+      {
+        "latitude": 6.305004358291626,
+        "longitude": 45.89382961131194
+      },
+      {
+        "latitude": 6.30502849817276,
+        "longitude": 45.89375493962168
+      },
+      {
+        "latitude": 6.3050901889801025,
+        "longitude": 45.89371760373891
+      },
+      {
+        "latitude": 6.305167973041534,
+        "longitude": 45.89369520219717
+      },
+      {
+        "latitude": 6.305259168148041,
+        "longitude": 45.89369333540162
+      },
+      {
+        "latitude": 6.305353045463562,
+        "longitude": 45.893728804506374
+      },
+      {
+        "latitude": 6.305393278598785,
+        "longitude": 45.8937829415173
+      },
+      {
+        "latitude": 6.30541205406189,
+        "longitude": 45.89384267884741
+      },
+      {
+        "latitude": 6.305387914180756,
+        "longitude": 45.8939042829018
+      },
+      {
+        "latitude": 6.3053154945373535,
+        "longitude": 45.89394908580751
+      },
+      {
+        "latitude": 6.305245757102966,
+        "longitude": 45.89397148724683
+      },
+      {
+        "latitude": 6.305146515369415,
+        "longitude": 45.89396215331486
+      }
+    ]
+  }
+}
