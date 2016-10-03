@@ -5,19 +5,19 @@
 app.Router = Backbone.Router.extend({
 
     routes: {
-        "": "home"
+        "": "login"
     },
 
     initialize: function () {
         this.$content = $("#content");
     },
 
-    home: function () {
+    login: function () {
         app.loginView = new app.loginView();
-        app.loginView.render();
+        //app.loginView.render();
         console.log('reusing home views');
         app.loginView.delegateEvents(); // delegate events when the views is recycled
-        this.$content.html(app.loginView.el);
+        //this.$content.html(app.loginView.el);
     }
 
     

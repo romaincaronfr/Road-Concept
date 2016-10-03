@@ -3,14 +3,19 @@
  */
 app.loginView = Backbone.View.extend({
 
-    event:{
-        "click #submitLogin":"clickOnSubmitLogin"
+    el: '#content',
+
+    initialize: function () {
+        this.render();
+    },
+
+    events:{
+        'click #submitLogin':'clickOnSubmitLogin'
     },
 
     render:function () {
         console.log("render login");
         this.$el.html(this.template());
-        return this;
     },
 
     clickOnSubmitLogin:function (){

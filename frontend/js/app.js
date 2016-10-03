@@ -14,9 +14,14 @@ $.ajaxSetup({
     xhrFields: {
         withCredentials: true
     },
-    crossDomain: true
+    crossDomain: true,
+    error : function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status == 401) {
+            app.router.navigate('', { trigger: true });
+        }
+    }
 });
-if (!loginToken) {
+if (loginToken) {
     $.ajax({
             url: "http://" + apiURL + "/login",
             type: "POST",
@@ -32,7 +37,7 @@ if (!loginToken) {
         .done(function (data, textStatus, jqXHR) {
             console.log("HTTP Request Succeeded: " + jqXHR.status);
             console.log(data);
-            loginToken = data.authenticationToken;
+            //loginToken = data.authenticationToken;
             //document.cookie = "vertx-web.session="+loginToken;
             console.log(loginToken);
             testTech();
@@ -74,32 +79,3 @@ var app = {
 
 };
 
-app.models.mapModel = Backbone.Model.extend({});
-
-app.collections.mapCollection = Backbone.Collection.extend({
-    model: app.models.mapModel,
-    url: function () {
-        return this.absURL + '/api/maps';
-    }
-});
-var testModel = new app.models.mapModel();
-var testCollection = new app.collections.mapCollection();
-
-
-
-$(document).ready(function () {
-    console.log("document ready");
-    app.loadTemplates(["loginView"],
-        function () {
-            app.router = new app.Router();
-            Backbone.history.start();
-        });
-    console.log(testCollection.get());
-});
-
-function testTech(){
-    testCollection.fetch();
-    console.log(testCollection.toJSON());
-    testCollection.add({"id":1,"name":"Ville de Lannion"});
-    console.log(testCollection.toJSON());
-}
