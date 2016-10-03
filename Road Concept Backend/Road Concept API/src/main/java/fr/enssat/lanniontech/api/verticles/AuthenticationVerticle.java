@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class AuthenticationVerticle extends AbstractVerticle {
@@ -61,7 +62,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         try {
             // We need to set a 'Set Cookie' header in order to ask the browser to remove the cookie from client side.
             Date now = new Date(); // TODO: Use the new Java8 date API ?
-            DateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+            DateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz", Locale.ENGLISH);
             formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
             String headerValue = "vertx-web.session=" + routingContext.session().id() + "; path=/; expires=" + formatter.format(now);
             routingContext.response().putHeader(HttpHeaders.SET_COOKIE, headerValue);
