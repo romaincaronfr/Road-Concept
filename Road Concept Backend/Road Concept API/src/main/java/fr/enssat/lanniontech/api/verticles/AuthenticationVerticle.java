@@ -6,6 +6,7 @@ import fr.enssat.lanniontech.api.services.AuthenticationService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -15,6 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class AuthenticationVerticle extends AbstractVerticle {
 
@@ -52,6 +59,12 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
     private void processLogout(RoutingContext routingContext) {
         try {
+            // We need to set a 'Set Cookie' header in order to ask the browser to remove the cookie from client side.
+            Date now = new Date(); // TODO: Use the new Java8 date API ?
+            DateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+            String headerValue = "vertx-web.session=" + routingContext.session().id() + "; path=/; expires=" + formatter.format(now);
+            routingContext.response().putHeader(HttpHeaders.SET_COOKIE, headerValue);
             routingContext.session().destroy();
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
