@@ -25,7 +25,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
 
-        SQLDatabaseConnector.configure(Constants.ACTIVE_SGBD);
+        SQLDatabaseConnector.setUp(); // This call is thread safe. May throw
 
         configureGlobalHandlers(router);
 
@@ -54,7 +54,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                 routingContext.next(); // process the next handler, if any
             }
         });
-
     }
 
     private void configureCORS(CorsHandler corsHandler) {

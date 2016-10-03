@@ -5,7 +5,7 @@ public abstract class RoadConceptException extends RuntimeException {
     private String message;
     private Throwable cause;
 
-    public RoadConceptException(){
+    public RoadConceptException() {
 
     }
 

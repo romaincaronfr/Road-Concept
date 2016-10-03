@@ -25,6 +25,7 @@ public class APIDocVerticle extends AbstractVerticle {
         staticHandler.setCachingEnabled(false); // TODO: Remove in production mode
         staticHandler.setAllowRootFileSystemAccess(true);
         router.route("/doc*").handler(staticHandler);
+        LOGGER.debug("Successfully started");
     }
 
 }

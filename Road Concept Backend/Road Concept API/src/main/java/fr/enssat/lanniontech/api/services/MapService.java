@@ -6,9 +6,7 @@ import fr.enssat.lanniontech.api.jsonparser.MapJSONParser;
 import fr.enssat.lanniontech.api.jsonparser.entities.Map;
 import fr.enssat.lanniontech.api.repositories.MapRepository;
 import org.apache.commons.io.IOUtils;
-import org.sqlite.SQLiteConfig;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -45,7 +43,7 @@ public class MapService {
 
     public Map getMap(User user, int mapID) {
         //TODO: Retrive data from db. Now is just example data
-      //  File json = new File("src/main/resources/map_all.json");
+        //  File json = new File("src/main/resources/map_all.json");
         InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
         Map map = null;
         try {

@@ -22,7 +22,7 @@ public class Constants {
 
     public static final String POSTGRESQL_DATABASE_NAME = "roadconcept";
     public static final int POSTGRESQL_SERVER_PORT = 5432;
-    public static final String POSTGRESQL_SERVER_HOST = "localhost" ;
+    public static final String POSTGRESQL_SERVER_HOST = "localhost";
     public static final int POSTGRESQL_MAX_CONNECTIONS = 10;
 
     // ERROR CODES
@@ -36,6 +36,8 @@ public class Constants {
     // ======
 
     public static final String SQLITE_DATABASE_NAME = "roadconcept";
+    public static final String SQLITE_URL_PREFIX = "jdbc:sqlite:";
+    public static final String SQLITE_DB_FILE_SUFFIX = "-sqlite.db";
     public static final String SQLITE_FOREIGN_KEY_VIOLATION = "787";
     public static final String SQLITE_UNIQUE_VIOLATION = "2067";
     public static final String SQLITE_CHECK_VIOLATION = "275";

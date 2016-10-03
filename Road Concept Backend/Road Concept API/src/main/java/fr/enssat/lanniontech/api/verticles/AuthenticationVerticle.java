@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.AuthenticationException;
-import fr.enssat.lanniontech.api.services.AuthenticationService;
+import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
@@ -18,8 +18,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.BadRequestException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -31,7 +29,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
     private static final String INPUT_JSON_USERNAME = "username";
     private static final String INPUT_JSON_PASSWORD = "password";
 
-    private AuthenticationService authenticationService = new AuthenticationService();
+    private UserService authenticationService = new UserService();
 
     private Router router;
 
@@ -52,6 +50,10 @@ public class AuthenticationVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/api/logout").handler(routingContext -> {
             processLogout(routingContext);
         });
+
+        router.route(HttpMethod.GET, "/api/user/details").handler(routingContext -> {
+            processUserDetails(routingContext);
+        });
     }
 
     // ========
@@ -60,11 +62,10 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
     private void processLogout(RoutingContext routingContext) {
         try {
-            // We need to set a 'Set Cookie' header in order to ask the browser to remove the cookie from client side.
-            Date now = new Date(); // TODO: Use the new Java8 date API ?
+            // We need to set a 'Set Cookie' header in order to ask the browser to remove the cookie from client side. // TODO: Use the new Java8 date API ?
             DateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz", Locale.ENGLISH);
             formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
-            String headerValue = "vertx-web.session=" + routingContext.session().id() + "; path=/; expires=" + formatter.format(now);
+            String headerValue = "vertx-web.session=" + routingContext.session().id() + "; path=/; expires=" + formatter.format(new Date());
             routingContext.response().putHeader(HttpHeaders.SET_COOKIE, headerValue);
             routingContext.session().destroy();
             HttpResponseBuilder.buildNoContentResponse(routingContext);
@@ -77,7 +78,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
             if (requestBody == null || StringUtils.isBlank(requestBody.getString("username")) || StringUtils.isBlank(requestBody.getString("password"))) {
-                throw new BadRequestException();
+                throw new BadRequestException(); // TODO: Erreur 500 si login ou password non renseigné...
             }
             String userName = requestBody.getString(INPUT_JSON_USERNAME);
             String password = requestBody.getString(INPUT_JSON_PASSWORD);
@@ -85,11 +86,21 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
-            HttpResponseBuilder.buildOkResponse(routingContext, user);
+
+            HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (BadRequestException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Username and password can't be null, empty or blank.");
         } catch (AuthenticationException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "Bad credentials, check your login and/or password.");
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    private void processUserDetails(RoutingContext routingContext) {
+        try {
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            HttpResponseBuilder.buildOkResponse(routingContext, currentUser);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }

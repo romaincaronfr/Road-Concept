@@ -21,28 +21,26 @@ public abstract class AbstractRepository {
 
     private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
 
-    protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz)
-    {
-        switch ( e.getSQLState() ) { // TODO: Tester qu'on est compatible PostgreSQL et SQLite sur les error codes
+    protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
+        switch (e.getSQLState()) { // TODO: Tester qu'on est compatible PostgreSQL et SQLite sur les error codes
             case Constants.SQLITE_CHECK_VIOLATION:
-            case Constants.POSTGRESQL_CHECK_VIOLATION :
-                return new DatabaseOperationException(extractErrorFromMessage(e),e);
+            case Constants.POSTGRESQL_CHECK_VIOLATION:
+                return new DatabaseOperationException(extractErrorFromMessage(e), e);
             case Constants.SQLITE_FOREIGN_KEY_VIOLATION:
-            case Constants.POSTGRESQL_FOREIGN_KEY_VIOLATION :
+            case Constants.POSTGRESQL_FOREIGN_KEY_VIOLATION:
                 return new DatabaseOperationException("Entity '" + clazz + "' is still in use.", e);
             case Constants.SQLITE_UNIQUE_VIOLATION:
-            case Constants.POSTGRESQL_UNIQUE_VIOLATION :
+            case Constants.POSTGRESQL_UNIQUE_VIOLATION:
                 return new DatabaseOperationException("Entity '" + clazz + "' already exists.", e);
-            default :
+            default:
                 break;
         }
         return new SQLUnexpectedException(e);
     }
 
-    private static String extractErrorFromMessage(SQLException e)
-    {
+    private static String extractErrorFromMessage(SQLException e) {
         Matcher matcher = SQL_EXCEPTION_PATTERN.matcher(e.getMessage());
-        if ( matcher.find() ) {
+        if (matcher.find()) {
             return matcher.group(1);
         }
         return null;

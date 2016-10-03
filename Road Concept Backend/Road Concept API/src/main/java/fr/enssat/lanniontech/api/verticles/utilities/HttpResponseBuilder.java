@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.verticles.utilities;
 
 import fr.enssat.lanniontech.api.entities.RestException;
 import fr.enssat.lanniontech.api.utilities.JSONSerializer;
-import fr.enssat.lanniontech.api.verticles.APIDocVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.exception.ExceptionUtils;
