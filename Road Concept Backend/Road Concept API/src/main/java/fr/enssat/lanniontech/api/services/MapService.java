@@ -5,8 +5,12 @@ import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.jsonparser.MapJSONParser;
 import fr.enssat.lanniontech.api.jsonparser.entities.Map;
 import fr.enssat.lanniontech.api.repositories.MapRepository;
+import org.apache.commons.io.IOUtils;
+import org.sqlite.SQLiteConfig;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,8 +45,15 @@ public class MapService {
 
     public Map getMap(User user, int mapID) {
         //TODO: Retrive data from db. Now is just example data
-        File json = new File("src/test/resources/map_all.json");
-        Map map = MapJSONParser.unmarshall(json);
+      //  File json = new File("src/main/resources/map_all.json");
+        InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
+        Map map = null;
+        try {
+            String theString = IOUtils.toString(json);
+            map = MapJSONParser.unmarshall(theString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         // TODO: Check mapID incorrect (400)
         // TODO: Check mapID pour 404
         // TODO: Check mapID pas consistent avec l'user logué

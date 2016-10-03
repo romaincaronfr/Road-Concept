@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.api.repositories;
 import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +14,10 @@ public class SQLTests {
     public static void main(String[] args) throws ClassNotFoundException {
 
         SQLDatabaseConnector.configure(Constants.ACTIVE_SGBD);
+
+        URL location = SQLTests.class.getProtectionDomain().getCodeSource().getLocation();
+        System.out.println(location.getFile());
+
         try (Connection connection = SQLDatabaseConnector.getConnection()) {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.

@@ -2,13 +2,19 @@ package fr.enssat.lanniontech.api.verticles.utilities;
 
 import fr.enssat.lanniontech.api.entities.RestException;
 import fr.enssat.lanniontech.api.utilities.JSONSerializer;
+import fr.enssat.lanniontech.api.verticles.APIDocVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
 
 public class HttpResponseBuilder {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpResponseBuilder.class);
 
     public static void buildUnexpectedErrorResponse(RoutingContext routingContext, Throwable cause) {
         RestException error = new RestException();
@@ -18,6 +24,10 @@ public class HttpResponseBuilder {
         routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         routingContext.response().end(JSONSerializer.toJSON(error));
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(cause));
+        }
     }
 
     public static void buildForbiddenResponse(RoutingContext routingContext, String cause) {

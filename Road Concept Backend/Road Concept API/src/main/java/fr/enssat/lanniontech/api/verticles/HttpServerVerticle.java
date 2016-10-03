@@ -32,29 +32,15 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new APIDocVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
         vertx.deployVerticle(new MapsVerticle(router));
+        vertx.deployVerticle(new SimulatorVerticle(router));
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
     }
 
     private void configureGlobalHandlers(Router router) {
         CorsHandler corsHandler = CorsHandler.create("*");
-        corsHandler.allowedMethod(HttpMethod.GET);
-        corsHandler.allowedMethod(HttpMethod.OPTIONS);
-        corsHandler.allowedMethod(HttpMethod.POST);
-        corsHandler.allowedMethod(HttpMethod.PUT);
-        corsHandler.allowedMethod(HttpMethod.DELETE);
-        corsHandler.allowedHeader("Authorization");
-        corsHandler.allowedHeader("Content-Type");
-        corsHandler.allowedHeader("Set-Cookie");
-        corsHandler.allowedHeader("Access-Control-Allow-Origin");
-        corsHandler.allowedHeader("Access-Control-Allow-Headers");
-        corsHandler.allowCredentials(true);
+        configureCORS(corsHandler);
         router.route().handler(corsHandler); // Allows cross domain origin request
-
-
-
-
-
 
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
@@ -69,5 +55,19 @@ public class HttpServerVerticle extends AbstractVerticle {
             }
         });
 
+    }
+
+    private void configureCORS(CorsHandler corsHandler) {
+        corsHandler.allowedMethod(HttpMethod.GET);
+        corsHandler.allowedMethod(HttpMethod.OPTIONS);
+        corsHandler.allowedMethod(HttpMethod.POST);
+        corsHandler.allowedMethod(HttpMethod.PUT);
+        corsHandler.allowedMethod(HttpMethod.DELETE);
+        corsHandler.allowedHeader("Authorization");
+        corsHandler.allowedHeader("Content-Type");
+        corsHandler.allowedHeader("Set-Cookie");
+        corsHandler.allowedHeader("Access-Control-Allow-Origin");
+        corsHandler.allowedHeader("Access-Control-Allow-Headers");
+        corsHandler.allowCredentials(true);
     }
 }

@@ -1,7 +1,10 @@
 package fr.enssat.lanniontech.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User implements Entity {
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private int id;
     private String userName;
 

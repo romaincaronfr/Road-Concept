@@ -6,7 +6,7 @@ public class Constants {
 
     public static final int HTTP_SERVER_PORT = 8080;
     public static final String SESSION_CURRENT_USER = "me";
-    public static final SGBD ACTIVE_SGBD = SGBD.POSTGRESQL;
+    public static final SGBD ACTIVE_SGBD = SGBD.SQLITE;
 
     // =======
     // MONGODB
@@ -20,10 +20,10 @@ public class Constants {
     // POSTGRESQL
     // ==========
 
-    public static final String POSTGRE_SQL_DATABASE_NAME = "roadconcept";
+    public static final String POSTGRESQL_DATABASE_NAME = "roadconcept";
     public static final int POSTGRESQL_SERVER_PORT = 5432;
     public static final String POSTGRESQL_SERVER_HOST = "localhost" ;
-    public static int POSTGRESQL_MAX_CONNECTIONS = 10;
+    public static final int POSTGRESQL_MAX_CONNECTIONS = 10;
 
     // ERROR CODES
     // -----------
@@ -35,6 +35,7 @@ public class Constants {
     // SQLITE
     // ======
 
+    public static final String SQLITE_DATABASE_NAME = "roadconcept";
     public static final String SQLITE_FOREIGN_KEY_VIOLATION = "787";
     public static final String SQLITE_UNIQUE_VIOLATION = "2067";
     public static final String SQLITE_CHECK_VIOLATION = "275";

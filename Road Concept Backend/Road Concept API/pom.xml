@@ -97,6 +97,14 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- FIXME: REMOVE COMMONS-IO DEPENDENCY -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>
