@@ -10,7 +10,7 @@ public class RoadSection {
 
     private Lane laneA; //this lane is on rigth side in A -> B scenario
     private Lane laneB; //this lane is on left side in A -> B scenario
-    private PosFunction f;
+    private PosFunction function;
 
 
     public RoadSection(Position A, Position B) {
@@ -19,14 +19,14 @@ public class RoadSection {
         length = Position.length(A,B);
         laneA = new Lane(this,length,null);
         laneB = new Lane(this,length,null);
-        f = new PosFunction(A,B,length);
+        function = new PosFunction(A,B,length);
     }
 
     public Position getPosition(Lane myLane,double pos){
         if(myLane == laneA){
-            return f.get(pos);
+            return function.get(pos);
         }else{
-            return f.get(length-pos);
+            return function.get(length-pos);
         }
     }
 
@@ -39,9 +39,9 @@ public class RoadSection {
      */
     public Position getPosition(Lane myLane,double pos,double widthPos){
         if(myLane == laneA){
-            return f.get(pos,widthPos);
+            return function.get(pos,widthPos);
         }else{
-            return f.get(length-pos,-widthPos);
+            return function.get(length-pos,-widthPos);
         }
     }
 
@@ -79,5 +79,17 @@ public class RoadSection {
 
     public Position getB() {
         return B;
+    }
+
+    public PosFunction getFunction() {
+        return function;
+    }
+
+    public double getWPos(Lane lane, double width) {
+        if (lane == laneA){
+            return width/2;
+        }else{
+            return -width/2;
+        }
     }
 }

@@ -116,4 +116,12 @@ public class Lane {
         }
         return true;
     }
+
+    public double getMyWPos(){
+        return myRoadSection.getWPos(this,width);
+    }
+
+    public RoadSection getMyRoadSection(){
+        return myRoadSection;
+    }
 }
