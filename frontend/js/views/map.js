@@ -8,9 +8,15 @@ app.mapView = Backbone.View.extend({
     initialize: function () {
         this.mapCollection = new app.collections.mapCollection;
         var self = this;
-        this.mapCollection.fetch().done(function(){
+        this.mapCollection.fetch({
+            success :(function(){
             self.render();
-        });
+        }),
+            error :(function (e) {
+                console.log("error");
+                app.router.navigate('', { trigger: true });
+            })
+        })
     },
 
     render:function () {

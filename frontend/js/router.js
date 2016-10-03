@@ -2,6 +2,9 @@
  * Created by Romain on 30/09/2016.
  */
 
+var login = null;
+var map = null;
+
 app.Router = Backbone.Router.extend({
 
     routes: {
@@ -14,15 +17,23 @@ app.Router = Backbone.Router.extend({
     },
 
     login: function () {
-        app.loginView = new app.loginView();
-        //app.loginView.render();
-        console.log('reusing home views');
-        app.loginView.delegateEvents(); // delegate events when the views is recycled
+        if (!login) {
+            login = new app.loginView();
+            //app.loginView.render();
+            console.log('reusing home views');
+        }else {
+            login.render();
+        }
+        login.delegateEvents(); // delegate events when the views is recycled
         //this.$content.html(app.loginView.el);
     },
 
     map: function() {
-        app.mapView = new app.mapView();
+        if (!map) {
+            map = new app.mapView();
+        }else{
+            map.render();
+        }
     }
 
     
