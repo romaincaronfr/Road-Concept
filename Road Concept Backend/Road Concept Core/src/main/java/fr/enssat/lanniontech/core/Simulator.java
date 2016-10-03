@@ -26,7 +26,7 @@ public class Simulator implements Runnable {
     private long startTime;
     private long stopTime;
 
-    public Simulator(){
+    public Simulator(int vehicleNumber){
         l = new ReentrantReadWriteLock();
 
         roadManager = new RoadManager();
@@ -46,7 +46,7 @@ public class Simulator implements Runnable {
 
         vehicleManager.addToSpawnArea(R);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < vehicleNumber; i++) {
             System.out.println(vehicleManager.addVehicle());
         }
         System.out.println(vehicleManager.getVehiclesNumber());
@@ -76,7 +76,7 @@ public class Simulator implements Runnable {
         int j=1;
         for (long i = 0; i < step ; i++) {
 
-            if(j==100){
+            if(j==1000){
                 vehicleManager.newStep(precision,true);
                 j=1;
             }else{
@@ -128,7 +128,7 @@ public class Simulator implements Runnable {
     }
 
     public static void main (String[] args){
-        Simulator Sim = new Simulator();
+        Simulator Sim = new Simulator(10);
 
         try {
             Thread.sleep(2000);

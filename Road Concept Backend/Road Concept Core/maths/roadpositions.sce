@@ -83,6 +83,12 @@ function findInter(fX1,fY1,fX2,fY2)
     disp(M1)
     disp(R1)
     
+    k=M1(1,1)/M1(2,1)
+    M1(1,:)=M1(1,:)-M1(2,:)*k
+    
+    disp(M1)
+    R1(1)=R1(1)-R1(2)*k
+    disp(R1)
     
 endfunction
 
