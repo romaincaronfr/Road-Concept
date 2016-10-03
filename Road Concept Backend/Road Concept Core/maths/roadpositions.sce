@@ -48,7 +48,9 @@ function roadInter()
     tracefXYzw(fX2,fY2,z2,0,"m")
     
     
-    findInter(fX1,fY1,fX2,fY2)
+    [p1,p2]=findInter(fX1,fY1,fX2,fY2)
+    
+    tracefXYzPoint(fX1,fY1,p1)
 endfunction
 
 function [z]=calcZ(x,y)
@@ -77,7 +79,14 @@ function tracefXYzw(fX,fY,z,w,c)
     plot(Xz,Yz,c);
 endfunction
 
-function findInter(fX1,fY1,fX2,fY2)
+function tracefXYzPoint(fX,fY,z)
+    Xz=fX(1)+z*fX(2)
+    Yz=fY(1)+z*fY(2)
+    
+    plot(Xz,Yz,"Ro");
+endfunction
+
+function [p1,p2]=findInter(fX1,fY1,fX2,fY2)
     M1=[fX1(2),-fX2(2);fY1(2),-fY2(2)]
     R1=[fX2(1)-fX1(1);fY2(1)-fY1(1)]
     disp(M1)
@@ -89,6 +98,9 @@ function findInter(fX1,fY1,fX2,fY2)
     disp(M1)
     R1(1)=R1(1)-R1(2)*k
     disp(R1)
+    
+    p2=R1(1)/M1(1,2);
+    p1=(R1(2)-p2*M1(2,2))/M1(2,1)
     
 endfunction
 
