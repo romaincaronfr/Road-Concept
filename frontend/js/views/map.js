@@ -11,12 +11,8 @@ app.mapView = Backbone.View.extend({
         this.mapCollection.fetch({
             success :(function(){
             self.render();
-        }),
-            error :(function (e) {
-                console.log("error");
-                app.router.navigate('', { trigger: true });
-            })
         })
+        });
     },
 
     render:function () {
@@ -30,6 +26,14 @@ app.mapView = Backbone.View.extend({
             //this.$el.append(mapTableView.render().el);
         }.bind(this));
         return this;
+    },
+
+    reloadCollection:function(){
+        this.mapCollection.fetch({
+            success :(function(){
+                self.render();
+            })
+        });
     }
 
 });

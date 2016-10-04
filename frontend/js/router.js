@@ -2,8 +2,7 @@
  * Created by Romain on 30/09/2016.
  */
 
-var login = null;
-var map = null;
+
 
 Backbone.sync = (function(syncFn) {
     return function(method, model, options) {
@@ -29,26 +28,28 @@ app.Router = Backbone.Router.extend({
     },
 
     initialize: function () {
-        this.$content = $("#content");
+        this.login = null;
+        this.map = null;
+        this.navBar = new app.navBarView();
     },
 
     login: function () {
-        if (!login) {
-            login = new app.loginView();
+        if (!this.login) {
+            this.login = new app.loginView();
             //app.loginView.render();
             console.log('reusing home views');
         }else {
-            login.render();
+            this.login.render();
         }
-        login.delegateEvents(); // delegate events when the views is recycled
+        this.login.delegateEvents(); // delegate events when the views is recycled
         //this.$content.html(app.loginView.el);
     },
 
     map: function() {
-        if (!map) {
-            map = new app.mapView();
+        if (!this.map) {
+            this.map = new app.mapView();
         }else{
-            map.render();
+            this.map.reloadCollection();
         }
     }
 

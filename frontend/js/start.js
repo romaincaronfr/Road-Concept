@@ -5,7 +5,7 @@
 
 $(document).ready(function () {
     console.log("document ready");
-    app.loadTemplates(["loginView","mapView","mapTableView"],
+    app.loadTemplates(["loginView","mapView","mapTableView","navBarView"],
         function () {
             app.router = new app.Router();
             Backbone.history.start();
