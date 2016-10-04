@@ -21,7 +21,7 @@ app.loginView = Backbone.View.extend({
     clickOnSubmitLogin:function (){
         console.log("click on submit");
         $.ajax({
-                url: "http://" + apiURL + "/login",
+                url: Backbone.Collection.prototype.absURL+"/login",
                 type: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
@@ -34,7 +34,6 @@ app.loginView = Backbone.View.extend({
             })
             .done(function (data, textStatus, jqXHR) {
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
-                console.log(data);
                 app.router.navigate('map', { trigger: true });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {

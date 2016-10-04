@@ -3,51 +3,14 @@
  */
 var apiURL = "localhost:8080";
 Backbone.Collection.prototype.absURL = "http://localhost:8080";
-var loginToken = null;
 
 
 $.ajaxSetup({
     xhrFields: {
         withCredentials: true
     },
-    crossDomain: true,
-    error : function(jqXHR, textStatus, errorThrown) {
-        console.log("error ajax");
-        if (jqXHR.status == 401) {
-            console.log('error 401');
-            app.router.navigate('', { trigger: true });
-        }
-    }
+    crossDomain: true
 });
-
-if (loginToken) {
-    $.ajax({
-            url: "http://" + apiURL + "/login",
-            type: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            contentType: "application/json",
-            data: JSON.stringify({
-                "username": "efzrfz",
-                "password": "fgreger"
-            })
-        })
-        .done(function (data, textStatus, jqXHR) {
-            console.log("HTTP Request Succeeded: " + jqXHR.status);
-            console.log(data);
-            //loginToken = data.authenticationToken;
-            //document.cookie = "vertx-web.session="+loginToken;
-            console.log(loginToken);
-            testTech();
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("HTTP Request Failed");
-        })
-        .always(function () {
-            /* ... */
-        });
-}
 
 
 var app = {

@@ -5,6 +5,22 @@
 var login = null;
 var map = null;
 
+Backbone.sync = (function(syncFn) {
+    return function(method, model, options) {
+        options = options || {};
+        // handle unauthorized error (401)
+        options.error = function(xhr, textStatus, errorThrown) {
+            console.log("error sync");
+            if (xhr.status === 401) {
+                console.log('error 401');
+                app.router.navigate('', { trigger: true });
+            }
+        };
+
+        return syncFn.apply(this, arguments);
+    };
+})(Backbone.sync);
+
 app.Router = Backbone.Router.extend({
 
     routes: {
