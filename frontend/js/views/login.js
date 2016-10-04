@@ -34,7 +34,7 @@ app.loginView = Backbone.View.extend({
             })
             .done(function (data, textStatus, jqXHR) {
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
-                app.router.navigate('map', { trigger: true });
+                app.router.navigate('', { trigger: true });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log("HTTP Request Failed");

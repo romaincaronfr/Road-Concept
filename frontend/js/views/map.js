@@ -29,6 +29,7 @@ app.mapView = Backbone.View.extend({
     },
 
     reloadCollection:function(){
+        var self = this;
         this.mapCollection.fetch({
             success :(function(){
                 self.render();
