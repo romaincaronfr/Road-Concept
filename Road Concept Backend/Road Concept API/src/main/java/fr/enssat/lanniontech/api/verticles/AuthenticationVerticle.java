@@ -78,7 +78,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
             if (requestBody == null || StringUtils.isBlank(requestBody.getString("username")) || StringUtils.isBlank(requestBody.getString("password"))) {
-                throw new BadRequestException(); // TODO: Erreur 500 si login ou password non renseigné...
+                throw new BadRequestException(); // FIXME: On a une erreur 500 si login ou password non renseigné...
             }
             String userName = requestBody.getString(INPUT_JSON_USERNAME);
             String password = requestBody.getString(INPUT_JSON_PASSWORD);
@@ -86,6 +86,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
+            //TODO: Créer une instance de 'Simulator' lors du login ?
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (BadRequestException e) {

@@ -26,6 +26,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
 
         SQLDatabaseConnector.setUp(); // This call is thread safe. May throw
+        // TODO: Add test connection to MongoDB
 
         configureGlobalHandlers(router);
 
