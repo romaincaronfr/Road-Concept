@@ -1,34 +1,19 @@
 <div class="alert alert-danger hidden" id="alertLogin">
     <strong>Danger!</strong> Mauvais mot de passe ou login. Enfin TMTC !
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-4">
+    <div class="login-clean">
+        <form role="form">
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"><img src="assets/img/map-marker-icon.png"></div>
+            <div class="form-group">
+                <input class="form-control" type="email" name="email" placeholder="Email" id="exampleInputEmail1">
             </div>
-            <div class="col-md-4">
-                <form role="form">
-                    <div class="form-group">
-
-                        <label for="exampleInputEmail1">
-                            Adresse mail
-                        </label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" />
-                    </div>
-                    <div class="form-group">
-
-                        <label for="exampleInputPassword1">
-                            Mot de passe
-                        </label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" />
-                    </div>
-                    <button type="button" class="btn btn-default" id="submitLogin">
-                        Se connecter
-                    </button>
-                </form>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Mot de passe" id="exampleInputPassword1">
             </div>
-            <div class="col-md-4">
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" type="button" id="submitLogin">Se connecter</button>
             </div>
-        </div>
+        </form>
     </div>
-</div>
+

@@ -1,6 +1,8 @@
 .login-clean {
-  background:#f1f7fc;
-  padding:80px 0;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background-color:#f1f7fc;
+  width: auto;
 }
 
 .login-clean form {
