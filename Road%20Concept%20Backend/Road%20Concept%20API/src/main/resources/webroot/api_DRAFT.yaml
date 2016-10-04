@@ -1,0 +1,211 @@
+swagger: '2.0'
+info:
+  title: Portail d'intéractions du simulateur de traffic Road Concept
+  description: Aide à l'utilisation de l'API
+  version: "0.1"
+host: localhost:8080
+schemes:
+  - http
+produces:
+  - application/json
+
+parameters:
+  authenticationToken:
+    name: authentication_token
+    in: header
+    type: string
+    required: true
+  userName:
+    name: name
+    description: login de l'utilisateur
+    in: path
+    required: true
+    type: string
+  mapUUID:
+    name: mapUUID
+    in: path
+    required: true
+    type: string
+    format: uuid
+
+paths:
+  /users/{name}/maps:
+    get:
+      parameters:
+        - $ref: '#/parameters/authenticationToken'
+        - $ref: '#/parameters/userName'
+      tags:
+        - Cartes
+      responses:
+        200:
+          description: Un tableau de carte contenant les informations de base sur chacune d'entre elles
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nom de la carte
+                id:
+                  type: string
+                  description: ID de la carte # TODO: UUID plutôt que ID ?
+                image_url:
+                  type: string
+                  description: URL de l'image associé à cette carte
+
+    post:
+      summary: Créer une nouvelle carte
+      description: |
+        Permet de créer une nouvelle carte pour un utilisateur.
+      parameters:
+        - $ref: '#/parameters/authenticationToken'
+        - $ref: '#/parameters/userName'
+        - name: mapName
+          in: formData
+          description: Nom de la carte à créer
+          required: true
+          type: string
+        - name: mapCountryBorder
+          in: formData
+          description: La map doit-elle contenir les frontières des pays ?
+          required: true
+          type: boolean
+        - name: image
+          in: formData
+          description: Une image optionnelle pour représenter la carte.
+          type: file
+      tags:
+        - Cartes
+      responses:
+        201:
+          description: Carte crée avec succès. Son UUID est retourné dans le header Location.
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /users/{name}/maps/{mapUUID}:
+    put:
+      summary: Modifier une carte.
+      description: |
+        Modification des informations d'une carte d'un utilisateur.
+      parameters:
+        - $ref: '#/parameters/authenticationToken'
+        - $ref: '#/parameters/userName'
+        - $ref: '#/parameters/mapUUID'
+        - name: mapCountryBorder
+          in: formData
+          description: Indique si la carte doit afficher les frontières des pays.
+          type: boolean
+        - name: image
+          in: formData
+          description: Une image optionnelle pour représenter la carte
+          type: file
+      tags:
+        - Cartes
+      responses:
+        200:
+          description: Réponse de succés. La map a été modifiée.
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+    delete:
+      summary: Supprimer une carte
+      description: |
+        Supprime la carte d'un utilisateur.
+      parameters:
+        - $ref: '#/parameters/authenticationToken'
+        - $ref: '#/parameters/userName'
+        - $ref: '#/parameters/mapUUID'
+      tags:
+        - Cartes
+      responses:
+        204:
+          description: La carte et l'enssemble des données associées ont été supprimés.
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /users/{name}/maps/{mapUUID}/import:
+    post:
+      summary: Import de carte
+      description: |
+        Permet des éléments depuis un site externe à une carte éxistante.
+      parameters:
+        - $ref: '#/parameters/authenticationToken'
+        - $ref: '#/parameters/userName'
+        - $ref: '#/parameters/mapUUID'
+        - name: data
+          in: formData
+          required: true
+          description: Fichier à importer
+          type: file
+        - name: type
+          in: formData
+          required: true
+          description: Type de carte à importer.
+          type: string
+          enum:
+            - OpenStreetMap
+      tags:
+        - Importation
+      responses:
+        201:
+          description: Les données ont correctement été ajoutées à la carte.
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        404:
+          description: Nom d'utilisateur ou UUID de la carte incorrect.
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          $ref: '#/responses/500'
+
+responses:
+  '400':
+    description: Mauvaise requête. Vérifier les paramètres et les formats.
+    schema :
+      $ref: '#/definitions/Error'
+  '401':
+    description: Authentification nécéssaire. Voir méthode POST /login.
+    schema :
+      $ref: '#/definitions/Error'
+  '403':
+    description: Accès refusé (problème de droits).
+    schema:
+      $ref: '#/definitions/Error'
+  '500':
+    description: Erreur interne au serveur. Contacter un administrateur de l'API.
+    schema :
+      $ref: '#/definitions/Error'
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code: # code HTTP
+        type: integer
+        format: int32
+      cause:
+        type: string
+
