@@ -28,7 +28,7 @@ app.loginView = Backbone.View.extend({
                 },
                 contentType: "application/json",
                 data: JSON.stringify({
-                    "username": $('#exampleInputEmail1').val(),
+                    "email": $('#exampleInputEmail1').val(),
                     "password": $('#exampleInputPassword1').val()
                 })
             })
