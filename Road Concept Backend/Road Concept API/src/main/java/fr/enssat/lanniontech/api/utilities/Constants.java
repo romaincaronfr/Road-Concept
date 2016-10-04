@@ -1,12 +1,10 @@
 package fr.enssat.lanniontech.api.utilities;
 
-import fr.enssat.lanniontech.api.repositories.connectors.SGBD;
-
 public class Constants {
 
+    public static final ProjetEnvironment ENVIRONMENT = ProjetEnvironment.DEVELOPPMENT;
     public static final int HTTP_SERVER_PORT = 8080;
     public static final String SESSION_CURRENT_USER = "me";
-    public static final SGBD ACTIVE_SGBD = SGBD.SQLITE;
 
     // =======
     // MONGODB
@@ -30,17 +28,6 @@ public class Constants {
     public static final String POSTGRESQL_FOREIGN_KEY_VIOLATION = "23503";
     public static final String POSTGRESQL_UNIQUE_VIOLATION = "23505";
     public static final String POSTGRESQL_CHECK_VIOLATION = "23514";
-
-    // ======
-    // SQLITE
-    // ======
-
-    public static final String SQLITE_DATABASE_NAME = "roadconcept";
-    public static final String SQLITE_URL_PREFIX = "jdbc:sqlite:";
-    public static final String SQLITE_DB_FILE_SUFFIX = "-sqlite.db";
-    public static final String SQLITE_FOREIGN_KEY_VIOLATION = "787";
-    public static final String SQLITE_UNIQUE_VIOLATION = "2067";
-    public static final String SQLITE_CHECK_VIOLATION = "275";
 
     // ====================
     // SINGLETON MANAGEMENT

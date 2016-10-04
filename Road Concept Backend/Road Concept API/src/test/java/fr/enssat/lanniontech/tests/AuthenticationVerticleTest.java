@@ -23,7 +23,7 @@ public class AuthenticationVerticleTest {
         vertx.close(context.asyncAssertSuccess());
     }
 
-   // @Test
+    // @Test
     public void testMyApplication(TestContext context) {
 
     }

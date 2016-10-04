@@ -50,7 +50,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
-        
+
         // Require authentication for all path starting "/api"
         router.route("/api/*").handler(routingContext -> {
             // Set the default Content Type for all the responses

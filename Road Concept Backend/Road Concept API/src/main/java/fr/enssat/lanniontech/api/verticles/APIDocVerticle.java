@@ -7,8 +7,6 @@ import io.vertx.ext.web.handler.StaticHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.core.MediaType;
-
 /**
  * Simple verticle to serve static API documentation.
  */

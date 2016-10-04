@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>road-concept</artifactId>
@@ -19,7 +19,6 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
         <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
-        <sqlite-jdbc.version>3.14.2</sqlite-jdbc.version>
         <postgresql.version>9.4.1211.jre7</postgresql.version>
         <jbcrypt.version>0.4-atlassian-1</jbcrypt.version>
     </properties>
@@ -40,11 +39,6 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>${mongo-java-driver.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.xerial</groupId>
-            <artifactId>sqlite-jdbc</artifactId>
-            <version>${sqlite-jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -99,9 +93,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.mindrot</groupId>-->
-            <!--<artifactId>jbcrypt</artifactId>-->
-            <!--<version>${jbcrypt.version}</version>-->
+        <!--<groupId>org.mindrot</groupId>-->
+        <!--<artifactId>jbcrypt</artifactId>-->
+        <!--<version>${jbcrypt.version}</version>-->
         <!--</dependency>-->
 
         <!-- FIXME: REMOVE COMMONS-IO DEPENDENCY -->
@@ -160,12 +154,14 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>io.vertx.core.Launcher</Main-Class>
-                                        <Main-Verticle>fr.enssat.lanniontech.api.verticles.HttpServerVerticle</Main-Verticle>
+                                        <Main-Verticle>fr.enssat.lanniontech.api.verticles.HttpServerVerticle
+                                        </Main-Verticle>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
                             <artifactSet/>
-                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
+                            </outputFile>
                         </configuration>
                     </execution>
                 </executions>

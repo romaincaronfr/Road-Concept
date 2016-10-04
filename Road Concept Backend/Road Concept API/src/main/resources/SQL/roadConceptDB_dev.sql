@@ -3,25 +3,23 @@
 -- ******************************************************************************
 -- ** product: Road Concept                                                    **
 -- ** 	module: Road Concept API                                               **
--- ** version: 0.1_SNAPSHOT                                                    **
--- ** 	date: 03/10/2016                                                       **
--- ** file: src/main/resources/roadConceptDB_SQLite.sql                        **
+-- ** version: 0.1-SNAPSHOT                                                    **
+-- ** 	date: 05/10/2016                                                       **
+-- ** file: src/main/resources/roadConceptDB_dev.sql                       **
 -- ** author: Maëlig NANTEL						                                         **
 -- ******************************************************************************
-
---CREATE SCHEMA IF NOT EXISTS "road_concept";
---SET SCHEMA 'road_concept';
 
 -- ==============================================================================
 -- USERS
 -- ==============================================================================
 
-CREATE TABLE IF NOT EXISTS "user" (
-  "id_user" SERIAL PRIMARY KEY,
-  "type" INTEGER,
-  "email" TEXT NOT NULL,
-  "first_name" TEXT NOT NULL,
-  "last_name" TEXT NOT NULL
+CREATE TABLE IF NOT EXISTS "final_user" (
+  "id"         SERIAL PRIMARY KEY,
+  "email"      VARCHAR(89) NOT NULL UNIQUE CHECK ("email" ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+  "password"   VARCHAR     NOT NULL,
+  "first_name" VARCHAR(20) NOT NULL,
+  "last_name"  VARCHAR(20) NOT NULL,
+  "type"       INTEGER CHECK ("type" IN (1, 2))
 );
 
 -- ==============================================================================
@@ -29,9 +27,9 @@ CREATE TABLE IF NOT EXISTS "user" (
 -- ==============================================================================
 
 CREATE TABLE IF NOT EXISTS "map_info" (
-  "id_map" SERIAL PRIMARY KEY,
-  "id_user" INTEGER NOT NULL REFERENCES user(id_user) ON DELETE CASCADE,
-  "name" TEXT NOT NULL,
-  "image_url" TEXT,
+  "id"          SERIAL PRIMARY KEY,
+  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL,
+  "image_url"   VARCHAR(100),
   "description" TEXT
 );

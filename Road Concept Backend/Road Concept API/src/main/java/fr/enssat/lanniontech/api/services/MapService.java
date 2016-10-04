@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MapService extends AbstractRoadConceptService{
+public class MapService extends AbstractRoadConceptService {
 
     private MapRepository repository = new MapRepository();
 

@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.api.entities.Entity;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.utilities.Constants;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,19 +23,20 @@ public abstract class AbstractRepository {
     private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
 
     protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
-        switch (e.getSQLState()) { // TODO: Tester qu'on est compatible PostgreSQL et SQLite sur les error codes
-            case Constants.SQLITE_CHECK_VIOLATION:
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+        }
+        switch (e.getSQLState()) {
             case Constants.POSTGRESQL_CHECK_VIOLATION:
                 return new DatabaseOperationException(extractErrorFromMessage(e), e);
-            case Constants.SQLITE_FOREIGN_KEY_VIOLATION:
             case Constants.POSTGRESQL_FOREIGN_KEY_VIOLATION:
                 return new DatabaseOperationException("Entity '" + clazz + "' is still in use.", e);
-            case Constants.SQLITE_UNIQUE_VIOLATION:
             case Constants.POSTGRESQL_UNIQUE_VIOLATION:
                 return new DatabaseOperationException("Entity '" + clazz + "' already exists.", e);
             default:
                 break;
         }
+        LOGGER.error(ExceptionUtils.getStackTrace(e));
         return new SQLUnexpectedException(e);
     }
 
