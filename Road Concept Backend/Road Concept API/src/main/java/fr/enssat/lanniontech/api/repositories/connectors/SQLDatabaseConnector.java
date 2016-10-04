@@ -1,7 +1,9 @@
 package fr.enssat.lanniontech.api.repositories.connectors;
 
 import com.mongodb.MongoClient;
+import fr.enssat.lanniontech.api.entities.UserType;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
+import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.ProjetEnvironment;
 import fr.enssat.lanniontech.api.utilities.SQLScriptRunner;
@@ -16,7 +18,6 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-// TODO: Définir quand et comment une connection doit être fermée
 public class SQLDatabaseConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLDatabaseConnector.class);
@@ -27,11 +28,11 @@ public class SQLDatabaseConnector {
     // DB CONNECTIONS
     // ==============
 
-    public synchronized static MongoClient getMongoDBClient() {
+    public static MongoClient getMongoDBClient() {
         return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
     }
 
-    public synchronized static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws SQLException { // dataSource is thread safe
         return dataSource.getConnection();
     }
 
@@ -42,7 +43,13 @@ public class SQLDatabaseConnector {
     public static void setUp() throws SQLUnexpectedException {
         configure();
         if (Constants.ENVIRONMENT == ProjetEnvironment.DEVELOPPMENT) {
-            initializeSchema();
+            try (Connection initConnection = getConnection()) {
+                initializeDeveloppmentSchema(initConnection);
+                new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
+            } catch (SQLException e) {
+                LOGGER.error(ExceptionUtils.getStackTrace(e));
+                throw new SQLUnexpectedException(e);
+            }
         }
     }
 
@@ -53,16 +60,16 @@ public class SQLDatabaseConnector {
         dataSource.setMaxConnections(Constants.POSTGRESQL_MAX_CONNECTIONS);
     }
 
-    private static void initializeSchema() {
-        /**
-         * The development script do not contains any procedure or trigger, since it cause trouble to process the file on server startup.
-         */
-        String file = "roadConceptDB_dev.sql";
-        try (Connection connection = getConnection()) {
+    /**
+     * The development script do not contains any procedure or trigger, since it cause trouble to process the file on server startup.
+     */
+    private static void initializeDeveloppmentSchema(Connection connection) {
+        try {
+            String file = "roadConceptDB_dev.sql";
             SQLScriptRunner runner = new SQLScriptRunner(connection, false);
-            InputStream script = SQLDatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/" + file);
-            runner.runScript(new BufferedReader(new InputStreamReader(script)));
-            connection.close();
+            try (InputStream script = SQLDatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/" + file)) {
+                runner.runScript(new BufferedReader(new InputStreamReader(script)));
+            }
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw new SQLUnexpectedException(e);

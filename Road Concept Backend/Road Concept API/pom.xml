@@ -20,7 +20,7 @@
         <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
         <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
         <postgresql.version>9.4.1211.jre7</postgresql.version>
-        <jbcrypt.version>0.4-atlassian-1</jbcrypt.version>
+        <jBCrypt.version>0.4.1</jBCrypt.version>
     </properties>
 
     <dependencies>
@@ -92,11 +92,12 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.mindrot</groupId>-->
-        <!--<artifactId>jbcrypt</artifactId>-->
-        <!--<version>${jbcrypt.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>de.svenkubiak</groupId>
+            <artifactId>jBCrypt</artifactId>
+            <version>${jBCrypt.version}</version>
+        </dependency>
+
 
         <!-- FIXME: REMOVE COMMONS-IO DEPENDENCY -->
         <dependency>

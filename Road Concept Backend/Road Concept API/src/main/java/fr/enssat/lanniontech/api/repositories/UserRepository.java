@@ -20,6 +20,7 @@ public class UserRepository extends AbstractRepository {
     private static final String INSERT = "INSERT INTO final_user(email, password, first_name, last_name, type) VALUES (?, ?, ?, ?, ?) RETURNING id";
     private static final String SELECT_FROM_ID = "SELECT email, password, first_name, last_name, type FROM final_user WHERE id = ?";
     private static final String SELECT_FROM_EMAIL = "SELECT id, password, first_name, last_name, type FROM final_user WHERE email = ?";
+    private static final String SELECT_FROM_EMAIL_AND_PASSWORD = "SELECT id, first_name, last_name, type FROM final_user WHERE email = ? AND password = ?";
 
     //  private static final String SELECT_ALL = "SELECT id_application, uuid_application, name, visible_deployment, visible_dashboard, visible_quick_editor, id_description FROM application WHERE id_tenant = ? ORDER BY name";
     //  private static final String SELECT_FROM_UUID = "SELECT id_application, id_tenant, name, visible_deployment, visible_dashboard, visible_quick_editor, id_description FROM application WHERE uuid_application = ?::uuid";
@@ -42,8 +43,8 @@ public class UserRepository extends AbstractRepository {
             statement.setString(4, lastName);
             statement.setInt(5, type.getJsonID());
 
-            try (ResultSet result = statement.executeQuery()) {
-                result.next(); // get first row
+            try (ResultSet result = statement.executeQuery()) { //TODO: What if email already exists ?
+                result.next(); // Has exactly one row
                 User user = new User();
                 user.setId(result.getInt("id"));
                 user.setEmail(email);
@@ -56,6 +57,7 @@ public class UserRepository extends AbstractRepository {
         } catch (SQLException e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw processBasicSQLException(e, User.class);
+            //   throw processBasicSQLException(e, User.class);
         }
     }
 
@@ -111,18 +113,22 @@ public class UserRepository extends AbstractRepository {
             statement.setInt(1, id);
 
             try (ResultSet result = statement.executeQuery()) {
-                User user = new User();
-                user.setId(id);
-                user.setEmail(result.getString("email"));
-                user.setPassword(result.getString("password"));
-                user.setFirstName(result.getString("first_name"));
-                user.setLastName(result.getString("last_name"));
-                user.setType(UserType.forValue(result.getInt("type")));
-                return user;
+                if (result.next()) {
+                    User user = new User();
+                    user.setId(id);
+                    user.setEmail(result.getString("email"));
+                    user.setPassword(result.getString("password"));
+                    user.setFirstName(result.getString("first_name"));
+                    user.setLastName(result.getString("last_name"));
+                    user.setType(UserType.forValue(result.getInt("type")));
+                    return user;
+                }
+                return null; // No row
             }
         } catch (SQLException e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
-            throw new SQLUnexpectedException(e);
+            throw processBasicSQLException(e, User.class);
+            //throw new SQLUnexpectedException(e);
         }
     }
 
@@ -131,19 +137,22 @@ public class UserRepository extends AbstractRepository {
             statement.setString(1, email);
 
             try (ResultSet result = statement.executeQuery()) {
-                result.next();
-                User user = new User();
-                user.setId(result.getInt("id"));
-                user.setEmail(email);
-                user.setPassword(result.getString("password"));
-                user.setFirstName(result.getString("first_name"));
-                user.setLastName(result.getString("last_name"));
-                user.setType(UserType.forValue(result.getInt("type")));
-                return user;
+                if (result.next()) {
+                    User user = new User();
+                    user.setId(result.getInt("id"));
+                    user.setEmail(email);
+                    user.setPassword(result.getString("password"));
+                    user.setFirstName(result.getString("first_name"));
+                    user.setLastName(result.getString("last_name"));
+                    user.setType(UserType.forValue(result.getInt("type")));
+                    return user;
+                }
+                return null; // No row
             }
         } catch (SQLException e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
-            throw new SQLUnexpectedException(e);
+            throw processBasicSQLException(e, User.class);
+            // throw new SQLUnexpectedException(e);
         }
     }
 
