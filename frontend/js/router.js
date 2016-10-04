@@ -13,7 +13,7 @@ Backbone.sync = (function(syncFn) {
             console.log("error sync");
             if (xhr.status === 401) {
                 console.log('error 401');
-                app.router.navigate('', { trigger: true });
+                app.router.navigate('login', { trigger: true });
             }
         };
 
@@ -24,8 +24,8 @@ Backbone.sync = (function(syncFn) {
 app.Router = Backbone.Router.extend({
 
     routes: {
-        "": "login",
-        "map": "map"
+        "": "map",
+        "login": "login"
     },
 
     initialize: function () {
