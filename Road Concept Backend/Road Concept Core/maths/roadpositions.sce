@@ -54,6 +54,40 @@ function roadInter()
     tracefXYzwPoint(fX2,fY2,p2,0)
 endfunction
 
+function findSide()
+    clf;
+    isoview(-3,-3,3,3)
+    plot2d(0,0,rect=[-3,-3,3,3]);
+    n=0;
+    x1=0;
+    y1=0;
+    bt=0;
+    for n=1:2
+        [bt,x1(n),y1(n)]=xclick()
+        plot(x1(n),y1(n),"ro");
+    end
+    
+    z1=calcZ(x1,y1)
+    [fX1,fY1]=fXYz(x1,y1,z1)
+    tracefXYzw(fX1,fY1,z1,0,"b")
+    
+    x2=0;
+    y2=0;
+    bt=0;
+    for n=1:2
+        [bt,x2(n),y2(n)]=xclick()
+        plot(x2(n),y2(n),"go");
+    end
+    z2=calcZ(x1,y1)
+    [fX2,fY2]=fXYz(x2,y2,z2)
+    tracefXYzw(fX2,fY2,z2,0,"m")
+    disp(deter(fX1,fY1,fX2,fY2))
+endfunction
+
+function v=deter(fX1,fY1,fX2,fY2)
+    v=(fX1(2)*fY2(2))-(fX2(2)*fY1(1))
+endfunction
+
 function [z]=calcZ(x,y)
     z(1)=0;
     z(2)=sqrt((x(1)-x(2))^2+(y(1)-y(2))^2);
@@ -108,6 +142,6 @@ function [p1,p2]=findInter(fX1,fY1,fX2,fY2,w1,w2)
     
 endfunction
 
-roadInter();
-
 //traceRoad();
+//roadInter();
+findSide()

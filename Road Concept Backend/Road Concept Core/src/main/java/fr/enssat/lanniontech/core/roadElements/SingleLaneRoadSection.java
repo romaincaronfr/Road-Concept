@@ -6,11 +6,11 @@ import fr.enssat.lanniontech.core.positioning.Position;
 
 public class SingleLaneRoadSection extends RoadSection {
 
-    SingleLaneRoadSection(Position A, Position B){
-        super(A,B);
+    SingleLaneRoadSection(Position A, Position B) {
+        super(A, B);
     }
 
-    public Lane getLaneB(){
+    public Lane getLaneB() {
         return super.getLaneA();
     }
 

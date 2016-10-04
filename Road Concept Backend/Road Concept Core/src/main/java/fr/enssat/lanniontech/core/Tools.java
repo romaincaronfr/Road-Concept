@@ -10,11 +10,11 @@ public class Tools {
         return (double) tmp / factor;
     }
 
-    public static double mpsToKph(double mps){
-        return mps*3.6;
+    public static double mpsToKph(double mps) {
+        return mps * 3.6;
     }
 
-    public static double kphToMph(double kph){
-        return kph/3.6;
+    public static double kphToMph(double kph) {
+        return kph / 3.6;
     }
 }

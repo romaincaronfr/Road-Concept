@@ -16,52 +16,51 @@ public class RoadSection {
     public RoadSection(Position A, Position B) {
         this.A = A;
         this.B = B;
-        length = Position.length(A,B);
-        laneA = new Lane(this,length,null);
-        laneB = new Lane(this,length,null);
-        function = new PosFunction(A,B,length);
+        length = Position.length(A, B);
+        laneA = new Lane(this, length, null);
+        laneB = new Lane(this, length, null);
+        function = new PosFunction(A, B, length);
     }
 
-    public Position getPosition(Lane myLane,double pos){
-        if(myLane == laneA){
+    public Position getPosition(Lane myLane, double pos) {
+        if (myLane == laneA) {
             return function.get(pos);
-        }else{
-            return function.get(length-pos);
+        } else {
+            return function.get(length - pos);
         }
     }
 
     /**
-     *
      * @param myLane
      * @param pos
      * @param widthPos position of the vehicle from the left side of the road
      * @return
      */
-    public Position getPosition(Lane myLane,double pos,double widthPos){
-        if(myLane == laneA){
-            return function.get(pos,widthPos);
-        }else{
-            return function.get(length-pos,-widthPos);
+    public Position getPosition(Lane myLane, double pos, double widthPos) {
+        if (myLane == laneA) {
+            return function.get(pos, widthPos);
+        } else {
+            return function.get(length - pos, -widthPos);
         }
     }
 
-    public Lane getRigthLane(Position P){
-        if(P==A){
+    public Lane getRigthLane(Position P) {
+        if (P == A) {
             return laneA;
-        }else{
+        } else {
             return laneB;
         }
     }
 
-    public Lane getLeftLane(Position P){
-        if(P==B){
+    public Lane getLeftLane(Position P) {
+        if (P == B) {
             return laneA;
-        }else{
+        } else {
             return laneB;
         }
     }
 
-    public Lane getLaneA(){
+    public Lane getLaneA() {
         return laneA;
     }
 
@@ -86,10 +85,10 @@ public class RoadSection {
     }
 
     public double getWPos(Lane lane, double width) {
-        if (lane == laneA){
-            return width/2;
-        }else{
-            return -width/2;
+        if (lane == laneA) {
+            return width / 2;
+        } else {
+            return -width / 2;
         }
     }
 }

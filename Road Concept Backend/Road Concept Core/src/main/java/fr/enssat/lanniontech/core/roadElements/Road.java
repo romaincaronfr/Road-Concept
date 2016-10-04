@@ -14,13 +14,13 @@ public class Road {
     private Position A;
     private Position B;
 
-    public Road(int id){
-        this(id,50);
+    public Road(int id) {
+        this(id, 50);
     }
 
-    public Road(int id, double maxSpeed){
+    public Road(int id, double maxSpeed) {
         this.id = id;
-        this.maxSpeed=maxSpeed;
+        this.maxSpeed = maxSpeed;
         this.sections = new ArrayList<RoadSection>();
         this.length = 0;
         this.timeWeigth = 0;
@@ -29,40 +29,40 @@ public class Road {
         B = null;
     }
 
-    private void updateRoad(){
+    private void updateRoad() {
         length = 0;
-        for (int i = 0; i < sections.size() ; i++) {
+        for (int i = 0; i < sections.size(); i++) {
             length += sections.get(i).getLength();
         }
-        timeWeigth = length/maxSpeed;
+        timeWeigth = length / maxSpeed;
     }
 
-    public void addSection(RoadSection newSection){
-        if (A==null && B==null){
-            A=newSection.getA();
-            B=newSection.getB();
+    public void addSection(RoadSection newSection) {
+        if (A == null && B == null) {
+            A = newSection.getA();
+            B = newSection.getB();
             sections.add(newSection);
-        }else if (A==newSection.getA()){
-            A=newSection.getB();
+        } else if (A == newSection.getA()) {
+            A = newSection.getB();
             sections.add(newSection);
-        }else if(A==newSection.getB()){
-            A=newSection.getA();
+        } else if (A == newSection.getB()) {
+            A = newSection.getA();
             sections.add(newSection);
-        }else if (B==newSection.getA()){
-            B=newSection.getB();
-            sections.add(sections.size(),newSection);
-        }else if(B==newSection.getB()){
-            B=newSection.getA();
-            sections.add(sections.size(),newSection);
+        } else if (B == newSection.getA()) {
+            B = newSection.getB();
+            sections.add(sections.size(), newSection);
+        } else if (B == newSection.getB()) {
+            B = newSection.getA();
+            sections.add(sections.size(), newSection);
         } else return;
         updateRoad();
     }
 
-    public RoadSection get(int i){
+    public RoadSection get(int i) {
         return sections.get(i);
     }
 
-    public int size(){
+    public int size() {
         return sections.size();
     }
 

@@ -7,13 +7,13 @@ public class Side {
     protected Vehicle myVehicle;
     protected Lane myLane;
 
-    Side(double pos, Vehicle myVehicle, Lane myLane){
+    Side(double pos, Vehicle myVehicle, Lane myLane) {
         this.myVehicle = myVehicle;
         this.pos = pos;
         this.myLane = myLane;
     }
 
-    public double getPos(){
+    public double getPos() {
         return pos;
     }
 

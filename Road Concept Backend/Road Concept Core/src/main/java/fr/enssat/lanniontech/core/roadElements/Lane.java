@@ -1,7 +1,7 @@
 package fr.enssat.lanniontech.core.roadElements;
 
-import fr.enssat.lanniontech.core.vehicleElements.FrontBackSide;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.vehicleElements.FrontBackSide;
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ public class Lane {
     private double length;
     private double width;
 
-    Lane(RoadSection myRoadSection, double length,Lane nextLane){
+    Lane(RoadSection myRoadSection, double length, Lane nextLane) {
         this.myRoadSection = myRoadSection;
         this.length = length;
         this.nextLane = nextLane;
@@ -31,85 +31,84 @@ public class Lane {
     public void getIn(FrontBackSide side) {
         int i = 0;
         //System.out.println(vehiclesSides.size());
-        while(i<vehiclesSides.size()
+        while (i < vehiclesSides.size()
                 &&
-                side.getPos()>vehiclesSides.get(i).getPos())
-        {
+                side.getPos() > vehiclesSides.get(i).getPos()) {
             i++;
         }
-        vehiclesSides.add(i,side);
+        vehiclesSides.add(i, side);
     }
 
-    public Lane getNextLane(){
+    public Lane getNextLane() {
         return nextLane;
     }
 
-    public double getDistanceToNext(FrontBackSide side){
+    public double getDistanceToNext(FrontBackSide side) {
         int pos = vehiclesSides.indexOf(side);
-        if (pos==vehiclesSides.size()-1) {
-            if(nextLane==null){
+        if (pos == vehiclesSides.size() - 1) {
+            if (nextLane == null) {
                 return length - side.getPos();
-            }else{
+            } else {
                 return length - side.getPos() + nextLane.getDistanceToFirst();
             }
-        }else {
+        } else {
             return vehiclesSides.get(pos + 1).getPos() - side.getPos();
         }
     }
 
-    public double getDistanceToFirst(){
-        if (vehiclesSides.size()==0){
-            if(nextLane==null){
+    public double getDistanceToFirst() {
+        if (vehiclesSides.size() == 0) {
+            if (nextLane == null) {
                 return length;
-            }else{
-                return length+nextLane.getDistanceToFirst();
+            } else {
+                return length + nextLane.getDistanceToFirst();
             }
-        }else{
+        } else {
             return vehiclesSides.get(0).getPos();
         }
     }
 
     public double getNextCarSpeed(FrontBackSide side) {
         int pos = vehiclesSides.indexOf(side);
-        if (pos==vehiclesSides.size()-1) {
-            if(nextLane==null){
+        if (pos == vehiclesSides.size() - 1) {
+            if (nextLane == null) {
                 return 0;
-            }else {
+            } else {
                 return nextLane.getSpeedOfFirst();
             }
-        }else {
+        } else {
             return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
     }
 
-    public double getSpeedOfFirst(){
-        if (vehiclesSides.size()==0){
-            if(nextLane==null){
+    public double getSpeedOfFirst() {
+        if (vehiclesSides.size() == 0) {
+            if (nextLane == null) {
                 return 0;
-            }else{
+            } else {
                 return nextLane.getSpeedOfFirst();
             }
-        }else{
+        } else {
             return vehiclesSides.get(0).getMyVehicle().getSpeed();
         }
     }
 
-    public Position getPosition(double pos){
-        return myRoadSection.getPosition(this,pos,width/2);
+    public Position getPosition(double pos) {
+        return myRoadSection.getPosition(this, pos, width / 2);
     }
 
     public void setNextLane(Lane nextLane) {
         this.nextLane = nextLane;
     }
 
-    public boolean rangeIsFree(double start,double end){
-        int i=0;
+    public boolean rangeIsFree(double start, double end) {
+        int i = 0;
         double pos;
-        while (i<vehiclesSides.size()){
-            pos=vehiclesSides.get(i).getPos();
-            if(pos>=start&&pos<=end){
+        while (i < vehiclesSides.size()) {
+            pos = vehiclesSides.get(i).getPos();
+            if (pos >= start && pos <= end) {
                 return false;
-            }else if(pos>end){
+            } else if (pos > end) {
                 return true;
             }
             i++;
@@ -117,11 +116,11 @@ public class Lane {
         return true;
     }
 
-    public double getMyWPos(){
-        return myRoadSection.getWPos(this,width);
+    public double getMyWPos() {
+        return myRoadSection.getWPos(this, width);
     }
 
-    public RoadSection getMyRoadSection(){
+    public RoadSection getMyRoadSection() {
         return myRoadSection;
     }
 }
