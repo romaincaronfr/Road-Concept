@@ -1,4 +1,4 @@
-# Road Concept - A powerfull road traffic simuator !
+# Road Concept - A powerfull road traffic simulator !
 ![Powered by LannionTech](./misc/LannionTech.png)
 
 > Projet de génie logiciel en 3ème année de formation IMR à l'ENSSAT Lannion.
