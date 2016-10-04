@@ -26,9 +26,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        router.route(HttpMethod.GET, "/api/simulate").handler(routingContext -> {
-            processSimulation(routingContext);
-        });
+        router.route(HttpMethod.GET, "/api/simulate").handler(this::processSimulation);
     }
 
     private void processSimulation(RoutingContext routingContext) {

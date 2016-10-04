@@ -9,6 +9,7 @@ public class User implements Entity {
     private String email;
     private String lastName;
     private String firstName;
+    private UserType type;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -50,5 +51,13 @@ public class User implements Entity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 }

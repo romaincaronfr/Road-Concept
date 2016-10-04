@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.core.Simulator;
 
-public class SimulatorService {
+public class SimulatorService extends AbstractRoadConceptService {
 
     private Simulator simulator = new Simulator(); // TODO: Store a Simulator instance in the session on login ?
 

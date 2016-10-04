@@ -2,12 +2,13 @@ package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.AuthenticationException;
-import fr.enssat.lanniontech.api.services.UserService;
+import fr.enssat.lanniontech.api.services.AuthenticationService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -26,10 +27,10 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationVerticle.class);
 
-    private static final String INPUT_JSON_USERNAME = "username";
+    private static final String INPUT_JSON_EMAIL = "email";
     private static final String INPUT_JSON_PASSWORD = "password";
 
-    private UserService authenticationService = new UserService();
+    private AuthenticationService authenticationService = new AuthenticationService();
 
     private Router router;
 
@@ -43,17 +44,11 @@ public class AuthenticationVerticle extends AbstractVerticle {
         /**
          * The login route *DO NOT* contains "/api" in its path since it *MUST* be accessible when the user is not logged in.
          */
-        router.route(HttpMethod.POST, "/login").handler(routingContext -> {
-            processLogin(routingContext);
-        });
+        router.route(HttpMethod.POST, "/login").handler(this::processLogin);
 
-        router.route(HttpMethod.POST, "/api/logout").handler(routingContext -> {
-            processLogout(routingContext);
-        });
+        router.route(HttpMethod.POST, "/api/logout").handler(this::processLogout);
 
-        router.route(HttpMethod.GET, "/api/user/details").handler(routingContext -> {
-            processUserDetails(routingContext);
-        });
+        router.route(HttpMethod.GET, "/api/me").handler(this::processUserDetails);
     }
 
     // ========
@@ -62,7 +57,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
     private void processLogout(RoutingContext routingContext) {
         try {
-            // We need to set a 'Set Cookie' header in order to ask the browser to remove the cookie from client side. // TODO: Use the new Java8 date API ?
+            // We need to set the expiration date of the authentication cookie
             DateFormat formatter = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz", Locale.ENGLISH);
             formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
             String headerValue = "vertx-web.session=" + routingContext.session().id() + "; path=/; expires=" + formatter.format(new Date());
@@ -77,20 +72,23 @@ public class AuthenticationVerticle extends AbstractVerticle {
     private void processLogin(RoutingContext routingContext) {
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
-            if (requestBody == null || StringUtils.isBlank(requestBody.getString("username")) || StringUtils.isBlank(requestBody.getString("password"))) {
-                throw new BadRequestException(); // FIXME: On a une erreur 500 si login ou password non renseigné...
+            if (requestBody == null || StringUtils.isBlank(requestBody.getString(INPUT_JSON_EMAIL)) || StringUtils.isBlank(requestBody.getString(INPUT_JSON_PASSWORD))) {
+                throw new BadRequestException(); // FIXME: HTTP 500 error if one of the fields are not set
             }
-            String userName = requestBody.getString(INPUT_JSON_USERNAME);
+
+            String userName = requestBody.getString(INPUT_JSON_EMAIL);
             String password = requestBody.getString(INPUT_JSON_PASSWORD);
             User user = authenticationService.login(userName, password); // Insure the user credentials are valid
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
-            //TODO: Créer une instance de 'Simulator' lors du login ?
+            //TODO: Create and set a 'Simulator' instnce in the session when the user connect?
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
-        } catch (BadRequestException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Username and password can't be null, empty or blank.");
+        } catch (BadRequestException | ClassCastException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Email and password must be strings, not null, empty or blank.");
+        } catch (DecodeException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format.");
         } catch (AuthenticationException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "Bad credentials, check your login and/or password.");
         } catch (Exception e) {

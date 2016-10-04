@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -13,6 +14,8 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.MediaType;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
@@ -25,7 +28,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
 
-        SQLDatabaseConnector.setUp(); // This call is thread safe. May throw
+        SQLDatabaseConnector.setUp(); // Throws if the server can't connect/set up the SQL database
         // TODO: Add test connection to MongoDB
 
         configureGlobalHandlers(router);
@@ -34,6 +37,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new AuthenticationVerticle(router));
         vertx.deployVerticle(new MapsVerticle(router));
         vertx.deployVerticle(new SimulatorVerticle(router));
+        vertx.deployVerticle(new UserVerticle(router));
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
     }
@@ -46,9 +50,12 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
-
+        
         // Require authentication for all path starting "/api"
         router.route("/api/*").handler(routingContext -> {
+            // Set the default Content Type for all the responses
+            routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+
             if (routingContext.session() == null || routingContext.session().get(Constants.SESSION_CURRENT_USER) == null) {
                 HttpResponseBuilder.buildUnauthorizedResponse(routingContext);
             } else {

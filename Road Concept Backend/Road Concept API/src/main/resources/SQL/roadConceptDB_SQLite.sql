@@ -18,6 +18,7 @@
 
 CREATE TABLE IF NOT EXISTS "user" (
   "id_user" SERIAL PRIMARY KEY,
+  "type" INTEGER,
   "email" TEXT NOT NULL,
   "first_name" TEXT NOT NULL,
   "last_name" TEXT NOT NULL
@@ -31,5 +32,6 @@ CREATE TABLE IF NOT EXISTS "map_info" (
   "id_map" SERIAL PRIMARY KEY,
   "id_user" INTEGER NOT NULL REFERENCES user(id_user) ON DELETE CASCADE,
   "name" TEXT NOT NULL,
-  "image_url" TEXT
+  "image_url" TEXT,
+  "description" TEXT
 );

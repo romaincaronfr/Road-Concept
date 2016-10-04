@@ -18,6 +18,7 @@
 
 CREATE TABLE IF NOT EXISTS "user" (
 	"id_user" SERIAL PRIMARY KEY,
+	"type" INTEGER CHECK ("type" NOT IN (1, 2)),
 	"email" varchar(89) NOT NULL UNIQUE CHECK ("email" ~ '[A-Z0-9._%-]+@[A-Z0-9._%-]+\.[A-Z]{2,4}'),
 	"first_name" varchar(20) NOT NULL,
 	"last_name" varchar(20) NOT NULL
@@ -31,5 +32,6 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 	"id_map" SERIAL PRIMARY KEY,
   "id_user" integer NOT NULL REFERENCES "user" (id_user) ON DELETE CASCADE,
 	"name" varchar(31) NOT NULL,
-	"image_url" varchar(100)
+	"image_url" varchar(100),
+	"description" text
 );

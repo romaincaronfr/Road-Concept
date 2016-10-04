@@ -5,6 +5,7 @@ public class MapInfo implements Entity {
     private int id;
     private String name;
     private String imageURL;
+    private String description;
 
     public int getId() {
         return id;
@@ -28,5 +29,13 @@ public class MapInfo implements Entity {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

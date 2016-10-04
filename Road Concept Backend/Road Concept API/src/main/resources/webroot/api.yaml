@@ -16,10 +16,6 @@ parameters:
     required: true
     type: integer
     format: int32
-  authenticationToken:
-    name: Cookie
-    in: header
-    type: string
 
 paths:
   /login:
@@ -32,27 +28,39 @@ paths:
           schema:
             $ref: '#/definitions/UserCredentials'
       tags:
-        - Connexion
+        - Authentification
       responses:
-        201:
-          description: Utilisateur corretement authentifié. Un cookie a été retourné et doit être envoyé au serveur à chaque prochaine requête.
+        204:
+          description: Utilisateur corretement authentifié. Un cookie a été retourné et doit être envoyé au serveur à chaque prochaine requête dont le path commence par "/api".
+        400:
+          $ref: '#/responses/400'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/me:
+    get:
+      tags:
+        - Authentification
+        - Utilisateurs
+      description: Récupère les informations sur l'utilisateur acctuellement connecté
+      responses:
+        202:
+          description: Détails de l'utilisateur
           schema:
             $ref: '#/definitions/User'
         400:
           $ref: '#/responses/400'
         401:
-          $ref: '#/responses/401'
-        403:
           $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
 
   /api/logout:
     post:
-      parameters:
-        - $ref: '#/parameters/authenticationToken'
       tags:
-        - Connexion
+        - Authentification
       responses:
         204:
           description: Utilisateur corretement déconnecté.
@@ -60,15 +68,28 @@ paths:
           $ref: '#/responses/400'
         401:
           $ref: '#/responses/401'
-        403:
+        500:
+          $ref: '#/responses/500'
+
+  /api/users:
+    get:
+      description: Récupérer la liste de tous les utilisateurs
+      tags:
+        - Utilisateurs
+      responses:
+        202:
+          description: Liste des utilisateurs éxistants
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        401:
           $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
 
   /api/maps:
     get:
-      parameters:
-        - $ref: '#/parameters/authenticationToken'
       tags:
         - Cartes
       description: Retourne les informations générales sur toutes les cartes d'un utilisateur
@@ -91,7 +112,6 @@ paths:
   /api/maps/{mapID}:
     get:
       parameters:
-        - $ref: '#/parameters/authenticationToken'
         - $ref: '#/parameters/mapID'
       tags:
         - Cartes
@@ -139,7 +159,7 @@ definitions:
 
   UserCredentials:
     properties:
-      username: # code HTTP
+      email:
         type: string
       password:
         type: string
@@ -147,16 +167,21 @@ definitions:
 
   User:
     properties:
-      id:
-        type: integer
-        format: int32
-        description: user id
-      username:
+      email:
         type: string
         description: Login de l'utilisateur conneté
-      authenticationToken:
+      firstName:
         type: string
-        description: Jeton d'identification. Il correspond à la valeure du header HTTP 'Set Cookie'. Ce champ doit être envoyé dans toutes les prochaines requêtes afin d'identifier l'utilisateur.
+        description: Prénom de l'utilisateur
+      lastName:
+        type: string
+        description: Nom de famille de l'utilisateur
+      type:
+        type: string
+        enum:
+          - USER
+          - ADMINISTRATOR
+        description: Status de l'utilisateur
 
   MapInfo:
     properties:
@@ -170,6 +195,8 @@ definitions:
       imageURL:
         type: string
         description: URL d'une image représentant la carte. Peut être null
+      description:
+        description: Description de la carte
 
   Map:
     properties:
