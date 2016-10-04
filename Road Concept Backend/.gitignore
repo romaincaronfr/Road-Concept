@@ -7,7 +7,6 @@
 */test-output
 */.gitignore
 **/target/
-**/webroot/
 bin/
 figs/
 csv/
@@ -140,3 +139,6 @@ local.properties
 Fin de la discussion
 
 roadconcept-sqlite.db
+roadconcept.db
+.vertx
+
