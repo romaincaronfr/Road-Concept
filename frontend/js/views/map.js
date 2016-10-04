@@ -13,12 +13,12 @@ app.mapView = Backbone.View.extend({
             self.render();
         })
         });
+        this.mapCollection.on('add',self.newElement,self);
     },
 
     render:function () {
         this.$el.html(this.template());
         this.mapCollection.each(function(model) {
-            console.log(model);
             var mapTableView = new app.mapTableView({
                 model: model
             });
@@ -34,6 +34,13 @@ app.mapView = Backbone.View.extend({
             success :(function(){
                 self.render();
             })
+        });
+    },
+
+    newElement:function(element){
+        console.log("new element");
+        new app.mapTableView({
+            model: element
         });
     }
 
