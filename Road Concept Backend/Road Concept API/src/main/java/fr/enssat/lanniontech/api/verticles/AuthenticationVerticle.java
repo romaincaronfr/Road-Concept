@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.core.MediaType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -70,6 +71,8 @@ public class AuthenticationVerticle extends AbstractVerticle {
     }
 
     private void processLogin(RoutingContext routingContext) {
+        // The content type is not set by default for this request
+        routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
             if (requestBody == null || StringUtils.isBlank(requestBody.getString(INPUT_JSON_EMAIL)) || StringUtils.isBlank(requestBody.getString(INPUT_JSON_PASSWORD))) {
