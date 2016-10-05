@@ -34,6 +34,11 @@ public class HttpResponseBuilder {
         routingContext.response().end(JSONSerializer.toJSON(error));
     }
 
+    public static void buildCreatedResponse(RoutingContext routingContext, Object dataCreated) {
+        routingContext.response().setStatusCode(HttpStatus.SC_CREATED);
+        routingContext.response().end(JSONSerializer.toJSON(dataCreated));
+    }
+
     public static void buildBadRequestResponse(RoutingContext routingContext, String cause) {
         RestException error = new RestException();
         error.setCode(HttpStatus.SC_BAD_REQUEST);

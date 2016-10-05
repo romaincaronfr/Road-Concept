@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
+import java.util.List;
 
 public class UserVerticle extends AbstractVerticle {
 
@@ -32,9 +33,9 @@ public class UserVerticle extends AbstractVerticle {
     public void start() {
         router.route(HttpMethod.GET, "/api/users").blockingHandler(this::processGetAllUsers);
         router.route(HttpMethod.POST, "/api/users").blockingHandler(this::processCreateUser);
-        router.route(HttpMethod.GET, "/api/users/:userMail").blockingHandler(this::processGetUser); //TODO: UUID plutôt que mail ? A voir avec Romain
-        router.route(HttpMethod.PUT, "/api/users/:userID").blockingHandler(this::processUpdateUser);
-        router.route(HttpMethod.DELETE, "/api/users/:userID").blockingHandler(this::processDeleteUser);
+        router.route(HttpMethod.GET, "/api/users/:userMail").blockingHandler(this::processGetUser);
+        router.route(HttpMethod.PUT, "/api/users/:userMail").blockingHandler(this::processUpdateUser);
+        router.route(HttpMethod.DELETE, "/api/users/:userMail").blockingHandler(this::processDeleteUser);
     }
 
     // ========
@@ -42,8 +43,12 @@ public class UserVerticle extends AbstractVerticle {
     // ========
 
     private void processDeleteUser(RoutingContext routingContext) {
-        try {
-            throw new NotImplementedException();
+        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+            String email = routingContext.request().getParam("userMail");
+            User user = new User();
+            user.setEmail(email);
+            userService.delete(user);
+            HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -51,7 +56,7 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processCreateUser(RoutingContext routingContext) {
-        try {
+        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
             JsonObject body = routingContext.getBodyAsJson();
             if (body == null) {
                 throw new BadRequestException();
@@ -68,7 +73,7 @@ public class UserVerticle extends AbstractVerticle {
             UserType type = UserType.forValue(body.getInteger("type"));
 
             User user = userService.create(email, password, lastName, firstName, type);
-            HttpResponseBuilder.buildOkResponse(routingContext, user);
+            HttpResponseBuilder.buildCreatedResponse(routingContext, user);
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -76,7 +81,7 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processUpdateUser(RoutingContext routingContext) {
-        try {
+        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
             throw new NotImplementedException();
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
@@ -85,8 +90,9 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processGetAllUsers(RoutingContext routingContext) {
-        try {
-            throw new NotImplementedException();
+        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+            List<User> users = userService.getAll();
+            HttpResponseBuilder.buildOkResponse(routingContext, users);
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -94,9 +100,8 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processGetUser(RoutingContext routingContext) {
-        try {
+        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin ou que c'est lui même
             String email = routingContext.request().getParam("userMail");
-
             User user = userService.get(email);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
         } catch (Exception e) { //TODO: 404, 403 si pas soit même ou que pas admin

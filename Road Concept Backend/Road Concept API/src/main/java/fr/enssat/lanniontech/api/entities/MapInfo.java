@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.entities;
 
-public class MapInfo implements Entity {
+public class MapInfo implements SQLStoredEntity {
 
     private int id;
     private String name;
@@ -37,5 +37,15 @@ public class MapInfo implements Entity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public Object getIdentifierValue() {
+        return getId();
+    }
+
+    @Override
+    public String getIdentifierName() {
+        return "id";
     }
 }

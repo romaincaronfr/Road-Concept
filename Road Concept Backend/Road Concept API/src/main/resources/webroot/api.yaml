@@ -53,7 +53,7 @@ paths:
         400:
           $ref: '#/responses/400'
         401:
-          $ref: '#/responses/403'
+          $ref: '#/responses/401'
         500:
           $ref: '#/responses/500'
 
@@ -84,7 +84,26 @@ paths:
             items:
               $ref: '#/definitions/User'
         401:
-          $ref: '#/responses/403'
+          $ref: '#/responses/401'
+        403: # Si pas admin
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
+
+    post:
+      description: Créer un nouvel utilisateur
+      tags:
+        - Utilisateurs
+      responses:
+        201:
+          description: Liste des utilisateurs éxistants
+          schema:
+            items:
+              $ref: '#/definitions/User'
+        401:
+          $ref: '#/responses/401'
+        403: # Si pas admin
+          $ref: '#/responses/401'
         500:
           $ref: '#/responses/500'
 
