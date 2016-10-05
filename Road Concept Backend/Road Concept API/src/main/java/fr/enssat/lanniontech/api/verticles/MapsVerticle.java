@@ -32,9 +32,8 @@ public class MapsVerticle extends AbstractVerticle {
     @Override
     public void start() {
 
-        router.route(HttpMethod.GET, "/api/maps").handler(this::processGetAllMaps);
-
-        router.route(HttpMethod.GET, "/api/maps/:mapID").handler(this::processGetOneMap);
+        router.route(HttpMethod.GET, "/api/maps").blockingHandler(this::processGetAllMaps);
+        router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
     }
 
     private void processGetOneMap(RoutingContext routingContext) {

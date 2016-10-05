@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.Entity;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
+import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -23,16 +24,13 @@ public abstract class AbstractRepository {
     private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
 
     protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
-        }
         switch (e.getSQLState()) {
             case Constants.POSTGRESQL_CHECK_VIOLATION:
-                return new DatabaseOperationException(extractErrorFromMessage(e), e);
+                return new DatabaseOperationException(extractErrorFromMessage(e), e); //TODO: Create new exception (see nabuTalk)
             case Constants.POSTGRESQL_FOREIGN_KEY_VIOLATION:
-                return new DatabaseOperationException("Entity '" + clazz + "' is still in use.", e);
+                return new DatabaseOperationException("Entity '" + clazz + "' is still in use.", e); //TODO: Create new exception (see nabuTalk)
             case Constants.POSTGRESQL_UNIQUE_VIOLATION:
-                return new DatabaseOperationException("Entity '" + clazz + "' already exists.", e);
+                return new EntityAlreadyExistsException("Entity '" + clazz + "' already exists.", e);//TODO: Rename? (see nabuTalk)
             default:
                 break;
         }

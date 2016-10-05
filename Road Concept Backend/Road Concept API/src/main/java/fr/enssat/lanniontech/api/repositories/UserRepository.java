@@ -5,7 +5,6 @@ import fr.enssat.lanniontech.api.entities.UserType;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +54,7 @@ public class UserRepository extends AbstractRepository {
                 return user;
             }
         } catch (SQLException e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw processBasicSQLException(e, User.class);
-            //   throw processBasicSQLException(e, User.class);
         }
     }
 
@@ -126,9 +123,7 @@ public class UserRepository extends AbstractRepository {
                 return null; // No row
             }
         } catch (SQLException e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw processBasicSQLException(e, User.class);
-            //throw new SQLUnexpectedException(e);
         }
     }
 
@@ -150,9 +145,7 @@ public class UserRepository extends AbstractRepository {
                 return null; // No row
             }
         } catch (SQLException e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw processBasicSQLException(e, User.class);
-            // throw new SQLUnexpectedException(e);
         }
     }
 

@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.repositories.connectors;
 
 import com.mongodb.MongoClient;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
@@ -46,6 +47,9 @@ public class SQLDatabaseConnector {
             try (Connection initConnection = getConnection()) {
                 initializeDeveloppmentSchema(initConnection);
                 new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
+            } catch (EntityAlreadyExistsException e) {
+                // The default admin user already exists, just ignore the exception
+                LOGGER.debug("Default admin user already exists ! Nothing created.");
             } catch (SQLException e) {
                 LOGGER.error(ExceptionUtils.getStackTrace(e));
                 throw new SQLUnexpectedException(e);

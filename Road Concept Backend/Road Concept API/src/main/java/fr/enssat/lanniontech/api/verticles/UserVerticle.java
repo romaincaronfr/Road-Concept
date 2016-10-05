@@ -30,11 +30,11 @@ public class UserVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        router.route(HttpMethod.GET, "/api/users").handler(this::processGetAllUsers);
-        router.route(HttpMethod.POST, "/api/users").handler(this::processCreateUser);
-        router.route(HttpMethod.GET, "/api/users/:userMail").handler(this::processGetUser); //TODO: UUID plutôt que mail ? A voir avec Romain
-        router.route(HttpMethod.PUT, "/api/users/:userID").handler(this::processUpdateUser);
-        router.route(HttpMethod.DELETE, "/api/users/:userID").handler(this::processDeleteUser);
+        router.route(HttpMethod.GET, "/api/users").blockingHandler(this::processGetAllUsers);
+        router.route(HttpMethod.POST, "/api/users").blockingHandler(this::processCreateUser);
+        router.route(HttpMethod.GET, "/api/users/:userMail").blockingHandler(this::processGetUser); //TODO: UUID plutôt que mail ? A voir avec Romain
+        router.route(HttpMethod.PUT, "/api/users/:userID").blockingHandler(this::processUpdateUser);
+        router.route(HttpMethod.DELETE, "/api/users/:userID").blockingHandler(this::processDeleteUser);
     }
 
     // ========
