@@ -1,7 +1,9 @@
 package fr.enssat.lanniontech.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.geojson.GeoJsonObject;
+import fr.enssat.lanniontech.api.jsonparser.Feature;
+import fr.enssat.lanniontech.api.jsonparser.FeatureCollection;
+import fr.enssat.lanniontech.api.jsonparser.GeoJsonObject;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -10,22 +12,51 @@ import java.io.InputStream;
 public class GeoJSONParserTest {
 
     @Test
-    public void testSuccessMap() {
+    public void testSuccessOSM() {
         try {
-            // Read a file from the project resource folder
-            //     File json = new File("src/test/resources/geosjon-example.json");
-            //     Assert.assertNotNull(json);
+            InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
 
+            GeoJsonObject object = new ObjectMapper().readValue(source, GeoJsonObject.class);
+            Assert.assertTrue(object instanceof FeatureCollection);
 
-            InputStream json = getClass().getResourceAsStream("/geojson-example.json");
+            FeatureCollection features = (FeatureCollection) object;
+        } catch (Exception e) {
+            // Should not happen
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
 
+    @Test
+    public void testSuccessSmallMap() {
+        try {
+            InputStream source = getClass().getResourceAsStream("/geojson-small-map.json");
 
-            GeoJsonObject object = new ObjectMapper().readValue(json, GeoJsonObject.class);
-            System.out.println(object.toString());
+            FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
 
+            System.out.println(features);
 
         } catch (Exception e) {
             // Should not happen
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testSuccessSingleFeature() {
+        try {
+            InputStream source = getClass().getResourceAsStream("/geojson-single-feature.json");
+
+            GeoJsonObject object = new ObjectMapper().readValue(source, GeoJsonObject.class);
+            Assert.assertTrue(object instanceof Feature);
+
+            Feature feature = (Feature) object;
+            System.out.println(feature);
+
+        } catch (Exception e) {
+            // Should not happen
+            e.printStackTrace();
             Assert.fail();
         }
     }

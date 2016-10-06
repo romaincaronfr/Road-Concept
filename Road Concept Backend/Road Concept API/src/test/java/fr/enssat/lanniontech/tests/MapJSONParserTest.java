@@ -1,8 +1,8 @@
 package fr.enssat.lanniontech.tests;
 
-import fr.enssat.lanniontech.api.jsonparser.MapJSONParser;
-import fr.enssat.lanniontech.api.jsonparser.entities.Map;
-import fr.enssat.lanniontech.api.jsonparser.entities.MapElementType;
+import fr.enssat.lanniontech.api.jsonparser.old.MapJSONParser;
+import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.old.entities.MapElementType;
 import org.junit.Assert;
 import org.junit.Test;
 

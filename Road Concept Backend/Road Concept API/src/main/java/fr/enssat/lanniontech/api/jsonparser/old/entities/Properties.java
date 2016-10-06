@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.jsonparser.entities;
+package fr.enssat.lanniontech.api.jsonparser.old.entities;
 
 public class Properties {
 

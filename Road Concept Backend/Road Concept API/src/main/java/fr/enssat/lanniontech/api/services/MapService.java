@@ -2,8 +2,8 @@ package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.jsonparser.MapJSONParser;
-import fr.enssat.lanniontech.api.jsonparser.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.old.MapJSONParser;
+import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
 import fr.enssat.lanniontech.api.repositories.MapRepository;
 import org.apache.commons.io.IOUtils;
 

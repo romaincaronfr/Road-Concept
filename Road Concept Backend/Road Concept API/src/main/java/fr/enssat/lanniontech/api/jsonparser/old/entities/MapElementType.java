@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.jsonparser.entities;
+package fr.enssat.lanniontech.api.jsonparser.old.entities;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

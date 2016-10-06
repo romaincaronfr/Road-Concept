@@ -1,8 +1,8 @@
-package fr.enssat.lanniontech.api.jsonparser;
+package fr.enssat.lanniontech.api.jsonparser.old;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
-import fr.enssat.lanniontech.api.jsonparser.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,0 +1,22 @@
+{
+  "type": "Feature",
+  "properties": {
+    "type ": 2,
+    "bridge": "false",
+    "maxSpeed": 110,
+    "name": "Kerampont"
+  },
+  "geometry": {
+    "type": "LineString",
+    "coordinates": [
+      [
+        -3.465912938117981,
+        48.73011039640248
+      ],
+      [
+        -3.4657949209213257,
+        48.73054561851111
+      ]
+    ]
+  }
+}

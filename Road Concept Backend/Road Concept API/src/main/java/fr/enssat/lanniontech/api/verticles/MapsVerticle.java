@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
-import fr.enssat.lanniontech.api.jsonparser.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
