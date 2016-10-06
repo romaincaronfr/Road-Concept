@@ -99,6 +99,14 @@
         </dependency>
 
 
+        <!-- FIXME:Get the source inside the projet in order to custom them? (@JsonIgnore ...) -->
+        <dependency>
+            <groupId>de.grundid.opendatalab</groupId>
+            <artifactId>geojson-jackson</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+
         <!-- FIXME: REMOVE COMMONS-IO DEPENDENCY -->
         <dependency>
             <groupId>commons-io</groupId>

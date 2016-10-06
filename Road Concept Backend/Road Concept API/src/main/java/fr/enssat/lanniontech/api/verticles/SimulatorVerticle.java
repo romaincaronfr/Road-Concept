@@ -1,8 +1,6 @@
 package fr.enssat.lanniontech.api.verticles;
 
-import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.services.SimulatorService;
-import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
@@ -32,7 +30,7 @@ public class SimulatorVerticle extends AbstractVerticle {
 
     private void processSimulation(RoutingContext routingContext) {
         try {
-            User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            //User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
             boolean result = simulatorService.simulate(); // TODO: Add parameters
             HttpResponseBuilder.buildOkResponse(routingContext, result);
         } catch (Exception e) {

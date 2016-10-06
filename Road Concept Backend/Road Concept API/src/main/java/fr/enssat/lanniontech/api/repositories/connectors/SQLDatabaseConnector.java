@@ -23,7 +23,7 @@ public class SQLDatabaseConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLDatabaseConnector.class);
 
-    private static final PGPoolingDataSource dataSource = new PGPoolingDataSource();
+    private static final PGPoolingDataSource DATA_SOURCE = new PGPoolingDataSource();
 
     // ==============
     // DB CONNECTIONS
@@ -33,21 +33,13 @@ public class SQLDatabaseConnector {
         return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
     }
 
-    public static Connection getConnection() throws SQLException { // dataSource is thread safe
-        return dataSource.getConnection();
-    }
-
-    // ==============================
-    // CONFIGURATION & INITIALIZATION
-    // ==============================
-
     public static void setUp() throws SQLUnexpectedException {
         configure();
         if (Constants.ENVIRONMENT == ProjetEnvironment.DEVELOPPMENT) {
             try (Connection initConnection = getConnection()) {
                 initializeDeveloppmentSchema(initConnection);
                 new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
-            } catch (EntityAlreadyExistsException e) {
+            } catch (EntityAlreadyExistsException ignored) {
                 // The default admin user already exists, just ignore the exception
                 LOGGER.debug("Default admin user already exists ! Nothing created.");
             } catch (SQLException e) {
@@ -57,11 +49,19 @@ public class SQLDatabaseConnector {
         }
     }
 
+    // ==============================
+    // CONFIGURATION & INITIALIZATION
+    // ==============================
+
     private static void configure() {
-        dataSource.setServerName(Constants.POSTGRESQL_SERVER_HOST);
-        dataSource.setPortNumber(Constants.POSTGRESQL_SERVER_PORT);
-        dataSource.setDatabaseName(Constants.POSTGRESQL_DATABASE_NAME);
-        dataSource.setMaxConnections(Constants.POSTGRESQL_MAX_CONNECTIONS);
+        DATA_SOURCE.setServerName(Constants.POSTGRESQL_SERVER_HOST);
+        DATA_SOURCE.setPortNumber(Constants.POSTGRESQL_SERVER_PORT);
+        DATA_SOURCE.setDatabaseName(Constants.POSTGRESQL_DATABASE_NAME);
+        DATA_SOURCE.setMaxConnections(Constants.POSTGRESQL_MAX_CONNECTIONS);
+    }
+
+    public static Connection getConnection() throws SQLException { // DATA_SOURCE is thread safe
+        return DATA_SOURCE.getConnection();
     }
 
     /**

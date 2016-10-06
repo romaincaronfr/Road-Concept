@@ -3,7 +3,6 @@ package fr.enssat.lanniontech.api.repositories;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
-import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,10 +54,10 @@ public class UserRepository extends AbstractRepository {
     // UPDATE
     // ======
 
-//    public void updateName(Application application, String name) throws ErrorResponseException {
-//        updateStringField(Application.class, application, "name", name);
-//    }
-//
+    //    public void updateName(Application application, String name) throws ErrorResponseException {
+    //        updateStringField(Application.class, application, "name", name);
+    //    }
+    //
 
     // ===
     // GET

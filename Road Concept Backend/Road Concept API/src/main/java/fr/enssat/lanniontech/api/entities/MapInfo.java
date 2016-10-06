@@ -7,14 +7,6 @@ public class MapInfo implements SQLStoredEntity {
     private String imageURL;
     private String description;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -44,8 +36,17 @@ public class MapInfo implements SQLStoredEntity {
         return getId();
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String getIdentifierName() {
         return "id";
     }
+
 }

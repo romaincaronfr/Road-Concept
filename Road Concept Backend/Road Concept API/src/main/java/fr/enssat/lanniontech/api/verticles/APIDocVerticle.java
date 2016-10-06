@@ -28,9 +28,7 @@ public class APIDocVerticle extends AbstractVerticle {
         staticHandler.setAllowRootFileSystemAccess(true);
         router.route(DOC_PATH).handler(staticHandler);
         // An "application/json" content type have been set by default. We must re-set a "text/html" one.
-        router.route(DOC_PATH).handler(routingContext -> {
-            routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, "text/html;charset=UTF-8");
-        });
+        router.route(DOC_PATH).handler(routingContext -> routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, "text/html;charset=UTF-8"));
     }
 
 }

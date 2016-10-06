@@ -21,36 +21,39 @@ public class SQLScriptRunner {
     private final Connection connection;
 
     /**
-     * @param connection : Connection to database.
-     * @param autoCommit : True - it will commit automatically, false - you have to commit manualy.
+     * @param connection
+     *         : Connection to database.
+     * @param autoCommit
+     *         : True - it will commit automatically, false - you have to commit manualy.
      */
-    public SQLScriptRunner(final Connection connection, final boolean autoCommit) {
+    public SQLScriptRunner(Connection connection, boolean autoCommit) {
         this.connection = connection;
         this.autoCommit = autoCommit;
     }
 
     /**
-     * @param reader - file with your script
-     * @throws SQLException - throws SQLException on error
+     * @param reader
+     *         - file with your script
+     *
+     * @throws SQLException
+     *         - throws SQLException on error
      */
-    public void runScript(final Reader reader) throws SQLException {
-        final boolean originalAutoCommit = this.connection.getAutoCommit();
+    public void runScript(Reader reader) throws SQLException {
+        boolean originalAutoCommit = connection.getAutoCommit();
         try {
-            if (originalAutoCommit != this.autoCommit) {
-                this.connection.setAutoCommit(autoCommit);
+            if (originalAutoCommit != autoCommit) {
+                connection.setAutoCommit(autoCommit);
             }
-            this.runScript(this.connection, reader);
+            runScript(connection, reader);
         } finally {
-            this.connection.setAutoCommit(originalAutoCommit);
-            this.connection.close();
+            connection.setAutoCommit(originalAutoCommit);
+            connection.close();
         }
     }
 
-    private void runScript(final Connection connection, final Reader reader) {
+    private void runScript(Connection connection, Reader reader) {
         for (String script : formatString(reader)) {
-            PreparedStatement statement = null;
-            try {
-                statement = connection.prepareStatement(script);
+            try (PreparedStatement statement = connection.prepareStatement(script)) {
                 statement.execute();
 
                 // If auto commit is enabled, then commit
@@ -59,14 +62,6 @@ public class SQLScriptRunner {
                 }
             } catch (SQLException e) {
                 LOGGER.error(ExceptionUtils.getStackTrace(e));
-            } finally {
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (SQLException e) {
-                        LOGGER.error(ExceptionUtils.getStackTrace(e));
-                    }
-                }
             }
         }
     }
@@ -75,25 +70,23 @@ public class SQLScriptRunner {
      * Parses file into commands delimeted by ';'
      *
      * @param reader
+     *         content
+     *
      * @return string[] - commands from file
      */
-    private String[] formatString(final Reader reader) {
-        String result = "";
-        String line;
-        final LineNumberReader lineReader = new LineNumberReader(reader);
+    private static String[] formatString(Reader reader) {
 
-        try {
+        StringBuilder result = new StringBuilder();
+        String line;
+        try (LineNumberReader lineReader = new LineNumberReader(reader)) {
             while ((line = lineReader.readLine()) != null) {
-                if (line.startsWith("--") || line.startsWith("//") || line.startsWith("#")) {
-                    //DO NOTHING - It is a commented line
-                } else {
-                    result += line;
+                if (!line.startsWith("--") && !line.startsWith("//") && !line.startsWith("#")) { //DO NOTHING if it is a commented line
+                    result.append(line);
                 }
             }
         } catch (IOException e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
         }
-
-        return result.replaceAll("(?<!" + DEFAULT_SCRIPT_DELIMETER + ")(\\r?\\n)+", "").split(DEFAULT_SCRIPT_DELIMETER);
+        return result.toString().replaceAll("(?<!" + DEFAULT_SCRIPT_DELIMETER + ")(\\r?\\n)+", "").split(DEFAULT_SCRIPT_DELIMETER);
     }
 }

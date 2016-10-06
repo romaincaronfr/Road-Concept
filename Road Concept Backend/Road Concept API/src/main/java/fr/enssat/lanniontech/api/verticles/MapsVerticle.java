@@ -42,7 +42,7 @@ public class MapsVerticle extends AbstractVerticle {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
 
             Map map = mapService.getMap(currentUser, mapID); // may throw
-//            HttpResponseBuilder.buildOkResponse(routingContext, map);
+            //            HttpResponseBuilder.buildOkResponse(routingContext, map);
             HttpResponseBuilder.buildOkResponse(routingContext, map.getElements()); // FIXME: Change the 'Map' object?
         } catch (NumberFormatException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Incorrect map ID.");
@@ -56,7 +56,7 @@ public class MapsVerticle extends AbstractVerticle {
 
     private void processGetAllMaps(RoutingContext routingContext) {
         try {
-            User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             List<MapInfo> maps = mapService.getAllMapsInfo(currentUser);
             HttpResponseBuilder.buildOkResponse(routingContext, maps);
         } catch (Exception e) {

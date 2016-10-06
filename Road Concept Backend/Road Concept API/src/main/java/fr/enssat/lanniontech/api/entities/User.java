@@ -1,25 +1,18 @@
 package fr.enssat.lanniontech.api.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 public class User implements SQLStoredEntity {
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = Access.WRITE_ONLY)
     private int id;
     private String email;
     private String lastName;
     private String firstName;
     private UserType type;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = Access.WRITE_ONLY)
     private String password;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public int getId() {
         return id;
@@ -66,8 +59,20 @@ public class User implements SQLStoredEntity {
         return getEmail();
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String getIdentifierName() {
         return "email";
+    }
+
+    public String toString() {
+        return "foo";
     }
 }

@@ -16,36 +16,28 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AbstractRepository {
+abstract class AbstractRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRepository.class);
 
     // ===================
     // SQL - DELETE ENTITY
     // ===================
-
-    protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException
-    {
-        StringBuilder query = new StringBuilder("DELETE FROM \"");
-        query.append(tableName).append("\" WHERE ").append(entity.getIdentifierName()).append(" = ?");
-
-        try ( PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement(query.toString()) ) {
-            statement.setObject(1,entity.getIdentifierValue());
-
-            int count = statement.executeUpdate();
-            return count;
-
-        } catch ( SQLException e ) {
-            throw processBasicSQLException(e, entity.getClass());
-        }
-    }
+    private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
     // =====================
     // SQL - BASIC EXCEPTION
     // =====================
 
-    private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
+    protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
+        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
+            statement.setObject(1, entity.getIdentifierValue());
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, entity.getClass());
+        }
+    }
 
-    protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
+    static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
         switch (e.getSQLState()) {
             case Constants.POSTGRESQL_CHECK_VIOLATION:
                 return new DatabaseOperationException(extractErrorFromMessage(e), e); //TODO: Create new exception (see nabuTalk)
