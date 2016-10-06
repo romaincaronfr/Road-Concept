@@ -2,12 +2,15 @@ package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.repositories.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UserService extends AbstractService {
 
@@ -16,6 +19,9 @@ public class UserService extends AbstractService {
     private UserRepository repository = new UserRepository();
 
     public User create(String email, String password, String lastName, String firstName, UserType type) {
+        if (! isValidEmailAddress(email)) {
+            throw new InvalidParameterException("The email parameter has an incorrect format.");
+        }
         String securePassword = BCrypt.hashpw(password, BCrypt.gensalt());
         User user = repository.create(email, lastName, firstName, securePassword, type);
         LOGGER.debug("User has been created with id=" + user.getId());
@@ -33,5 +39,12 @@ public class UserService extends AbstractService {
 
     public List<User> getAll() {
         return repository.getAll();
+    }
+
+    private boolean isValidEmailAddress(String email) {
+        String emailFormat = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        Pattern pattern = java.util.regex.Pattern.compile(emailFormat);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

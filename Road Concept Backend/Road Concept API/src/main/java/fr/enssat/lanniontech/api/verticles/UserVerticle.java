@@ -2,8 +2,12 @@ package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.NotImplementedException;
+import fr.enssat.lanniontech.api.exceptions.PrivilegeLevelException;
+import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.services.UserService;
+import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
@@ -43,12 +47,16 @@ public class UserVerticle extends AbstractVerticle {
     // ========
 
     private void processDeleteUser(RoutingContext routingContext) {
-        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+        try {
+            checkAdminLevel(routingContext);
+
             String email = routingContext.request().getParam("userMail");
             User user = new User();
             user.setEmail(email);
             userService.delete(user);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -56,7 +64,9 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processCreateUser(RoutingContext routingContext) {
-        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+        try {
+            checkAdminLevel(routingContext);
+
             JsonObject body = routingContext.getBodyAsJson();
             if (body == null) {
                 throw new BadRequestException();
@@ -69,11 +79,18 @@ public class UserVerticle extends AbstractVerticle {
             if (StringUtils.isBlank(email) || StringUtils.isBlank(password) || StringUtils.isBlank(lastName) || StringUtils.isBlank(firstName)) {
                 throw new BadRequestException();
             }
-
             UserType type = UserType.forValue(body.getInteger("type"));
 
             User user = userService.create(email, password, lastName, firstName, type);
             HttpResponseBuilder.buildCreatedResponse(routingContext, user);
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
+        } catch (ClassCastException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Bad format for parameters. Check the API documentation.");
+        } catch (InvalidParameterException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, e.getMessage());
+        } catch (EntityAlreadyExistsException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "An user already exists for this email");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -81,8 +98,11 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processUpdateUser(RoutingContext routingContext) {
-        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+        try {
+            checkAdminLevel(routingContext);
             throw new NotImplementedException();
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -90,9 +110,12 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processGetAllUsers(RoutingContext routingContext) {
-        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin
+        try {
+            checkAdminLevel(routingContext);
             List<User> users = userService.getAll();
             HttpResponseBuilder.buildOkResponse(routingContext, users);
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -100,13 +123,27 @@ public class UserVerticle extends AbstractVerticle {
     }
 
     private void processGetUser(RoutingContext routingContext) {
-        try { //TODO: Vérifier que l'utilisateur faisant la requête est admin ou que c'est lui même
+        try {
+            checkAdminLevel(routingContext);
             String email = routingContext.request().getParam("userMail");
             User user = userService.get(email);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
-        } catch (Exception e) { //TODO: 404, 403 si pas soit même ou que pas admin
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
+        } catch (Exception e) { //TODO: 404
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    // =========
+    // UTILITIES
+    // =========
+
+    private void checkAdminLevel(RoutingContext routingContext) {
+        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
+            throw new PrivilegeLevelException();
         }
     }
 
