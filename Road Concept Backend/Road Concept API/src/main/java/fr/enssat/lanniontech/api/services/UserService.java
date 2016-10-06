@@ -31,7 +31,7 @@ public class UserService extends AbstractService {
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public List<User> getAll(){
+    public List<User> getAll() {
         return repository.getAll();
     }
 }

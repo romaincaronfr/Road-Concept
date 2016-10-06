@@ -14,8 +14,7 @@ public class AuthenticationVerticleTest {
     @Before
     public void setUp(TestContext context) {
         vertx = Vertx.vertx();
-        vertx.deployVerticle(AuthenticationVerticle.class.getName(),
-                context.asyncAssertSuccess());
+        vertx.deployVerticle(AuthenticationVerticle.class.getName(), context.asyncAssertSuccess());
     }
 
     @After

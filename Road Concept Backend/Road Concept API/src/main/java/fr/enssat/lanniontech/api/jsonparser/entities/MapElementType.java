@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum MapElementType {
 
-    SIMPLE_ROAD(1),
-    DOUBLE_ROAD(2),
-    TRIPLE_ROAD(3),
-    ROUNDABOUT(4),
-    RED_LIGHT(5);
+    SIMPLE_ROAD(1), DOUBLE_ROAD(2), TRIPLE_ROAD(3), ROUNDABOUT(4), RED_LIGHT(5);
 
     private final int jsonID;
 
