@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
-import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.FeatureCollection;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
@@ -41,9 +41,8 @@ public class MapsVerticle extends AbstractVerticle {
             User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
 
-            Map map = mapService.getMap(currentUser, mapID); // may throw
-            //            HttpResponseBuilder.buildOkResponse(routingContext, map);
-            HttpResponseBuilder.buildOkResponse(routingContext, map.getElements()); // FIXME: Change the 'Map' object?
+            FeatureCollection map = mapService.getMap(currentUser, mapID); // may throw
+            HttpResponseBuilder.buildOkResponse(routingContext, map.getFeatures());
         } catch (NumberFormatException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Incorrect map ID.");
         } catch (UnconsistentException e) {

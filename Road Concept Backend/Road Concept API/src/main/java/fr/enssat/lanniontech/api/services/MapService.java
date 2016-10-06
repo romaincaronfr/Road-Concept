@@ -1,13 +1,11 @@
 package fr.enssat.lanniontech.api.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.jsonparser.old.MapJSONParser;
-import fr.enssat.lanniontech.api.jsonparser.old.entities.Map;
+import fr.enssat.lanniontech.api.jsonparser.FeatureCollection;
 import fr.enssat.lanniontech.api.repositories.MapRepository;
-import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,20 +41,28 @@ public class MapService extends AbstractService {
         return result;
     }
 
-    public Map getMap(User user, int mapID) {
-        //TODO: Retrive data from db. Now is just example data
-        //  File json = new File("src/main/resources/map_all.json");
-        InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
-        Map map = null;
+    public FeatureCollection getMap(User user, int mapID) {
+//        //TODO: Retrive data from db. Now is just example data
+//        //  File json = new File("src/main/resources/map_all.json");
+//        InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
+//        Map map = null;
+//        try {
+//            String theString = IOUtils.toString(json);
+//            map = MapJSONParser.unmarshall(theString);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        // TODO: Check mapID incorrect (400)
+//        // TODO: Check mapID pour 404
+//        // TODO: Check mapID pas consistent avec l'user logué
+
+        FeatureCollection map = new FeatureCollection();
         try {
-            String theString = IOUtils.toString(json);
-            map = MapJSONParser.unmarshall(theString);
-        } catch (IOException e) {
+            InputStream source = getClass().getResourceAsStream("/geojson-small-map.json");
+            map = new ObjectMapper().readValue(source, FeatureCollection.class);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        // TODO: Check mapID incorrect (400)
-        // TODO: Check mapID pour 404
-        // TODO: Check mapID pas consistent avec l'user logué
         return map;
     }
 }
