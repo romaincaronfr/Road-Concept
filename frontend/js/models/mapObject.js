@@ -7,7 +7,8 @@ app.models.mapModel = Backbone.Model.extend({
         return {
             id: payload.id || "NO_ID_SERVER_IS_TOO_BAD",
             name: payload.name || "MAP_NAME",
-            imageURL: payload.imageURL || "NO_URL"
+            imageURL: payload.imageURL || "assets/img/map-default.png",
+            description: payload.description || "Pas de description disponible"
         };
     }
 });

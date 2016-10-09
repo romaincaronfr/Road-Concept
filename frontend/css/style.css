@@ -19,3 +19,9 @@ body {
     right: 0;
     margin: auto;
 }
+
+.panel-image img.panel-image-preview {
+    width: 100%;
+    height: 200px;
+    border-radius: 4px 4px 0px 0px;
+}

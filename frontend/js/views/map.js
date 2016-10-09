@@ -42,6 +42,13 @@ app.mapView = Backbone.View.extend({
 
     newElement:function(element){
         console.log("new element");
+        var index = this.mapCollection.indexOf(element);
+        console.log('modulo : '+(index+1)%4);
+        if (index == 0){
+            console.log("first element");
+        } else if ((index+1)%4 == 0){
+            console.log('je dois ajouter une div');
+        }
         new app.mapTableView({
             model: element
         });

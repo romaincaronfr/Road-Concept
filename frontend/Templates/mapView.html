@@ -1,16 +1,60 @@
 <div class="row">
-    <div class="col-md-12">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>ImageURL</th>
-            </tr>
-            </thead>
-            <tbody id="mapTable">
+    <div class='page-header'>
+    <h1>
+        <span>Mes cartes</span>
+        <button class='btn btn-success pull-right' data-toggle="modal" data-target="#modalAddMap">Créer une carte</button>
+    </h1>
+        </div>
+</div>
+<div class="row" id="mapTable">
 
-            </tbody>
-        </table>
+</div>
+
+<div id="modalAddMap" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Création d'une nouvelle carte</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+
+                        <label for="mapName" class="col-sm-2 control-label">
+                            Nom
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="mapName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="mapDescription" class="col-sm-2 control-label">
+                            Description
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="mapDescription" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="mapImgURL" class="col-sm-2 control-label">
+                            Url de l'image
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="mapImgURL" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success">Créer</button>
+            </div>
+        </div>
+
     </div>
 </div>

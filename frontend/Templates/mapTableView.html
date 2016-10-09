@@ -1,5 +1,14 @@
-<tr>
-<td class="map<%= id %>"><%= id %></td>
-<td><%= name %></td>
-<td><%= imageURL %></td>
-</tr>
+<div class="col-lg-4">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><%= name %></h3>
+    </div>
+    <div class="panel-body panel-image">
+        <img src="<%= imageURL %>" class="panel-image-preview"/>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-block btn-success" type="button">Afficher</button>
+        <button class="btn btn-block btn-danger" type="button">Supprimer</button>
+    </div>
+</div>
+</div>
