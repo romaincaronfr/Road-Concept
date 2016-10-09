@@ -18,14 +18,18 @@ public class Polygon extends Geometry<List<Coordinates>> {
         add(Arrays.asList(polygon));
     }
 
-    public void setExteriorRing(List<Coordinates> points) {
-        getCoordinates().add(0, points);
-    }
-
     @JsonIgnore
     public List<Coordinates> getExteriorRing() {
         assertExteriorRing();
         return getCoordinates().get(0);
+    }
+
+    public void setExteriorRing(List<Coordinates> points) {
+        getCoordinates().add(0, points);
+    }
+
+    private void assertExteriorRing() {
+        if (getCoordinates().isEmpty()) throw new RuntimeException("No exterior ring definied");
     }
 
     @JsonIgnore
@@ -47,10 +51,6 @@ public class Polygon extends Geometry<List<Coordinates>> {
     public void addInteriorRing(Coordinates... points) {
         assertExteriorRing();
         getCoordinates().add(Arrays.asList(points));
-    }
-
-    private void assertExteriorRing() {
-        if (getCoordinates().isEmpty()) throw new RuntimeException("No exterior ring definied");
     }
 
     @Override

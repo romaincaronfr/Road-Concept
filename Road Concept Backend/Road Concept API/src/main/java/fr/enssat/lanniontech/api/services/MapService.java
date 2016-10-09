@@ -42,19 +42,19 @@ public class MapService extends AbstractService {
     }
 
     public FeatureCollection getMap(User user, int mapID) {
-//        //TODO: Retrive data from db. Now is just example data
-//        //  File json = new File("src/main/resources/map_all.json");
-//        InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
-//        Map map = null;
-//        try {
-//            String theString = IOUtils.toString(json);
-//            map = MapJSONParser.unmarshall(theString);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        // TODO: Check mapID incorrect (400)
-//        // TODO: Check mapID pour 404
-//        // TODO: Check mapID pas consistent avec l'user logué
+        //        //TODO: Retrive data from db. Now is just example data
+        //        //  File json = new File("src/main/resources/map_all.json");
+        //        InputStream json = getClass().getResourceAsStream("/map_all.json"); // FIXME: Retirer le fichier du dossier ressources une fois cette méthode OK
+        //        Map map = null;
+        //        try {
+        //            String theString = IOUtils.toString(json);
+        //            map = MapJSONParser.unmarshall(theString);
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
+        //        // TODO: Check mapID incorrect (400)
+        //        // TODO: Check mapID pour 404
+        //        // TODO: Check mapID pas consistent avec l'user logué
 
         FeatureCollection map = new FeatureCollection();
         try {

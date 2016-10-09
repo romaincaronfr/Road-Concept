@@ -40,6 +40,6 @@ public class Coordinates implements Serializable {
 
     @Override
     public String toString() {
-       return "Coordinates{" + "longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + '}';
+        return "Coordinates{" + "longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + '}';
     }
 }

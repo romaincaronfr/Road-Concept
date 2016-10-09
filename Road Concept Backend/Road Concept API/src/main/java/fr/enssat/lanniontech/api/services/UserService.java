@@ -19,13 +19,20 @@ public class UserService extends AbstractService {
     private UserRepository repository = new UserRepository();
 
     public User create(String email, String password, String lastName, String firstName, UserType type) {
-        if (! isValidEmailAddress(email)) {
+        if (!isValidEmailAddress(email)) {
             throw new InvalidParameterException("The email parameter has an incorrect format.");
         }
         String securePassword = BCrypt.hashpw(password, BCrypt.gensalt());
         User user = repository.create(email, lastName, firstName, securePassword, type);
         LOGGER.debug("User has been created with id=" + user.getId());
         return user;
+    }
+
+    private boolean isValidEmailAddress(String email) {
+        String format = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        Pattern pattern = java.util.regex.Pattern.compile(format);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
     public User get(String email) {
@@ -39,12 +46,5 @@ public class UserService extends AbstractService {
 
     public List<User> getAll() {
         return repository.getAll();
-    }
-
-    private boolean isValidEmailAddress(String email) {
-        String emailFormat = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        Pattern pattern = java.util.regex.Pattern.compile(emailFormat);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 }

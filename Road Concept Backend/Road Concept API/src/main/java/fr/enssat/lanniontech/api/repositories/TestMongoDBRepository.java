@@ -18,14 +18,14 @@ public class TestMongoDBRepository {
         //  MongoCollection<Document> collection = db.getCollection("test");
         //  collection.drop();
 
-      //  TestMongoDBRepository repository = new TestMongoDBRepository();
+        //  TestMongoDBRepository repository = new TestMongoDBRepository();
 
-       // Map map = new MapService().getMap(null, 1); // Fake data
-      //  map.setId(new Random().nextInt());
-      //  repository.insertMap(map, "test"); // "test" collection *MUST* already exist
+        // Map map = new MapService().getMap(null, 1); // Fake data
+        //  map.setId(new Random().nextInt());
+        //  repository.insertMap(map, "test"); // "test" collection *MUST* already exist
 
-     //   Map fromMongo = repository.getMap(-1513300328, "test");
-    //    System.out.println("fromMongo id => " + fromMongo.getId());
+        //   Map fromMongo = repository.getMap(-1513300328, "test");
+        //    System.out.println("fromMongo id => " + fromMongo.getId());
 
     }
 
