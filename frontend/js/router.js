@@ -13,6 +13,8 @@ Backbone.sync = (function(syncFn) {
             if (xhr.status === 401) {
                 console.log('error 401');
                 app.router.navigate('login', { trigger: true });
+            }else {
+                $('#modalError').modal('show');
             }
         };
 
