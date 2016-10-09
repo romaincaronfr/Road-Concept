@@ -14,6 +14,9 @@ app.mapView = Backbone.View.extend({
         })
         });
         this.mapCollection.on('add',self.newElement,self);
+        this.mapCollection.on('change',self.newChange,self);
+        this.mapCollection.on('reset',self.newReset,self);
+        this.mapCollection.on('sync',self.newSync,self);
     },
 
     render:function () {
@@ -42,6 +45,21 @@ app.mapView = Backbone.View.extend({
         new app.mapTableView({
             model: element
         });
+    },
+
+    newChange:function(element){
+        console.log("change collection");
+        console.log(element);
+    },
+
+    newReset:function(element){
+        console.log("reset collection");
+        console.log(element);
+    },
+
+    newSync:function(element){
+        console.log("sync collection");
+        console.log(element);
     }
 
 });

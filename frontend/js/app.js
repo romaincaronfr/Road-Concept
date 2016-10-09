@@ -1,7 +1,6 @@
 /**
  * Created by Romain on 28/09/2016.
  */
-var apiURL = "localhost:8080";
 Backbone.Collection.prototype.absURL = "http://localhost:8080";
 
 
