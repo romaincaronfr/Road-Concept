@@ -1,19 +1,23 @@
 <div class="alert alert-danger hidden" id="alertLogin">
     <strong>Danger!</strong> Mauvais mot de passe ou login. Enfin TMTC !
 </div>
-    <div class="login-clean">
-        <form role="form">
-            <h2 class="sr-only">Login Form</h2>
-            <div class="illustration"><img src="assets/img/map-marker-icon.png"></div>
-            <div class="form-group">
-                <input class="form-control" type="email" name="email" placeholder="Email" id="exampleInputEmail1">
-            </div>
-            <div class="form-group">
-                <input class="form-control" type="password" name="password" placeholder="Mot de passe" id="exampleInputPassword1">
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-block" type="button" id="submitLogin">Se connecter</button>
-            </div>
-        </form>
-    </div>
-
+<div class="login-clean" id="formDiv">
+    <form role="form">
+        <h2 class="sr-only">Login Form</h2>
+        <div class="illustration"><img src="assets/img/map-marker-icon.png"></div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email" id="exampleInputEmail1">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Mot de passe" id="exampleInputPassword1">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="button" id="submitLogin">Se connecter</button>
+        </div>
+    </form>
+</div>
+<div class="login-clean hidden" id="waitDiv">
+    <form role="form">
+        <img src="assets/svg/wait.svg" style="display:block;margin-left: auto; margin-right: auto;"/>
+    </form>
+</div>

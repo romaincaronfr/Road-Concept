@@ -20,6 +20,8 @@ app.loginView = Backbone.View.extend({
 
     clickOnSubmitLogin:function (){
         console.log("click on submit");
+        $('#formDiv').addClass('hidden');
+        $('#waitDiv').removeClass('hidden');
         $.ajax({
                 url: Backbone.Collection.prototype.absURL+"/login",
                 type: "POST",
@@ -34,11 +36,32 @@ app.loginView = Backbone.View.extend({
             })
             .done(function (data, textStatus, jqXHR) {
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
-                app.router.navigate('', { trigger: true });
+                $.ajax({
+                        url: Backbone.Collection.prototype.absURL+"/api/me",
+                        type: "GET",
+                        headers: {
+                            "Content-Type": "application/json; charset=utf-8",
+                        },
+                        contentType: "application/json"
+                    })
+                    .done(function (data, textStatus, jqXHR) {
+                        console.log("HTTP Request Succeeded: " + jqXHR.status);
+                        user = new app.models.userModel(data);
+                        console.log(user);
+                        app.router.navigate('', { trigger: true });
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("HTTP Request Failed : /api/me");
+                    })
+                    .always(function () {
+                        /* ... */
+                    });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log("HTTP Request Failed");
                 $('#alertLogin').removeClass('hidden');
+                $('#formDiv').removeClass('hidden');
+                $('#waitDiv').addClass('hidden');
             })
             .always(function () {
                 /* ... */

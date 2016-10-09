@@ -52,7 +52,4 @@ app.Router = Backbone.Router.extend({
             this.map.reloadCollection();
         }
     }
-
-    
-
 });
