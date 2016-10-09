@@ -5,6 +5,10 @@ app.mapView = Backbone.View.extend({
 
     el: '#content',
 
+    events: {
+        'click #submitCreateMap':'clickOnCreateNewMap'
+    },
+
     initialize: function () {
         this.mapCollection = new app.collections.mapCollection;
         var self = this;
@@ -36,6 +40,22 @@ app.mapView = Backbone.View.extend({
         this.mapCollection.fetch({
             success :(function(){
                 self.render();
+            })
+        });
+    },
+
+    clickOnCreateNewMap: function(){
+        var self = this;
+        var name = $('#mapName').val();
+        var description = $('#mapDescription').val();
+        var urlImg = $('#mapImgURL').val();
+        var newMapModel = new app.models.mapModel({'name':name,'description':description,'imageURL':urlImg});
+        newMapModel.save({
+            success : (function(){
+                self.mapCollection.add(newMapModel);
+            }),
+            error : (function(){
+                console.error('error during saving new map');
             })
         });
     },

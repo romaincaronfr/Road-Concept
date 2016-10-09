@@ -2,6 +2,7 @@
  * Created by Romain on 28/09/2016.
  */
 Backbone.Collection.prototype.absURL = "http://localhost:8080";
+Backbone.Model.prototype.absURL = "http://localhost:8080";
 
 
 $.ajaxSetup({

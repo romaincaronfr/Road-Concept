@@ -3,6 +3,10 @@
  */
 
 app.models.mapModel = Backbone.Model.extend({
+    url: function(){
+        return this.absURL + '/api/maps';
+    },
+
     parse: function (payload) {
         return {
             id: payload.id || "NO_ID_SERVER_IS_TOO_BAD",
