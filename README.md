@@ -47,7 +47,6 @@ Ce script va :
     
 [Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc```
 
-En mode "developpement", le projet est configuré pour utiliser une base de données SQL embarquée (```SQLite3```). Il est possible de modifier la configuration pour utiliser une base de données ```PostgreSQL```.
 
 
 **Free Software, Hell Yeah!**
