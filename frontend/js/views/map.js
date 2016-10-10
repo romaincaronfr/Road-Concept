@@ -12,15 +12,12 @@ app.mapView = Backbone.View.extend({
     initialize: function () {
         this.mapCollection = new app.collections.mapCollection;
         var self = this;
-        this.mapCollection.fetch({
-            success :(function(){
-            self.render();
-        })
-        });
+        this.render();
         this.mapCollection.on('add',self.newElement,self);
         this.mapCollection.on('change',self.newChange,self);
         this.mapCollection.on('reset',self.newReset,self);
         this.mapCollection.on('sync',self.newSync,self);
+        this.mapCollection.fetch();
     },
 
     render:function () {
@@ -33,15 +30,6 @@ app.mapView = Backbone.View.extend({
             //this.$el.append(mapTableView.render().el);
         }.bind(this));
         return this;
-    },
-
-    reloadCollection:function(){
-        var self = this;
-        this.mapCollection.fetch({
-            success :(function(){
-                self.render();
-            })
-        });
     },
 
     clickOnCreateNewMap: function(){
@@ -72,9 +60,9 @@ app.mapView = Backbone.View.extend({
         console.log(element);
     },
 
-    newReset:function(element){
+    newReset:function(){
         console.log("reset collection");
-        console.log(element);
+        this.$el.html(this.template());
     },
 
     newSync:function(element){

@@ -51,7 +51,7 @@ app.Router = Backbone.Router.extend({
         if (!this.map) {
             this.map = new app.mapView();
         }else{
-            this.map.reloadCollection();
+            this.map.render();
         }
     }
 });
