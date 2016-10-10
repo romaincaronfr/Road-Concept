@@ -1,7 +1,7 @@
-package fr.enssat.lanniontech.api.jsonparser;
+package fr.enssat.lanniontech.api.geojson;
 
 
-import fr.enssat.lanniontech.api.jsonparser.jackson.CrsType;
+import fr.enssat.lanniontech.api.geojson.jackson.CrsType;
 
 import java.io.Serializable;
 import java.util.HashMap;

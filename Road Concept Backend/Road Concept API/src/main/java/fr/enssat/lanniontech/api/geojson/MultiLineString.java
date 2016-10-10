@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.jsonparser;
+package fr.enssat.lanniontech.api.geojson;
 
 import java.util.List;
 

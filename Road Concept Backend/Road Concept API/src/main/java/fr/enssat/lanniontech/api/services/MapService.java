@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.api.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.jsonparser.FeatureCollection;
+import fr.enssat.lanniontech.api.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.repositories.MapRepository;
 
 import java.io.InputStream;

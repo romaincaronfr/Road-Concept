@@ -1,9 +1,9 @@
-package fr.enssat.lanniontech.api.jsonparser;
+package fr.enssat.lanniontech.api.geojson;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import fr.enssat.lanniontech.api.jsonparser.jackson.LngLatAltDeserializer;
-import fr.enssat.lanniontech.api.jsonparser.jackson.LngLatAltSerializer;
+import fr.enssat.lanniontech.api.geojson.jackson.LngLatAltDeserializer;
+import fr.enssat.lanniontech.api.geojson.jackson.LngLatAltSerializer;
 
 import java.io.Serializable;
 

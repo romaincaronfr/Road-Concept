@@ -1,10 +1,10 @@
-package fr.enssat.lanniontech.api.jsonparser.jackson;
+package fr.enssat.lanniontech.api.geojson.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import fr.enssat.lanniontech.api.jsonparser.Coordinates;
+import fr.enssat.lanniontech.api.geojson.Coordinates;
 
 import java.io.IOException;
 import java.util.ArrayList;

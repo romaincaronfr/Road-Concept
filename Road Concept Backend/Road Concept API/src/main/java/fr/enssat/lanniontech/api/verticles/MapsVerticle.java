@@ -4,7 +4,7 @@ import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
-import fr.enssat.lanniontech.api.jsonparser.FeatureCollection;
+import fr.enssat.lanniontech.api.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
