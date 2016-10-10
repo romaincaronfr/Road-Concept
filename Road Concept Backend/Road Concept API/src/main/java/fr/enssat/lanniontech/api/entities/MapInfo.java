@@ -1,8 +1,13 @@
 package fr.enssat.lanniontech.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 public class MapInfo implements SQLStoredEntity {
 
     private int id;
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private int userID;
     private String name;
     private String imageURL;
     private String description;
@@ -31,6 +36,14 @@ public class MapInfo implements SQLStoredEntity {
         this.description = description;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     @Override
     public Object getIdentifierValue() {
         return getId();
@@ -48,5 +61,6 @@ public class MapInfo implements SQLStoredEntity {
     public String getIdentifierName() {
         return "id";
     }
+
 
 }
