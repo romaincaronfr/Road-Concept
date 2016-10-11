@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class SQLDatabaseConnector {
+public final class SQLDatabaseConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLDatabaseConnector.class);
 
@@ -54,6 +54,8 @@ public class SQLDatabaseConnector {
     // ==============================
 
     private static void configure() {
+        DATA_SOURCE.setUser(Constants.POSTGRESQL_USER_NAME);
+        DATA_SOURCE.setPassword(Constants.POSTGRESQL_USER_PASSWORD);
         DATA_SOURCE.setServerName(Constants.POSTGRESQL_SERVER_HOST);
         DATA_SOURCE.setPortNumber(Constants.POSTGRESQL_SERVER_PORT);
         DATA_SOURCE.setDatabaseName(Constants.POSTGRESQL_DATABASE_NAME);
