@@ -4,7 +4,7 @@
 app.mapTableView = Backbone.View.extend({
 
     el: '#mapTable',
-
+    
     initialize: function () {
         this.render();
     },
