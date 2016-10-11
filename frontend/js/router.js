@@ -26,12 +26,14 @@ app.Router = Backbone.Router.extend({
 
     routes: {
         "": "map",
-        "login": "login"
+        "login": "login",
+        "user": "user"
     },
 
     initialize: function () {
         this.login = null;
         this.map = null;
+        this.user = null;
         this.navBar = new app.navBarView();
     },
 
@@ -52,6 +54,15 @@ app.Router = Backbone.Router.extend({
             this.map = new app.mapView();
         }else{
             this.map.render();
+        }
+    },
+
+    user: function(){
+        if (!this.user){
+            console.log("Router : user");
+            this.user = new app.userInfoView();
+        }else{
+            console.log("Router : user else");
         }
     }
 });

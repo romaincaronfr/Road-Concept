@@ -46,8 +46,8 @@ app.loginView = Backbone.View.extend({
                     })
                     .done(function (data, textStatus, jqXHR) {
                         console.log("HTTP Request Succeeded: " + jqXHR.status);
-                        user = new app.models.userModel(data);
-                        console.log(user);
+                        userModel = new app.models.userModel(data);
+                        console.log(userModel);
                         app.router.navigate('', { trigger: true });
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
