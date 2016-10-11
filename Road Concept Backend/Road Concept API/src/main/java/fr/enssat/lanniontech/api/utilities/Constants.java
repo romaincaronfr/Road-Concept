@@ -23,7 +23,7 @@ public final class Constants {
     public static final String POSTGRESQL_USER_PASSWORD = "roadconcept";
     public static final int POSTGRESQL_SERVER_PORT = 5432;
     public static final String POSTGRESQL_SERVER_HOST = "localhost";
-    public static final int POSTGRESQL_MAX_CONNECTIONS = 10;
+    public static final int POSTGRESQL_MAX_CONNECTIONS = 10; // TODO: Set to 100 in production mode
 
     // ERROR CODES
     // -----------

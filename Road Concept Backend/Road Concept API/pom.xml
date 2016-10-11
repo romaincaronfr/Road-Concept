@@ -20,6 +20,7 @@
         <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
         <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
         <postgresql.version>9.4.1211.jre7</postgresql.version>
+        <dbcp.version>2.1.1</dbcp.version>
         <jBCrypt.version>0.4.1</jBCrypt.version>
     </properties>
 
@@ -44,6 +45,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>${dbcp.version}</version>
         </dependency>
 
         <dependency>
@@ -98,15 +105,6 @@
             <version>${jBCrypt.version}</version>
         </dependency>
 
-
-        <!-- FIXME:Get the source inside the projet in order to custom them? (@JsonIgnore ...) -->
-      <!--  <dependency>
-            <groupId>de.grundid.opendatalab</groupId>
-            <artifactId>geojson-jackson</artifactId>
-            <version>1.6</version>
-        </dependency>
--->
-
         <!-- FIXME: REMOVE COMMONS-IO DEPENDENCY -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -120,7 +118,6 @@
             <artifactId>jersey-common</artifactId>
             <version>2.23.2</version>
         </dependency>
-
 
         <!-- TEST DEPENDENCIES -->
         <dependency>

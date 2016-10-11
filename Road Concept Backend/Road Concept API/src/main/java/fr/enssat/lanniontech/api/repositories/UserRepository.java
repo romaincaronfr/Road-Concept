@@ -7,6 +7,7 @@ import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,23 +28,25 @@ public class UserRepository extends AbstractRepository {
     // ======
 
     public User create(String email, String lastName, String firstName, String password, UserType type) throws DatabaseOperationException {
-        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement(INSERT)) {
-            statement.setString(1, email);
-            statement.setString(2, password);
-            statement.setString(3, firstName);
-            statement.setString(4, lastName);
-            statement.setInt(5, type.getJsonID());
+        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
+                statement.setString(1, email);
+                statement.setString(2, password);
+                statement.setString(3, firstName);
+                statement.setString(4, lastName);
+                statement.setInt(5, type.getJsonID());
 
-            try (ResultSet result = statement.executeQuery()) { //TODO: What if email already exists ?
-                result.next(); // Has exactly one row
-                User user = new User();
-                user.setId(result.getInt("id"));
-                user.setEmail(email);
-                user.setPassword(password);
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
-                user.setType(type);
-                return user;
+                try (ResultSet result = statement.executeQuery()) { //TODO: What if email already exists ?
+                    result.next(); // Has exactly one row
+                    User user = new User();
+                    user.setId(result.getInt("id"));
+                    user.setEmail(email);
+                    user.setPassword(password);
+                    user.setFirstName(firstName);
+                    user.setLastName(lastName);
+                    user.setType(type);
+                    return user;
+                }
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, User.class);
@@ -64,23 +67,24 @@ public class UserRepository extends AbstractRepository {
     // ===
 
     public List<User> getAll() throws DatabaseOperationException {
-        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement(SELECT_ALL)) {
+        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
+                try (ResultSet result = statement.executeQuery()) {
+                    List<User> users = new ArrayList<>();
 
-            try (ResultSet result = statement.executeQuery()) {
-                List<User> users = new ArrayList<>();
+                    while (result.next()) {
+                        User user = new User();
+                        user.setId(result.getInt("id"));
+                        user.setEmail(result.getString("email"));
+                        user.setPassword(result.getString("password"));
+                        user.setLastName(result.getString("last_name"));
+                        user.setFirstName(result.getString("first_name"));
+                        user.setType(UserType.forValue(result.getInt("type")));
 
-                while (result.next()) {
-                    User user = new User();
-                    user.setId(result.getInt("id"));
-                    user.setEmail(result.getString("email"));
-                    user.setPassword(result.getString("password"));
-                    user.setLastName(result.getString("last_name"));
-                    user.setFirstName(result.getString("first_name"));
-                    user.setType(UserType.forValue(result.getInt("type")));
-
-                    users.add(user);
+                        users.add(user);
+                    }
+                    return users;
                 }
-                return users;
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, User.class);
@@ -88,21 +92,23 @@ public class UserRepository extends AbstractRepository {
     }
 
     public User getFromId(int id) throws DatabaseOperationException {
-        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement(SELECT_FROM_ID)) {
-            statement.setInt(1, id);
+        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
+                statement.setInt(1, id);
 
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    User user = new User();
-                    user.setId(id);
-                    user.setEmail(result.getString("email"));
-                    user.setPassword(result.getString("password"));
-                    user.setFirstName(result.getString("first_name"));
-                    user.setLastName(result.getString("last_name"));
-                    user.setType(UserType.forValue(result.getInt("type")));
-                    return user;
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        User user = new User();
+                        user.setId(id);
+                        user.setEmail(result.getString("email"));
+                        user.setPassword(result.getString("password"));
+                        user.setFirstName(result.getString("first_name"));
+                        user.setLastName(result.getString("last_name"));
+                        user.setType(UserType.forValue(result.getInt("type")));
+                        return user;
+                    }
+                    return null; // No row
                 }
-                return null; // No row
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, User.class);
@@ -110,21 +116,23 @@ public class UserRepository extends AbstractRepository {
     }
 
     public User getFromEmail(String email) throws DatabaseOperationException {
-        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement(SELECT_FROM_EMAIL)) {
-            statement.setString(1, email);
+        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_EMAIL)) {
+                statement.setString(1, email);
 
-            try (ResultSet result = statement.executeQuery()) {
-                if (result.next()) {
-                    User user = new User();
-                    user.setId(result.getInt("id"));
-                    user.setEmail(email);
-                    user.setPassword(result.getString("password"));
-                    user.setFirstName(result.getString("first_name"));
-                    user.setLastName(result.getString("last_name"));
-                    user.setType(UserType.forValue(result.getInt("type")));
-                    return user;
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        User user = new User();
+                        user.setId(result.getInt("id"));
+                        user.setEmail(email);
+                        user.setPassword(result.getString("password"));
+                        user.setFirstName(result.getString("first_name"));
+                        user.setLastName(result.getString("last_name"));
+                        user.setType(UserType.forValue(result.getInt("type")));
+                        return user;
+                    }
+                    return null; // No row
                 }
-                return null; // No row
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, User.class);

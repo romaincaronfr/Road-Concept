@@ -8,8 +8,8 @@ import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.ProjetEnvironment;
 import fr.enssat.lanniontech.api.utilities.SQLScriptRunner;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.postgresql.ds.PGPoolingDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public final class SQLDatabaseConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SQLDatabaseConnector.class);
 
-    private static final PGPoolingDataSource DATA_SOURCE = new PGPoolingDataSource();
+    private static BasicDataSource DATA_SOURCE = new BasicDataSource(); //FIXME: Handle close or just the server do it on stop ?
 
     // ==============
     // DB CONNECTIONS
@@ -54,14 +54,15 @@ public final class SQLDatabaseConnector {
     // ==============================
 
     private static void configure() {
-        DATA_SOURCE.setUser(Constants.POSTGRESQL_USER_NAME);
+        DATA_SOURCE.setUsername(Constants.POSTGRESQL_USER_NAME);
         DATA_SOURCE.setPassword(Constants.POSTGRESQL_USER_PASSWORD);
-        DATA_SOURCE.setServerName(Constants.POSTGRESQL_SERVER_HOST);
-        DATA_SOURCE.setPortNumber(Constants.POSTGRESQL_SERVER_PORT);
-        DATA_SOURCE.setDatabaseName(Constants.POSTGRESQL_DATABASE_NAME);
-        DATA_SOURCE.setMaxConnections(Constants.POSTGRESQL_MAX_CONNECTIONS);
+        DATA_SOURCE.setUrl("jdbc:postgresql://" + Constants.POSTGRESQL_SERVER_HOST + "/" + Constants.POSTGRESQL_DATABASE_NAME);
+        DATA_SOURCE.setMaxTotal(Constants.POSTGRESQL_MAX_CONNECTIONS);
     }
 
+    /**
+     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
+     */
     public static Connection getConnection() throws SQLException { // DATA_SOURCE is thread safe
         return DATA_SOURCE.getConnection();
     }

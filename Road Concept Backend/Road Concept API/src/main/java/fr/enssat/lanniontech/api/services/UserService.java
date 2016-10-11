@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +45,7 @@ public class UserService extends AbstractService {
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public List<User> getAll() {
+    public List<User> getAll() throws SQLException {
         return repository.getAll();
     }
 }

@@ -11,12 +11,13 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-abstract class AbstractRepository {
+public abstract class AbstractRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRepository.class);
 
@@ -24,14 +25,17 @@ abstract class AbstractRepository {
     // SQL - DELETE ENTITY
     // ===================
     private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
+
     // =====================
     // SQL - BASIC EXCEPTION
     // =====================
 
     protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
-        try (PreparedStatement statement = SQLDatabaseConnector.getConnection().prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
-            statement.setObject(1, entity.getIdentifierValue());
-            return statement.executeUpdate();
+        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
+                statement.setObject(1, entity.getIdentifierValue());
+                return statement.executeUpdate();
+            }
         } catch (SQLException e) {
             throw processBasicSQLException(e, entity.getClass());
         }
