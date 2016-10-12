@@ -60,9 +60,9 @@ app.Router = Backbone.Router.extend({
     user: function(){
         if (!this.user){
             console.log("Router : user");
-            this.user = new app.userInfoView();
+            this.user = new app.userView();
         }else{
-            console.log("Router : user else");
+            this.user.render();
         }
     }
 });
