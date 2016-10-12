@@ -49,7 +49,7 @@ public class HttpResponseBuilder {
     }
 
     public static void buildOkResponse(RoutingContext routingContext, Object data) {
-        routingContext.response().setStatusCode(HttpStatus.SC_ACCEPTED);
+        routingContext.response().setStatusCode(HttpStatus.SC_OK);
         routingContext.response().end(JSONSerializer.toJSON(data));
     }
 

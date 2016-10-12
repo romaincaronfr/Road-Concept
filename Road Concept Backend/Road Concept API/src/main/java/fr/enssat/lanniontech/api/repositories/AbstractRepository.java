@@ -5,7 +5,7 @@ import fr.enssat.lanniontech.api.entities.SQLStoredEntity;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
 import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
-import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
+import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public abstract class AbstractRepository {
     // =====================
 
     protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
-        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
                 statement.setObject(1, entity.getIdentifierValue());
                 return statement.executeUpdate();

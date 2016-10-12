@@ -46,12 +46,10 @@ paths:
         - Utilisateurs
       description: Récupère les informations sur l'utilisateur acctuellement connecté
       responses:
-        202:
+        200:
           description: Détails de l'utilisateur
           schema:
             $ref: '#/definitions/User'
-        400:
-          $ref: '#/responses/400'
         401:
           $ref: '#/responses/401'
         500:
@@ -77,7 +75,7 @@ paths:
       tags:
         - Utilisateurs
       responses:
-        202:
+        200:
           description: Liste des utilisateurs éxistants
           schema:
             type: array
@@ -89,20 +87,59 @@ paths:
           $ref: '#/responses/401'
         500:
           $ref: '#/responses/500'
-
     post:
       description: Créer un nouvel utilisateur
+      parameters:
+        - name: credentials
+          in: body
+          description: Informations de l'utilisateur
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+
       tags:
         - Utilisateurs
       responses:
         201:
-          description: Liste des utilisateurs éxistants
+          description: Utilisateur créé
           schema:
-            items:
-              $ref: '#/definitions/User'
+              $ref: '#/definitions/UserCreate'
         401:
           $ref: '#/responses/401'
         403: # Si pas admin
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
+
+  /api/users/{userMail}:
+    parameters:
+      - name: userMail
+        in: path
+        required: true
+        type: string
+    delete:
+      description: Supprimer un utilisateur ainsi que l'enssemble de ses cartes (irréversible).
+      tags:
+        - Utilisateurs
+      responses:
+        204:
+          description: Utilisateur et maps supprimées
+        401:
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
+    get:
+      description: Retourne les informations sur un utilisateur
+      tags:
+        - Utilisateurs
+      responses:
+        200:
+          description: Liste des utilisateurs éxistants
+          schema:
+              $ref: '#/definitions/User'
+        401:
+          $ref: '#/responses/401'
+        403:
           $ref: '#/responses/401'
         500:
           $ref: '#/responses/500'
@@ -113,7 +150,7 @@ paths:
         - Cartes
       description: Retourne les informations générales sur toutes les cartes d'un utilisateur
       responses:
-        201:
+        200:
           description: Requête correctement éxécutée.
           schema:
             type: array
@@ -127,16 +164,36 @@ paths:
           $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
+    post:
+      parameters:
+        - name: name
+          in: body
+          schema:
+            $ref: '#/definitions/MapInfoCreate'
+      description: Créer une nouvelle carte
+      tags:
+        - Utilisateurs
+      responses:
+        201:
+          description: Carte créée
+          schema:
+              $ref: '#/definitions/MapInfo'
+        401:
+          $ref: '#/responses/401'
+        403: # Si pas admin
+          $ref: '#/responses/401'
+        500:
+          $ref: '#/responses/500'
 
   /api/maps/{mapID}:
+    parameters:
+      - $ref: '#/parameters/mapID'
     get:
-      parameters:
-        - $ref: '#/parameters/mapID'
       tags:
         - Cartes
       description: Retourne le contenu d'une carte identifiée par son ID
       responses:
-        201:
+        200:
           description: Requête correctement éxécutée.
           schema:
               $ref: '#/definitions/Map'
@@ -145,6 +202,19 @@ paths:
         401:
           $ref: '#/responses/401'
         403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+    delete:
+      description: Supprimer un utilisateur ainsi que l'enssemble de ses cartes (irréversible).
+      tags:
+        - Cartes
+      responses:
+        204:
+          description: Map supprimée
+        401:
+          $ref: '#/responses/401'
+        403: # Map pas à lui ou pas admin
           $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
@@ -189,12 +259,33 @@ definitions:
       email:
         type: string
         description: Login de l'utilisateur conneté
-      firstName:
-        type: string
-        description: Prénom de l'utilisateur
       lastName:
         type: string
         description: Nom de famille de l'utilisateur
+      firstName:
+        type: string
+        description: Prénom de l'utilisateur
+      type:
+        type: string
+        enum:
+          - USER
+          - ADMINISTRATOR
+        description: Status de l'utilisateur
+  UserCreate:
+    properties:
+      email:
+        type: string
+        description: Login de l'utilisateur conneté
+      lastName:
+        type: string
+        description: Nom de famille de l'utilisateur
+      firstName:
+        type: string
+        description: Prénom de l'utilisateur
+      password:
+        type: string
+        format: password
+        description: password de l'utilisateur (en clair)
       type:
         type: string
         enum:
@@ -211,7 +302,18 @@ definitions:
       name:
         type: string
         description: Nom de la carte. Peux être vide mais non null
-      imageURL:
+      image_url:
+        type: string
+        description: URL d'une image représentant la carte. Peut être null
+      description:
+        description: Description de la carte
+
+  MapInfoCreate:
+    properties:
+      name:
+        type: string
+        description: Nom de la carte
+      image_url:
         type: string
         description: URL d'une image représentant la carte. Peut être null
       description:

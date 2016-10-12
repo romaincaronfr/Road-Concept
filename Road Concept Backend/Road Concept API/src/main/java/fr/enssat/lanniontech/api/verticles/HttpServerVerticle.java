@@ -1,8 +1,6 @@
 package fr.enssat.lanniontech.api.verticles;
 
-import fr.enssat.lanniontech.api.repositories.TestMongoDBRepository;
-import fr.enssat.lanniontech.api.repositories.UserRepository;
-import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
+import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
@@ -30,10 +28,7 @@ public class HttpServerVerticle extends AbstractVerticle {
     public void start() {
         Router router = Router.router(vertx);
 
-        SQLDatabaseConnector.setUp(); // Throws if the server can't connect/set up the SQL database
-
-        // TODO: Add test connection to MongoDB
-        new TestMongoDBRepository().testConnection(new UserRepository().getFromEmail("admin@enssat.fr"));
+        DatabaseConnector.setUp(); // Throws if the server can't connect/set up the databases connections
 
         configureGlobalHandlers(router);
 

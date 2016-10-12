@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.api.repositories;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
-import fr.enssat.lanniontech.api.repositories.connectors.SQLDatabaseConnector;
+import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ public class MapRepository extends AbstractRepository {
     // ======
 
     public MapInfo create(User user, String name, String imageURL, String description) throws DatabaseOperationException {
-        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setInt(1, user.getId());
                 statement.setString(2, name);
@@ -56,7 +56,7 @@ public class MapRepository extends AbstractRepository {
     // ===
 
     public List<MapInfo> getAll(User user) throws DatabaseOperationException {
-        try (Connection connection = SQLDatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, user.getId());
 

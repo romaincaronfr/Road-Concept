@@ -1,6 +1,8 @@
 package fr.enssat.lanniontech.api.repositories.connectors;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import fr.enssat.lanniontech.api.entities.UserType;
 import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
@@ -10,6 +12,7 @@ import fr.enssat.lanniontech.api.utilities.ProjetEnvironment;
 import fr.enssat.lanniontech.api.utilities.SQLScriptRunner;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,21 +22,26 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public final class SQLDatabaseConnector {
+public final class DatabaseConnector {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SQLDatabaseConnector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConnector.class);
 
-    private static BasicDataSource DATA_SOURCE = new BasicDataSource(); //FIXME: Handle close or just the server do it on stop ?
+    private static BasicDataSource DATA_SOURCE = new BasicDataSource(); // Vert.x will destroy it on stop
 
     // ==============
     // DB CONNECTIONS
     // ==============
 
     public static MongoClient getMongoDBClient() {
-        return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
+           return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
     }
 
-    public static void setUp() throws SQLUnexpectedException {
+    public static void setUp(){
+        setUpSQL();
+        setUpNoSQL();
+    }
+
+    private static void setUpSQL() throws SQLUnexpectedException {
         configure();
         if (Constants.ENVIRONMENT == ProjetEnvironment.DEVELOPPMENT) {
             try (Connection initConnection = getConnection()) {
@@ -46,6 +54,15 @@ public final class SQLDatabaseConnector {
                 LOGGER.error(ExceptionUtils.getStackTrace(e));
                 throw new SQLUnexpectedException(e);
             }
+        }
+    }
+
+    private static void setUpNoSQL() { // Check the connection is ok
+        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
+            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
+            db.createCollection("fake");
+            MongoCollection<Document> fakeCollection = db.getCollection("fake");
+            fakeCollection.drop();
         }
     }
 
@@ -63,7 +80,7 @@ public final class SQLDatabaseConnector {
     /**
      * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
      */
-    public static Connection getConnection() throws SQLException { // DATA_SOURCE is thread safe
+    public static Connection getConnection() throws SQLException {
         return DATA_SOURCE.getConnection();
     }
 
@@ -74,7 +91,7 @@ public final class SQLDatabaseConnector {
         try {
             String file = "roadConceptDB_dev.sql";
             SQLScriptRunner runner = new SQLScriptRunner(connection, false);
-            try (InputStream script = SQLDatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/" + file)) {
+            try (InputStream script = DatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/" + file)) {
                 runner.runScript(new BufferedReader(new InputStreamReader(script)));
             }
         } catch (Exception e) {
