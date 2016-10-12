@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  web:
+    build: ./roadconcept
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mongodb:/data/db:rw
+#      - ./road-concept-api-0.1-SNAPSHOT-fat.jar:/var/road-concept-api.jar:rw
+    links:
+      - "postgresql"
+  postgresql:
+    build: ./postgresql
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: bonjour
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
