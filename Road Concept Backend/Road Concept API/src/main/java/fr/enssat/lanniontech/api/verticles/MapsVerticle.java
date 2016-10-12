@@ -38,6 +38,7 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/maps").blockingHandler(this::processGetAllMaps);
         router.route(HttpMethod.POST, "/api/maps").blockingHandler(this::processCreateMap);
         router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
+        router.route(HttpMethod.DELETE, "/api/maps/:mapID").blockingHandler(this::processDeleteMap);
     }
 
     private void processGetOneMap(RoutingContext routingContext) {
@@ -83,6 +84,19 @@ public class MapsVerticle extends AbstractVerticle {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             List<MapInfo> maps = mapService.getAllMapsInfo(currentUser);
             HttpResponseBuilder.buildOkResponse(routingContext, maps);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    private void processDeleteMap(RoutingContext routingContext) {
+        try {
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            // TODO: Check ID consistent
+
+            Integer mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
+            mapService.delete(mapID);
+            HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }

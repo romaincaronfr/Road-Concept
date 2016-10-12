@@ -70,4 +70,10 @@ public class MapService extends AbstractService {
         }
         return map;
     }
+
+    public void delete(Integer mapID) {
+        MapInfo map = new MapInfo();
+        map.setId(mapID);
+        repository.delete(map);
+    }
 }

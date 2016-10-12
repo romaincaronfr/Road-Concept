@@ -61,6 +61,4 @@ public class MapInfo implements SQLStoredEntity {
     public String getIdentifierName() {
         return "id";
     }
-
-
 }
