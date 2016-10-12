@@ -23,7 +23,6 @@ app.mapView = Backbone.View.extend({
     },
 
     render:function () {
-        this.mapCollection.fetch();
         this.$el.html(this.template());
         this.mapCollection.each(function(model) {
             var mapTableView = new app.mapTableView({
@@ -32,6 +31,7 @@ app.mapView = Backbone.View.extend({
 
             //this.$el.append(mapTableView.render().el);
         });
+        this.mapCollection.fetch();
         return this;
     },
 
