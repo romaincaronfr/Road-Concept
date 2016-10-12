@@ -5,15 +5,16 @@ services:
     build: ./roadconcept
     ports:
       - "8080:8080"
-    volumes:
-      - ./mongodb:/data/db:rw
-#      - ./road-concept-api-0.1-SNAPSHOT-fat.jar:/var/road-concept-api.jar:rw
     links:
       - "postgresql"
+      - "mongodb"
   postgresql:
     build: ./postgresql
-    image: postgres
     environment:
       POSTGRES_PASSWORD: bonjour
     volumes:
       - ./postgresql/data:/var/lib/postgresql/data
+  mongodb:
+    image: mongo
+    volumes:
+      - ./mongodb/data:/data/db:rw
