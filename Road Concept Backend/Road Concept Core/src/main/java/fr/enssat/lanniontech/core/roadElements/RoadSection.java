@@ -11,15 +11,21 @@ public class RoadSection {
     private Lane laneA; //this lane is on rigth side in A -> B scenario
     private Lane laneB; //this lane is on left side in A -> B scenario
     private PosFunction function;
+    private Road myRoad;
 
 
     public RoadSection(Position A, Position B) {
+        this(A,B,null);
+    }
+
+    public RoadSection(Position A, Position B,Road myRoad){
         this.A = A;
         this.B = B;
         length = Position.length(A, B);
         laneA = new Lane(this, length, null);
         laneB = new Lane(this, length, null);
         function = new PosFunction(A, B, length);
+        this.myRoad = myRoad;
     }
 
     public Position getPosition(Lane myLane, double pos) {
@@ -90,5 +96,13 @@ public class RoadSection {
         } else {
             return -width / 2;
         }
+    }
+
+    public Road getMyRoad() {
+        return myRoad;
+    }
+
+    public void setMyRoad(Road myRoad) {
+        this.myRoad = myRoad;
     }
 }

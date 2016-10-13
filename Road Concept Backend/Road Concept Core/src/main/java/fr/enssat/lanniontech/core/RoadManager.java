@@ -21,8 +21,12 @@ public class RoadManager {
         roads = new HashMap<Integer, Road>();
     }
 
-    public RoadSection addRoadSection(Position A, Position B) {
-        RoadSection RS1 = new RoadSection(A, B);
+    public RoadSection addRoadSection(Position A,Position B){
+        return addRoadSection(A,B,null);
+    }
+
+    private RoadSection addRoadSection(Position A, Position B,Road myRoad) {
+        RoadSection RS1 = new RoadSection(A, B, myRoad);
         RoadSection RS2 = null;
         roadSections.add(RS1);
         if (emptyRoadEdges.containsKey(A)) {
@@ -40,15 +44,12 @@ public class RoadManager {
         } else {
             emptyRoadEdges.put(B, RS1);
         }
-        System.out.println(emptyRoadEdges);
         return RS1;
     }
 
     public Road addRoad(Position A, Position B, int id) {
         Road R = new Road(id);
-        System.out.println(A);
-        System.out.println(B);
-        R.addSection(addRoadSection(A, B));
+        R.addSection(addRoadSection(A, B, R));
         roads.put(id, R);
         return R;
     }

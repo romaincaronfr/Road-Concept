@@ -66,4 +66,7 @@ public class Road {
         return sections.size();
     }
 
+    public int getId() {
+        return id;
+    }
 }
