@@ -69,8 +69,8 @@ public class RoadManager {
     }
 
     private void assembleRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
-        RS2.getLeftLane(P).setNextLane(RS1.getRigthLane(P));
-        RS1.getLeftLane(P).setNextLane(RS2.getRigthLane(P));
+        RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
+        RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
     }
 
 }

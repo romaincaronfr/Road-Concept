@@ -58,7 +58,7 @@ public class RoadSection {
         }
     }
 
-    public Lane getRigthLane(Position P) {
+    public Lane getRightLane(Position P) {
         if (P == A) {
             return laneA;
         } else {
@@ -113,4 +113,22 @@ public class RoadSection {
     public void setMyRoad(Road myRoad) {
         this.myRoad = myRoad;
     }
+
+    public void setTrajectoryMap(Position P,Map<Integer, Trajectory> trajectoryMap) {
+        if(P==A){
+            this.trajectoryMapA = trajectoryMap;
+        }else if(P==B){
+            this.trajectoryMapB = trajectoryMap;
+        }
+    }
+
+    public Map<Integer, Trajectory> getTrajectoryMap(Position P) {
+        if(P==A){
+            return this.trajectoryMapA;
+        }else if(P==B){
+            return this.trajectoryMapB;
+        }
+        return null;
+    }
+
 }

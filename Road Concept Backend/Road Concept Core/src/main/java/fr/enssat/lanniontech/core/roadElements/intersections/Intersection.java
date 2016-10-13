@@ -25,15 +25,16 @@ public class Intersection {
 
         for (int i : roadSections.keySet()){
             if(id != i){
-                Trajectory T = new Trajectory(roadSections.get(i).getRigthLane(P),
+                Trajectory T = new Trajectory(roadSections.get(i).getRightLane(P),
                         roadSections.get(id).getLeftLane(P));
                 trajectories.get(i).put(id,T);
-                T = new Trajectory(roadSections.get(id).getRigthLane(P),
+                T = new Trajectory(roadSections.get(id).getRightLane(P),
                         roadSections.get(i).getLeftLane(P));
                 myTrajectories.put(i,T);
             }
         }
         trajectories.put(id,myTrajectories);
+        roadSections.get(id).setTrajectoryMap(P,myTrajectories);
     }
 
     public boolean addRoadSection(RoadSection Rs){
@@ -41,11 +42,8 @@ public class Intersection {
             return false;
         }
         roadSections.put(Rs.getMyRoad().getId(),Rs);
-        if (roadSections.size()>0){
-            addTrajectories(Rs.getMyRoad().getId());
-        }
+        addTrajectories(Rs.getMyRoad().getId());
         return true;
-
     }
 
     public int getTrajectoriesSize(){
@@ -66,6 +64,7 @@ public class Intersection {
                 trajectories.get(i).remove(id);
             }
             trajectories.remove(id);
+            roadSections.get(id).setTrajectoryMap(P,null);
             roadSections.remove(id);
         }else{
             return false;
