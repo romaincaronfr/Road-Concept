@@ -19,7 +19,7 @@ app.userView = Backbone.View.extend({
     },
 
     render:function () {
-        this.$el.html(this.template(userModel.attributes));
+        this.$el.html(this.template(app.router.navBarV.model.attributes));
         return this;
 
     },

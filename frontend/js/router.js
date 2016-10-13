@@ -31,38 +31,52 @@ app.Router = Backbone.Router.extend({
     },
 
     initialize: function () {
-        this.login = null;
-        this.map = null;
-        this.user = null;
-        this.navBar = new app.navBarView();
+        this.loginV = null;
+        this.mapV = null;
+        this.userV = null;
+        this.navBarV = null;
     },
 
     login: function () {
-        if (!this.login) {
-            this.login = new app.loginView();
+        this.checkAndDestroyNavbar();
+        if (!this.loginV) {
+            this.loginV = new app.loginView();
             //app.loginView.render();
             console.log('reusing home views');
         }else {
-            this.login.render();
+            this.loginV.render();
         }
-        this.login.delegateEvents(); // delegate events when the views is recycled
+        this.loginV.delegateEvents(); // delegate events when the views is recycled
         //this.$content.html(app.loginView.el);
     },
 
     map: function() {
-        if (!this.map) {
-            this.map = new app.mapView();
+        this.checkAndInitNavBar();
+        if (!this.mapV) {
+            this.mapV = new app.mapView();
         }else{
-            this.map.render();
+            this.mapV.render();
         }
     },
 
     user: function(){
-        if (!this.user){
-            console.log("Router : user");
-            this.user = new app.userView();
-        }else{
-            this.user.render();
+        if (!this.navBarV){
+            this.navBarV = new app.navBarView(true);
+        }else {
+            this.navBarV.checkUserModelBeforeMyUser();
+        }
+    },
+
+    checkAndInitNavBar: function(){
+        if (!this.navBarV){
+            this.navBarV = new app.navBarView(false);
+        }
+    },
+
+    checkAndDestroyNavbar: function(){
+        if (this.navBarV){
+            this.navBarV.cleanHTML();
+            this.navBarV = null;
         }
     }
 });
