@@ -47,7 +47,11 @@ Ce script va :
     
 [Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc```
 
-
+L'administrateur par défaut de l'application est :
+```
+admin@enssat.fr
+admin
+```
 
 **Free Software, Hell Yeah!**
 
