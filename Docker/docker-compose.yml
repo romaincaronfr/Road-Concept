@@ -20,3 +20,5 @@ services:
     image: mongo
     volumes:
       - ./mongodb/data:/data/db:rw
+    ports:
+      - "27017:27017"

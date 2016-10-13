@@ -4,8 +4,8 @@ import fr.enssat.lanniontech.api.entities.Entity;
 import fr.enssat.lanniontech.api.entities.SQLStoredEntity;
 import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
 import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
+import fr.enssat.lanniontech.api.exceptions.database.EntityStillInUseException;
 import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
-import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
 
 public abstract class AbstractRepository {
 
@@ -24,14 +24,9 @@ public abstract class AbstractRepository {
     // ===================
     // SQL - DELETE ENTITY
     // ===================
-    private static final Pattern SQL_EXCEPTION_PATTERN = Pattern.compile("\\[([a-z_]+)\\]");
-
-    // =====================
-    // SQL - BASIC EXCEPTION
-    // =====================
 
     protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
                 statement.setObject(1, entity.getIdentifierValue());
                 return statement.executeUpdate();
@@ -41,26 +36,20 @@ public abstract class AbstractRepository {
         }
     }
 
-    static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
+    // =====================
+    // SQL - BASIC EXCEPTION
+    // =====================
+
+    protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
         switch (e.getSQLState()) {
-            case Constants.POSTGRESQL_CHECK_VIOLATION:
-                return new DatabaseOperationException(extractErrorFromMessage(e), e); //TODO: Create new exception (see nabuTalk)
             case Constants.POSTGRESQL_FOREIGN_KEY_VIOLATION:
-                return new DatabaseOperationException("Entity '" + clazz + "' is still in use.", e); //TODO: Create new exception (see nabuTalk)
+                return new EntityStillInUseException("Entity '" + clazz + "' is still in use.", e);
             case Constants.POSTGRESQL_UNIQUE_VIOLATION:
-                return new EntityAlreadyExistsException("Entity '" + clazz + "' already exists.", e);//TODO: Rename? (see nabuTalk)
+                return new EntityAlreadyExistsException("Entity '" + clazz + "' already exists.", e);
             default:
                 break;
         }
         LOGGER.error(ExceptionUtils.getStackTrace(e));
         return new SQLUnexpectedException(e);
-    }
-
-    private static String extractErrorFromMessage(SQLException e) {
-        Matcher matcher = SQL_EXCEPTION_PATTERN.matcher(e.getMessage());
-        if (matcher.find()) {
-            return matcher.group(1);
-        }
-        return null;
     }
 }

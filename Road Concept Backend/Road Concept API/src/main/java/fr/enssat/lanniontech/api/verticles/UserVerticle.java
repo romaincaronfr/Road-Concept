@@ -63,10 +63,17 @@ public class UserVerticle extends AbstractVerticle {
         }
     }
 
-    private void checkAdminLevel(RoutingContext routingContext) {
-        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
-        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
-            throw new PrivilegeLevelException();
+    private void processGetUser(RoutingContext routingContext) {
+        try {
+            checkAdminLevel(routingContext);
+            String email = routingContext.request().getParam("userMail");
+            User user = userService.get(email);
+            HttpResponseBuilder.buildOkResponse(routingContext, user);
+        } catch (PrivilegeLevelException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
+        } catch (Exception e) { //TODO: 404
+            LOGGER.error(ExceptionUtils.getStackTrace(e));
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
@@ -133,18 +140,12 @@ public class UserVerticle extends AbstractVerticle {
     // UTILITIES
     // =========
 
-    private void processGetUser(RoutingContext routingContext) {
-        try {
-            checkAdminLevel(routingContext);
-            String email = routingContext.request().getParam("userMail");
-            User user = userService.get(email);
-            HttpResponseBuilder.buildOkResponse(routingContext, user);
-        } catch (PrivilegeLevelException e) {
-            HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (Exception e) { //TODO: 404
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
-            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+    private void checkAdminLevel(RoutingContext routingContext) {
+        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
+            throw new PrivilegeLevelException();
         }
     }
+
 
 }

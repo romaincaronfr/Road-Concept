@@ -93,3 +93,7 @@ local.properties
 .DS_Store
 
 *.suml
+
+Docker/hiveship-docker-compose.yml
+
+*.jar

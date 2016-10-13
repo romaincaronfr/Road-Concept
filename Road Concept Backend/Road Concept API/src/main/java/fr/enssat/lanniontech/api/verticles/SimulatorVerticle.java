@@ -30,7 +30,6 @@ public class SimulatorVerticle extends AbstractVerticle {
 
     private void processSimulation(RoutingContext routingContext) {
         try {
-            //User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
             boolean result = simulatorService.simulate(); // TODO: Add parameters
             HttpResponseBuilder.buildOkResponse(routingContext, result);
         } catch (Exception e) {

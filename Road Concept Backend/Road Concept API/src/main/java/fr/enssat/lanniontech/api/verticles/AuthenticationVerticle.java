@@ -13,7 +13,6 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +84,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
-            //TODO: Create and set a 'Simulator' instnce in the session when the user connect?
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (BadRequestException | ClassCastException e) {
@@ -95,7 +93,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
         } catch (AuthenticationException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "Bad credentials, check your login and/or password.");
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }

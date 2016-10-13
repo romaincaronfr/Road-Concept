@@ -11,18 +11,6 @@ import org.bson.Document;
 
 public class TestMongoDBRepository {
 
-//    public static void main(String[] args) {
-//
-//        TestMongoDBRepository repository = new TestMongoDBRepository();
-//        User sample = new User();
-//        sample.setId(new Random().nextInt());
-//        sample.setEmail("Yuko");
-//        repository.insert(sample, "test");
-//        repository.getMap("test");
-//
-//
-//    }
-
     public void testConnection(User user) {
         insert(user, "test_connection");
         getMap("test_connection");

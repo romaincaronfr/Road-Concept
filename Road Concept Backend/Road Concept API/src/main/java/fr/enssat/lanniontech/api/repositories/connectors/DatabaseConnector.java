@@ -36,7 +36,18 @@ public final class DatabaseConnector {
            return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
     }
 
-    public static void setUp(){
+    /**
+     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
+     */
+    public static Connection getConnection() throws SQLException {
+        return DATA_SOURCE.getConnection();
+    }
+
+    // ==============================
+    // CONFIGURATION & INITIALIZATION
+    // ==============================
+
+    public static void setUp() {
         setUpSQL();
         setUpNoSQL();
     }
@@ -66,22 +77,11 @@ public final class DatabaseConnector {
         }
     }
 
-    // ==============================
-    // CONFIGURATION & INITIALIZATION
-    // ==============================
-
     private static void configure() {
         DATA_SOURCE.setUsername(Constants.POSTGRESQL_USER_NAME);
         DATA_SOURCE.setPassword(Constants.POSTGRESQL_USER_PASSWORD);
         DATA_SOURCE.setUrl("jdbc:postgresql://" + Constants.POSTGRESQL_SERVER_HOST + "/" + Constants.POSTGRESQL_DATABASE_NAME);
         DATA_SOURCE.setMaxTotal(Constants.POSTGRESQL_MAX_CONNECTIONS);
-    }
-
-    /**
-     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
-     */
-    public static Connection getConnection() throws SQLException {
-        return DATA_SOURCE.getConnection();
     }
 
     /**

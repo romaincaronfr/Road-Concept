@@ -43,7 +43,7 @@ public class MapsVerticle extends AbstractVerticle {
 
     private void processGetOneMap(RoutingContext routingContext) {
         try {
-            User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
 
             FeatureCollection map = mapService.getMap(currentUser, mapID); // may throw
@@ -64,15 +64,13 @@ public class MapsVerticle extends AbstractVerticle {
             if (body == null) {
                 throw new BadRequestException();
             }
-            User currentUser = (User) routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             String name = body.getString("name");
             String imageURL = body.getString("image_url");
             String description = body.getString("description");
 
             MapInfo mapInfo = mapService.create(currentUser, name, imageURL, description);
             HttpResponseBuilder.buildOkResponse(routingContext, mapInfo);
-        } catch (EntityAlreadyExistsException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext, "An user already exists for this email");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -91,7 +89,6 @@ public class MapsVerticle extends AbstractVerticle {
 
     private void processDeleteMap(RoutingContext routingContext) {
         try {
-            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             // TODO: Check ID consistent
 
             Integer mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
