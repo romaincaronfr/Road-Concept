@@ -2,11 +2,17 @@ package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.Trajectory;
+
+import java.util.Map;
 
 public class RoadSection {
     private Position A;
     private Position B;
-    double length;
+    private Map<Integer, Trajectory> trajectoryMapA;
+    private Map<Integer, Trajectory> trajectoryMapB;
+    private double length;
+
 
     private Lane laneA; //this lane is on rigth side in A -> B scenario
     private Lane laneB; //this lane is on left side in A -> B scenario
@@ -26,6 +32,8 @@ public class RoadSection {
         laneB = new Lane(this, length, null);
         function = new PosFunction(A, B, length);
         this.myRoad = myRoad;
+        trajectoryMapA = null;
+        trajectoryMapB = null;
     }
 
     public Position getPosition(Lane myLane, double pos) {

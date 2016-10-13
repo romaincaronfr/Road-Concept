@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.core.roadElements.intersections;
 
-import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.Trajectory;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
@@ -45,11 +44,7 @@ public class Intersection {
         if (roadSections.size()>0){
             addTrajectories(Rs.getMyRoad().getId());
         }
-        if ((roadSections.size()-1)*roadSections.size()==getTrajectoriesSize()){
-            return true;
-        }else{
-            return false;
-        }
+        return true;
 
     }
 
@@ -61,9 +56,20 @@ public class Intersection {
         return s;
     }
 
-    public boolean removeRoadSection(int id){
-        return true;
+    public int getRoadSectionsSize(){
+        return roadSections.size();
     }
 
-
+    public boolean removeRoadSection(int id){
+        if (roadSections.containsKey(id)){
+            for (int i : trajectories.keySet()){
+                trajectories.get(i).remove(id);
+            }
+            trajectories.remove(id);
+            roadSections.remove(id);
+        }else{
+            return false;
+        }
+        return true;
+    }
 }

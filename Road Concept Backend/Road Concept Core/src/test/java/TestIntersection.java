@@ -21,15 +21,34 @@ public class TestIntersection {
         Road R2 = RM.addRoad(B,I,1);
         Road R3 = RM.addRoad(C,I,2);
         Road R4 = RM.addRoad(D,I,3);
-        Road R5 = RM.addRoad(D,I,4);
+        Road R5 = RM.addRoad(E,I,4);
 
         Intersection Inter = new Intersection(I);
 
 
         Assert.assertTrue(Inter.addRoadSection(R1.get(0)));
+        Assert.assertEquals(Inter.getTrajectoriesSize(),
+                Inter.getRoadSectionsSize()*(Inter.getRoadSectionsSize()-1));
+
         Assert.assertTrue(Inter.addRoadSection(R2.get(0)));
+        Assert.assertEquals(Inter.getTrajectoriesSize(),
+                Inter.getRoadSectionsSize()*(Inter.getRoadSectionsSize()-1));
+
         Assert.assertTrue(Inter.addRoadSection(R3.get(0)));
+        Assert.assertEquals(Inter.getTrajectoriesSize(),
+                Inter.getRoadSectionsSize()*(Inter.getRoadSectionsSize()-1));
+
         Assert.assertTrue(Inter.addRoadSection(R4.get(0)));
+        Assert.assertEquals(Inter.getTrajectoriesSize(),
+                Inter.getRoadSectionsSize()*(Inter.getRoadSectionsSize()-1));
+
         Assert.assertTrue(Inter.addRoadSection(R5.get(0)));
+        Assert.assertEquals(Inter.getTrajectoriesSize(),
+                Inter.getRoadSectionsSize()*(Inter.getRoadSectionsSize()-1));
+
+
+        Assert.assertTrue(Inter.removeRoadSection(1));
+        Assert.assertFalse(Inter.removeRoadSection(9));
+        Assert.assertEquals(Inter.getTrajectoriesSize(), 12);
     }
 }
