@@ -26,9 +26,10 @@ Backbone.sync = (function(syncFn) {
 app.Router = Backbone.Router.extend({
 
     routes: {
-        "": "map",
+        "": "start",
         "login": "login",
-        "user": "user"
+        "user": "user",
+        "map": "map"
     },
 
     initialize: function () {
@@ -36,6 +37,18 @@ app.Router = Backbone.Router.extend({
         this.mapV = null;
         this.userV = null;
         this.navBarV = null;
+    },
+
+    start: function(){
+        if (!this.navBarV){
+            this.navBarV = new app.navBarView(false,true);
+        }else {
+            if (this.navBarV.model){
+                app.router.navigate('map', { trigger: true });
+            }else {
+                app.router.navigate('login', { trigger: true });
+            }
+        }
     },
 
     login: function () {
@@ -62,7 +75,7 @@ app.Router = Backbone.Router.extend({
 
     user: function(){
         if (!this.navBarV){
-            this.navBarV = new app.navBarView(true);
+            this.navBarV = new app.navBarView(true,false);
         }else {
             this.navBarV.checkUserModelBeforeMyUser();
         }
@@ -70,7 +83,7 @@ app.Router = Backbone.Router.extend({
 
     checkAndInitNavBar: function(){
         if (!this.navBarV){
-            this.navBarV = new app.navBarView(false);
+            this.navBarV = new app.navBarView(false,false);
         }
     },
 

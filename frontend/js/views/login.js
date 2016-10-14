@@ -48,7 +48,7 @@ app.loginView = Backbone.View.extend({
                         console.log("HTTP Request Succeeded: " + jqXHR.status);
                         userModel = new app.models.userModel(data);
                         console.log(userModel);
-                        app.router.navigate('', { trigger: true });
+                        app.router.navigate('map', { trigger: true });
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("HTTP Request Failed : /api/me");

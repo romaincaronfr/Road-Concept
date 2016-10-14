@@ -7,9 +7,9 @@ app.navBarView = Backbone.View.extend({
 
     model: null,
 
-    initialize: function (redirectToUser) {
+    initialize: function (redirectToUser,redirectToMap) {
         var self = this;
-        this.getMe(redirectToUser,this);
+        this.getMe(redirectToUser,redirectToMap,this);
     },
 
     render: function () {
@@ -31,7 +31,7 @@ app.navBarView = Backbone.View.extend({
         }
     },
 
-    getMe:function(redirectToUser,self){
+    getMe:function(redirectToUser,redirectToMap,self){
         $.ajax({
                 url: Backbone.Collection.prototype.absURL + "/api/me",
                 type: "GET",
@@ -45,6 +45,8 @@ app.navBarView = Backbone.View.extend({
                 self.render();
                 if (redirectToUser){
                     app.router.userV = new app.userView();
+                }else if (redirectToMap){
+                    app.router.navigate('map', { trigger: true });
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
