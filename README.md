@@ -7,7 +7,8 @@
 Pour pouvoir compiler et éxécuter le projet en local sur votre poste, les dépendances suivantes sont nécéssaires :
 * [Oracle JDK8] - Le simulateur ainsi que l'API permettant d'y accéder sont développés en Java
 * [Maven] - Ces deux projets utilisent le gestionaire de projet Maven
-* [MongoDB] - Les données liés à l'affichage des cartes sont stockés dans une base NoSQL MongoDB
+* [Docker] - 
+* [Docker-compose] - 
 
 ## Comment déployer localement le projet ?
 
@@ -15,35 +16,24 @@ Récupérer le projet à l'aide du dépôt git hébergé sur GitHub
 ```sh
 $ git clone git@github.com:Webrom/Road-Concept.git
 ```
-Se placer dans le dossier ```developper-bin```
+Se placer dans le dossier ```Docker```
 ```sh
-$ cd developper-bin/
+$ cd Docker/
 ```
-Démarrer la base de données MongoDB. En fonction de votre système d'exploitation :
-
-
-GNU/Linux Ubuntu
+Builder les images des services :
 ```sh
-$ ./start_MongoDB_Ubuntu.sh
-
-```
-Apple mac OS
-```sh
-$ ./start_MongoDB_Mac.sh
-```
-Lors de la première éxécution, il est possible de devoir donner les droits d'éxécutions aux scripts :
-```sh
-$ chmod u+x start_MongoDB_[Mac|Ubuntu].sh
+$ docker-commpose build
 ```
 
-A ce stade, il reste à compiler la partie serveur du projet et à déployer le serveur HTTP. Pour cela :
+Lancer les services en conteneurs :
 ```sh
-$ ./deploy.sh
+$ docker-commpose up
 ```
-Ce script va :
-* Build ```Road Concept Core```
-* Build ```Road Concept API```
-* Déployer le serveur HTTP ```Vert.x```, écoutant par défaut sur le port ```8080```
+
+Cette commande va lalancer les conteneurs suivants :
+* Un serveur ```mongodb```, écoutant sur le port ```"27017```
+* Un serveur ```postgresql```, écoutant sur le port ```5432```
+* Un serveur HTTP ```Vert.x```, écoutant sur le port ```8080```
     
 [Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc```
 
