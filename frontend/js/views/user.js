@@ -9,9 +9,7 @@ app.userView = Backbone.View.extend({
 
 
     events: {
-        'click #submitMajemail' : 'clickOnMajemail',
-        'click #submitMajfirst' : 'clicOnmajfirst',
-        'click #submitMajlast' : 'clicOnmajlast'
+        'click #submitUser' : 'clickOnSubmitUser'
     },
 
     initialize: function () {
@@ -24,22 +22,32 @@ app.userView = Backbone.View.extend({
 
     },
 
-    clickOnMajemail: function () {
-        var newemail = $('#user_email').val();
-        userModel.set('email',newemail);
-        userModel.save();
-    },
+    clickOnSubmitUser: function () {
+        var initNom = app.router.navBarV.model.get('lastName');
+        var initPrenom = app.router.navBarV.model.get('firstName');
+        var newNom = $('#nameInput').val();
+        var newPrenom = $('#prenomInput').val();
 
-    clicOnmajfirst:function () {
-        var newfirstname = $('#firstname').val();
-        userModel.set('firstname',newfirstname);
-        userModel.save();
-    },
+        if (initNom != newNom || initPrenom != newPrenom){
+            app.router.navBarV.model.save({
+                'lastName': newNom,
+                'firstName': newPrenom
+            }, {
+                success: function(model, response) {
+                    app.router.navBarV.render();
+                },
+                error: function(model, response) {
+                    console.log('error');
+                    $('#nameInput').val(initNom);
+                    $('#prenomInput').val(initPrenom);
+                },
+                wait: true // Add this
+            });
+        }else {
+            $('#danger-text-modal').html("Aucun changement à enregistrer.");
+            $('#modalError').modal('show');
+        }
 
-    clicOnmajlast:function(){
-        var newlastname = $('#lastname').val();
-        userModel.set('lastname',newlastname);
-        userModel.save();
     }
 
 });

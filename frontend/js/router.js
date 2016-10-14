@@ -14,6 +14,7 @@ Backbone.sync = (function(syncFn) {
                 console.log('error 401');
                 app.router.navigate('login', { trigger: true });
             }else {
+                $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, quelque chose s'est mal passée. Veuillez réessayer. (C'est encore le dev qui a du mal bosser...)");
                 $('#modalError').modal('show');
             }
         };

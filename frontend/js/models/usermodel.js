@@ -3,6 +3,6 @@
  */
 app.models.userModel = Backbone.Model.extend({
     url: function () {
-        return this.absURL + '/api/me';
+        return this.absURL + '/api/users';
     }
 });
