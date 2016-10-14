@@ -28,7 +28,7 @@ app.Router = Backbone.Router.extend({
     routes: {
         "": "start",
         "login": "login",
-        "admin" : "admin"
+        "admin" : "admin",
         "user": "user",
         "map": "map"
     },
@@ -85,6 +85,7 @@ app.Router = Backbone.Router.extend({
     },
 
     admin: function(){
+        this.checkAndInitNavBar();
         if(!this.adminV){
             this.adminV = new app.adminManaView();
         }else{

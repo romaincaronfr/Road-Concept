@@ -14,6 +14,9 @@ app.navBarView = Backbone.View.extend({
 
     render: function () {
         this.$el.html(this.template(this.model.attributes));
+        if (this.model.attributes.type == 2){
+            new app.adminPanelOptionsView();
+        }
         return this;
     },
 
