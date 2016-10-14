@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
+import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class MapRepository extends AbstractRepository {
     // ======
     // UPDATE
     // ======
-    //TODO
+    // Maps info are not supposed to be updated yet...
 
     // ===
     // GET

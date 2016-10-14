@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.api.verticles.utilities;
 
 import fr.enssat.lanniontech.api.entities.RestException;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.utilities.JSONSerializer;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -61,5 +62,12 @@ public class HttpResponseBuilder {
     public static void buildUnauthorizedResponse(RoutingContext routingContext) {
         routingContext.response().setStatusCode(HttpStatus.SC_UNAUTHORIZED);
         routingContext.response().end();
+    }
+
+    public static void buildNotFoundException(RoutingContext routingContext, EntityNotExistingException e) {
+        RestException error = new RestException();
+        error.setCode(HttpStatus.SC_NOT_FOUND);
+        error.setCause(e.getEntityClass() + " not found");
+        routingContext.response().end(JSONSerializer.toJSON(error));
     }
 }

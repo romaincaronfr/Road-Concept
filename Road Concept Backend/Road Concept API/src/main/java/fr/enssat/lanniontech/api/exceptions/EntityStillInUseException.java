@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.exceptions.database;
+package fr.enssat.lanniontech.api.exceptions;
 
 
 public class EntityStillInUseException extends DatabaseOperationException {

@@ -22,6 +22,7 @@
         <postgresql.version>9.4.1211.jre7</postgresql.version>
         <dbcp.version>2.1.1</dbcp.version>
         <jBCrypt.version>0.4.1</jBCrypt.version>
+        <jersey-common.version>2.23.2</jersey-common.version>
     </properties>
 
     <dependencies>
@@ -104,7 +105,13 @@
             <artifactId>jBCrypt</artifactId>
             <version>${jBCrypt.version}</version>
         </dependency>
-        
+
+        <dependency> <!-- Used when a JSON field is missing or not set... -->
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>${jersey-common.version}</version>
+        </dependency>
+
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>

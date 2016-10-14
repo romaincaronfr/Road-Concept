@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.repositories.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -36,11 +37,45 @@ public class UserService extends AbstractService {
         return matcher.matches();
     }
 
-    public User get(String email) {
-        return repository.getFromEmail(email);
+    private User get(String email) {
+        User user = repository.getFromEmail(email);
+        if (user == null) {
+            throw new EntityNotExistingException();
+        }
+        return user;
     }
 
-    public boolean delete(User user) {
+    public User get(int id) {
+        User user = repository.getFromId(id);
+        if (user == null) {
+            throw new EntityNotExistingException();
+        }
+        return user;
+    }
+
+    public User update(User user) {
+        User current = repository.getFromEmail(user.getEmail());
+        if (current == null) {
+            throw new EntityNotExistingException(User.class);
+        }
+        if (!user.getFirstName().equals(current.getFirstName())) {
+            repository.updateFirstName(user, user.getFirstName());
+            current.setFirstName(user.getFirstName());
+        }
+        if (!user.getLastName().equals(current.getLastName())) {
+            repository.updateLastName(user, user.getLastName());
+            current.setLastName(user.getLastName());
+        }
+        if (!user.getEmail().equals(current.getEmail())) {
+            repository.updateLastName(user, user.getEmail());
+            current.setLastName(user.getEmail());
+        }
+        return current;
+    }
+
+    public boolean delete(int id) {
+        User user = new User();
+        user.setId(id);
         int count = repository.delete(user);
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }

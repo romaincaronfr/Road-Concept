@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
-import fr.enssat.lanniontech.api.exceptions.database.DatabaseOperationException;
+import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,7 @@ public class UserRepository extends AbstractRepository {
     private static final String SELECT_FROM_EMAIL = "SELECT id, password, first_name, last_name, type FROM final_user WHERE email = ?";
     private static final String SELECT_ALL = "SELECT id, email, password, first_name, last_name, type FROM final_user";
 
+
     // ======
     // CREATE
     // ======
@@ -36,7 +37,7 @@ public class UserRepository extends AbstractRepository {
                 statement.setString(4, lastName);
                 statement.setInt(5, type.getJsonID());
 
-                try (ResultSet result = statement.executeQuery()) { //TODO: What if email already exists ?
+                try (ResultSet result = statement.executeQuery()) {
                     result.next(); // Has exactly one row
                     User user = new User();
                     user.setId(result.getInt("id"));
@@ -57,10 +58,17 @@ public class UserRepository extends AbstractRepository {
     // UPDATE
     // ======
 
-    //    public void updateName(Application application, String name) throws ErrorResponseException {
-    //        updateStringField(Application.class, application, "name", name);
-    //    }
-    //
+    public void updateLastName(User user, String newValue) throws DatabaseOperationException {
+        updateStringField("final_user", "last_name", user, newValue);
+    }
+
+    public void updateFirstName(User user, String newValue) throws DatabaseOperationException {
+        updateStringField("final_user", "first_name", user, newValue);
+    }
+
+    public void updateEmail(User user, String newValue) throws DatabaseOperationException {
+        updateStringField("final_user", "email", user, newValue);
+    }
 
     // ===
     // GET

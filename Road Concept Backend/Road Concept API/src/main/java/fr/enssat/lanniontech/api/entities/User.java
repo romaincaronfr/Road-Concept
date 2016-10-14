@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 public class User implements SQLStoredEntity {
 
-    @JsonProperty(access = Access.WRITE_ONLY)
     private int id;
     private String email;
     private String lastName;

@@ -84,19 +84,18 @@ paths:
         401:
           $ref: '#/responses/401'
         403: # Si pas admin
-          $ref: '#/responses/401'
+          $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
     post:
       description: Créer un nouvel utilisateur
       parameters:
-        - name: credentials
+        - name: userData
           in: body
           description: Informations de l'utilisateur
           required: true
           schema:
             $ref: '#/definitions/User'
-
       tags:
         - Utilisateurs
       responses:
@@ -107,16 +106,17 @@ paths:
         401:
           $ref: '#/responses/401'
         403: # Si pas admin
-          $ref: '#/responses/401'
+          $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
 
-  /api/users/{userMail}:
+  /api/users/{userID}:
     parameters:
-      - name: userMail
+      - name: userID
         in: path
         required: true
-        type: string
+        type: integer
+        format: int32
     delete:
       description: Supprimer un utilisateur ainsi que l'enssemble de ses cartes (irréversible).
       tags:
@@ -140,7 +140,33 @@ paths:
         401:
           $ref: '#/responses/401'
         403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+    put:
+      description: Modifier un utilisateur
+      parameters:
+        - name: data
+          in: body
+          description: Informations de l'utilisateur
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      tags:
+        - Utilisateurs
+      responses:
+        200:
+          description: Liste des utilisateurs éxistants
+          schema:
+              $ref: '#/definitions/User'
+        401:
           $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
         500:
           $ref: '#/responses/500'
 
@@ -181,7 +207,7 @@ paths:
         401:
           $ref: '#/responses/401'
         403: # Si pas admin
-          $ref: '#/responses/401'
+          $ref: '#/responses/403'
         500:
           $ref: '#/responses/500'
 
@@ -203,6 +229,8 @@ paths:
           $ref: '#/responses/401'
         403:
           $ref: '#/responses/403'
+        404:
+          $ref: '#/responses/404'
         500:
           $ref: '#/responses/500'
     delete:
@@ -230,6 +258,10 @@ responses:
       $ref: '#/definitions/RestException'
   '403':
     description: Accès refusé.
+    schema:
+      $ref: '#/definitions/RestException'
+  '404':
+    description: Entitée innéxistante.
     schema:
       $ref: '#/definitions/RestException'
   '500':
@@ -268,9 +300,9 @@ definitions:
       type:
         type: string
         enum:
-          - USER
-          - ADMINISTRATOR
-        description: Status de l'utilisateur
+          - 1
+          - 2
+        description: Status de l'utilisateur. 1 = Utilisateur et 2 = Administrateur
   UserCreate:
     properties:
       email:
@@ -289,9 +321,9 @@ definitions:
       type:
         type: string
         enum:
-          - USER
-          - ADMINISTRATOR
-        description: Status de l'utilisateur
+          - 1
+          - 2
+        description: Status de l'utilisateur. 1 = Utilisateur et 2 = Administrateur
 
   MapInfo:
     properties:

@@ -1,6 +1,4 @@
-package fr.enssat.lanniontech.api.exceptions.database;
-
-import fr.enssat.lanniontech.api.exceptions.RoadConceptException;
+package fr.enssat.lanniontech.api.exceptions;
 
 public class DatabaseOperationException extends RoadConceptException {
 

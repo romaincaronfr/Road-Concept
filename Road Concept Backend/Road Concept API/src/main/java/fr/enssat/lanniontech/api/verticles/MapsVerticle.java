@@ -3,13 +3,13 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
-import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -71,6 +71,8 @@ public class MapsVerticle extends AbstractVerticle {
 
             MapInfo mapInfo = mapService.create(currentUser, name, imageURL, description);
             HttpResponseBuilder.buildOkResponse(routingContext, mapInfo);
+        } catch (DecodeException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);

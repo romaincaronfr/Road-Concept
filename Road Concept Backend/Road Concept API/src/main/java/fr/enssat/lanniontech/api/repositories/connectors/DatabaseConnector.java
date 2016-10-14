@@ -4,8 +4,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.enssat.lanniontech.api.entities.UserType;
-import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
-import fr.enssat.lanniontech.api.exceptions.database.SQLUnexpectedException;
+import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
+import fr.enssat.lanniontech.api.exceptions.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.ProjetEnvironment;
@@ -32,21 +32,6 @@ public final class DatabaseConnector {
     // DB CONNECTIONS
     // ==============
 
-    public static MongoClient getMongoDBClient() {
-           return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
-    }
-
-    /**
-     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
-     */
-    public static Connection getConnection() throws SQLException {
-        return DATA_SOURCE.getConnection();
-    }
-
-    // ==============================
-    // CONFIGURATION & INITIALIZATION
-    // ==============================
-
     public static void setUp() {
         setUpSQL();
         setUpNoSQL();
@@ -68,6 +53,10 @@ public final class DatabaseConnector {
         }
     }
 
+    // ==============================
+    // CONFIGURATION & INITIALIZATION
+    // ==============================
+
     private static void setUpNoSQL() { // Check the connection is ok
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
@@ -85,6 +74,13 @@ public final class DatabaseConnector {
     }
 
     /**
+     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
+     */
+    public static Connection getConnection() throws SQLException {
+        return DATA_SOURCE.getConnection();
+    }
+
+    /**
      * The development script do not contains any procedure or trigger, since it cause trouble to process the file on server startup.
      */
     private static void initializeDeveloppmentSchema(Connection connection) {
@@ -98,5 +94,9 @@ public final class DatabaseConnector {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw new SQLUnexpectedException(e);
         }
+    }
+
+    public static MongoClient getMongoDBClient() {
+        return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
     }
 }

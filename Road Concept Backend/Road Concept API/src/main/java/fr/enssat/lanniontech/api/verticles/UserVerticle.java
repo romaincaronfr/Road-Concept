@@ -2,15 +2,16 @@ package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
-import fr.enssat.lanniontech.api.exceptions.NotImplementedException;
 import fr.enssat.lanniontech.api.exceptions.PrivilegeLevelException;
-import fr.enssat.lanniontech.api.exceptions.database.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -37,9 +38,10 @@ public class UserVerticle extends AbstractVerticle {
     public void start() {
         router.route(HttpMethod.GET, "/api/users").blockingHandler(this::processGetAllUsers);
         router.route(HttpMethod.POST, "/api/users").blockingHandler(this::processCreateUser);
-        router.route(HttpMethod.GET, "/api/users/:userMail").blockingHandler(this::processGetUser);
-        router.route(HttpMethod.PUT, "/api/users/:userMail").blockingHandler(this::processUpdateUser);
-        router.route(HttpMethod.DELETE, "/api/users/:userMail").blockingHandler(this::processDeleteUser);
+        router.route(HttpMethod.GET, "/api/users/:userID").blockingHandler(this::processGetUser);
+        router.route(HttpMethod.PUT, "/api/users/:userID").blockingHandler(this::processUpdateUser);
+        router.route(HttpMethod.DELETE, "/api/users/:userID").blockingHandler(this::processDeleteUser);
+        router.route(HttpMethod.PUT, "/api/users/:userID").blockingHandler(this::processUpdateUser);
     }
 
     // ========
@@ -50,28 +52,39 @@ public class UserVerticle extends AbstractVerticle {
         try {
             checkAdminLevel(routingContext);
 
-            String email = routingContext.request().getParam("userMail");
-            User user = new User();
-            user.setEmail(email);
-            userService.delete(user);
+            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            userService.delete(id);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
+        } catch (ClassCastException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid ID");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
+    private void checkAdminLevel(RoutingContext routingContext) {
+        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
+            throw new PrivilegeLevelException();
+        }
+    }
+
     private void processGetUser(RoutingContext routingContext) {
         try {
             checkAdminLevel(routingContext);
-            String email = routingContext.request().getParam("userMail");
-            User user = userService.get(email);
+            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            User user = userService.get(id);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (Exception e) { //TODO: 404
+        } catch (ClassCastException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid ID");
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -97,6 +110,8 @@ public class UserVerticle extends AbstractVerticle {
 
             User user = userService.create(email, password, lastName, firstName, type);
             HttpResponseBuilder.buildCreatedResponse(routingContext, user);
+        } catch (DecodeException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (ClassCastException e) {
@@ -113,15 +128,39 @@ public class UserVerticle extends AbstractVerticle {
 
     private void processUpdateUser(RoutingContext routingContext) {
         try {
-            checkAdminLevel(routingContext);
-            throw new NotImplementedException();
+            JsonObject body = routingContext.getBodyAsJson();
+            if (body == null) {
+                throw new BadRequestException();
+            }
+
+            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            User logged = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+            if (id != logged.getId()) {
+                checkAdminLevel(routingContext);
+            }
+
+            User data = new User();
+            data.setEmail(body.getString("email"));
+            data.setFirstName(body.getString("firstName"));
+            data.setLastName(body.getString("lastName"));
+
+            User updated = userService.update(data);
+            HttpResponseBuilder.buildOkResponse(routingContext, updated);
+        } catch (DecodeException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
+
+    // =========
+    // UTILITIES
+    // =========
 
     private void processGetAllUsers(RoutingContext routingContext) {
         try {
@@ -135,17 +174,4 @@ public class UserVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
-
-    // =========
-    // UTILITIES
-    // =========
-
-    private void checkAdminLevel(RoutingContext routingContext) {
-        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
-        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
-            throw new PrivilegeLevelException();
-        }
-    }
-
-
 }
