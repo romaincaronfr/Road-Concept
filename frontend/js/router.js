@@ -28,6 +28,7 @@ app.Router = Backbone.Router.extend({
     routes: {
         "": "start",
         "login": "login",
+        "admin" : "admin"
         "user": "user",
         "map": "map"
     },
@@ -37,6 +38,7 @@ app.Router = Backbone.Router.extend({
         this.mapV = null;
         this.userV = null;
         this.navBarV = null;
+        this.adminV = null;
     },
 
     start: function(){
@@ -80,6 +82,15 @@ app.Router = Backbone.Router.extend({
         }else {
             this.navBarV.checkUserModelBeforeMyUser();
         }
+    },
+
+    admin: function(){
+        if(!this.adminV){
+            this.adminV = new app.adminManaView();
+        }else{
+            this.adminV.render();
+        }
+
     },
 
     checkAndInitNavBar: function(){
