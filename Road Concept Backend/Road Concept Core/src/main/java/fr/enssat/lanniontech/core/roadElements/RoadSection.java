@@ -9,8 +9,6 @@ import java.util.Map;
 public class RoadSection {
     private Position A;
     private Position B;
-    private Map<Integer, Trajectory> trajectoryMapA;
-    private Map<Integer, Trajectory> trajectoryMapB;
     private double length;
 
 
@@ -32,8 +30,6 @@ public class RoadSection {
         laneB = new Lane(this, length, null);
         function = new PosFunction(A, B, length);
         this.myRoad = myRoad;
-        trajectoryMapA = null;
-        trajectoryMapB = null;
     }
 
     public Position getPosition(Lane myLane, double pos) {
@@ -116,17 +112,17 @@ public class RoadSection {
 
     public void setTrajectoryMap(Position P,Map<Integer, Trajectory> trajectoryMap) {
         if(P==A){
-            this.trajectoryMapA = trajectoryMap;
+            laneB.setTrajectoryMap(trajectoryMap);
         }else if(P==B){
-            this.trajectoryMapB = trajectoryMap;
+            laneA.setTrajectoryMap(trajectoryMap);
         }
     }
 
     public Map<Integer, Trajectory> getTrajectoryMap(Position P) {
         if(P==A){
-            return this.trajectoryMapA;
+            return laneB.getTrajectoryMap();
         }else if(P==B){
-            return this.trajectoryMapB;
+            return laneA.getTrajectoryMap();
         }
         return null;
     }

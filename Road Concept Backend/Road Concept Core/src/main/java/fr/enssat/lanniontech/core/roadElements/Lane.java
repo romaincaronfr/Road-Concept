@@ -1,9 +1,11 @@
 package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.Trajectory;
 import fr.enssat.lanniontech.core.vehicleElements.FrontBackSide;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Lane {
     private RoadSection myRoadSection;
@@ -11,6 +13,7 @@ public class Lane {
     private ArrayList<FrontBackSide> vehiclesSides;
     private double length;
     private double width;
+    private Map<Integer, Trajectory> trajectoryMap;
 
     Lane(RoadSection myRoadSection, double length, Lane nextLane) {
         this.myRoadSection = myRoadSection;
@@ -56,7 +59,7 @@ public class Lane {
         }
     }
 
-    public double getDistanceToFirst() {
+    private double getDistanceToFirst() {
         if (vehiclesSides.size() == 0) {
             if (nextLane == null) {
                 return length;
@@ -81,7 +84,7 @@ public class Lane {
         }
     }
 
-    public double getSpeedOfFirst() {
+    private double getSpeedOfFirst() {
         if (vehiclesSides.size() == 0) {
             if (nextLane == null) {
                 return 0;
@@ -122,5 +125,13 @@ public class Lane {
 
     public RoadSection getMyRoadSection() {
         return myRoadSection;
+    }
+
+    public Map<Integer, Trajectory> getTrajectoryMap() {
+        return trajectoryMap;
+    }
+
+    public void setTrajectoryMap(Map<Integer, Trajectory> trajectoryMap) {
+        this.trajectoryMap = trajectoryMap;
     }
 }
