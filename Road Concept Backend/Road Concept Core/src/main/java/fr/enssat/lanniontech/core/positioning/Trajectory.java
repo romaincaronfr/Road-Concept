@@ -28,4 +28,16 @@ public class Trajectory {
         Ps.add(10.0);
         length = Ps.get(1) - Ps.get(0) + Ps.get(3) - Ps.get(2);
     }
+
+    public double getP(int i) {
+        return Ps.get(i);
+    }
+
+    public int getSectionSize(){
+        return Pfs.size();
+    }
+
+    public Lane getDestination() {
+        return destination;
+    }
 }

@@ -4,14 +4,18 @@ package fr.enssat.lanniontech.core.vehicleElements;
 import fr.enssat.lanniontech.core.positioning.Trajectory;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
+import java.util.Set;
+
 public class FrontBackSide extends Side {
 
-    Trajectory myTrajectory;
+    private Trajectory myTrajectory;
+    private int tSection;
 
     FrontBackSide(double pos, Vehicle myVehicle, Lane myLane) {
         super(pos, myVehicle, myLane);
         myLane.getIn(this);
         myTrajectory = null;
+        tSection = 0;
     }
 
     public void move(double distance) {
@@ -24,9 +28,26 @@ public class FrontBackSide extends Side {
                     myLane = myLane.getNextLane();
                     myLane.getIn(this);
                 }
+            }else{
+                //select the trajectory to follow
+                Set<Integer> set = myLane.getTrajectoryMap().keySet();
+                myTrajectory = myLane.getTrajectoryMap().get(set.toArray()[0]);
+                tSection = 0;
+                //todo add trajectory selection
             }
         }else{
-            //todo add trajectory selection
+            if(myTrajectory.getP(tSection+1)<pos){
+                if(tSection != myTrajectory.getSectionSize()){
+                    pos =pos - myTrajectory.getP(tSection+1) + myTrajectory.getP(tSection+2);
+                    if (myLane != null){
+                        myLane.getOut(this);
+                        myLane=null;
+                    }
+                }else{
+                    myLane = myTrajectory.getDestination();
+                    myLane.getIn(this);
+                }
+            }
         }
     }
 
