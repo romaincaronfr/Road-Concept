@@ -3,7 +3,7 @@
  */
 
 app.models.mapModel = Backbone.Model.extend({
-    url: function(){
+    url: function () {
         return this.absURL + '/api/maps';
     },
 

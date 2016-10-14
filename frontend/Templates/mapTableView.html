@@ -1,14 +1,14 @@
 <div class="col-lg-4" id="div_mapId_<%= id %>">
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title"><%= name %></h3>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><%= name %></h3>
+        </div>
+        <div class="panel-body panel-image">
+            <img src="<%= imageURL %>" class="panel-image-preview"/>
+        </div>
+        <div class="panel-footer">
+            <button class="btn btn-block btn-success print_map" type="button" id="afficher_<%= id %>">Afficher</button>
+            <button class="btn btn-block btn-danger remove_map" type="button" id="remove_<%= id %>">Supprimer</button>
+        </div>
     </div>
-    <div class="panel-body panel-image">
-        <img src="<%= imageURL %>" class="panel-image-preview"/>
-    </div>
-    <div class="panel-footer">
-        <button class="btn btn-block btn-success print_map" type="button" id="afficher_<%= id %>">Afficher</button>
-        <button class="btn btn-block btn-danger remove_map" type="button" id="remove_<%= id %>">Supprimer</button>
-    </div>
-</div>
 </div>

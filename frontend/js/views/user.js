@@ -5,18 +5,18 @@
 
 app.userView = Backbone.View.extend({
 
-    el:'#content',
+    el: '#content',
 
 
     events: {
-        'click #submitUser' : 'clickOnSubmitUser'
+        'click #submitUser': 'clickOnSubmitUser'
     },
 
     initialize: function () {
         this.render();
     },
 
-    render:function () {
+    render: function () {
         this.$el.html(this.template(app.router.navBarV.model.attributes));
         return this;
 
@@ -30,18 +30,18 @@ app.userView = Backbone.View.extend({
         var newNom = $('#nameInput').val();
         var newPrenom = $('#prenomInput').val();
 
-        if (initNom != newNom || initPrenom != newPrenom || initEmail!=newEmail){
+        if (initNom != newNom || initPrenom != newPrenom || initEmail != newEmail) {
             app.router.navBarV.model.save({
                 'lastName': newNom,
                 'firstName': newPrenom,
                 'email': newEmail
             }, {
-                success: function(model, response) {
+                success: function (model, response) {
                     app.router.navBarV.render();
                 },
                 wait: true // Add this
             });
-        }else {
+        } else {
             $('#danger-text-modal').html("Aucun changement à enregistrer.");
             $('#modalError').modal('show');
         }

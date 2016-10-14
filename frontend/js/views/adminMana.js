@@ -7,14 +7,14 @@ app.adminManaView = Backbone.View.extend({
     el: "#content",
 
     events: {
-        'click #AddUser' : 'clickOnAjoutUser'
+        'click #AddUser': 'clickOnAjoutUser'
     },
 
     initialize: function () {
         this.render();
     },
 
-    render:function () {
+    render: function () {
         this.$el.html(this.template());
         return this;
     },
@@ -25,7 +25,13 @@ app.adminManaView = Backbone.View.extend({
         var usertype = $('#userinput').val();
         var userPassword = $('#passwordInput').val()
         var userFname = $('#prenomInput').val();
-        user = new app.models.userModel({email:usermail, lastname:userLname, firstname:userFname, password:userPassword, type:usertype});
+        user = new app.models.userModel({
+            email: usermail,
+            lastname: userLname,
+            firstname: userFname,
+            password: userPassword,
+            type: usertype
+        });
         console.log(user);
         user.save();
     },

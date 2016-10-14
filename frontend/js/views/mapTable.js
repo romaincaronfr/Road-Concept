@@ -4,12 +4,12 @@
 app.mapTableView = Backbone.View.extend({
 
     el: '#mapTable',
-    
+
     initialize: function () {
         this.render();
     },
 
-    render:function () {
+    render: function () {
         this.$el.append(this.template(this.model.attributes));
         return this;
     }

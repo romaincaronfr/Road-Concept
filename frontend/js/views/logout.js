@@ -3,17 +3,17 @@
  */
 app.logoutView = Backbone.View.extend({
 
-    el:'#content',
+    el: '#content',
 
 
     initialize: function () {
         this.render();
     },
 
-    render:function () {
+    render: function () {
         this.$el.html(this.template());
         $.ajax({
-                url: Backbone.Collection.prototype.absURL+"/api/logout",
+                url: Backbone.Collection.prototype.absURL + "/api/logout",
                 type: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",

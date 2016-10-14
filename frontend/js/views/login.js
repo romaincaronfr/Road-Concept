@@ -9,21 +9,21 @@ app.loginView = Backbone.View.extend({
         this.render();
     },
 
-    events:{
-        'click #submitLogin':'clickOnSubmitLogin'
+    events: {
+        'click #submitLogin': 'clickOnSubmitLogin'
     },
 
-    render:function () {
+    render: function () {
         console.log("render login");
         this.$el.html(this.template());
     },
 
-    clickOnSubmitLogin:function (){
+    clickOnSubmitLogin: function () {
         console.log("click on submit");
         $('#formDiv').addClass('hidden');
         $('#waitDiv').removeClass('hidden');
         $.ajax({
-                url: Backbone.Collection.prototype.absURL+"/login",
+                url: Backbone.Collection.prototype.absURL + "/login",
                 type: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
@@ -37,7 +37,7 @@ app.loginView = Backbone.View.extend({
             .done(function (data, textStatus, jqXHR) {
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
                 $.ajax({
-                        url: Backbone.Collection.prototype.absURL+"/api/me",
+                        url: Backbone.Collection.prototype.absURL + "/api/me",
                         type: "GET",
                         headers: {
                             "Content-Type": "application/json; charset=utf-8",
@@ -48,7 +48,7 @@ app.loginView = Backbone.View.extend({
                         console.log("HTTP Request Succeeded: " + jqXHR.status);
                         userModel = new app.models.userModel(data);
                         console.log(userModel);
-                        app.router.navigate('map', { trigger: true });
+                        app.router.navigate('map', {trigger: true});
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("HTTP Request Failed : /api/me");

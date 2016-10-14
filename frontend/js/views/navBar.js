@@ -7,14 +7,14 @@ app.navBarView = Backbone.View.extend({
 
     model: null,
 
-    initialize: function (redirectToUser,redirectToMap) {
+    initialize: function (redirectToUser, redirectToMap) {
         var self = this;
-        this.getMe(redirectToUser,redirectToMap,this);
+        this.getMe(redirectToUser, redirectToMap, this);
     },
 
     render: function () {
         this.$el.html(this.template(this.model.attributes));
-        if (this.model.attributes.type == 2){
+        if (this.model.attributes.type == 2) {
             new app.adminPanelOptionsView();
         }
         return this;
@@ -27,14 +27,14 @@ app.navBarView = Backbone.View.extend({
     checkUserModelBeforeMyUser: function () {
         var self = this;
         if (!this.model) {
-            this.getMe(true,self);
+            this.getMe(true, self);
         }
         else {
             app.router.userV = new app.userView();
         }
     },
 
-    getMe:function(redirectToUser,redirectToMap,self){
+    getMe: function (redirectToUser, redirectToMap, self) {
         $.ajax({
                 url: Backbone.Collection.prototype.absURL + "/api/me",
                 type: "GET",
@@ -46,16 +46,16 @@ app.navBarView = Backbone.View.extend({
             .done(function (data, textStatus, jqXHR) {
                 self.model = new app.models.userModel(data);
                 self.render();
-                if (redirectToUser){
+                if (redirectToUser) {
                     app.router.userV = new app.userView();
-                }else if (redirectToMap){
-                    app.router.navigate('map', { trigger: true });
+                } else if (redirectToMap) {
+                    app.router.navigate('map', {trigger: true});
                 }
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 //TODO rediriger qu'en cas d'erreur 401, merci :)
                 console.log("HTTP Request Failed : /api/me");
-                app.router.navigate('login', { trigger: true });
+                app.router.navigate('login', {trigger: true});
             })
             .always(function () {
                 /* ... */
