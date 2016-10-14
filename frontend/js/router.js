@@ -30,7 +30,8 @@ app.Router = Backbone.Router.extend({
         "login": "login",
         "admin" : "admin",
         "user": "user",
-        "map": "map"
+        "map": "map",
+        "logout": "logout"
     },
 
     initialize: function () {
@@ -92,6 +93,10 @@ app.Router = Backbone.Router.extend({
             this.adminV.render();
         }
 
+    },
+
+    logout : function(){
+        new app.logoutView();
     },
 
     checkAndInitNavBar: function(){

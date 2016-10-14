@@ -11,7 +11,7 @@ app.adminPanelOptionsView = Backbone.View.extend({
     },
 
     render:function () {
-        this.$el.append(this.template());
+        this.$el.prepend(this.template());
         return this;
     }
 
