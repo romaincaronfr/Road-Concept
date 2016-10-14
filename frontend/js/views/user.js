@@ -23,23 +23,21 @@ app.userView = Backbone.View.extend({
     },
 
     clickOnSubmitUser: function () {
+        var initEmail = app.router.navBarV.model.get('email');
         var initNom = app.router.navBarV.model.get('lastName');
         var initPrenom = app.router.navBarV.model.get('firstName');
+        var newEmail = $('#emailInput').val();
         var newNom = $('#nameInput').val();
         var newPrenom = $('#prenomInput').val();
 
-        if (initNom != newNom || initPrenom != newPrenom){
+        if (initNom != newNom || initPrenom != newPrenom || initEmail!=newEmail){
             app.router.navBarV.model.save({
                 'lastName': newNom,
-                'firstName': newPrenom
+                'firstName': newPrenom,
+                'email': newEmail
             }, {
                 success: function(model, response) {
                     app.router.navBarV.render();
-                },
-                error: function(model, response) {
-                    console.log('error');
-                    $('#nameInput').val(initNom);
-                    $('#prenomInput').val(initPrenom);
                 },
                 wait: true // Add this
             });
