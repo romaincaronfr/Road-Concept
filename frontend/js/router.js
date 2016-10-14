@@ -40,6 +40,7 @@ app.Router = Backbone.Router.extend({
     },
 
     start: function(){
+        new app.waitView();
         if (!this.navBarV){
             this.navBarV = new app.navBarView(false,true);
         }else {
