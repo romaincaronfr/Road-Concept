@@ -7,7 +7,8 @@ app.mapView = Backbone.View.extend({
 
     events: {
         'click #submitCreateMap': 'clickOnCreateNewMap',
-        'click .remove_map': 'clickOnRemove'
+        'click .remove_map': 'clickOnRemove',
+        'click .print_map': 'clickOnPrintMap'
     },
 
     initialize: function () {
@@ -57,6 +58,12 @@ app.mapView = Backbone.View.extend({
                 console.error('error during saving new map');
             })
         });
+    },
+
+    clickOnPrintMap: function(event){
+        var id = event.currentTarget.id;
+        id = id.replace('afficher_', '');
+        app.router.navigate('map/'+id, {trigger: true});
     },
 
     newElement: function (element) {

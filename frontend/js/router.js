@@ -31,7 +31,8 @@ app.Router = Backbone.Router.extend({
         "admin": "admin",
         "user": "user",
         "map": "map",
-        "logout": "logout"
+        "logout": "logout",
+        "map/:id": "mapDetail"
     },
 
     initialize: function () {
@@ -75,6 +76,10 @@ app.Router = Backbone.Router.extend({
         } else {
             this.mapV.render();
         }
+    },
+
+    mapDetail: function(id){
+        new app.mapDetailsPageView({id:id})
     },
 
     user: function () {
