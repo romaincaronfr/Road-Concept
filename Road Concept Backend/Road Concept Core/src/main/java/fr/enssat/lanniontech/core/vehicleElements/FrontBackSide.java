@@ -20,7 +20,7 @@ public class FrontBackSide extends Side {
 
     public void move(double distance) {
         pos += distance;
-        if(myTrajectory!=null){
+        if(myTrajectory==null){
             if(myLane.getTrajectoryMap()==null){
                 if (pos > myLane.getLength()) {
                     pos -= myLane.getLength();
@@ -50,7 +50,6 @@ public class FrontBackSide extends Side {
             }
         }
     }
-
 
     public double getDistanceToNextCar() {
         return myLane.getDistanceToNext(this);

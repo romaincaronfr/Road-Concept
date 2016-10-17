@@ -49,8 +49,6 @@ public class Vehicle {
         System.out.println("ID: " + this.ID);
         System.out.println("distance: " + distanceDone);
         System.out.println("speed: " + Va);
-        //System.out.println("backSide pos: "+backSide.pos);
-        //System.out.println("frontSide pos: "+frontSide.pos);
         System.out.println("Acceleration: " + A);
         System.out.println("distance to next car: " + distanceToNextCar());
         System.out.println("Position: " + getGPSPosition());
