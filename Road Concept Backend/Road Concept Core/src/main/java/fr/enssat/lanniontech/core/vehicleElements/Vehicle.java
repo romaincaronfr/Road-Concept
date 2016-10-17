@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Vehicle {
     private double v0;          //desired speed
     private double s0 = 2;      //minimum distance between two cars
     private long time;
-    private ArrayList<Position> positionHistory;
+    private ArrayList<SpaceTimePosition> positionHistory;
 
 
     /**
@@ -41,7 +42,7 @@ public class Vehicle {
         this.frontSide = new FrontBackSide(length + startPos, this, start);
         this.backSide = new FrontBackSide(startPos, this, start);
         this.time = initialTime;
-        positionHistory = new ArrayList<Position>();
+        positionHistory = new ArrayList<SpaceTimePosition>();
         positionHistory.add(getGPSPosition());
     }
 
@@ -103,18 +104,8 @@ public class Vehicle {
         return Va;
     }
 
-    public Position getGPSPosition() {
-        double pos = frontSide.getPos() - length / 2;
-        Position posGPS;
-        if (frontSide.getPos() >= 0) {
-            posGPS = frontSide.myLane.getPosition(pos);
-        } else {
-            pos = backSide.getPos() + length / 2;
-            posGPS = backSide.myLane.getPosition(pos);
-        }
-        posGPS.setTime(time);
-        return posGPS;
+    public SpaceTimePosition getGPSPosition() {
+        return SpaceTimePosition.getMean(frontSide.getGPS(),backSide.getGPS(),time);
     }
-
 
 }

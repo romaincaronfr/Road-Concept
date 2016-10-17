@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
 
+import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.Trajectory;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
@@ -57,5 +58,9 @@ public class FrontBackSide extends Side {
 
     public double getNextCarSpeed() {
         return myLane.getNextCarSpeed(this);
+    }
+
+    public Position getGPS(){
+        return myLane.getPosition(0);
     }
 }
