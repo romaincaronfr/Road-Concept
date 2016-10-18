@@ -79,6 +79,7 @@ app.Router = Backbone.Router.extend({
     },
 
     mapDetail: function(id){
+        this.checkAndInitNavBar();
         new app.mapDetailsPageView({id:id})
     },
 
@@ -108,6 +109,7 @@ app.Router = Backbone.Router.extend({
         if (!this.navBarV) {
             this.navBarV = new app.navBarView(false, false);
         }
+        $('#mapRow').empty();
     },
 
     checkAndDestroyNavbar: function () {
@@ -115,5 +117,6 @@ app.Router = Backbone.Router.extend({
             this.navBarV.cleanHTML();
             this.navBarV = null;
         }
+        $('#mapRow').empty();
     }
 });

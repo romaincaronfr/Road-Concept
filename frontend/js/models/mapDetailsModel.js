@@ -4,7 +4,11 @@
 app.models.mapDetailsModel = Backbone.Model.extend({
 
     getCoordinates: function(){
-        return this.attributes.geometry.coordinates;
+        if (this.attributes.geometry.coordinates.length == 1){
+            return this.attributes.geometry.coordinates[0];
+        } else {
+            return this.attributes.geometry.coordinates;
+        }
     },
 
     getGeometryType : function(){
