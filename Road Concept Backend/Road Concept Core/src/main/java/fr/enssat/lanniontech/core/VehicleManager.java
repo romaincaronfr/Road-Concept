@@ -8,9 +8,6 @@ import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by 4r3 on 01/10/16.
- */
 public class VehicleManager {
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Vehicle> activeVehicles;
@@ -44,7 +41,7 @@ public class VehicleManager {
         int k = 0;
         System.out.println(startingLane.getLength());
         System.out.println(startingPos);
-        while (!startingLane.rangeIsFree(startingPos - 15, startingPos + 5)) {
+        while (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 15, startingPos + 5)) {
             startingPos = 10 + gen.nextInt((int) ((startingLane.getLength() - 15) * 10)) / 10.0;
             if (k > 10) {
                 return false;

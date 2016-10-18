@@ -1,8 +1,10 @@
 package fr.enssat.lanniontech.core.roadElements.intersections;
 
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.positioning.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +13,7 @@ public class Intersection {
     private Position P;
     private Map<Integer,RoadSection> roadSections;
     private Map<Integer, Map<Integer, Trajectory>> trajectories;
-    //structure is <source ,<destination, Trajectory>>
+    //structure is <source ,<destination, SimpleTrajectory>>
 
     public Intersection(Position P) {
         this.P = P;
@@ -25,16 +27,17 @@ public class Intersection {
 
         for (int i : roadSections.keySet()){
             if(id != i){
-                Trajectory T = new Trajectory(roadSections.get(i).getRightLane(P),
+                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(i).getRightLane(P),
                         roadSections.get(id).getLeftLane(P));
+
                 trajectories.get(i).put(id,T);
-                T = new Trajectory(roadSections.get(id).getRightLane(P),
+                T = new AdvancedTrajectory(roadSections.get(id).getRightLane(P),
                         roadSections.get(i).getLeftLane(P));
                 myTrajectories.put(i,T);
             }
         }
         trajectories.put(id,myTrajectories);
-        roadSections.get(id).setTrajectoryMap(P,myTrajectories);
+        //roadSections.get(id).setTrajectoryMap(P,myTrajectories);
     }
 
     public boolean addRoadSection(RoadSection Rs){
@@ -64,7 +67,7 @@ public class Intersection {
                 trajectories.get(i).remove(id);
             }
             trajectories.remove(id);
-            roadSections.get(id).setTrajectoryMap(P,null);
+            //roadSections.get(id).setTrajectoryMap(P,null);
             roadSections.remove(id);
         }else{
             return false;

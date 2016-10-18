@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
-import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 public class Vehicle {
     private final double length;
     private double distanceDone;// in m
-    private FrontBackSide frontSide;
-    private FrontBackSide backSide;
+    private Side frontSide;
+    private Side backSide;
     private int ID;
 
     private double Va = 0;      //speed in m/s
@@ -39,8 +38,8 @@ public class Vehicle {
         this.length = length;
         this.distanceDone = 0;
         this.v0 = speed;
-        this.frontSide = new FrontBackSide(length + startPos, this, start);
-        this.backSide = new FrontBackSide(startPos, this, start);
+        this.frontSide = new Side(length + startPos, this, start);
+        this.backSide = new Side(startPos, this, start);
         this.time = initialTime;
         positionHistory = new ArrayList<SpaceTimePosition>();
         positionHistory.add(getGPSPosition());

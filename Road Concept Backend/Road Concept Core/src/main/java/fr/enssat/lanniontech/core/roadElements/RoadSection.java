@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.positioning.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
 import java.util.Map;
 
@@ -26,9 +26,9 @@ public class RoadSection {
         this.A = A;
         this.B = B;
         length = Position.length(A, B);
-        laneA = new Lane(this, length, null);
-        laneB = new Lane(this, length, null);
-        function = new PosFunction(A, B, length);
+        laneA = new Lane(this, length);
+        laneB = new Lane(this, length);
+        function = new PosFunction(A, B);
         this.myRoad = myRoad;
     }
 
@@ -109,8 +109,9 @@ public class RoadSection {
     public void setMyRoad(Road myRoad) {
         this.myRoad = myRoad;
     }
-
-    public void setTrajectoryMap(Position P,Map<Integer, Trajectory> trajectoryMap) {
+/*
+    @Deprecated
+    public void setTrajectoryMap(Position P,Map<Integer, SimpleTrajectory> trajectoryMap) {
         if(P==A){
             laneB.setTrajectoryMap(trajectoryMap);
         }else if(P==B){
@@ -118,7 +119,8 @@ public class RoadSection {
         }
     }
 
-    public Map<Integer, Trajectory> getTrajectoryMap(Position P) {
+    @Deprecated
+    public Map<Integer, SimpleTrajectory> getTrajectoryMap(Position P) {
         if(P==A){
             return laneB.getTrajectoryMap();
         }else if(P==B){
@@ -126,5 +128,5 @@ public class RoadSection {
         }
         return null;
     }
-
+*/
 }

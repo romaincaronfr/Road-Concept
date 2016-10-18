@@ -11,7 +11,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 
 public class Simulator implements Runnable {
-
     public static Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
     private RoadManager roadManager;

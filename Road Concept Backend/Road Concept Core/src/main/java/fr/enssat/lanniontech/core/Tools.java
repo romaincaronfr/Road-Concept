@@ -1,6 +1,10 @@
 package fr.enssat.lanniontech.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Tools {
+
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 

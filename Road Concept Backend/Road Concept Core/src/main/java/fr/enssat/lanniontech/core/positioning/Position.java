@@ -29,7 +29,15 @@ public class Position {
         return lon;
     }
 
-    public boolean equals(Position pos) {
+    public boolean equals(Object pos) {
+        if (pos instanceof Position) {
+            return equals((Position)pos);
+        }else {
+            return false;
+        }
+    }
+
+    public boolean equals(Position pos){
         return this.lat == pos.getLat() && this.lon == pos.getLon();
     }
 

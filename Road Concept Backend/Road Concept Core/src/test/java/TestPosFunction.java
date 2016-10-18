@@ -25,7 +25,7 @@ public class TestPosFunction {
         Assert.assertFalse(Pf1.cross(Pf2));
         Assert.assertFalse(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)==0);
+        Assert.assertEquals(Pf1.det(Pf2),0,0.001);
     }
 
     @Test
@@ -63,7 +63,8 @@ public class TestPosFunction {
         Assert.assertTrue(Pf1.cross(Pf2));
         Assert.assertTrue(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)>0);
+        Assert.assertTrue(Pf1.det(Pf2)<0);
+        Assert.assertTrue(Pf2.det(Pf1)>0);
     }
 
     @Test
@@ -82,6 +83,7 @@ public class TestPosFunction {
         Assert.assertTrue(Pf1.cross(Pf2));
         Assert.assertTrue(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)<0);
+        Assert.assertTrue(Pf1.det(Pf2)>0);
+        Assert.assertTrue(Pf2.det(Pf1)<0);
     }
 }

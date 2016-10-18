@@ -9,9 +9,21 @@ public class PosFunction {
     private double blon;
     private double clon;
 
+    public PosFunction(Position P1, Position P2){
+        double length = Position.length(P1,P2);
 
+        blat = P1.lat;
+        alat = (P2.lat - P1.lat) / length;
+        blon = P1.lon;
+        alon = (P2.lon - P1.lon) / length;
+
+        clat = -alat;
+        clon = alon;
+    }
+
+    @Deprecated
     public PosFunction(Position P1, Position P2, double length) {
-        //calculate the parrameters
+        //calculate the parameters
         blat = P1.lat;
         alat = (P2.lat - P1.lat) / length;
         blon = P1.lon;
@@ -90,7 +102,7 @@ public class PosFunction {
     }
 
     public boolean cross(PosFunction Pf){
-        return det(Pf)==0;
+        return det(Pf)!=0;
     }
 
     public double getAlat() {
