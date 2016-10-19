@@ -24,7 +24,7 @@ public class GeoJSONParserTest {
             Object tags = feature.getProperties().get("tags");
             System.out.println("tags class -> " + tags.getClass());
 
-            FeatureCollection features = (FeatureCollection) object;
+            FeatureCollection features = object;
         } catch (Exception e) {
             // Should not happen
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class GeoJSONParserTest {
 
             FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
 
-        //    System.out.println(features);
+            //    System.out.println(features);
 
         } catch (Exception e) {
             // Should not happen
@@ -57,9 +57,9 @@ public class GeoJSONParserTest {
             FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
             map.setFeatures(features);
 
-       //     for (Feature feature : features) {
-       //         System.out.println(feature.getType());
-       //     }
+            //     for (Feature feature : features) {
+            //         System.out.println(feature.getType());
+            //     }
 
         } catch (Exception e) {
             // Should not happen

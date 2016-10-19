@@ -41,9 +41,9 @@ public class MapService extends AbstractService {
 
         FeatureCollection features = new FeatureCollection();
         try {
-           //    InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
-               InputStream source = getClass().getResourceAsStream("/marseille-saint-antoine.json");
-             //  InputStream source = getClass().getResourceAsStream("/antoine-example.json");
+            //    InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
+            InputStream source = getClass().getResourceAsStream("/marseille-saint-antoine.json");
+            //  InputStream source = getClass().getResourceAsStream("/antoine-example.json");
 
             features = new ObjectMapper().readValue(source, FeatureCollection.class);
             infos.setFromOSM(true);

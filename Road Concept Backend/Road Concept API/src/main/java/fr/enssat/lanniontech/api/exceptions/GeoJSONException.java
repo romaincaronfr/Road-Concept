@@ -11,7 +11,7 @@ public class GeoJSONException extends JSONProcessingException {
     /**
      * Constructs a new GeoJSONException with specified detail message.
      */
-    public GeoJSONException(final String message) {
+    public GeoJSONException(String message) {
         super(message);
     }
 
@@ -19,7 +19,7 @@ public class GeoJSONException extends JSONProcessingException {
      * Constructs a new GeoJSONException with specified detail message
      * and nested Throwable.
      */
-    public GeoJSONException(final String message, final Throwable cause) {
+    public GeoJSONException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -27,7 +27,7 @@ public class GeoJSONException extends JSONProcessingException {
      * Constructs a new GeoJSONException with specified nested Throwable
      * and default message.
      */
-    public GeoJSONException(final Throwable cause) {
+    public GeoJSONException(Throwable cause) {
         super(cause);
     }
 }
