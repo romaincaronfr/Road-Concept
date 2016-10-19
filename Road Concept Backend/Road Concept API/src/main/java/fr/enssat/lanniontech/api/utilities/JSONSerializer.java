@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.api.utilities;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ public class JSONSerializer {
 
     static {
         MAPPER.setSerializationInclusion(Include.NON_NULL);
+        MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 
     public static String toJSON(Object object) {

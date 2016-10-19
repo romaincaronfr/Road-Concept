@@ -11,6 +11,8 @@ public class MapInfo implements SQLStoredEntity {
     private String name;
     private String imageURL;
     private String description;
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private boolean fromOSM;
 
     public String getName() {
         return name;
@@ -60,5 +62,13 @@ public class MapInfo implements SQLStoredEntity {
     @Override
     public String getIdentifierName() {
         return "id";
+    }
+
+    public boolean isFromOSM() {
+        return fromOSM;
+    }
+
+    public void setFromOSM(boolean fromOSM) {
+        this.fromOSM = fromOSM;
     }
 }
