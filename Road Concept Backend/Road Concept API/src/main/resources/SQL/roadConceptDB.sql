@@ -44,6 +44,7 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 	"id" SERIAL PRIMARY KEY,
   "id_user" integer NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
 	"name" varchar(31) NOT NULL,
+	"from_osm" BOOLEAN NOT NULL,
 	"image_url" varchar(100),
 	"description" text
 );

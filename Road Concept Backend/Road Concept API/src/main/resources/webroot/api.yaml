@@ -288,6 +288,10 @@ definitions:
 
   User:
     properties:
+      id:
+        type: integer
+        format: int32
+        description: id de l'utilisateur
       email:
         type: string
         description: Login de l'utilisateur conneté

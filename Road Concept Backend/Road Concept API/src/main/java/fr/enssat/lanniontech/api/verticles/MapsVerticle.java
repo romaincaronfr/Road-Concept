@@ -1,9 +1,10 @@
 package fr.enssat.lanniontech.api.verticles;
 
+import fr.enssat.lanniontech.api.entities.Map;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
-import fr.enssat.lanniontech.api.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
@@ -13,7 +14,6 @@ import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,14 +46,15 @@ public class MapsVerticle extends AbstractVerticle {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
 
-            FeatureCollection map = mapService.getMap(currentUser, mapID); // may throw
+            Map map = mapService.getMap(currentUser, mapID); // may throw
             HttpResponseBuilder.buildOkResponse(routingContext, map.getFeatures());
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (NumberFormatException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Incorrect map ID.");
         } catch (UnconsistentException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "The authenticated user and the given map ID are not consistent.");
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -69,12 +70,11 @@ public class MapsVerticle extends AbstractVerticle {
             String imageURL = body.getString("image_url");
             String description = body.getString("description");
 
-            MapInfo mapInfo = mapService.create(currentUser, name, imageURL, description);
+            MapInfo mapInfo = mapService.create(currentUser, name, false, imageURL, description);
             HttpResponseBuilder.buildOkResponse(routingContext, mapInfo);
         } catch (DecodeException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
