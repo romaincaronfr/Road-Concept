@@ -32,7 +32,8 @@ app.Router = Backbone.Router.extend({
         "user": "user",
         "map": "map",
         "logout": "logout",
-        "map/:id": "mapDetail"
+        "map/:id": "mapDetail",
+        "users": "users"
     },
 
     initialize: function () {
@@ -41,6 +42,7 @@ app.Router = Backbone.Router.extend({
         this.userV = null;
         this.navBarV = null;
         this.adminV = null;
+        this.adminMV = null;
     },
 
     start: function () {
@@ -103,7 +105,6 @@ app.Router = Backbone.Router.extend({
         } else {
             this.adminV.render();
         }
-
     },
 
     logout: function () {
@@ -123,8 +124,17 @@ app.Router = Backbone.Router.extend({
             this.navBarV = null;
         }
     },
-
     checkAndDestroyMap: function() {
         $('#mapRow').remove();
+    },
+    users: function () {
+        this.checkAndDestroyMap();
+        this.checkAndInitNavBar();
+        if (!this.adminMV){
+            this.adminMV = new app.adminManaUsersView();
+        }else{
+            this.adminMV.render();
+        }
     }
+
 });

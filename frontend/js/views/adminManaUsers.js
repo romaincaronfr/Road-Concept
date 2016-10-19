@@ -1,0 +1,89 @@
+/**
+ * Created by paul on 16/10/16.
+ */
+
+app.adminManaUsersView = Backbone.View.extend({
+
+    el: '#content',
+
+    events: {
+        'click .modify_map': 'clickOnModifyUser',
+        'click .remove_User': 'clickOnRemove'
+    },
+
+    initialize: function () {
+        this.userCollection = new app.collections.userCollection;
+        var self = this;
+        this.render();
+        this.userCollection.on('change', self.newChange, self);
+        this.userCollection.on('reset', self.newReset, self);
+        this.userCollection.on('sync', self.newSync, self);
+        this.userCollection.on('destroy', self.newDestroy, self);
+        this.userCollection.on('add',self.newElement,self);
+        this.userCollection.on()
+    },
+
+    render: function () {
+        this.$el.html(this.template());
+
+        this.userCollection.each(function (model) {
+            var adminUserRow = new app.adminUserRowView({
+                model: model
+            });
+
+        });
+        this.userCollection.fetch();
+        return this;
+
+    },
+
+    clickOnRemove: function (event) {
+        console.log('click on remove');
+        var id = event.currentTarget.id;
+        id = id.replace('remove_User_', '');
+        console.log(id);
+        this.userCollection.get(id).destroy({wait: true});
+        console.log('click on remove def');
+
+    },
+
+
+    clickOnModifyUser: function (event) {
+        $('#submitModifyUserM').prop("disabled", true);
+        var firstname = $('#firstname').val();
+        var lastname = $('#lastName').val();
+        var email = $('#email').val();
+        var type = $('#type').val();
+        var id = event.currentTarget.id
+        id = id.replace('modify_','');
+        console.log(event.currentTarget.id);
+        this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email':email, 'type':type});
+        this.userCollection.get(id).save();
+    },
+
+
+    newElement: function (element) {
+        new app.adminUserRowView({
+            model: element
+        });
+    },
+
+    newChange: function (element) {
+        console.log(element);
+    },
+
+    newReset: function () {
+        this.$el.html(this.template());
+    },
+
+    newSync: function (element) {
+        console.log(element);
+    },
+
+    newDestroy: function (element) {
+        console.log(element.attributes.id);
+        var divName = '#user_Id_' + element.attributes.id;
+        $(divName).remove();
+
+    }
+});
