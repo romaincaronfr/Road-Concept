@@ -7,13 +7,12 @@ import fr.enssat.lanniontech.core.vehicleElements.Side;
 import java.util.ArrayList;
 
 public class SimpleTrajectory extends Trajectory {
-    ArrayList<Trajectory> sourcesTrajectories;
-    ArrayList<Trajectory> destinationsTrajectories;
-    PosFunction pF;
+    private ArrayList<Trajectory> sourcesTrajectories;
+    private ArrayList<Trajectory> destinationsTrajectories;
+    private PosFunction pF;
     private double width;
     private double start;
     private double stop;
-    private double length;
     private boolean inverted;
 
     public SimpleTrajectory(PosFunction pF, double start, double stop, double width){
@@ -22,8 +21,51 @@ public class SimpleTrajectory extends Trajectory {
         this.pF = pF;
         this.start = start;
         this.stop = stop;
-        this.width = width;
         this.inverted = start > stop;
+        if (inverted){
+            length = start - stop;
+            this.width = -width;
+        }else{
+            length = stop - start;
+            this.width = width;
+        }
+    }
+
+    /**
+     * this method add a destination trajectory
+     * @param t
+     */
+    public void addDestination(SimpleTrajectory t){
+        if(destinationsTrajectories.size() == 0){
+            if(pF.cross(t.pF)){
+                double Ps[] = pF.getInterPos(t.pF,width,t.width);
+
+                setStop(Ps[0]);
+                t.setStart(Ps[1]);
+
+                destinationsTrajectories.add(t);
+                t.sourcesTrajectories.add(this);
+            }else if(t.getGPS(stop).equals(getGPS(start))){
+                destinationsTrajectories.add(t);
+                t.sourcesTrajectories.add(this);
+            } else{
+                //todo add exception
+            }
+        } else {
+            //todo add exception
+        }
+    }
+
+    public double getStart() {
+        return start;
+    }
+
+    public double getStop() {
+        return stop;
+    }
+
+    public void setStart(double start) {
+        this.start = start;
         if (inverted){
             length = start - stop;
         }else{
@@ -31,12 +73,13 @@ public class SimpleTrajectory extends Trajectory {
         }
     }
 
-    public void addSource(Trajectory t){
-        sourcesTrajectories.add(t);
-    }
-
-    public void addDestination(Trajectory t){
-        destinationsTrajectories.add(t);
+    public void setStop(double stop) {
+        this.stop = stop;
+        if (inverted){
+            length = start - stop;
+        }else{
+            length = stop - start;
+        }
     }
 
     //Trajectory class implementation
@@ -117,14 +160,10 @@ public class SimpleTrajectory extends Trajectory {
     public Position getGPS(double pos) {
         Position P;
         if(inverted){
-            P = pF.get(start-pos,-width);
+            P = pF.get(start-pos,width);
         }else{
             P = pF.get(start+pos,width);
         }
         return P;
-    }
-
-    public double getLength() {
-        return length;
     }
 }

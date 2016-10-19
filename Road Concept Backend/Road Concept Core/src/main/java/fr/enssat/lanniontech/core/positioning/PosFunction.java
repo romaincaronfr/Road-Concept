@@ -44,6 +44,15 @@ public class PosFunction {
         return new Position(lat, lon);
     }
 
+    /**
+     *
+     * return the intersection position of the two {@link PosFunction}
+     *
+     * @param Pf
+     * @param myW
+     * @param PfW
+     * @return [0]: my pos, [1]: Pf pos
+     */
     public double[] getInterPos(PosFunction Pf, double myW, double PfW) {
         double[] M = new double[4];
         double[] R = new double[2];

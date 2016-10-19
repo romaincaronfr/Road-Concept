@@ -26,9 +26,9 @@ public class RoadSection {
         this.A = A;
         this.B = B;
         length = Position.length(A, B);
+        function = new PosFunction(A, B);
         laneA = new Lane(this, length);
         laneB = new Lane(this, length);
-        function = new PosFunction(A, B);
         this.myRoad = myRoad;
     }
 
@@ -108,6 +108,10 @@ public class RoadSection {
 
     public void setMyRoad(Road myRoad) {
         this.myRoad = myRoad;
+    }
+
+    public boolean isLeftLane(Lane l){
+        return laneB == l;
     }
 /*
     @Deprecated

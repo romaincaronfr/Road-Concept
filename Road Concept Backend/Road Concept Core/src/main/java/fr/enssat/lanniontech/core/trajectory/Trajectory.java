@@ -97,4 +97,8 @@ public abstract class Trajectory {
      * @return
      */
     public abstract Position getGPS(double pos);
+
+    public double getLength() {
+        return length;
+    }
 }

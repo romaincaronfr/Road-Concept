@@ -12,10 +12,11 @@ public class Side {
     private double pos;
     private Vehicle myVehicle;
 
-    Side(double pos, Vehicle myVehicle, Lane myLane) {
+    public Side(double pos, Vehicle myVehicle, Lane myLane) {
         this.myVehicle = myVehicle;
         this.pos = pos;
         myTrajectory = myLane.getInsertTrajectory();
+        myTrajectory.getIn(this);
     }
 
     public double getPos() {
@@ -29,7 +30,9 @@ public class Side {
     public void move(double distance) {
         double pos = myTrajectory.getPos(this.pos+distance);
         if(this.pos > pos){
+            myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext();
+            myTrajectory.getIn(this);
         }
         this.pos = pos;
     }

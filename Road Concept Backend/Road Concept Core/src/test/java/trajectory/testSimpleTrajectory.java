@@ -2,7 +2,9 @@ package trajectory;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ public class testSimpleTrajectory {
 
         SimpleTrajectory sT = new SimpleTrajectory(pF,0,2000,0);
 
-        Assert.assertEquals(sT.getLength(),2000,0.0001);
+        Assert.assertEquals(2000,sT.getLength(),0.0001);
 
         Assert.assertEquals(pF.get(0),sT.getGPS(0));
         Assert.assertNotEquals(pF.get(2000),sT.getGPS(0));
@@ -32,7 +34,7 @@ public class testSimpleTrajectory {
 
         SimpleTrajectory sT = new SimpleTrajectory(pF,2000,0,0);
 
-        Assert.assertEquals(sT.getLength(),2000,0.0001);
+        Assert.assertEquals(2000,sT.getLength(),0.0001);
 
         Assert.assertEquals(pF.get(2000),sT.getGPS(0));
         Assert.assertNotEquals(pF.get(0),sT.getGPS(0));
@@ -48,7 +50,7 @@ public class testSimpleTrajectory {
 
         SimpleTrajectory sT = new SimpleTrajectory(pF,0,2000,10);
 
-        Assert.assertEquals(sT.getLength(),2000,0.0001);
+        Assert.assertEquals(2000,sT.getLength(),0.0001);
 
         Assert.assertEquals(pF.get(0,10),sT.getGPS(0));
         Assert.assertNotEquals(pF.get(0),sT.getGPS(0));
@@ -64,10 +66,43 @@ public class testSimpleTrajectory {
 
         SimpleTrajectory sT = new SimpleTrajectory(pF,2000,0,10);
 
-        Assert.assertEquals(sT.getLength(),2000,0.0001);
+        Assert.assertEquals(2000,sT.getLength(),0.0001);
 
         Assert.assertEquals(pF.get(0,-10),sT.getGPS(2000));
         Assert.assertNotEquals(pF.get(0),sT.getGPS(0));
         Assert.assertEquals(pF.get(2000,-10),sT.getGPS(0));
+    }
+
+    @Test
+    public void testLengthFromSide(){
+        Position A = new Position(42,0);
+        Position B = new Position(42,1);
+
+        RoadSection Rs = new RoadSection(A,B);
+
+        Side S = new Side(0,null,Rs.getLaneA());
+
+        Assert.assertEquals(Rs.getLength(),S.getDistanceToNextCar(),0.01);
+
+        S.move(100);
+
+        Assert.assertEquals(Rs.getLength()-100,S.getDistanceToNextCar(),0.01);
+    }
+
+    @Test
+    public void testLengthSide2Side(){
+        Position A = new Position(42,0);
+        Position B = new Position(42,1);
+
+        RoadSection Rs = new RoadSection(A,B);
+
+        Side S1 = new Side(0,null,Rs.getLaneA());
+        Side S2 = new Side(100,null,Rs.getLaneA());
+
+        Assert.assertEquals(S2.getPos(),S1.getDistanceToNextCar(),0.01);
+
+        S1.move(10);
+
+        Assert.assertEquals(S2.getPos()-10,S1.getDistanceToNextCar(),0.01);
     }
 }
