@@ -9,7 +9,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +31,7 @@ public class UserService extends AbstractService {
 
     private boolean isValidEmailAddress(String email) {
         String format = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        Pattern pattern = java.util.regex.Pattern.compile(format);
+        Pattern pattern = Pattern.compile(format);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
@@ -77,10 +76,10 @@ public class UserService extends AbstractService {
         User user = new User();
         user.setId(id);
         int count = repository.delete(user);
-        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
+        return count == 1; // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public List<User> getAll() throws SQLException {
+    public List<User> getAll() {
         return repository.getAll();
     }
 }

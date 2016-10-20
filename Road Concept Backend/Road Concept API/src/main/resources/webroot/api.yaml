@@ -247,6 +247,30 @@ paths:
         500:
           $ref: '#/responses/500'
 
+  /api/maps/{mapID}/import:
+    parameters:
+      - $ref: '#/parameters/mapID'
+    post:
+      parameters:
+        - name: data
+          in: formData
+          type: file
+          required: true
+          description: Fichier XML contenant la carte à importer. Doit provenir du site Open Street Map.
+      description: Importe des données d'Open Street Map dans une carte éxistante
+      tags:
+        - Maps
+        - Import
+      responses:
+        204:
+          description: Fichier importé. A préciser...
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
 responses:
   '400':
     description: Mauvaise requête. Vérifier les paramètres et les formats.

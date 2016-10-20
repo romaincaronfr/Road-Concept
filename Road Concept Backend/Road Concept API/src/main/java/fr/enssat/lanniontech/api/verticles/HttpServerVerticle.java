@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
-import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
+import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
@@ -46,7 +46,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         configureCORS(corsHandler);
         router.route().handler(corsHandler); // Allows cross domain origin request
 
-        router.route().handler(BodyHandler.create().setBodyLimit(10 * MB));
+        router.route().handler(BodyHandler.create().setBodyLimit(50 * MB));
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
 
@@ -61,6 +61,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                 routingContext.next(); // process the next handler, if any
             }
         });
+
+        // TODO: Global error handler. Add Throwable and then remove the catch (Exception) in each verticle method
+        router.route().failureHandler(HttpResponseBuilder::buildUnexpectedErrorResponse);
     }
 
     private void configureCORS(CorsHandler corsHandler) {

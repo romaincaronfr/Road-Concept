@@ -9,9 +9,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class JSONSerializer {
+public class JSONHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JSONSerializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSONHelper.class);
 
     private static ObjectMapper MAPPER = new ObjectMapper();
 

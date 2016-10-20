@@ -6,13 +6,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-@JsonIgnoreProperties({"id"})
+@JsonIgnoreProperties({"id", "_id"})
 public class Feature extends GeoJsonObject {
 
-    private static final String type = "feature";
+    //  private static final String type = "Feature"; // case sensitive
     @JsonInclude(Include.ALWAYS)
-    private Integer id; //TODO: Voir pour récupérer l'ID qui est affecté par MongoDB ?
+    private UUID uuid = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
@@ -43,21 +44,21 @@ public class Feature extends GeoJsonObject {
         this.geometry = geometry;
     }
 
-    public Integer getId() {
-        return id;
+    public UUID getUUID() {
+        return uuid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(UUID uuid) {
+        this.uuid = uuid;
     }
 
     @Override
     public String toString() {
-        return "Feature{properties=" + properties + ", geometry=" + geometry + ", id='" + id + "'}";
+        return "Feature{properties=" + properties + ", geometry=" + geometry + ", id='" + uuid + "'}";
     }
 
-    public String getType() {
-        return type;
-    }
+    // public String getType() {
+    //    return type;
+    // }
 
 }

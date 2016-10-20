@@ -114,8 +114,10 @@ public class MapInfoRepository extends MapRepository {
     // DELETE
     // ------
 
-    public int delete(MapInfo map) throws DatabaseOperationException {
+    public int delete(int mapID) throws DatabaseOperationException {
         //TODO: Vérifier l'accès de l'user + que les éléments de la maps sont bien supprimés
+        MapInfo map = new MapInfo();
+        map.setId(mapID);
         return delete("map_info", map);
     }
 }

@@ -4,55 +4,48 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 import fr.enssat.lanniontech.api.geojson.Feature;
 import fr.enssat.lanniontech.api.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.geojson.FeatureType;
 import fr.enssat.lanniontech.api.geojson.LineString;
 import fr.enssat.lanniontech.api.geojson.Point;
+import fr.enssat.lanniontech.api.repositories.MapElementRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class MapService extends AbstractService {
 
     private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road", "traffic_signals"};
-    private MapInfoRepository repository = new MapInfoRepository();
+
+    private MapInfoRepository mapInfoRepository = new MapInfoRepository();
+    private MapElementRepository mapElementRepository = new MapElementRepository();
 
     public MapInfo create(User user, String name, boolean fromOSM, String imageURL, String description) {
-        return repository.create(user, name, fromOSM, imageURL, description);
+        return mapInfoRepository.create(user, name, fromOSM, imageURL, description);
     }
 
     public List<MapInfo> getAllMapsInfo(User user) {
-        return repository.getAll(user);
+        return mapInfoRepository.getAll(user);
     }
 
     public fr.enssat.lanniontech.api.entities.Map getMap(User user, int mapID) {
-        MapInfo infos = repository.get(mapID);
+        MapInfo infos = mapInfoRepository.get(mapID);
+
         if (infos == null) {
             throw new EntityNotExistingException(MapInfo.class);
         }
-
-        FeatureCollection features = new FeatureCollection();
-        try {
-            //    InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
-            InputStream source = getClass().getResourceAsStream("/marseille-saint-antoine.json");
-            //  InputStream source = getClass().getResourceAsStream("/antoine-example.json");
-
-            features = new ObjectMapper().readValue(source, FeatureCollection.class);
-            infos.setFromOSM(true);
-            if (infos.isFromOSM()) {
-                fromOSMAdaptation(features);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (infos.getUserID() != user.getId()) {
+            throw new UnconsistentException();
         }
+
+        FeatureCollection features = mapElementRepository.getAllFeatures(mapID);
         fr.enssat.lanniontech.api.entities.Map map = new fr.enssat.lanniontech.api.entities.Map();
         map.setInfos(infos);
         map.setFeatures(features);
@@ -63,9 +56,27 @@ public class MapService extends AbstractService {
     // OPEN STREET MAP IMPORTS
     // =======================
 
+    public boolean delete(Integer mapID) {
+        mapElementRepository.deleteAll(mapID);
+        int count = mapInfoRepository.delete(mapID);
+        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
+    }
+
+    public void importFromOSM(int mapID, String fileData) throws Exception { //TODO: handle exceptions
+        //TODO: Comment détecter les doublons ?
+        MapInfo infos = mapInfoRepository.get(mapID);
+        if (infos == null) {
+            throw new EntityNotExistingException();
+        }
+
+        FeatureCollection features = new ObjectMapper().readValue(fileData, FeatureCollection.class);
+        fromOSMAdaptation(features);
+        mapElementRepository.addFeatures(mapID, features);
+    }
+
     //FIXME: refactor
-    private void fromOSMAdaptation(FeatureCollection map) {
-        for (Iterator<Feature> iterator = map.getFeatures().iterator(); iterator.hasNext(); ) {
+    private void fromOSMAdaptation(FeatureCollection features) {
+        for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
 
             // Delete all non 'LineString' features
@@ -106,14 +117,14 @@ public class MapService extends AbstractService {
         Map<String, Object> newProperties = new HashMap<>();
         newProperties.put("type", getType(feature.getProperties()));
         newProperties.put("name", getName(feature.getProperties()));
-        newProperties.put("id", new Random().nextInt()); // TODO: A récupérer après l'ajout en base
+        // newProperties.put("uuid", feature.getUUID()); // FIXME: Attendre décision finale de Romain
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
         Integer time = getRedLightTime(feature.getProperties());
-        if (time != null) {
-            newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
-        }
+        //if (time != null) {
+        newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
+        // }
         feature.getProperties().clear();
         feature.getProperties().putAll(newProperties);
     }
@@ -196,7 +207,6 @@ public class MapService extends AbstractService {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -254,12 +264,5 @@ public class MapService extends AbstractService {
             return 30; // Default value
         }
         return null;
-    }
-
-    public boolean delete(Integer mapID) {
-        MapInfo map = new MapInfo();
-        map.setId(mapID);
-        int count = repository.delete(map);
-        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 }

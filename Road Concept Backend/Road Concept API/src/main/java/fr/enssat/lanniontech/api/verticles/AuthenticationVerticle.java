@@ -4,7 +4,7 @@ import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.AuthenticationException;
 import fr.enssat.lanniontech.api.services.AuthenticationService;
 import fr.enssat.lanniontech.api.utilities.Constants;
-import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
+import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
@@ -75,7 +75,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
             if (requestBody == null || StringUtils.isBlank(requestBody.getString(INPUT_JSON_EMAIL)) || StringUtils.isBlank(requestBody.getString(INPUT_JSON_PASSWORD))) {
-                throw new BadRequestException(); // FIXME: HTTP 500 error if one of the fields are not set
+                throw new BadRequestException();
             }
 
             String userName = requestBody.getString(INPUT_JSON_EMAIL);

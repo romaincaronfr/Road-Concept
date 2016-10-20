@@ -8,7 +8,7 @@ import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.PrivilegeLevelException;
 import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
-import fr.enssat.lanniontech.api.verticles.utilities.HttpResponseBuilder;
+import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.DecodeException;
@@ -60,7 +60,6 @@ public class UserVerticle extends AbstractVerticle {
         } catch (ClassCastException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid ID");
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -85,7 +84,6 @@ public class UserVerticle extends AbstractVerticle {
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -121,7 +119,6 @@ public class UserVerticle extends AbstractVerticle {
         } catch (EntityAlreadyExistsException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "An user already exists for this email");
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -153,7 +150,6 @@ public class UserVerticle extends AbstractVerticle {
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
-            LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }

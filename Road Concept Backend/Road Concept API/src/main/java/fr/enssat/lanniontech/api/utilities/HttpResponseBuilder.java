@@ -1,8 +1,7 @@
-package fr.enssat.lanniontech.api.verticles.utilities;
+package fr.enssat.lanniontech.api.utilities;
 
 import fr.enssat.lanniontech.api.entities.RestException;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
-import fr.enssat.lanniontech.api.utilities.JSONSerializer;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.HttpStatus;
@@ -19,11 +18,20 @@ public class HttpResponseBuilder {
         error.setCause("Unexpected error due to [" + cause.getClass() + "]");
 
         routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
-        routingContext.response().end(JSONSerializer.toJSON(error));
+        routingContext.response().end(JSONHelper.toJSON(error));
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(ExceptionUtils.getStackTrace(cause));
         }
+    }
+
+    public static void buildUnexpectedErrorResponse(RoutingContext routingContext) {
+        RestException error = new RestException();
+        error.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        error.setCause("Unexpected error occured");
+
+        routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        routingContext.response().end(JSONHelper.toJSON(error));
     }
 
     public static void buildForbiddenResponse(RoutingContext routingContext, String cause) {
@@ -32,12 +40,12 @@ public class HttpResponseBuilder {
         error.setCause(cause);
 
         routingContext.response().setStatusCode(HttpStatus.SC_FORBIDDEN);
-        routingContext.response().end(JSONSerializer.toJSON(error));
+        routingContext.response().end(JSONHelper.toJSON(error));
     }
 
     public static void buildCreatedResponse(RoutingContext routingContext, Object dataCreated) {
         routingContext.response().setStatusCode(HttpStatus.SC_CREATED);
-        routingContext.response().end(JSONSerializer.toJSON(dataCreated));
+        routingContext.response().end(JSONHelper.toJSON(dataCreated));
     }
 
     public static void buildBadRequestResponse(RoutingContext routingContext, String cause) {
@@ -46,12 +54,12 @@ public class HttpResponseBuilder {
         error.setCause(cause);
 
         routingContext.response().setStatusCode(HttpStatus.SC_BAD_REQUEST);
-        routingContext.response().end(JSONSerializer.toJSON(error));
+        routingContext.response().end(JSONHelper.toJSON(error));
     }
 
     public static void buildOkResponse(RoutingContext routingContext, Object data) {
         routingContext.response().setStatusCode(HttpStatus.SC_OK);
-        routingContext.response().end(JSONSerializer.toJSON(data));
+        routingContext.response().end(JSONHelper.toJSON(data));
     }
 
     public static void buildNoContentResponse(RoutingContext routingContext) {
@@ -68,6 +76,6 @@ public class HttpResponseBuilder {
         RestException error = new RestException();
         error.setCode(HttpStatus.SC_NOT_FOUND);
         error.setCause(e.getEntityClass() + " not found");
-        routingContext.response().end(JSONSerializer.toJSON(error));
+        routingContext.response().end(JSONHelper.toJSON(error));
     }
 }
