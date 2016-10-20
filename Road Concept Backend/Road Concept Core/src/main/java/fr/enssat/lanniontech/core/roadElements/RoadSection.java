@@ -2,9 +2,6 @@ package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
-
-import java.util.Map;
 
 public class RoadSection {
     private Position A;
@@ -19,10 +16,10 @@ public class RoadSection {
 
 
     public RoadSection(Position A, Position B) {
-        this(A,B,null);
+        this(A, B, null);
     }
 
-    public RoadSection(Position A, Position B,Road myRoad){
+    public RoadSection(Position A, Position B, Road myRoad) {
         this.A = A;
         this.B = B;
         length = Position.length(A, B);
@@ -110,7 +107,7 @@ public class RoadSection {
         this.myRoad = myRoad;
     }
 
-    public boolean isLeftLane(Lane l){
+    public boolean isLeftLane(Lane l) {
         return laneB == l;
     }
 /*

@@ -104,7 +104,7 @@ public class Vehicle {
     }
 
     public SpaceTimePosition getGPSPosition() {
-        return SpaceTimePosition.getMean(frontSide.getGPS(),backSide.getGPS(),time);
+        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time);
     }
 
 }

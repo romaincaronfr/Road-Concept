@@ -1,81 +1,119 @@
 package fr.enssat.lanniontech.core.trajectory;
 
-import fr.enssat.lanniontech.core.positioning.*;
-import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.positioning.PosFunction;
+import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.ArrayList;
 
 public class AdvancedTrajectory extends Trajectory {
-    private Lane sourceLane;
-    private Lane destinationLane;
+    private SimpleTrajectory source;
+    private SimpleTrajectory destination;
     private ArrayList<PosFunction> Pfs;
+    private ArrayList<Double> lengths;
     private ArrayList<Double> Ps;
-    private double length;
+    private double securityDistance;
 
-    public AdvancedTrajectory(Lane source, Lane destination) {
-        this.sourceLane = source;
-        this.destinationLane = destination;
+    public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
+        this.source = source;
+        this.destination = destination;
 
-        Pfs = new ArrayList<PosFunction>();
-        Ps = new ArrayList<Double>();
+        securityDistance = 15;
 
-        Pfs.add(destination.getMyRoadSection().getFunction());
+        Pfs = new ArrayList<>();
+        lengths =new ArrayList<>();
+        Ps = new ArrayList<>();
 
-        Ps.add(source.getLength() - 10);
-        double[] p = Pfs.get(0).getInterPos(Pfs.get(1), source.getMyWPos(), destination.getMyWPos());
+        Pfs.add(source.getFunction());
+        Pfs.add(destination.getFunction());
+
+        double[] p = Pfs.get(0).getInterPos(Pfs.get(1), source.getWidth(), destination.getWidth());
+
+        source.addDestination(this);
+        Ps.add(source.getStop());
         Ps.add(p[0]);
         Ps.add(p[1]);
-        Ps.add(10.0);
-        length = Ps.get(1) - Ps.get(0) + Ps.get(3) - Ps.get(2);
+        destination.addSource(this);
+        Ps.add(destination.getStop());
+
+        if(source.isInverted()){
+            lengths.add(Ps.get(0) - Ps.get(1));
+        }else{
+            lengths.add(Ps.get(1)-Ps.get(0));
+        }
+
+        if(destination.isInverted()){
+            lengths.add(Ps.get(2) - Ps.get(3));
+        }else{
+            lengths.add(Ps.get(3) - Ps.get(2));
+        }
+        length =  lengths.get(0) + lengths.get(1);
     }
 
-    public double getP(int i) {
-        return Ps.get(i);
+    public double getSecurityDistance() {
+        return securityDistance;
     }
 
-    public int getSectionSize() {
-        return Pfs.size();
-    }
+    //Trajectory class implementation
 
-    public Lane getDestination() {
-        return destinationLane;
-    }
-
-    //todo delete all line under this comment
-
-    @Override
     public Trajectory getNext() {
-        return null;
+        return destination;
     }
 
-    @Override
-    public double getNextCarSpeed(Side side) {
-        return 0;
-    }
-
-    @Override
     public double getSpeedOfFirst() {
-        return 0;
+        if (vehiclesSides.size() == 0) {
+            return destination.getSpeedOfFirst();
+        } else {
+            return vehiclesSides.get(0).getMyVehicle().getSpeed();
+        }
     }
 
-    @Override
-    public double getDistanceToNext(Side side) {
-        return 0;
+    public double getNextCarSpeed(Side side) {
+        int pos = vehiclesSides.indexOf(side);
+        if (pos == vehiclesSides.size() - 1) {
+            return destination.getSpeedOfFirst();
+        } else {
+            return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
+        }
     }
 
-    @Override
     public double getDistanceToFirst() {
-        return 0;
+        if (vehiclesSides.size() == 0) {
+                return length + destination.getDistanceToFirst();
+        } else {
+            return vehiclesSides.get(0).getPos();
+        }
     }
 
-    @Override
+    public double getDistanceToNext(Side side) {
+        int pos = vehiclesSides.indexOf(side);
+        if (pos == vehiclesSides.size() - 1) {
+            return length - side.getPos() + destination.getDistanceToFirst();
+        } else {
+            return vehiclesSides.get(pos + 1).getPos() - side.getPos();
+        }
+    }
+
     public boolean rangeIsFree(double start, double end) {
-        return false;
+        int i = 0;
+        double pos;
+        while (i < vehiclesSides.size()) {
+            pos = vehiclesSides.get(i).getPos();
+            if (pos >= start && pos <= end) {
+                return false;
+            } else if (pos > end) {
+                return true;
+            }
+            i++;
+        }
+        return true;
     }
 
-    @Override
     public Position getGPS(double pos) {
-        return null;
+        if(pos < lengths.get(0)){
+            source.getGPS(source.getLength()+pos);
+        }else{
+            destination.getGPS(pos-length);
+        }
     }
 }

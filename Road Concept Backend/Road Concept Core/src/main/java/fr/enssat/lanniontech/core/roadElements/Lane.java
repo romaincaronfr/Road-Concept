@@ -1,7 +1,6 @@
 package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
-import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 import java.util.ArrayList;
 

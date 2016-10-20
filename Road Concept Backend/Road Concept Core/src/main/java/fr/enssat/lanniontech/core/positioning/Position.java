@@ -31,20 +31,20 @@ public class Position {
 
     public boolean equals(Object pos) {
         if (pos instanceof Position) {
-            return equals((Position)pos);
-        }else {
+            return equals((Position) pos);
+        } else {
             return false;
         }
     }
 
-    public boolean equals(Position pos){
+    public boolean equals(Position pos) {
         return this.lat == pos.getLat() && this.lon == pos.getLon();
     }
 
-    static SpaceTimePosition getMean(Position A, Position B, long time){
-        double lon = (A.lon+B.lon)/2;
-        double lat = (A.lat+B.lat)/2;
+    static SpaceTimePosition getMean(Position A, Position B, long time) {
+        double lon = (A.lon + B.lon) / 2;
+        double lat = (A.lat + B.lat) / 2;
         //todo compute angle from A and B
-        return new SpaceTimePosition(lon,lat,time);
+        return new SpaceTimePosition(lon, lat, time);
     }
 }

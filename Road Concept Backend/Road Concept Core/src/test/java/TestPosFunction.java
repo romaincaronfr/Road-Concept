@@ -10,14 +10,14 @@ import org.junit.Test;
  */
 public class TestPosFunction {
     @Test
-    public void testParallelRoads1(){
+    public void testParallelRoads1() {
         RoadManager RM = new RoadManager();
-        Position A = new Position(0,0);
-        Position B = new Position(0,1);
-        Position C = new Position(0,2);
+        Position A = new Position(0, 0);
+        Position B = new Position(0, 1);
+        Position C = new Position(0, 2);
 
-        RoadSection RS1 = RM.addRoadSection(A,B);
-        RoadSection RS2 = RM.addRoadSection(B,C);
+        RoadSection RS1 = RM.addRoadSection(A, B);
+        RoadSection RS2 = RM.addRoadSection(B, C);
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -25,18 +25,18 @@ public class TestPosFunction {
         Assert.assertFalse(Pf1.cross(Pf2));
         Assert.assertFalse(Pf2.cross(Pf1));
 
-        Assert.assertEquals(Pf1.det(Pf2),0,0.001);
+        Assert.assertEquals(Pf1.det(Pf2), 0, 0.001);
     }
 
     @Test
-    public void testParallelRoads2(){
+    public void testParallelRoads2() {
         RoadManager RM = new RoadManager();
-        Position A = new Position(0,0);
-        Position B = new Position(0,1);
-        Position C = new Position(0,-1);
+        Position A = new Position(0, 0);
+        Position B = new Position(0, 1);
+        Position C = new Position(0, -1);
 
-        RoadSection RS1 = RM.addRoadSection(A,B);
-        RoadSection RS2 = RM.addRoadSection(B,C);
+        RoadSection RS1 = RM.addRoadSection(A, B);
+        RoadSection RS2 = RM.addRoadSection(B, C);
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -44,18 +44,18 @@ public class TestPosFunction {
         Assert.assertFalse(Pf1.cross(Pf2));
         Assert.assertFalse(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)==0);
+        Assert.assertTrue(Pf1.det(Pf2) == 0);
     }
 
     @Test
-    public void testNotParallelRoads1(){
+    public void testNotParallelRoads1() {
         RoadManager RM = new RoadManager();
-        Position A = new Position(0,0);
-        Position B = new Position(0,1);
-        Position C = new Position(1,1);
+        Position A = new Position(0, 0);
+        Position B = new Position(0, 1);
+        Position C = new Position(1, 1);
 
-        RoadSection RS1 = RM.addRoadSection(A,B);
-        RoadSection RS2 = RM.addRoadSection(B,C);
+        RoadSection RS1 = RM.addRoadSection(A, B);
+        RoadSection RS2 = RM.addRoadSection(B, C);
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -63,19 +63,19 @@ public class TestPosFunction {
         Assert.assertTrue(Pf1.cross(Pf2));
         Assert.assertTrue(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)<0);
-        Assert.assertTrue(Pf2.det(Pf1)>0);
+        Assert.assertTrue(Pf1.det(Pf2) < 0);
+        Assert.assertTrue(Pf2.det(Pf1) > 0);
     }
 
     @Test
-    public void testNotParallelRoads2(){
+    public void testNotParallelRoads2() {
         RoadManager RM = new RoadManager();
-        Position A = new Position(0,0);
-        Position B = new Position(0,1);
-        Position C = new Position(-1,1);
+        Position A = new Position(0, 0);
+        Position B = new Position(0, 1);
+        Position C = new Position(-1, 1);
 
-        RoadSection RS1 = RM.addRoadSection(A,B);
-        RoadSection RS2 = RM.addRoadSection(B,C);
+        RoadSection RS1 = RM.addRoadSection(A, B);
+        RoadSection RS2 = RM.addRoadSection(B, C);
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -83,7 +83,7 @@ public class TestPosFunction {
         Assert.assertTrue(Pf1.cross(Pf2));
         Assert.assertTrue(Pf2.cross(Pf1));
 
-        Assert.assertTrue(Pf1.det(Pf2)>0);
-        Assert.assertTrue(Pf2.det(Pf1)<0);
+        Assert.assertTrue(Pf1.det(Pf2) > 0);
+        Assert.assertTrue(Pf2.det(Pf1) < 0);
     }
 }

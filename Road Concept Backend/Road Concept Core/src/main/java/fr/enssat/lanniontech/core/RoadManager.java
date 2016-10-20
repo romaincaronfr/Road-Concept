@@ -21,11 +21,11 @@ public class RoadManager {
         roads = new HashMap<Integer, Road>();
     }
 
-    public RoadSection addRoadSection(Position A,Position B){
-        return addRoadSection(A,B,null);
+    public RoadSection addRoadSection(Position A, Position B) {
+        return addRoadSection(A, B, null);
     }
 
-    private RoadSection addRoadSection(Position A, Position B,Road myRoad) {
+    private RoadSection addRoadSection(Position A, Position B, Road myRoad) {
         RoadSection RS1 = new RoadSection(A, B, myRoad);
         RoadSection RS2 = null;
         roadSections.add(RS1);

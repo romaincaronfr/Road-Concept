@@ -10,23 +10,25 @@ public abstract class Trajectory {
     protected ArrayList<Side> vehiclesSides;
     protected double length;
 
-    public Trajectory(){
+    public Trajectory() {
         this.vehiclesSides = new ArrayList<>();
     }
 
     /**
      * remove a vehicle side from the trajectory
+     *
      * @param side
      */
-    public void getOut(Side side){
+    public void getOut(Side side) {
         vehiclesSides.remove(side);
     }
 
     /**
      * insert a vehicle side from the trajectory
+     *
      * @param side
      */
-    public void getIn(Side side){
+    public void getIn(Side side) {
         int i = 0;
         while (i < vehiclesSides.size()
                 &&
@@ -42,10 +44,10 @@ public abstract class Trajectory {
      * @param pos
      * @return
      */
-    public double getPos(double pos){
-        if(pos >= length){
+    public double getPos(double pos) {
+        if (pos >= length) {
             return pos - length;
-        }else {
+        } else {
             return pos;
         }
     }
@@ -57,6 +59,7 @@ public abstract class Trajectory {
 
     /**
      * return the speed of the vehicle ahead
+     *
      * @param side
      * @return
      */
@@ -71,6 +74,7 @@ public abstract class Trajectory {
 
     /**
      * return the distance of the vehicle ahead
+     *
      * @param side
      * @return
      */
@@ -85,6 +89,7 @@ public abstract class Trajectory {
 
     /**
      * return true if the range between start and stop is free
+     *
      * @param start
      * @param end
      * @return
@@ -93,6 +98,7 @@ public abstract class Trajectory {
 
     /**
      * return the GPS position on the current trajectory
+     *
      * @param pos
      * @return
      */

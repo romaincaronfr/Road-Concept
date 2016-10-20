@@ -2,8 +2,8 @@ package fr.enssat.lanniontech.core.vehicleElements;
 
 
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 public class Side {
 
@@ -28,8 +28,8 @@ public class Side {
     }
 
     public void move(double distance) {
-        double pos = myTrajectory.getPos(this.pos+distance);
-        if(this.pos > pos){
+        double pos = myTrajectory.getPos(this.pos + distance);
+        if (this.pos > pos) {
             myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext();
             myTrajectory.getIn(this);
@@ -45,7 +45,7 @@ public class Side {
         return myTrajectory.getNextCarSpeed(this);
     }
 
-    public Position getGPS(){
+    public Position getGPS() {
         return myTrajectory.getGPS(pos);
     }
 }

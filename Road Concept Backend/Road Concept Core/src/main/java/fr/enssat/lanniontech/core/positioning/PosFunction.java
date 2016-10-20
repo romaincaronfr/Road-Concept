@@ -9,8 +9,8 @@ public class PosFunction {
     private double blon;
     private double clon;
 
-    public PosFunction(Position P1, Position P2){
-        double length = Position.length(P1,P2);
+    public PosFunction(Position P1, Position P2) {
+        double length = Position.length(P1, P2);
 
         blat = P1.lat;
         alat = (P2.lat - P1.lat) / length;
@@ -45,7 +45,6 @@ public class PosFunction {
     }
 
     /**
-     *
      * return the intersection position of the two {@link PosFunction}
      *
      * @param Pf
@@ -106,12 +105,12 @@ public class PosFunction {
      * @param Pf
      * @return
      */
-    public double det(PosFunction Pf){
-        return alon*Pf.getAlat()-alat*Pf.getAlon();
+    public double det(PosFunction Pf) {
+        return alon * Pf.getAlat() - alat * Pf.getAlon();
     }
 
-    public boolean cross(PosFunction Pf){
-        return det(Pf)!=0;
+    public boolean cross(PosFunction Pf) {
+        return det(Pf) != 0;
     }
 
     public double getAlat() {
