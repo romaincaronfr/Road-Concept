@@ -60,9 +60,10 @@ app.mapDetailsPageView = Backbone.View.extend({
             //and save them in array
             self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
                 if (feature) {
-                    var encore = new ol.format.GeoJSON();
-                    console.log(encore.writeFeature(feature));
-                    console.log(feature.getId());
+                    //var encore = new ol.format.GeoJSON();
+                    //console.log(encore.writeFeature(feature));
+                    //console.log(feature.getId());
+                    console.log(feature.getProperties().properties);
                 }else {
                     console.log('feature null');
                 }
@@ -73,7 +74,7 @@ app.mapDetailsPageView = Backbone.View.extend({
     },
 
     onAddElement: function(element){
-
+        var self = this;
         var points = new Array();
         var coords = element.getCoordinates();
         var style = this.generateStyle(element.getTypeProperties());
@@ -90,12 +91,18 @@ app.mapDetailsPageView = Backbone.View.extend({
                 features: [new ol.Feature({
                     geometry: new ol.geom.LineString(points, 'XY'),
                     name: 'Line',
-                    id: element.attributes.id
+                    id: element.attributes.id,
+                    properties: element.attributes.properties
                 })]
             }),
-            style: style
+            style: function(feature, resolution){
+                var type = feature.getProperties().properties.type;
+                console.log('ououuoeueroeour');
+                return self.generateStyle(type);
+            }
         });
         this.map.addLayer(layerLines);
+        console.log(JSON.stringify(this.mapDetailsCOllection.toJSON()));
     },
 
     clickOnOSM: function(){

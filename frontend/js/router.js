@@ -89,6 +89,7 @@ app.Router = Backbone.Router.extend({
         } else {
             this.navBarV.checkUserModelBeforeMyUser();
         }
+        $('#mapRow').empty();
     },
 
     admin: function () {
