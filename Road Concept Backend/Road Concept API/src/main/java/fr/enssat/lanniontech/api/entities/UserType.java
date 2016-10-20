@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum UserType {
-    USER(1), ADMINISTRATOR(2);
+    //@formatter:off
+    USER(1),
+    ADMINISTRATOR(2);
+    //@formatter:on
 
     private final int jsonID;
 

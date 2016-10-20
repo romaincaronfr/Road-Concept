@@ -28,7 +28,7 @@ public class SimulatorVerticle extends AbstractVerticle {
 
     private void processSimulation(RoutingContext routingContext) {
         try {
-            boolean result = simulatorService.simulate(); // TODO: Add parameters
+            boolean result = simulatorService.simulate();
             HttpResponseBuilder.buildOkResponse(routingContext, result);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);

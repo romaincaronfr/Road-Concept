@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.geojson;
+package fr.enssat.lanniontech.api.entities.geojson;
 
 import java.util.ArrayList;
 import java.util.Collections;

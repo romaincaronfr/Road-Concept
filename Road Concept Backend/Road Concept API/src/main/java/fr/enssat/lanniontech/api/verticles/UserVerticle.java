@@ -64,12 +64,6 @@ public class UserVerticle extends AbstractVerticle {
         }
     }
 
-    private void checkAdminLevel(RoutingContext routingContext) {
-        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
-        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
-            throw new PrivilegeLevelException();
-        }
-    }
 
     private void processGetUser(RoutingContext routingContext) {
         try {
@@ -154,10 +148,6 @@ public class UserVerticle extends AbstractVerticle {
         }
     }
 
-    // =========
-    // UTILITIES
-    // =========
-
     private void processGetAllUsers(RoutingContext routingContext) {
         try {
             checkAdminLevel(routingContext);
@@ -168,6 +158,17 @@ public class UserVerticle extends AbstractVerticle {
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    // =========
+    // UTILITIES
+    // =========
+
+    private void checkAdminLevel(RoutingContext routingContext) { //TODO: Déplacer cette vérification dans la couche service ?
+        User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
+        if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
+            throw new PrivilegeLevelException();
         }
     }
 }

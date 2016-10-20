@@ -37,12 +37,4 @@ public final class Constants {
         // Prevent instantiation
     }
 
-    public static Constants getInstance() {
-        return InstanceHolder.INSTANCE;
-    }
-
-    private static class InstanceHolder {
-        private final static Constants INSTANCE = new Constants();
-    }
-
 }

@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import fr.enssat.lanniontech.api.entities.geojson.Feature;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
-import fr.enssat.lanniontech.api.geojson.Feature;
-import fr.enssat.lanniontech.api.geojson.FeatureCollection;
+import fr.enssat.lanniontech.api.exceptions.NotImplementedException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
@@ -15,11 +16,11 @@ import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapElementRepository extends MapInfoRepository {
+public class MapFeatureRepository extends MapRepository {
 
     private static final String MONGODB_MAP_COLLECTION_PREFIX = "map_";
 
-    public void addFeature(int mapID, Feature feature) {
+    public void create(int mapID, Feature feature) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
@@ -33,7 +34,7 @@ public class MapElementRepository extends MapInfoRepository {
         return MONGODB_MAP_COLLECTION_PREFIX + mapID;
     }
 
-    public void addFeatures(int mapID, FeatureCollection features) {
+    public void createAll(int mapID, FeatureCollection features) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
@@ -46,15 +47,15 @@ public class MapElementRepository extends MapInfoRepository {
         }
     }
 
-    public Feature getFeature(int featureID) {
-        return null; //TODO
+    public Feature get(int featureID) {
+        throw new NotImplementedException(); //TODO
     }
 
-    public void removeFeature(int featureID) {
-        //TODO
+    public void delete(int featureID) {
+        throw new NotImplementedException(); //TODO
     }
 
-    public FeatureCollection getAllFeatures(int mapID) {
+    public FeatureCollection getAll(int mapID) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
 
@@ -62,52 +63,15 @@ public class MapElementRepository extends MapInfoRepository {
 
             try {
                 FeatureCollection features = new FeatureCollection();
-                ObjectMapper mapper = new ObjectMapper();
+                ObjectMapper mapper = new ObjectMapper(); //TODO: Move to JSONHelper ?
                 for (Document item : collection.find()) {
                     features.add(mapper.readValue(item.toJson(), Feature.class));
                 }
                 return features;
             } catch (Exception e) {
-                e.printStackTrace();
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
             }
         }
-
-
-        //    public void testConnection(User user) {
-        //        insert(user, "test_connection");
-        //        getMap("test_connection");
-        //    }
-        //
-        //    public void insert(User user, String collectionName) {
-        //        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
-        //            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
-        //
-        //            MongoCollection<Document> collection = db.getCollection(collectionName);
-        //
-        //            Document document = Document.parse(JSONHelper.toJSON(user));
-        //            collection.insertOne(document); // insertMany(List) also available :)
-        //
-        //        }
-        //    }
-        //
-        //    public void getMap(String collectionName) {
-        //
-        //        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
-        //            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
-        //
-        //            User map = null;
-        //            MongoCollection<Document> collection = db.getCollection(collectionName);
-        //
-        //            System.out.println("Total items in the collection -> " + collection.count());
-        //
-        //            // Display all the collection
-        //            for (Document item : collection.find()) {
-        //                System.out.println(item);
-        //            }
-        //
-        //        }
-        //    }
     }
 
     public void deleteAll(Integer mapID) {

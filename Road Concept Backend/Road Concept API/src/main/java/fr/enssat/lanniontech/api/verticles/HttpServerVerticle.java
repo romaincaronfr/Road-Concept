@@ -62,7 +62,7 @@ public class HttpServerVerticle extends AbstractVerticle {
             }
         });
 
-        // TODO: Global error handler. Add Throwable and then remove the catch (Exception) in each verticle method
+        // TODO: Add Throwable and then remove the catch (Exception) in each verticle method
         router.route().failureHandler(HttpResponseBuilder::buildUnexpectedErrorResponse);
     }
 

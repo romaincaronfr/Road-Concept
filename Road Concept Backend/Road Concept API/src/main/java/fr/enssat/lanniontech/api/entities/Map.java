@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.entities;
 
-import fr.enssat.lanniontech.api.geojson.FeatureCollection;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 
 public class Map {
 

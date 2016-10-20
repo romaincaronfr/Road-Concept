@@ -37,11 +37,42 @@ public abstract class AbstractRepository {
         }
     }
 
+    protected void updateIntField(String tableName, String columnName, SQLStoredEntity entity, int newValue) {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
+                statement.setObject(1, entity.getIdentifierValue());
+                statement.setInt(2, newValue);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, entity.getClass());
+        }
+    }
+
     private String computeUpdateSQLQuery(String tableName, String columnName, String identifierName) {
         StringBuilder sql = new StringBuilder();
         sql.append("UPDATE ").append(tableName).append(" SET ").append(columnName).append(" = ? WHERE ").append(identifierName).append(" = ?");
         return sql.toString();
     }
+
+    // ===================
+    // SQL - DELETE ENTITY
+    // ===================
+
+    protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
+                statement.setObject(1, entity.getIdentifierValue());
+                return statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, entity.getClass());
+        }
+    }
+
+    // =====================
+    // SQL - BASIC EXCEPTION
+    // =====================
 
     protected static DatabaseOperationException processBasicSQLException(SQLException e, Class<? extends Entity> clazz) {
         switch (e.getSQLState()) {
@@ -56,35 +87,4 @@ public abstract class AbstractRepository {
         return new SQLUnexpectedException(e);
     }
 
-
-    // ===================
-    // SQL - DELETE ENTITY
-    // ===================
-
-    protected void updateIntField(String tableName, String columnName, SQLStoredEntity entity, int newValue) {
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
-                statement.setObject(1, entity.getIdentifierValue());
-                statement.setInt(2, newValue);
-                statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            throw processBasicSQLException(e, entity.getClass());
-        }
-    }
-
-    // =====================
-    // SQL - BASIC EXCEPTION
-    // =====================
-
-    protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
-        try (Connection connection = getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
-                statement.setObject(1, entity.getIdentifierValue());
-                return statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            throw processBasicSQLException(e, entity.getClass());
-        }
-    }
 }

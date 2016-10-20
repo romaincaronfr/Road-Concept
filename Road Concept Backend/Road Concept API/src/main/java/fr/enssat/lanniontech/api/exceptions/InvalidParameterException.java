@@ -6,13 +6,13 @@ public class InvalidParameterException extends RoadConceptException {
      * Constructs a new InvalidParameterException with default message.
      */
     public InvalidParameterException() {
-        super();
+
     }
 
     /**
      * Constructs a new InvalidParameterException with specified detail message.
      */
-    public InvalidParameterException(final String message) {
+    public InvalidParameterException(String message) {
         super(message);
     }
 
@@ -20,7 +20,7 @@ public class InvalidParameterException extends RoadConceptException {
      * Constructs a new InvalidParameterException with specified detail message
      * and nested Throwable.
      */
-    public InvalidParameterException(final String message, final Throwable cause) {
+    public InvalidParameterException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -28,7 +28,7 @@ public class InvalidParameterException extends RoadConceptException {
      * Constructs a new InvalidParameterException with specified nested Throwable
      * and default message.
      */
-    public InvalidParameterException(final Throwable cause) {
+    public InvalidParameterException(Throwable cause) {
         super(cause);
     }
 }

@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.geojson;
+package fr.enssat.lanniontech.api.entities.geojson;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

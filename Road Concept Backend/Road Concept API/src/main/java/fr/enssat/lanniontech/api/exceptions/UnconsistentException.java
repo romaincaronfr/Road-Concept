@@ -6,13 +6,13 @@ public class UnconsistentException extends RoadConceptException {
      * Constructs a new AuthenticationException with default message.
      */
     public UnconsistentException() {
-        super();
+
     }
 
     /**
      * Constructs a new AuthenticationException with specified detail message.
      */
-    public UnconsistentException(final String message) {
+    public UnconsistentException(String message) {
         super(message);
     }
 
@@ -20,7 +20,7 @@ public class UnconsistentException extends RoadConceptException {
      * Constructs a new AuthenticationException with specified detail message
      * and nested Throwable.
      */
-    public UnconsistentException(final String message, final Throwable cause) {
+    public UnconsistentException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -28,7 +28,7 @@ public class UnconsistentException extends RoadConceptException {
      * Constructs a new AuthenticationException with specified nested Throwable
      * and default message.
      */
-    public UnconsistentException(final Throwable cause) {
+    public UnconsistentException(Throwable cause) {
         super(cause);
     }
 }

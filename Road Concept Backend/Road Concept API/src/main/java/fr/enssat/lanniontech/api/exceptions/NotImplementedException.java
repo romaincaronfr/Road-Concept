@@ -9,13 +9,13 @@ public class NotImplementedException extends RoadConceptException {
      * Constructs a new NotImplementedException with default message.
      */
     public NotImplementedException() {
-        super();
+
     }
 
     /**
      * Constructs a new NotImplementedException with specified detail message.
      */
-    public NotImplementedException(final String message) {
+    public NotImplementedException(String message) {
         super(message);
     }
 
@@ -23,7 +23,7 @@ public class NotImplementedException extends RoadConceptException {
      * Constructs a new NotImplementedException with specified detail message
      * and nested Throwable.
      */
-    public NotImplementedException(final String message, final Throwable cause) {
+    public NotImplementedException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -31,7 +31,7 @@ public class NotImplementedException extends RoadConceptException {
      * Constructs a new NotImplementedException with specified nested Throwable
      * and default message.
      */
-    public NotImplementedException(final Throwable cause) {
+    public NotImplementedException(Throwable cause) {
         super(cause);
     }
 }

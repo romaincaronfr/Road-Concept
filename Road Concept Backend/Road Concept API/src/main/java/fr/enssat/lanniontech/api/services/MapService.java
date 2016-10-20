@@ -3,14 +3,14 @@ package fr.enssat.lanniontech.api.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
+import fr.enssat.lanniontech.api.entities.geojson.Feature;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
+import fr.enssat.lanniontech.api.entities.geojson.LineString;
+import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
-import fr.enssat.lanniontech.api.geojson.Feature;
-import fr.enssat.lanniontech.api.geojson.FeatureCollection;
-import fr.enssat.lanniontech.api.geojson.FeatureType;
-import fr.enssat.lanniontech.api.geojson.LineString;
-import fr.enssat.lanniontech.api.geojson.Point;
-import fr.enssat.lanniontech.api.repositories.MapElementRepository;
+import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class MapService extends AbstractService {
     private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road", "traffic_signals"};
 
     private MapInfoRepository mapInfoRepository = new MapInfoRepository();
-    private MapElementRepository mapElementRepository = new MapElementRepository();
+    private MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
 
     public MapInfo create(User user, String name, boolean fromOSM, String imageURL, String description) {
         return mapInfoRepository.create(user, name, fromOSM, imageURL, description);
@@ -41,26 +41,26 @@ public class MapService extends AbstractService {
         if (infos == null) {
             throw new EntityNotExistingException(MapInfo.class);
         }
-        if (infos.getUserID() != user.getId()) {
+        if (infos.getUserID() != user.getId()) { //TODO: Replace with 'canAccessMap()'
             throw new UnconsistentException();
         }
 
-        FeatureCollection features = mapElementRepository.getAllFeatures(mapID);
+        FeatureCollection features = mapFeatureRepository.getAll(mapID);
         fr.enssat.lanniontech.api.entities.Map map = new fr.enssat.lanniontech.api.entities.Map();
         map.setInfos(infos);
         map.setFeatures(features);
         return map;
     }
 
-    // =======================
-    // OPEN STREET MAP IMPORTS
-    // =======================
-
     public boolean delete(Integer mapID) {
-        mapElementRepository.deleteAll(mapID);
+        mapFeatureRepository.deleteAll(mapID);
         int count = mapInfoRepository.delete(mapID);
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
+
+    // =======================
+    // OPEN STREET MAP IMPORTS
+    // =======================
 
     public void importFromOSM(int mapID, String fileData) throws Exception { //TODO: handle exceptions
         //TODO: Comment détecter les doublons ?
@@ -71,7 +71,7 @@ public class MapService extends AbstractService {
 
         FeatureCollection features = new ObjectMapper().readValue(fileData, FeatureCollection.class);
         fromOSMAdaptation(features);
-        mapElementRepository.addFeatures(mapID, features);
+        mapFeatureRepository.createAll(mapID, features);
     }
 
     //FIXME: refactor
@@ -122,7 +122,7 @@ public class MapService extends AbstractService {
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
         Integer time = getRedLightTime(feature.getProperties());
-        //if (time != null) {
+        //if (time != null) { //TODO: Vérifier que à null, il n'est pas mis dans les properties
         newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
         // }
         feature.getProperties().clear();

@@ -23,7 +23,6 @@ public class UserRepository extends AbstractRepository {
     private static final String SELECT_FROM_EMAIL = "SELECT id, password, first_name, last_name, type FROM final_user WHERE email = ?";
     private static final String SELECT_ALL = "SELECT id, email, password, first_name, last_name, type FROM final_user";
 
-
     // ======
     // CREATE
     // ======

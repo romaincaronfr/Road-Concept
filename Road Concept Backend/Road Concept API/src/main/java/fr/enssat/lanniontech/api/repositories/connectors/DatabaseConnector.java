@@ -32,17 +32,33 @@ public final class DatabaseConnector {
     // DB CONNECTIONS
     // ==============
 
+    /**
+     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
+     */
+    public static Connection getConnection() throws SQLException {
+        return DATA_SOURCE.getConnection();
+    }
+
+    public static MongoClient getMongoDBClient() {
+        return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
+    }
+
+    // ==============================
+    // CONFIGURATION & INITIALIZATION
+    // ==============================
+
     public static void setUp() {
         setUpSQL();
         setUpNoSQL();
     }
 
     private static void setUpSQL() throws SQLUnexpectedException {
-        configure();
+        configurePostgreSQL();
         if (Constants.ENVIRONMENT == ProjetEnvironment.DEVELOPPMENT) {
             try (Connection initConnection = getConnection()) {
                 initializeDeveloppmentSchema(initConnection);
                 new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
+                LOGGER.debug("Default administrator account has been created.");
             } catch (EntityAlreadyExistsException ignored) {
                 // The default admin user already exists, just ignore the exception
                 LOGGER.debug("Default admin user already exists ! Nothing created.");
@@ -53,12 +69,15 @@ public final class DatabaseConnector {
         }
     }
 
-    // ==============================
-    // CONFIGURATION & INITIALIZATION
-    // ==============================
+    private static void configurePostgreSQL() {
+        DATA_SOURCE.setUsername(Constants.POSTGRESQL_USER_NAME);
+        DATA_SOURCE.setPassword(Constants.POSTGRESQL_USER_PASSWORD);
+        DATA_SOURCE.setUrl("jdbc:postgresql://" + Constants.POSTGRESQL_SERVER_HOST + "/" + Constants.POSTGRESQL_DATABASE_NAME);
+        DATA_SOURCE.setMaxTotal(Constants.POSTGRESQL_MAX_CONNECTIONS);
+    }
 
     private static void setUpNoSQL() { // Check the connection is ok
-        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
+        try (MongoClient client = getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             db.createCollection("fake");
             MongoCollection<Document> fakeCollection = db.getCollection("fake");
@@ -66,28 +85,13 @@ public final class DatabaseConnector {
         }
     }
 
-    private static void configure() {
-        DATA_SOURCE.setUsername(Constants.POSTGRESQL_USER_NAME);
-        DATA_SOURCE.setPassword(Constants.POSTGRESQL_USER_PASSWORD);
-        DATA_SOURCE.setUrl("jdbc:postgresql://" + Constants.POSTGRESQL_SERVER_HOST + "/" + Constants.POSTGRESQL_DATABASE_NAME);
-        DATA_SOURCE.setMaxTotal(Constants.POSTGRESQL_MAX_CONNECTIONS);
-    }
-
-    /**
-     * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
-     */
-    public static Connection getConnection() throws SQLException {
-        return DATA_SOURCE.getConnection();
-    }
-
     /**
      * The development script do not contains any procedure or trigger, since it cause trouble to process the file on server startup.
      */
     private static void initializeDeveloppmentSchema(Connection connection) {
         try {
-            String file = "roadConceptDB_dev.sql";
             SQLScriptRunner runner = new SQLScriptRunner(connection, false);
-            try (InputStream script = DatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/" + file)) {
+            try (InputStream script = DatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/roadConceptDB_dev.sql")) {
                 runner.runScript(new BufferedReader(new InputStreamReader(script)));
             }
         } catch (Exception e) {
@@ -96,7 +100,4 @@ public final class DatabaseConnector {
         }
     }
 
-    public static MongoClient getMongoDBClient() {
-        return new MongoClient(Constants.MONGODB_SERVER_URL, Constants.MONGODB_SERVER_PORT);
-    }
 }

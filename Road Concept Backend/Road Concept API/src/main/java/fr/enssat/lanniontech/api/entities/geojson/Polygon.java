@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.geojson;
+package fr.enssat.lanniontech.api.entities.geojson;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

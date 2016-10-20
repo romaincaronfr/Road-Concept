@@ -1,9 +1,9 @@
-package fr.enssat.lanniontech.api.geojson.jackson;
+package fr.enssat.lanniontech.api.utilities.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import fr.enssat.lanniontech.api.geojson.Coordinates;
+import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
 
 import java.io.IOException;
 

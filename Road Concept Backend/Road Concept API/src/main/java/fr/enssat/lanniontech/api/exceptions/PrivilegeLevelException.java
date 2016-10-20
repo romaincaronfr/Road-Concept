@@ -6,13 +6,13 @@ public class PrivilegeLevelException extends RoadConceptException {
      * Constructs a new PrivilegeLevelException with default message.
      */
     public PrivilegeLevelException() {
-        super();
+
     }
 
     /**
      * Constructs a new PrivilegeLevelException with specified detail message.
      */
-    public PrivilegeLevelException(final String message) {
+    public PrivilegeLevelException(String message) {
         super(message);
     }
 
@@ -20,7 +20,7 @@ public class PrivilegeLevelException extends RoadConceptException {
      * Constructs a new PrivilegeLevelException with specified detail message
      * and nested Throwable.
      */
-    public PrivilegeLevelException(final String message, final Throwable cause) {
+    public PrivilegeLevelException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -28,7 +28,7 @@ public class PrivilegeLevelException extends RoadConceptException {
      * Constructs a new PrivilegeLevelException with specified nested Throwable
      * and default message.
      */
-    public PrivilegeLevelException(final Throwable cause) {
+    public PrivilegeLevelException(Throwable cause) {
         super(cause);
     }
 }

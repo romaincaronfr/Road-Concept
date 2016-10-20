@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.geojson;
+package fr.enssat.lanniontech.api.entities.geojson;
 
 public class Point extends GeoJsonObject {
 
