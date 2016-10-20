@@ -8,5 +8,21 @@ app.collections.mapDetailsCollection = Backbone.Collection.extend({
     },
     url: function () {
         return this.absURL + '/api/maps/' + this.id;
+    },
+    parse: function(response){
+        return response.features;
+    },
+    toGeoJSON: function(){
+        var features = [];
+        this.models.forEach(function(model){
+            var feature = model.toGeoJSON();
+            if (! _.isEmpty(feature.geometry)) {
+                features.push(feature);
+            }
+        });
+        return {
+            'type': 'FeatureCollection',
+            'features': features
+        };
     }
 });

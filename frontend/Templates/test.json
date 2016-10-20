@@ -6,7 +6,7 @@
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": -2105550241,
+        "id": 1673822964,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -51,14 +51,15 @@
             43.3731765
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Point de Vue",
         "maxspeed": 50,
-        "id": 347959286,
+        "id": -1912042698,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -163,14 +164,15 @@
             43.372762
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Georges de Beauregard",
         "maxspeed": 50,
-        "id": 1164678533,
+        "id": 1907928302,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -207,14 +209,15 @@
             43.3687356
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Allée l'Agachon du Roi",
         "maxspeed": 50,
-        "id": -62442316,
+        "id": 70621502,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -259,14 +262,15 @@
             43.373625
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -159951586,
+        "id": -1128943716,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -283,14 +287,15 @@
             43.3695543
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 633600604,
+        "id": -1653597697,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -307,14 +312,15 @@
             43.3683641
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Jean Salaris",
         "maxspeed": 50,
-        "id": 487817587,
+        "id": -214972157,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -331,14 +337,15 @@
             43.3766257
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse des Genêts",
         "maxspeed": 50,
-        "id": -115958260,
+        "id": -788385946,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -355,14 +362,15 @@
             43.3763879
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Mimosas",
         "maxspeed": 50,
-        "id": 818621005,
+        "id": -1624251292,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -379,14 +387,15 @@
             43.3751753
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -156153707,
+        "id": 351556782,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -407,14 +416,15 @@
             43.375911
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -354974146,
+        "id": 345216489,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -439,14 +449,15 @@
             43.3746518
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -725692246,
+        "id": 689109659,
         "bridge": true,
         "type": 3,
         "oneway": true
@@ -463,14 +474,15 @@
             43.3778741
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -2049245700,
+        "id": 355872028,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -547,14 +559,15 @@
             43.3793863
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 1855269239,
+        "id": 1539827341,
         "bridge": true,
         "type": 3,
         "oneway": true
@@ -571,14 +584,15 @@
             43.3778741
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -485377798,
+        "id": 1754253008,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -619,14 +633,15 @@
             43.3770523
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1731540250,
+        "id": 925942725,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -659,14 +674,15 @@
             43.3683443
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Jenny Hélia",
         "maxspeed": 50,
-        "id": -1522004956,
+        "id": 752084522,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -699,14 +715,15 @@
             43.3661344
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Echangeur des Aygalades",
         "maxspeed": 50,
-        "id": 843911157,
+        "id": 609731807,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -739,14 +756,15 @@
             43.3632064
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": -926763476,
+        "id": 1384767257,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -823,14 +841,15 @@
             43.3689239
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": 1375279510,
+        "id": -972122923,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -859,14 +878,15 @@
             43.3681776
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Primitive",
         "maxspeed": 50,
-        "id": -2032156311,
+        "id": 792447043,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -891,14 +911,15 @@
             43.3749964
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 850449664,
+        "id": -14720547,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -915,14 +936,15 @@
             43.3673819
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 30,
-        "id": 1663981512,
+        "id": -1965782329,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -943,14 +965,15 @@
             43.3701299
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": -410318622,
+        "id": -1269370648,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -967,14 +990,15 @@
             43.3780472
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 1743029276,
+        "id": -1873797676,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -995,14 +1019,15 @@
             43.3742041
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 911670644,
+        "id": -1053586044,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1023,14 +1048,15 @@
             43.3783434
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": 2074659200,
+        "id": 89179938,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -1051,14 +1077,15 @@
             43.377701
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 193091969,
+        "id": -640673319,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1075,14 +1102,15 @@
             43.3786076
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": -566184972,
+        "id": -1141743266,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1107,14 +1135,15 @@
             43.3787849
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Vallon",
         "maxspeed": 50,
-        "id": 2041665401,
+        "id": 107721906,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -1227,14 +1256,15 @@
             43.3662151
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Georges de Beauregard",
         "maxspeed": 50,
-        "id": -1310847354,
+        "id": -1465176128,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1271,14 +1301,15 @@
             43.3681296
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 1254468018,
+        "id": -316604297,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1299,14 +1330,15 @@
             43.3773137
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -568133184,
+        "id": 409837166,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1327,14 +1359,15 @@
             43.378801
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -1718126825,
+        "id": 185785471,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1355,14 +1388,15 @@
             43.3783972
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 114432746,
+        "id": -1505200815,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1383,14 +1417,15 @@
             43.3773319
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de la Pinède",
         "maxspeed": 50,
-        "id": 1619177855,
+        "id": 1609212977,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -1419,14 +1454,15 @@
             43.3728032
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -65432721,
+        "id": 230863861,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -1483,14 +1519,15 @@
             43.3664202
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse du Viaduc",
         "maxspeed": 50,
-        "id": 1362896814,
+        "id": -822941965,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -1559,14 +1596,15 @@
             43.3675385
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 1500048956,
+        "id": 1684691144,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1603,14 +1641,15 @@
             43.3792235
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": -1488286346,
+        "id": 35768180,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1735,14 +1774,15 @@
             43.3730147
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 1931975909,
+        "id": 466800036,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1763,14 +1803,15 @@
             43.3772432
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": -102076276,
+        "id": 1480987521,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1911,14 +1952,15 @@
             43.3638984
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": -1140442313,
+        "id": 459851663,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -1935,14 +1977,15 @@
             43.3774889
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -697633595,
+        "id": -748706191,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -1983,14 +2026,15 @@
             43.3766351
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": -2096978203,
+        "id": -855127631,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -2071,14 +2115,15 @@
             43.3790286
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Georges de Beauregard",
         "maxspeed": 50,
-        "id": -1263318203,
+        "id": -1504955767,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2099,14 +2144,15 @@
             43.3699833
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Georges de Beauregard",
         "maxspeed": 50,
-        "id": -737241551,
+        "id": 1929502335,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2139,14 +2185,15 @@
             43.3687356
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -60576046,
+        "id": 937612057,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2167,14 +2214,15 @@
             43.3661172
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 90,
-        "id": -95556355,
+        "id": 1410800622,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -2243,14 +2291,15 @@
             43.3833203
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 1781314772,
+        "id": -506395691,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2279,14 +2328,15 @@
             43.3731097
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Route de la Gavotte",
         "maxspeed": 50,
-        "id": -1593921777,
+        "id": -1982176387,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2311,14 +2361,15 @@
             43.3737692
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 1921795744,
+        "id": 1129726077,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2339,14 +2390,15 @@
             43.3798595
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": 1933497117,
+        "id": 696940563,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2363,14 +2415,15 @@
             43.3772923
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -391662596,
+        "id": -1432099292,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2447,14 +2500,15 @@
             43.3742145
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 1929210862,
+        "id": 646702765,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2471,14 +2525,15 @@
             43.378693
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 90,
-        "id": -732747776,
+        "id": 1482222066,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -2519,14 +2574,15 @@
             43.3775192
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -1274879624,
+        "id": 178145541,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2559,14 +2615,15 @@
             43.3797803
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -221318610,
+        "id": -1352182298,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2603,14 +2660,15 @@
             43.3773137
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -428720591,
+        "id": 223251139,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2631,14 +2689,15 @@
             43.3771081
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 88709612,
+        "id": 888990481,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2711,14 +2770,15 @@
             43.3820304
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 792923636,
+        "id": -1648462272,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2843,14 +2903,15 @@
             43.3699502
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": -355306362,
+        "id": 1299904178,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -2959,14 +3020,15 @@
             43.3702028
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Route de la Gavotte",
         "maxspeed": 50,
-        "id": 450773996,
+        "id": 250569660,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -2983,14 +3045,15 @@
             43.3743497
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Route de la Gavotte",
         "maxspeed": 50,
-        "id": -323089066,
+        "id": 1645596543,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -3011,14 +3074,15 @@
             43.3742946
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Béranger",
         "maxspeed": 50,
-        "id": 1594881644,
+        "id": -959492262,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3095,14 +3159,15 @@
             43.374209
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de la Limite",
         "maxspeed": 50,
-        "id": 1866294969,
+        "id": -1153008788,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3135,14 +3200,15 @@
             43.3741803
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue des Joyeux",
         "maxspeed": 50,
-        "id": -610879143,
+        "id": 626323927,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3171,14 +3237,15 @@
             43.3774617
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de Lunel",
         "maxspeed": 50,
-        "id": 24784821,
+        "id": -330558971,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3207,14 +3274,15 @@
             43.3712979
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Frèze",
         "maxspeed": 50,
-        "id": -1891841201,
+        "id": -1440423463,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3247,14 +3315,15 @@
             43.3723115
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -636234466,
+        "id": 1572349881,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3299,14 +3368,15 @@
             43.3723115
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Thiers",
         "maxspeed": 50,
-        "id": -1604516757,
+        "id": -876194769,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3367,14 +3437,15 @@
             43.3702467
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de L'Américaine",
         "maxspeed": 50,
-        "id": 704798488,
+        "id": -866888013,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3447,14 +3518,15 @@
             43.3709644
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Marius Brémond",
         "maxspeed": 50,
-        "id": 29875925,
+        "id": 1015002919,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3511,14 +3583,15 @@
             43.3750769
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -63475972,
+        "id": 1281836960,
         "bridge": true,
         "type": 3,
         "oneway": true
@@ -3539,14 +3612,15 @@
             43.3782229
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -997235365,
+        "id": 665871236,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3571,14 +3645,15 @@
             43.3697115
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse du Figuier",
         "maxspeed": 50,
-        "id": 1124268937,
+        "id": 2096979133,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3595,14 +3670,15 @@
             43.3761427
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue de l'Acacia",
         "maxspeed": 50,
-        "id": -1821088221,
+        "id": 254004221,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3619,14 +3695,15 @@
             43.375911
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue du Stade",
         "maxspeed": 50,
-        "id": -246117091,
+        "id": -1060371551,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3651,14 +3728,15 @@
             43.3766824
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Georges de Beauregard",
         "maxspeed": 50,
-        "id": -1456547008,
+        "id": -1339757097,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3731,14 +3809,15 @@
             43.3654192
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de l'Américaine",
         "maxspeed": 50,
-        "id": 1910586122,
+        "id": -2067068537,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -3759,14 +3838,15 @@
             43.3709884
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue de la Carrière",
         "maxspeed": 50,
-        "id": 269673871,
+        "id": -2070681317,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3795,14 +3875,15 @@
             43.3756931
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 30,
-        "id": 1384151682,
+        "id": -497407932,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3855,14 +3936,15 @@
             43.3698967
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 597371947,
+        "id": -1984824868,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -3895,14 +3977,15 @@
             43.3737256
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue du Vallon",
         "maxspeed": 50,
-        "id": -323876927,
+        "id": 1453707759,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3943,14 +4026,15 @@
             43.3760014
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Henri Crest",
         "maxspeed": 50,
-        "id": 314573811,
+        "id": 703966868,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -3983,14 +4067,15 @@
             43.3758926
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": -1964969836,
+        "id": -1522594995,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -4067,14 +4152,15 @@
             43.3770845
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 30,
-        "id": 1577438588,
+        "id": 797331198,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4115,14 +4201,15 @@
             43.3737256
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 120124960,
+        "id": -124130091,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4163,14 +4250,15 @@
             43.3789744
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Route de la Gavotte",
         "maxspeed": 50,
-        "id": -764817325,
+        "id": -502052229,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4223,14 +4311,15 @@
             43.3720995
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": 776650962,
+        "id": -825377234,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -4251,14 +4340,15 @@
             43.3775504
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": 1352210464,
+        "id": 807907107,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -4279,14 +4369,15 @@
             43.3773346
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": 71076662,
+        "id": -1088400487,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -4363,14 +4454,15 @@
             43.3731637
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -346390729,
+        "id": 405865429,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4415,14 +4507,15 @@
             43.3709284
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Louise Michel",
         "maxspeed": 40,
-        "id": 1827598989,
+        "id": 840189728,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -4503,14 +4596,15 @@
             43.3701962
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Première armée française Rhin-Danube",
         "maxspeed": 40,
-        "id": -1016176913,
+        "id": 1022771098,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -4603,14 +4697,15 @@
             43.3737889
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Allée du Petit Pont",
         "maxspeed": 50,
-        "id": -1960836101,
+        "id": 1443598597,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -4739,14 +4834,15 @@
             43.3728566
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": -273463592,
+        "id": -684741348,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4835,14 +4931,15 @@
             43.3738665
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Danson",
         "maxspeed": 50,
-        "id": 1625066792,
+        "id": -1969374308,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -4863,14 +4960,15 @@
             43.3687727
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Savournin",
         "maxspeed": 50,
-        "id": 1528847461,
+        "id": -1826499571,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -4903,14 +5001,15 @@
             43.3714962
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Favart",
         "maxspeed": 50,
-        "id": -1951599701,
+        "id": 1561233741,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -4947,14 +5046,15 @@
             43.3700588
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Issautier",
         "maxspeed": 50,
-        "id": 1638850160,
+        "id": -130813497,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -4983,14 +5083,15 @@
             43.3662796
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1875354238,
+        "id": -163193169,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5019,14 +5120,15 @@
             43.3711966
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 9578905,
+        "id": 865915544,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5043,14 +5145,15 @@
             43.3769508
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 592689847,
+        "id": 2118811575,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5071,14 +5174,15 @@
             43.3776437
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Marie-Dominique",
         "maxspeed": 50,
-        "id": 1838487438,
+        "id": 1864931814,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5119,14 +5223,15 @@
             43.3793977
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Drailles",
         "maxspeed": 50,
-        "id": -736620351,
+        "id": 72279341,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5167,14 +5272,15 @@
             43.3779813
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de la Martine",
         "maxspeed": 50,
-        "id": 294005439,
+        "id": 1795787489,
         "bridge": true,
         "type": 1,
         "oneway": false
@@ -5191,14 +5297,15 @@
             43.3729338
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": 1100538570,
+        "id": 710979002,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -5291,14 +5398,15 @@
             43.3711961
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse des Puces",
         "maxspeed": 50,
-        "id": 2055853594,
+        "id": 681496115,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5319,14 +5427,15 @@
             43.3765324
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": -526156123,
+        "id": -1069076115,
         "bridge": true,
         "type": 1,
         "oneway": true
@@ -5343,14 +5452,15 @@
             43.3764981
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": -1500506125,
+        "id": -473490056,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5371,14 +5481,15 @@
             43.3768612
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de la Martine",
         "maxspeed": 90,
-        "id": -435555872,
+        "id": 887841513,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -5459,14 +5570,15 @@
             43.3755257
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Petits Cadeneaux",
         "maxspeed": 50,
-        "id": 1014347940,
+        "id": 1757418061,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5519,14 +5631,15 @@
             43.3801573
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Antoine Casubolo",
         "maxspeed": 50,
-        "id": 488955347,
+        "id": 681824042,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5559,14 +5672,15 @@
             43.3680576
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Antoine Casubolo",
         "maxspeed": 50,
-        "id": 1666437923,
+        "id": 1326356335,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5587,14 +5701,15 @@
             43.3665354
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Commandant Robert Thollon",
         "maxspeed": 30,
-        "id": 1043553081,
+        "id": 1941279328,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5623,14 +5738,15 @@
             43.3687234
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Antoine Casubolo",
         "maxspeed": 50,
-        "id": 591490121,
+        "id": -208693650,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5651,14 +5767,15 @@
             43.3661404
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": -1723388026,
+        "id": -155722207,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -5739,14 +5856,15 @@
             43.3749964
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 398318842,
+        "id": -2066868958,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -5787,14 +5905,15 @@
             43.3749843
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -2127094879,
+        "id": -1167970989,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -5835,14 +5954,15 @@
             43.3795298
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": -1711150507,
+        "id": 1204782477,
         "bridge": false,
         "type": 2,
         "oneway": true
@@ -5875,14 +5995,15 @@
             43.3769027
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 1881405812,
+        "id": 389698222,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5899,14 +6020,15 @@
             43.3755497
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 90,
-        "id": 1792151631,
+        "id": 890715566,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -5927,14 +6049,15 @@
             43.376823
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": 442894943,
+        "id": -1580230432,
         "bridge": true,
         "type": 1,
         "oneway": false
@@ -5951,14 +6074,15 @@
             43.3742439
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -894692994,
+        "id": 1726207481,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -5991,14 +6115,15 @@
             43.3773346
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": -224451064,
+        "id": 135145696,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -6023,14 +6148,15 @@
             43.3774889
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Moulin du Diable",
         "maxspeed": 50,
-        "id": -1781532591,
+        "id": -746818649,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6067,14 +6193,15 @@
             43.3791691
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Ancienne Route de la Gavotte",
         "maxspeed": 50,
-        "id": 494836807,
+        "id": -107772500,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -6115,14 +6242,15 @@
             43.3806209
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Montée de la Belle France",
         "maxspeed": 50,
-        "id": 230118503,
+        "id": 2088423831,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6227,14 +6355,15 @@
             43.3808636
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Planier",
         "maxspeed": 50,
-        "id": -1163516964,
+        "id": 602493959,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6255,14 +6384,15 @@
             43.3709373
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Marius Brémond",
         "maxspeed": 50,
-        "id": 928883825,
+        "id": 778955693,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6571,14 +6701,15 @@
             43.3825891
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -846860231,
+        "id": -670232025,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6595,14 +6726,15 @@
             43.3737643
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue du Docteur Paul Paret",
         "maxspeed": 50,
-        "id": -361618213,
+        "id": -1878001326,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -6619,14 +6751,15 @@
             43.3718075
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 50,
-        "id": -848688598,
+        "id": 1026431606,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -6679,14 +6812,15 @@
             43.3737732
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Minerve",
         "maxspeed": 50,
-        "id": -334747719,
+        "id": -469753836,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6711,14 +6845,15 @@
             43.3675885
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Roquefavour",
         "maxspeed": 50,
-        "id": 62169924,
+        "id": 1936069799,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6779,14 +6914,15 @@
             43.3689876
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Pins",
         "maxspeed": 30,
-        "id": -10677049,
+        "id": 632067951,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6931,14 +7067,15 @@
             43.3723755
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Prospéri",
         "maxspeed": 50,
-        "id": 1067966812,
+        "id": 1662525482,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -6983,14 +7120,15 @@
             43.3797454
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 1334193627,
+        "id": 1429767520,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7023,14 +7161,15 @@
             43.3757096
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Bourrely",
         "maxspeed": 90,
-        "id": 794119392,
+        "id": 1655625307,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -7107,14 +7246,15 @@
             43.3774889
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": 730287432,
+        "id": -62486023,
         "bridge": false,
         "type": 2,
         "oneway": true
@@ -7147,14 +7287,15 @@
             43.3771909
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": -798641260,
+        "id": -241968565,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7255,14 +7396,15 @@
             43.3747973
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 2063249630,
+        "id": 653464143,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7279,14 +7421,15 @@
             43.3684151
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 1333863141,
+        "id": 1864749794,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7315,14 +7458,15 @@
             43.3718675
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -969652790,
+        "id": 774655639,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7379,14 +7523,15 @@
             43.3698665
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Jórgi Reboul",
         "maxspeed": 30,
-        "id": 134981998,
+        "id": -845870144,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7403,14 +7548,15 @@
             43.371905
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de l'Octroi",
         "maxspeed": 50,
-        "id": 726017923,
+        "id": -1952023308,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7459,14 +7605,15 @@
             43.3743497
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Collet",
         "maxspeed": 50,
-        "id": 2130995534,
+        "id": 1573332968,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7499,14 +7646,15 @@
             43.3742145
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Collet",
         "maxspeed": 50,
-        "id": -427772257,
+        "id": -2035711184,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7539,14 +7687,15 @@
             43.3743497
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Collet",
         "maxspeed": 50,
-        "id": -1249234646,
+        "id": 685884915,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7583,14 +7732,15 @@
             43.3744314
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1046992059,
+        "id": 1721614633,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7655,14 +7805,15 @@
             43.3747482
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 850809570,
+        "id": 841345848,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7687,14 +7838,15 @@
             43.3738237
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -605813439,
+        "id": -1908453598,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7735,14 +7887,15 @@
             43.3740067
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -139532696,
+        "id": -543457101,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7795,14 +7948,15 @@
             43.3739757
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de l'Octroi",
         "maxspeed": 50,
-        "id": -864233518,
+        "id": 1340987871,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7835,14 +7989,15 @@
             43.3743424
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard des Pinsons",
         "maxspeed": 50,
-        "id": 803614258,
+        "id": -376449848,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7859,14 +8014,15 @@
             43.3735973
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1629409306,
+        "id": -400808983,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7891,14 +8047,15 @@
             43.3749868
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 2027202542,
+        "id": 1968056250,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7931,14 +8088,15 @@
             43.374303
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 455122173,
+        "id": -1082027777,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -7971,14 +8129,15 @@
             43.3749967
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de la Savine",
         "maxspeed": 50,
-        "id": -1898730075,
+        "id": -1306242502,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -7999,14 +8158,15 @@
             43.3678553
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": 1463987278,
+        "id": -762223441,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8027,14 +8187,15 @@
             43.3676005
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2105751967,
+        "id": 1414961088,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8059,14 +8220,15 @@
             43.3677634
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": 26462642,
+        "id": -1460730412,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8087,14 +8249,15 @@
             43.3677634
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1049486078,
+        "id": -553282866,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8115,14 +8278,15 @@
             43.3801598
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -113959263,
+        "id": 351332966,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8159,14 +8323,15 @@
             43.3802041
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Val Sec",
         "maxspeed": 50,
-        "id": -1068818517,
+        "id": -897588989,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8207,14 +8372,15 @@
             43.380099
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Nungesser et Coli",
         "maxspeed": 50,
-        "id": 1734850536,
+        "id": 107787973,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8259,14 +8425,15 @@
             43.3754536
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 791749701,
+        "id": -1861989689,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8287,14 +8454,15 @@
             43.3794765
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1204788122,
+        "id": -1845024832,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8311,14 +8479,15 @@
             43.3797016
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1003511347,
+        "id": 482978197,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8335,14 +8504,15 @@
             43.3795756
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Domaine des Oliviers",
         "maxspeed": 50,
-        "id": -1337168061,
+        "id": -1692266163,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8387,14 +8557,15 @@
             43.3793105
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1012987662,
+        "id": -125530511,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8419,14 +8590,15 @@
             43.3797619
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1248539178,
+        "id": 2103188182,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -8451,14 +8623,15 @@
             43.37019
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Frèze",
         "maxspeed": 50,
-        "id": -273382616,
+        "id": 186518321,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8475,14 +8648,15 @@
             43.3718303
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Frèze",
         "maxspeed": 50,
-        "id": -1358105962,
+        "id": -737206102,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8515,14 +8689,15 @@
             43.371112
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2018577065,
+        "id": -1443790737,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8555,14 +8730,15 @@
             43.371112
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -1279879244,
+        "id": -997199977,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -8639,14 +8815,15 @@
             43.3673705
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -79997598,
+        "id": -1945081130,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -8763,14 +8940,15 @@
             43.3527373
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -181708916,
+        "id": 1909584681,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -8803,14 +8981,15 @@
             43.3795144
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -1008426529,
+        "id": -83787445,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -8979,14 +9158,15 @@
             43.3699173
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 797179167,
+        "id": -992864037,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9011,14 +9191,15 @@
             43.3791256
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -1703756804,
+        "id": -349779522,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -9075,14 +9256,15 @@
             43.3775076
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 83403435,
+        "id": 1018041270,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -9127,14 +9309,15 @@
             43.381721
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -1544915599,
+        "id": 1794475823,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -9195,14 +9378,15 @@
             43.3781293
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Isidore",
         "maxspeed": 50,
-        "id": -552135261,
+        "id": 1444006715,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9231,14 +9415,15 @@
             43.3690469
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -638038215,
+        "id": 929939670,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9263,14 +9448,15 @@
             43.3728942
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1144986364,
+        "id": -427075644,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9311,14 +9497,15 @@
             43.3720553
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -392744944,
+        "id": 949324914,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9379,14 +9566,15 @@
             43.3722015
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Ruves",
         "maxspeed": 50,
-        "id": 1206145174,
+        "id": -1026412017,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9403,14 +9591,15 @@
             43.3718167
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Martin",
         "maxspeed": 50,
-        "id": -1903571,
+        "id": -113436184,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9431,14 +9620,15 @@
             43.3698782
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 343851363,
+        "id": -914062427,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9471,14 +9661,15 @@
             43.372254
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue des Trois Moulins",
         "maxspeed": 50,
-        "id": -2097039796,
+        "id": 140518445,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9563,14 +9754,15 @@
             43.3752568
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": -1088111316,
+        "id": 187771285,
         "bridge": true,
         "type": 3,
         "oneway": true
@@ -9587,14 +9779,15 @@
             43.3697053
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -1465571980,
+        "id": -1681368803,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9619,14 +9812,15 @@
             43.3683443
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 132122742,
+        "id": -1164555613,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9647,14 +9841,15 @@
             43.367602
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": 288667073,
+        "id": -1989095444,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9671,14 +9866,15 @@
             43.3675241
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Issauthier",
         "maxspeed": 50,
-        "id": -451618107,
+        "id": 1781007746,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9699,14 +9895,15 @@
             43.3774296
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard des Amandiers",
         "maxspeed": 50,
-        "id": 1671054401,
+        "id": -1682557801,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9727,14 +9924,15 @@
             43.3764627
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue des Joyeux",
         "maxspeed": 50,
-        "id": -1291101077,
+        "id": -806802296,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9775,14 +9973,15 @@
             43.3794765
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Val Sec",
         "maxspeed": 50,
-        "id": 199602596,
+        "id": -1352595539,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -9823,14 +10022,15 @@
             43.380326
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Berthelot",
         "maxspeed": 50,
-        "id": -90154776,
+        "id": -1704008492,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9859,14 +10059,15 @@
             43.3765743
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Caruso",
         "maxspeed": 50,
-        "id": 734470654,
+        "id": -1580966939,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9891,14 +10092,15 @@
             43.3761927
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Guynemer",
         "maxspeed": 50,
-        "id": -1833967225,
+        "id": -1236472651,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9935,14 +10137,15 @@
             43.3757599
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Pasteur",
         "maxspeed": 50,
-        "id": 887741211,
+        "id": -1274911444,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9959,14 +10162,15 @@
             43.3762316
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Matteoti",
         "maxspeed": 50,
-        "id": 2067634317,
+        "id": 225005932,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -9983,14 +10187,15 @@
             43.3754207
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Tardy",
         "maxspeed": 50,
-        "id": 1890712684,
+        "id": -44387904,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10039,14 +10244,15 @@
             43.3798326
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Fernandel",
         "maxspeed": 50,
-        "id": 1120689486,
+        "id": 76753256,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10139,14 +10345,15 @@
             43.3752208
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Escartefigue",
         "maxspeed": 50,
-        "id": 711371066,
+        "id": -116984413,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10211,14 +10418,15 @@
             43.376025
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Fanny",
         "maxspeed": 50,
-        "id": -1877128959,
+        "id": -1190591390,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10243,14 +10451,15 @@
             43.3756039
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Jean de Florette",
         "maxspeed": 50,
-        "id": 1645009056,
+        "id": 355101620,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10279,14 +10488,15 @@
             43.3752109
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse du Terminus",
         "maxspeed": 50,
-        "id": 243640855,
+        "id": 1315943769,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10311,14 +10521,15 @@
             43.3694972
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 201290374,
+        "id": -1892091147,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -10343,14 +10554,15 @@
             43.3727167
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 724095850,
+        "id": -1560368091,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -10379,14 +10591,15 @@
             43.3720507
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de l'Octroi",
         "maxspeed": 50,
-        "id": -647112012,
+        "id": 78416490,
         "bridge": true,
         "type": 1,
         "oneway": false
@@ -10403,14 +10616,15 @@
             43.3743593
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Courtes",
         "maxspeed": 50,
-        "id": 303850125,
+        "id": -1834539882,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10475,14 +10689,15 @@
             43.3721701
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Monchetti",
         "maxspeed": 50,
-        "id": 11661493,
+        "id": -1038872275,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10503,14 +10718,15 @@
             43.3702487
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de la Savine",
         "maxspeed": 50,
-        "id": 354726993,
+        "id": 1145133904,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10611,14 +10827,15 @@
             43.3660723
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de la Savine",
         "maxspeed": 50,
-        "id": -243525591,
+        "id": 610963423,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -10639,14 +10856,15 @@
             43.3681458
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de l'Église",
         "maxspeed": 50,
-        "id": 95238364,
+        "id": 1524770838,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10707,14 +10925,15 @@
             43.3666446
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Frèze",
         "maxspeed": 50,
-        "id": -173030402,
+        "id": 1360470955,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10731,14 +10950,15 @@
             43.3714544
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 622557573,
+        "id": 1629355421,
         "bridge": true,
         "type": 3,
         "oneway": true
@@ -10755,14 +10975,15 @@
             43.3697515
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 1666420103,
+        "id": 1558494367,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -10779,14 +11000,15 @@
             43.3683844
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 631592575,
+        "id": 947989408,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -10827,14 +11049,15 @@
             43.3732655
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Merlin",
         "maxspeed": 50,
-        "id": -776209018,
+        "id": -1759473468,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10859,14 +11082,15 @@
             43.3688584
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Falcot",
         "maxspeed": 30,
-        "id": 1681409629,
+        "id": -1771884059,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10903,14 +11127,15 @@
             43.3720119
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 544143742,
+        "id": 1252612548,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -10967,14 +11192,15 @@
             43.3675081
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Panisse",
         "maxspeed": 50,
-        "id": 2140393379,
+        "id": -2076653174,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11031,14 +11257,15 @@
             43.3762707
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Topaze",
         "maxspeed": 50,
-        "id": 2099842518,
+        "id": 1076405210,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11059,14 +11286,15 @@
             43.3760952
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Domaine du Val de Pins",
         "maxspeed": 50,
-        "id": 2128059260,
+        "id": 1386867834,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11191,14 +11419,15 @@
             43.3802036
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 161500709,
+        "id": 1584342023,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11247,14 +11476,15 @@
             43.3790331
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -878219647,
+        "id": -1948583174,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11311,14 +11541,15 @@
             43.3790852
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -80236189,
+        "id": -139462777,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11347,14 +11578,15 @@
             43.3801809
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2136038318,
+        "id": -493076052,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11387,14 +11619,15 @@
             43.3795067
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 329138876,
+        "id": 572141602,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11435,14 +11668,15 @@
             43.3781034
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Pinatel",
         "maxspeed": 50,
-        "id": -1141544029,
+        "id": -389241081,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11463,14 +11697,15 @@
             43.3773346
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Montée de l'Église",
         "maxspeed": 50,
-        "id": 1373226073,
+        "id": 336564312,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11495,14 +11730,15 @@
             43.3726115
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Melchion",
         "maxspeed": 50,
-        "id": -1661533042,
+        "id": 1435906634,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11519,14 +11755,15 @@
             43.3720804
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Magne",
         "maxspeed": 50,
-        "id": 1926943996,
+        "id": -142675964,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11547,14 +11784,15 @@
             43.3681424
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Montée Graille",
         "maxspeed": 50,
-        "id": 1424661967,
+        "id": -2046915447,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11571,14 +11809,15 @@
             43.371551
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Allée de la Jougarelle",
         "maxspeed": 50,
-        "id": -528036592,
+        "id": 1986614164,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11683,14 +11922,15 @@
             43.3679469
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Mimet",
         "maxspeed": 50,
-        "id": -880836589,
+        "id": 840819805,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -11727,14 +11967,15 @@
             43.3767794
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": 1237719644,
+        "id": 582715572,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11823,14 +12064,15 @@
             43.3737619
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": 345388100,
+        "id": -1843556309,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11863,14 +12105,15 @@
             43.3710644
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 513257278,
+        "id": -689987218,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11891,14 +12134,15 @@
             43.3727167
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 466429464,
+        "id": -220371676,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -11923,14 +12167,15 @@
             43.3729821
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Montée Graille",
         "maxspeed": 50,
-        "id": 686005908,
+        "id": 636635288,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -11955,14 +12200,15 @@
             43.37196
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 810973319,
+        "id": -1488963679,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12027,14 +12273,15 @@
             43.3685122
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1789790177,
+        "id": 256922996,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12051,14 +12298,15 @@
             43.3688031
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Falcot",
         "maxspeed": 50,
-        "id": -1399520755,
+        "id": -1144096821,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12087,14 +12335,15 @@
             43.3716882
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -117987381,
+        "id": -1270232058,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12115,14 +12364,15 @@
             43.3782067
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue François Mitterrand",
         "maxspeed": 50,
-        "id": 311950984,
+        "id": 1197984162,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12495,14 +12745,15 @@
             43.3990201
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de Odde",
         "maxspeed": 50,
-        "id": 40212946,
+        "id": 1606132332,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12543,14 +12794,15 @@
             43.3780403
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Commandeur",
         "maxspeed": 50,
-        "id": -1425739756,
+        "id": -1514363455,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12591,14 +12843,15 @@
             43.3706075
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -383660670,
+        "id": 808674989,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -12719,14 +12972,15 @@
             43.3780249
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Tardy",
         "maxspeed": 50,
-        "id": -197739047,
+        "id": -742563014,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12759,14 +13013,15 @@
             43.3784389
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Val Sec",
         "maxspeed": 50,
-        "id": 121590577,
+        "id": -163533122,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12855,14 +13110,15 @@
             43.380099
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Moulin du Diable",
         "maxspeed": 50,
-        "id": -631132496,
+        "id": 698508515,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12963,14 +13219,15 @@
             43.3784389
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Tardy",
         "maxspeed": 50,
-        "id": -924610592,
+        "id": -1886760226,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -12987,14 +13244,15 @@
             43.3788465
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de la Martine",
         "maxspeed": 50,
-        "id": 1838653336,
+        "id": -908474779,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13039,14 +13297,15 @@
             43.3729107
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Place des Baumes",
         "maxspeed": 50,
-        "id": -878140741,
+        "id": 379999043,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13067,14 +13326,15 @@
             43.3738665
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1543075878,
+        "id": 1173114502,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13091,14 +13351,15 @@
             43.3737732
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de l'Église Saint-Antoine",
         "maxspeed": 50,
-        "id": -468376567,
+        "id": -1335762878,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13155,14 +13416,15 @@
             43.3714453
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Vert Clos",
         "maxspeed": 50,
-        "id": -80830101,
+        "id": 1005046805,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13207,14 +13469,15 @@
             43.3751822
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Perrin",
         "maxspeed": 50,
-        "id": -1348847322,
+        "id": 794177786,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13287,14 +13550,15 @@
             43.3735637
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard de Casablanca",
         "maxspeed": 50,
-        "id": 175989338,
+        "id": 1618895546,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13335,14 +13599,15 @@
             43.3721668
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Marjolaine",
         "maxspeed": 50,
-        "id": 1485978449,
+        "id": 440106291,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13375,14 +13640,15 @@
             43.3733797
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1228472534,
+        "id": 1507030445,
         "bridge": true,
         "type": 1,
         "oneway": false
@@ -13399,14 +13665,15 @@
             43.3737709
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Autoroute du Soleil",
         "maxspeed": 90,
-        "id": 1501480118,
+        "id": -602860678,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -13499,14 +13766,15 @@
             43.3780249
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": 1958868329,
+        "id": 131086956,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -13535,14 +13803,15 @@
             43.3797803
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Escaliers de la Plaine Granger",
         "maxspeed": 50,
-        "id": -65181736,
+        "id": 212534519,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13559,14 +13828,15 @@
             43.3724519
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue du Droulet",
         "maxspeed": 50,
-        "id": 920094252,
+        "id": 358904897,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13603,14 +13873,15 @@
             43.3751807
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Léon Berger",
         "maxspeed": 50,
-        "id": -1808924935,
+        "id": -139370907,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -13627,14 +13898,15 @@
             43.3725429
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Minerve",
         "maxspeed": 50,
-        "id": -584604747,
+        "id": 1952698383,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13691,14 +13963,15 @@
             43.3675925
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -921666737,
+        "id": -1757057268,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13715,14 +13988,15 @@
             43.3675885
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 1713036788,
+        "id": -1821769017,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13743,14 +14017,15 @@
             43.367642
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1349401314,
+        "id": 430081849,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13771,14 +14046,15 @@
             43.3670934
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2000897751,
+        "id": 290897282,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13803,14 +14079,15 @@
             43.3672978
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Palanque",
         "maxspeed": 50,
-        "id": 1845518558,
+        "id": -1095196573,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13851,14 +14128,15 @@
             43.3760014
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue du Puits",
         "maxspeed": 50,
-        "id": 2069308051,
+        "id": -213899165,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13879,14 +14157,15 @@
             43.3765644
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Supérieure",
         "maxspeed": 50,
-        "id": -1883404242,
+        "id": 2022306130,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13915,14 +14194,15 @@
             43.3772265
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1498520903,
+        "id": -1979790901,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -13955,14 +14235,15 @@
             43.3787201
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de la Berge du Canal",
         "maxspeed": 50,
-        "id": -571363733,
+        "id": 1847958814,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14007,14 +14288,15 @@
             43.3776912
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse de l'Aire",
         "maxspeed": 50,
-        "id": 1440601305,
+        "id": 1832330039,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14031,14 +14313,15 @@
             43.3767083
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de Romarin",
         "maxspeed": 50,
-        "id": 355224822,
+        "id": 909019098,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14055,14 +14338,15 @@
             43.3764941
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse du Jasmin",
         "maxspeed": 50,
-        "id": 1944529971,
+        "id": 935452652,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14103,14 +14387,15 @@
             43.3764542
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Peyrards",
         "maxspeed": 50,
-        "id": -439596433,
+        "id": -1037969461,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14167,14 +14452,15 @@
             43.3718219
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2060089433,
+        "id": -79792488,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14239,14 +14525,15 @@
             43.3747284
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": -628968537,
+        "id": -635984734,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14391,14 +14678,15 @@
             43.3681458
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue de la Pagode",
         "maxspeed": 50,
-        "id": 77505136,
+        "id": -1054914393,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14423,14 +14711,15 @@
             43.3678008
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Béranger",
         "maxspeed": 50,
-        "id": 1120920664,
+        "id": 2029232026,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14455,14 +14744,15 @@
             43.3697225
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse Merlin",
         "maxspeed": 50,
-        "id": 867378557,
+        "id": 2075450448,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14491,14 +14781,15 @@
             43.3677851
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de l'Américaine",
         "maxspeed": 50,
-        "id": 1237436162,
+        "id": 699312294,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -14519,14 +14810,15 @@
             43.3710729
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de l'Américaine",
         "maxspeed": 50,
-        "id": 1002978203,
+        "id": 950145496,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14543,14 +14835,15 @@
             43.3707835
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Dallon",
         "maxspeed": 50,
-        "id": 335143502,
+        "id": -818704632,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14583,14 +14876,15 @@
             43.3754528
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Mayans",
         "maxspeed": 50,
-        "id": 1214706196,
+        "id": 1960244510,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14767,14 +15061,15 @@
             43.3718219
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Montée du Mont d'Or",
         "maxspeed": 50,
-        "id": 1604560121,
+        "id": -1489563566,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14911,14 +15206,15 @@
             43.3803548
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 823441076,
+        "id": 1977546438,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14967,14 +15263,15 @@
             43.3799268
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Ruves",
         "maxspeed": 50,
-        "id": 653587201,
+        "id": 2047585519,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -14991,14 +15288,15 @@
             43.3717874
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 211726457,
+        "id": -2002130780,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15023,14 +15321,15 @@
             43.378653
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse de la Pinède",
         "maxspeed": 50,
-        "id": -1746249678,
+        "id": 172787615,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15047,14 +15346,15 @@
             43.3742355
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Allée des Vignes",
         "maxspeed": 50,
-        "id": -1470226584,
+        "id": 2012050314,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15071,14 +15371,15 @@
             43.3709351
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 399565619,
+        "id": -921063333,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15095,14 +15396,15 @@
             43.3789997
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1910613802,
+        "id": 354221117,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15123,14 +15425,15 @@
             43.3791834
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1567510364,
+        "id": -1402808417,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15163,14 +15466,15 @@
             43.3766329
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -95429050,
+        "id": -1591150910,
         "bridge": true,
         "type": 1,
         "oneway": false
@@ -15187,14 +15491,15 @@
             43.379008
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Lotissement les Marronniers",
         "maxspeed": 50,
-        "id": 980740238,
+        "id": 876708529,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15235,14 +15540,15 @@
             43.3777245
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Résidence La Martine",
         "maxspeed": 30,
-        "id": -607658592,
+        "id": -1288026290,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15259,14 +15565,15 @@
             43.3748906
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Résidence La Martine",
         "maxspeed": 30,
-        "id": 1228165047,
+        "id": 94388370,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15287,14 +15594,15 @@
             43.3748772
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Résidence La Martine",
         "maxspeed": 30,
-        "id": -618435889,
+        "id": -1669013671,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15335,14 +15643,15 @@
             43.3748906
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse du Romarin",
         "maxspeed": 50,
-        "id": 707127847,
+        "id": 855125871,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15359,14 +15668,15 @@
             43.3764606
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -402114826,
+        "id": -1779000273,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15383,14 +15693,15 @@
             43.367803
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": 1361823307,
+        "id": -778764155,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15415,14 +15726,15 @@
             43.3679649
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": 166576923,
+        "id": 2014177251,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15455,14 +15767,15 @@
             43.3692735
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1504918041,
+        "id": 533206223,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15495,14 +15808,15 @@
             43.3678963
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -512917596,
+        "id": 446780540,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15519,14 +15833,15 @@
             43.367024
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 638970543,
+        "id": 660197744,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15623,14 +15938,15 @@
             43.3662999
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -659107695,
+        "id": -1022507032,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15667,14 +15983,15 @@
             43.3684222
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de la Barre",
         "maxspeed": 50,
-        "id": 37554167,
+        "id": -793031027,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15695,14 +16012,15 @@
             43.368842
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de la Barre",
         "maxspeed": 50,
-        "id": -375371578,
+        "id": -365809906,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15783,14 +16101,15 @@
             43.3688135
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Anne-Marie",
         "maxspeed": 50,
-        "id": -1985683091,
+        "id": -1244062117,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15827,14 +16146,15 @@
             43.3786234
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -1911406844,
+        "id": -808096220,
         "bridge": true,
         "type": 1,
         "oneway": true
@@ -15851,14 +16171,15 @@
             43.3692896
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 35249546,
+        "id": 159391262,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15895,14 +16216,15 @@
             43.3732681
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Pigala",
         "maxspeed": 50,
-        "id": 1352749051,
+        "id": 1302974264,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -15919,14 +16241,15 @@
             43.3729823
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 781388998,
+        "id": 1608975792,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15967,14 +16290,15 @@
             43.3733677
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": 344186229,
+        "id": 35123436,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -15991,14 +16315,15 @@
             43.3692999
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 897979691,
+        "id": 91217362,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -16015,14 +16340,15 @@
             43.3693701
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 30,
-        "id": 325093362,
+        "id": 2077223046,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -16071,14 +16397,15 @@
             43.3719456
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 265054125,
+        "id": -2114623067,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16103,14 +16430,15 @@
             43.3747673
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": -173060401,
+        "id": 131557685,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16127,14 +16455,15 @@
             43.374952
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse Béranger",
         "maxspeed": 50,
-        "id": -1413437013,
+        "id": -1466680647,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -16151,14 +16480,15 @@
             43.368155
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": -1825471066,
+        "id": 216016937,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -16183,14 +16513,15 @@
             43.3774671
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -1263714417,
+        "id": -1910367755,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16211,14 +16542,15 @@
             43.3766874
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": 1348360274,
+        "id": 1111530874,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16255,14 +16587,15 @@
             43.3774671
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 799737446,
+        "id": 1109719667,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16315,14 +16648,15 @@
             43.3773935
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -935364040,
+        "id": -427914450,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -16499,14 +16833,15 @@
             43.3674142
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse de la Batterie",
         "maxspeed": 50,
-        "id": 1635995483,
+        "id": -97180747,
         "bridge": false,
         "type": 2,
         "oneway": false
@@ -16587,14 +16922,15 @@
             43.3801405
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": 186407471,
+        "id": 1329494034,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -16719,14 +17055,15 @@
             43.3789655
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -1221924473,
+        "id": -1176484178,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16787,14 +17124,15 @@
             43.3679649
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": -1527330986,
+        "id": -1087624799,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -16875,14 +17213,15 @@
             43.367002
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Jenny Hélia",
         "maxspeed": 50,
-        "id": -407066116,
+        "id": -43125141,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16915,14 +17254,15 @@
             43.36686
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 1290697248,
+        "id": 853603160,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16947,14 +17287,15 @@
             43.3673046
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -610048165,
+        "id": 194394526,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -16979,14 +17320,15 @@
             43.3670525
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -309400117,
+        "id": -1003825549,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17007,14 +17349,15 @@
             43.376823
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 2101496716,
+        "id": -1943921596,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17107,14 +17450,15 @@
             43.371256
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 370171705,
+        "id": -937629913,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17143,14 +17487,15 @@
             43.3669164
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 573647965,
+        "id": -2007862616,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17179,14 +17524,15 @@
             43.3664938
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": 892013112,
+        "id": 375858533,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17211,14 +17557,15 @@
             43.3772348
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 412973736,
+        "id": -1528862191,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17235,14 +17582,15 @@
             43.3668206
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -2008397339,
+        "id": 1595344625,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17279,14 +17627,15 @@
             43.3766625
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 30,
-        "id": 1988300682,
+        "id": -52352512,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17307,14 +17656,15 @@
             43.3769855
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": -1676710588,
+        "id": 2103453302,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17335,14 +17685,15 @@
             43.3720507
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": -319361961,
+        "id": 1309039022,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17363,14 +17714,15 @@
             43.372259
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rue Jórgi Reboul",
         "maxspeed": 30,
-        "id": -2018286028,
+        "id": -1506033703,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17447,14 +17799,15 @@
             43.3687234
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 1709497605,
+        "id": -85924408,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17471,14 +17824,15 @@
             43.3673046
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": 1615581169,
+        "id": -358177494,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17511,14 +17865,15 @@
             43.3677425
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -927621059,
+        "id": 1093857652,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17543,14 +17898,15 @@
             43.3663563
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 594587051,
+        "id": -1377907915,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17707,14 +18063,15 @@
             43.3667171
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": 519304382,
+        "id": -2057880360,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17731,14 +18088,15 @@
             43.367957
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": 2071537751,
+        "id": 753908091,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17755,14 +18113,15 @@
             43.3680775
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": -1717136242,
+        "id": 877830141,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17779,14 +18138,15 @@
             43.367602
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -1329063696,
+        "id": 1242554255,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17823,14 +18183,15 @@
             43.3756437
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 610543900,
+        "id": -2078521384,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17903,14 +18264,15 @@
             43.3710495
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 1847434928,
+        "id": -1133430473,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17931,14 +18293,15 @@
             43.3681776
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de la Martine",
         "maxspeed": 50,
-        "id": -1271050390,
+        "id": -998067327,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -17963,14 +18326,15 @@
             43.3755539
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de la Martine",
         "maxspeed": 50,
-        "id": 1586913,
+        "id": 1816690750,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -17995,14 +18359,15 @@
             43.3755257
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Impasse du Commandeur",
         "maxspeed": 50,
-        "id": -40091011,
+        "id": -2043320368,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18023,14 +18388,15 @@
             43.3699631
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1844842094,
+        "id": 1708019407,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18059,14 +18425,15 @@
             43.3707033
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin du Vallon des Pins",
         "maxspeed": 50,
-        "id": 1748847878,
+        "id": -1990863411,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18119,14 +18486,15 @@
             43.3701532
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 2126212196,
+        "id": 28213443,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18143,14 +18511,15 @@
             43.3791653
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1955112805,
+        "id": -1525887931,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18167,14 +18536,15 @@
             43.373321
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 2089671760,
+        "id": -710576882,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18203,14 +18573,15 @@
             43.3776101
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -833025257,
+        "id": -991956221,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18243,14 +18614,15 @@
             43.3729072
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -5429810,
+        "id": 161262673,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18271,14 +18643,15 @@
             43.3777885
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 30,
-        "id": -2038872430,
+        "id": 866014987,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18307,14 +18680,15 @@
             43.3737256
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 130,
-        "id": -837715594,
+        "id": -84135944,
         "bridge": false,
         "type": 3,
         "oneway": true
@@ -18399,14 +18773,15 @@
             43.378102
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Traverse du Casino",
         "maxspeed": 50,
-        "id": 598714323,
+        "id": 344662713,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18427,14 +18802,15 @@
             43.3763734
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Allée des Anciens Combattants",
         "maxspeed": 50,
-        "id": 1773078189,
+        "id": 1268720236,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18471,14 +18847,15 @@
             43.3737393
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -1039674147,
+        "id": 505009704,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18519,14 +18896,15 @@
             43.367416
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -1482763027,
+        "id": 47512515,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18543,14 +18921,15 @@
             43.3676005
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": -319050254,
+        "id": -503939550,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18567,14 +18946,15 @@
             43.3786234
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Pierre Dramard",
         "maxspeed": 50,
-        "id": -578829430,
+        "id": 1364747456,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18607,14 +18987,15 @@
             43.3792235
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Rond-Point Ibrahim Ali",
         "maxspeed": 50,
-        "id": -565033760,
+        "id": 1819567638,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18631,14 +19012,15 @@
             43.3678782
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 361026216,
+        "id": -2033325021,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18659,14 +19041,15 @@
             43.3784321
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue de Saint-Antoine",
         "maxspeed": 50,
-        "id": 644421217,
+        "id": -1522771426,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18691,14 +19074,15 @@
             43.3789655
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 40,
-        "id": 621217333,
+        "id": -1221916468,
         "bridge": false,
         "type": 4,
         "oneway": false
@@ -18763,14 +19147,15 @@
             43.3766255
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin des Tuileries",
         "maxspeed": 50,
-        "id": 1015461559,
+        "id": -1058307183,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18791,14 +19176,15 @@
             43.371905
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Avenue Antoine Casubolo",
         "maxspeed": 30,
-        "id": -698989101,
+        "id": -1192046901,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18823,14 +19209,15 @@
             43.3687234
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": -2123940143,
+        "id": -554164789,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18863,14 +19250,15 @@
             43.371803
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 1769719559,
+        "id": -1081614224,
         "bridge": true,
         "type": 1,
         "oneway": true
@@ -18887,14 +19275,15 @@
             43.3731614
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 1996356654,
+        "id": -1275890094,
         "bridge": true,
         "type": 1,
         "oneway": true
@@ -18911,14 +19300,15 @@
             43.3731229
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": -803752473,
+        "id": 473218249,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -18947,14 +19337,15 @@
             43.3731388
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": -1643452079,
+        "id": -82899505,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18971,14 +19362,15 @@
             43.3686662
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard du Bosphore",
         "maxspeed": 50,
-        "id": 1214364742,
+        "id": -839798777,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -18999,14 +19391,15 @@
             43.3689239
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin de Saint-Antoine à Saint-Joseph",
         "maxspeed": 50,
-        "id": -1007217978,
+        "id": -2002205150,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -19027,14 +19420,15 @@
             43.3674142
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": -1489802193,
+        "id": -656861921,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -19055,14 +19449,15 @@
             43.3676399
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": 355838081,
+        "id": 814397281,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -19083,14 +19478,15 @@
             43.3678782
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Chemin rural du Vallon des Tuves",
         "maxspeed": 50,
-        "id": -1514724738,
+        "id": -1814495644,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -19111,14 +19507,15 @@
             43.3677425
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Boulevard Henri Barnier",
         "maxspeed": 50,
-        "id": 1041628695,
+        "id": -250598059,
         "bridge": false,
         "type": 1,
         "oneway": true
@@ -19143,14 +19540,15 @@
             43.373478
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
       "properties": {
         "name": "Unnamed unit road",
         "maxspeed": 50,
-        "id": 759987292,
+        "id": -1431951446,
         "bridge": false,
         "type": 1,
         "oneway": false
@@ -19175,7 +19573,8 @@
             43.3676202
           ]
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19183,7 +19582,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": -1583537883,
+        "id": 2132030736,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19194,7 +19593,8 @@
           5.3652773,
           43.3724272
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19202,7 +19602,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": -641779088,
+        "id": -784519424,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19213,7 +19613,8 @@
           5.3464077,
           43.3818818
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19221,7 +19622,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": 312465588,
+        "id": -932216800,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19232,7 +19633,8 @@
           5.3460723,
           43.3822271
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19240,7 +19642,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": -506665034,
+        "id": 1547391556,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19251,7 +19653,8 @@
           5.3652054,
           43.3724479
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19259,7 +19662,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": -389681818,
+        "id": 382184137,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19270,7 +19673,8 @@
           5.3565678,
           43.3774011
         ]
-      }
+      },
+      "type": "feature"
     },
     {
       "type": "Feature",
@@ -19278,7 +19682,7 @@
         "redlighttime": 30,
         "name": "Unnamed unit road",
         "maxspeed": 0,
-        "id": -266883531,
+        "id": 133543093,
         "bridge": false,
         "type": 5,
         "oneway": false
@@ -19289,7 +19693,8 @@
           5.3566023,
           43.3778312
         ]
-      }
+      },
+      "type": "feature"
     }
   ]
 }

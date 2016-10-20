@@ -3,7 +3,8 @@
  */
 app.models.mapDetailsModel = Backbone.Model.extend({
 
-    getCoordinates: function(){
+
+    getGPSCoordinates: function(){
         if (this.attributes.geometry.coordinates.length == 1){
             return this.attributes.geometry.coordinates[0];
         } else {
@@ -37,6 +38,22 @@ app.models.mapDetailsModel = Backbone.Model.extend({
 
     getRedLightTimeProperties: function(){
         return this.attributes.properties.redLightTime;
+    },
+    parse: function(response){
+        var newResponse = {};
+        newResponse.geometry = new Backbone.Model(response.geometry);
+        _.keys(response.properties).forEach(function(key){
+            newResponse[key] = response.properties[key];
+        });
+        return newResponse;
+    },
+
+    toGeoJSON: function(){
+        return {
+            "type": "Feature",
+            "properties": _.omit(this.toJSON(), 'geometry'),
+            "geometry": this.get('geometry').toJSON()
+        };
     }
 
 
