@@ -111,9 +111,9 @@ public class AdvancedTrajectory extends Trajectory {
 
     public Position getGPS(double pos) {
         if(pos < lengths.get(0)){
-            source.getGPS(source.getLength()+pos);
+            return source.getGPS(source.getLength()+pos);
         }else{
-            destination.getGPS(pos-length);
+            return destination.getGPS(pos-length);
         }
     }
 }
