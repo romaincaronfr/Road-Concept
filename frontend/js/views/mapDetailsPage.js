@@ -3,7 +3,7 @@
  */
 app.mapDetailsPageView = Backbone.View.extend({
 
-    el: '#mapRow',
+    el: '#body',
     map: null,
     tile: null,
 
@@ -20,14 +20,16 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.mapDetailsCOllection.fetch();
         this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('sync', self.onSync, self);
+        $('#mapRow').class('');
     },
 
     render: function () {
         $('#content').empty();
-        this.$el.html(this.template());
+        this.$el.append(this.template());
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
+        this.tile.setOpacity(0);
         this.map = new ol.Map({
             target: 'map',
             layers: [
@@ -140,8 +142,8 @@ app.mapDetailsPageView = Backbone.View.extend({
                 //SINGLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [254,234,178,1],
-                        width: 4/resolution
+                        color: [241, 196, 15,1],
+                        width: 5/resolution
                     })
                 });
                 return style;
@@ -150,7 +152,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 //DOUBLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [253,215,160,1],
+                        color: [230, 126, 34,1],
                         width: 6/resolution
                     })
                 });
@@ -158,9 +160,10 @@ app.mapDetailsPageView = Backbone.View.extend({
                 break;
             case 3:
                 //TRIPLE ROAD
+                console.log("trois voies");
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [253,215,160,1],
+                        color: [231, 76, 60,1],
                         width: 10/resolution
                     }),
 
@@ -181,7 +184,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 break;
             case 5:
                 //RED_LIGHT
-                console.log('red light');
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],

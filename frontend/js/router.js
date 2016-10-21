@@ -57,6 +57,7 @@ app.Router = Backbone.Router.extend({
     },
 
     login: function () {
+        this.checkAndDestroyMap();
         this.checkAndDestroyNavbar();
         if (!this.loginV) {
             this.loginV = new app.loginView();
@@ -70,6 +71,7 @@ app.Router = Backbone.Router.extend({
     },
 
     map: function () {
+        this.checkAndDestroyMap();
         this.checkAndInitNavBar();
         if (!this.mapV) {
             this.mapV = new app.mapView();
@@ -84,6 +86,7 @@ app.Router = Backbone.Router.extend({
     },
 
     user: function () {
+        this.checkAndDestroyMap();
         if (!this.navBarV) {
             this.navBarV = new app.navBarView(true, false);
         } else {
@@ -93,6 +96,7 @@ app.Router = Backbone.Router.extend({
     },
 
     admin: function () {
+        this.checkAndDestroyMap();
         this.checkAndInitNavBar();
         if (!this.adminV) {
             this.adminV = new app.adminManaView();
@@ -103,6 +107,7 @@ app.Router = Backbone.Router.extend({
     },
 
     logout: function () {
+        this.checkAndDestroyMap();
         new app.logoutView();
     },
 
@@ -110,7 +115,6 @@ app.Router = Backbone.Router.extend({
         if (!this.navBarV) {
             this.navBarV = new app.navBarView(false, false);
         }
-        $('#mapRow').empty();
     },
 
     checkAndDestroyNavbar: function () {
@@ -118,6 +122,9 @@ app.Router = Backbone.Router.extend({
             this.navBarV.cleanHTML();
             this.navBarV = null;
         }
-        $('#mapRow').empty();
+    },
+
+    checkAndDestroyMap: function() {
+        $('#mapRow').remove();
     }
 });
