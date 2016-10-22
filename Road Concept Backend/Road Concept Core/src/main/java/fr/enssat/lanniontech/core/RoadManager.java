@@ -10,56 +10,54 @@ import java.util.Map;
 
 
 public class RoadManager {
-    private Map<Position, RoadSection> emptyRoadEdges;
-    //private Map<Position,RoadSection> emptySingleRoadEdges;//for roads with only one lane empty
+    private Map<Position, ArrayList<RoadSection>> RoadEdges;
     private ArrayList<RoadSection> roadSections;
     private Map<Integer, Road> roads;
 
     public RoadManager() {
-        emptyRoadEdges = new HashMap<Position, RoadSection>();
-        roadSections = new ArrayList<RoadSection>();
-        roads = new HashMap<Integer, Road>();
+        RoadEdges = new HashMap<>();
+        roadSections = new ArrayList<>();
+        roads = new HashMap<>();
     }
 
+    @Deprecated
     public RoadSection addRoadSection(Position A, Position B) {
         return addRoadSection(A, B, null);
     }
 
     private RoadSection addRoadSection(Position A, Position B, Road myRoad) {
         RoadSection RS1 = new RoadSection(A, B, myRoad);
-        RoadSection RS2 = null;
-        roadSections.add(RS1);
-        if (emptyRoadEdges.containsKey(A)) {
-            RS2 = emptyRoadEdges.get(A);
-            assembleRoadsSection(RS1, RS2, A);
-            emptyRoadEdges.remove(A);
-        } else {
-            emptyRoadEdges.put(A, RS1);
-        }
 
-        if (emptyRoadEdges.containsKey(B)) {
-            RS2 = emptyRoadEdges.get(B);
-            assembleRoadsSection(RS1, RS2, B);
-            emptyRoadEdges.remove(B);
-        } else {
-            emptyRoadEdges.put(B, RS1);
-        }
+        roadSections.add(RS1);
+        assembleRoadSections(RS1, A, myRoad);
+        assembleRoadSections(RS1, B, myRoad);
+
         return RS1;
     }
 
-    public Road addRoad(Position A, Position B, int id) {
-        Road R = new Road(id);
-        R.addSection(addRoadSection(A, B, R));
-        roads.put(id, R);
-        return R;
+    private void assembleRoadSections(RoadSection Rs1, Position P, Road myRoad) {
+        if (RoadEdges.containsKey(P)) {
+            if (RoadEdges.get(P).size() == 1 && RoadEdges.get(P).get(0).getMyRoad() == myRoad) {
+                RoadSection Rs2 = RoadEdges.get(P).get(0);
+                fuseRoadsSection(Rs1, Rs2, P);
+                RoadEdges.remove(P);
+            } else {
+                //todo handle intersection creation
+            }
+        } else {
+            RoadEdges.put(P, new ArrayList<>());
+            RoadEdges.get(P).add(Rs1);
+        }
     }
 
     public Road addRoadSectionToRoad(Position A, Position B, int id) {
         Road R = roads.get(id);
         if (R == null) {
-            R = addRoad(A, B, id);
+            R = new Road(id);
+            R.addSection(addRoadSection(A, B, R));
+            roads.put(id, R);
         } else {
-            R.addSection(addRoadSection(A, B));
+            R.addSection(addRoadSection(A, B, R));
         }
         return R;
     }
@@ -68,7 +66,7 @@ public class RoadManager {
         return roads.get(id);
     }
 
-    private void assembleRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
+    private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
     }

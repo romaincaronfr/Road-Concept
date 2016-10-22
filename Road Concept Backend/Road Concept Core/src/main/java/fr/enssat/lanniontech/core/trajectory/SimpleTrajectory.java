@@ -61,24 +61,24 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     public void addDestination(AdvancedTrajectory t) {
-        if(destinationType != TrajectoryType.SimpleTrajectory){
+        if (destinationType != TrajectoryType.SimpleTrajectory) {
             destinationsTrajectories.add(t);
-            if(inverted){
-                setStop(stop+t.getSecurityDistance());
-            }else{
-                setStop(stop-t.getSecurityDistance());
+            if (inverted) {
+                setStop(stop + t.getSecurityDistance());
+            } else {
+                setStop(stop - t.getSecurityDistance());
             }
             destinationType = TrajectoryType.AdvancedTrajectory;
         }
     }
 
-    public void addSource(AdvancedTrajectory t){
-        if(sourceType != TrajectoryType.SimpleTrajectory){
+    public void addSource(AdvancedTrajectory t) {
+        if (sourceType != TrajectoryType.SimpleTrajectory) {
             sourcesTrajectories.add(t);
-            if(inverted){
-                setStart(start-t.getSecurityDistance());
-            }else{
-                setStart(start+t.getSecurityDistance());
+            if (inverted) {
+                setStart(start - t.getSecurityDistance());
+            } else {
+                setStart(start + t.getSecurityDistance());
             }
             sourceType = TrajectoryType.AdvancedTrajectory;
         }

@@ -17,13 +17,13 @@ public class TestIntersection {
         Position D = new Position(0, -1);
         Position E = new Position(1, 1);
 
-        Road R1 = RM.addRoad(A, I, 0);
-        Road R2 = RM.addRoad(B, I, 1);
-        Road R3 = RM.addRoad(C, I, 2);
-        Road R4 = RM.addRoad(D, I, 3);
-        Road R5 = RM.addRoad(E, I, 4);
+        Road R1 = RM.addRoadSectionToRoad(A, I, 0);
+        Road R2 = RM.addRoadSectionToRoad(B, I, 1);
+        Road R3 = RM.addRoadSectionToRoad(C, I, 2);
+        Road R4 = RM.addRoadSectionToRoad(D, I, 3);
+        Road R5 = RM.addRoadSectionToRoad(E, I, 4);
 
-        Intersection Inter = new Intersection(I);
+        Intersection Inter = new Intersection(I); //todo replace by call to the roadmanager
 
 
         Assert.assertTrue(Inter.addRoadSection(R1.get(0)));

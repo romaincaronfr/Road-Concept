@@ -3,7 +3,6 @@ package fr.enssat.lanniontech.core.roadElements.intersections;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
-import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -40,7 +40,7 @@ public class TestRoadManager {
     }
 
     @Test
-    public void connectRoad2Road(){
+    public void connectRoad2Road() {
 
     }
 }

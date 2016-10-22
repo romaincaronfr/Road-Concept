@@ -38,7 +38,7 @@ public class Simulator implements Runnable {
         Position C = positionManager.addPosition(40.1, 0.1);
         Position D = positionManager.addPosition(40.1, 0);
 
-        Road R = roadManager.addRoad(A, B, 0);
+        Road R = roadManager.addRoadSectionToRoad(A, B, 0);
         roadManager.addRoadSectionToRoad(B, C, 0);
         roadManager.addRoadSectionToRoad(C, D, 0);
         roadManager.addRoadSectionToRoad(D, A, 0);

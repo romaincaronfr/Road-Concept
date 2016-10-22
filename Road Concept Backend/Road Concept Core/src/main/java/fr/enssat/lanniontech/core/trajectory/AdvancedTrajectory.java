@@ -21,7 +21,7 @@ public class AdvancedTrajectory extends Trajectory {
         securityDistance = 15;
 
         Pfs = new ArrayList<>();
-        lengths =new ArrayList<>();
+        lengths = new ArrayList<>();
         Ps = new ArrayList<>();
 
         Pfs.add(source.getFunction());
@@ -36,18 +36,18 @@ public class AdvancedTrajectory extends Trajectory {
         destination.addSource(this);
         Ps.add(destination.getStop());
 
-        if(source.isInverted()){
+        if (source.isInverted()) {
             lengths.add(Ps.get(0) - Ps.get(1));
-        }else{
-            lengths.add(Ps.get(1)-Ps.get(0));
+        } else {
+            lengths.add(Ps.get(1) - Ps.get(0));
         }
 
-        if(destination.isInverted()){
+        if (destination.isInverted()) {
             lengths.add(Ps.get(2) - Ps.get(3));
-        }else{
+        } else {
             lengths.add(Ps.get(3) - Ps.get(2));
         }
-        length =  lengths.get(0) + lengths.get(1);
+        length = lengths.get(0) + lengths.get(1);
     }
 
     public double getSecurityDistance() {
@@ -79,7 +79,7 @@ public class AdvancedTrajectory extends Trajectory {
 
     public double getDistanceToFirst() {
         if (vehiclesSides.size() == 0) {
-                return length + destination.getDistanceToFirst();
+            return length + destination.getDistanceToFirst();
         } else {
             return vehiclesSides.get(0).getPos();
         }
@@ -110,10 +110,10 @@ public class AdvancedTrajectory extends Trajectory {
     }
 
     public Position getGPS(double pos) {
-        if(pos < lengths.get(0)){
-            return source.getGPS(source.getLength()+pos);
-        }else{
-            return destination.getGPS(pos-length);
+        if (pos < lengths.get(0)) {
+            return source.getGPS(source.getLength() + pos);
+        } else {
+            return destination.getGPS(pos - length);
         }
     }
 }
