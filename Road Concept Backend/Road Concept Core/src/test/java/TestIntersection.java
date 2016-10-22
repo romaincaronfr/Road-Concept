@@ -23,7 +23,7 @@ public class TestIntersection {
         Road R4 = RM.addRoadSectionToRoad(D, I, 3);
         Road R5 = RM.addRoadSectionToRoad(E, I, 4);
 
-        Intersection Inter = new Intersection(I); //todo replace by call to the roadmanager
+        Intersection Inter = new Intersection(I);
 
 
         Assert.assertTrue(Inter.addRoadSection(R1.get(0)));

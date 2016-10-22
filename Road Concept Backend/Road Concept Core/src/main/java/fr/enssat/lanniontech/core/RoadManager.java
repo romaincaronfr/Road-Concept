@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.core;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,11 +14,13 @@ public class RoadManager {
     private Map<Position, ArrayList<RoadSection>> RoadEdges;
     private ArrayList<RoadSection> roadSections;
     private Map<Integer, Road> roads;
+    private Map<Position,Intersection> intersectionMap;
 
     public RoadManager() {
         RoadEdges = new HashMap<>();
         roadSections = new ArrayList<>();
         roads = new HashMap<>();
+        intersectionMap = new HashMap<>();
     }
 
     @Deprecated
@@ -42,7 +45,15 @@ public class RoadManager {
                 fuseRoadsSection(Rs1, Rs2, P);
                 RoadEdges.remove(P);
             } else {
-                //todo handle intersection creation
+                RoadEdges.get(P).add(Rs1);
+                if(!intersectionMap.containsKey(P)){
+                    intersectionMap.put(P,new Intersection(P));
+                    for(RoadSection Rs :RoadEdges.get(P)){
+                        intersectionMap.get(P).addRoadSection(Rs);
+                    }
+                }else {
+                    intersectionMap.get(P).addRoadSection(Rs1);
+                }
             }
         } else {
             RoadEdges.put(P, new ArrayList<>());
@@ -66,9 +77,15 @@ public class RoadManager {
         return roads.get(id);
     }
 
+    public Intersection getIntersection(Position P){
+        return intersectionMap.get(P);
+    }
+
     private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
     }
+
+
 
 }

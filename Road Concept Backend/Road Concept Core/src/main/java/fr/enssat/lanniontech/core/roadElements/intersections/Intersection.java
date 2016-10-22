@@ -15,8 +15,8 @@ public class Intersection {
 
     public Intersection(Position P) {
         this.P = P;
-        roadSections = new HashMap<Integer, RoadSection>();
-        trajectories = new HashMap<Integer, Map<Integer, AdvancedTrajectory>>();
+        roadSections = new HashMap<>();
+        trajectories = new HashMap<>();
     }
 
     private void addTrajectories(int id) {
