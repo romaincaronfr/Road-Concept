@@ -1,23 +1,27 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@JsonIgnoreProperties({"id", "_id"})
+@JsonIgnoreProperties({"_id"}) // "_id" is auto set by MongoDB
 public class Feature extends GeoJsonObject {
 
     //  private static final String type = "Feature"; // case sensitive
-    @JsonInclude(Include.ALWAYS)
+    @JsonIgnore // Set in the 'properties'
     private UUID uuid = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
     private GeoJsonObject geometry;
+    @JsonProperty("id")
+    private String openStreetMapID;
 
     public void setProperty(String key, Object value) {
         properties.put(key, value);
@@ -48,8 +52,18 @@ public class Feature extends GeoJsonObject {
         return uuid;
     }
 
-    public void setId(UUID uuid) {
+    public void setUUID(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    @JsonIgnore
+    public String getId() {
+        return openStreetMapID;
+    }
+
+    @JsonProperty("id")
+    public void setId(String openStreetMapID) {
+        this.openStreetMapID = openStreetMapID;
     }
 
     @Override

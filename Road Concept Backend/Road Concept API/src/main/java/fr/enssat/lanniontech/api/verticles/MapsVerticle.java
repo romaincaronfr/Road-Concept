@@ -115,6 +115,8 @@ public class MapsVerticle extends AbstractVerticle {
 
             mapService.importFromOSM(mapID, uploadedFile.toString());
 
+            vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
+
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);

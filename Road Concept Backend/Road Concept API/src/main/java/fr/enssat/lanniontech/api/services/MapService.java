@@ -64,6 +64,7 @@ public class MapService extends AbstractService {
 
     public void importFromOSM(int mapID, String fileData) throws Exception { //TODO: handle exceptions
         //TODO: Comment détecter les doublons ?
+        // Idée : stocker l'id fournis par OSM et faire une requête en base voir si ça existe. Si ca éxiste, on retire des features à ajouter.
         MapInfo infos = mapInfoRepository.get(mapID);
         if (infos == null) {
             throw new EntityNotExistingException();
@@ -71,6 +72,12 @@ public class MapService extends AbstractService {
 
         FeatureCollection features = new ObjectMapper().readValue(fileData, FeatureCollection.class);
         fromOSMAdaptation(features);
+
+        for (Feature feature : features) {
+            System.out.println("OSM ID = " + feature.getId());
+            //TODO: Vérifier si éxiste déjà dans la mongo, si oui, supprimer des features à ajouter
+        }
+
         mapFeatureRepository.createAll(mapID, features);
     }
 
@@ -117,7 +124,7 @@ public class MapService extends AbstractService {
         Map<String, Object> newProperties = new HashMap<>();
         newProperties.put("type", getType(feature.getProperties()));
         newProperties.put("name", getName(feature.getProperties()));
-        // newProperties.put("uuid", feature.getUUID()); // FIXME: Attendre décision finale de Romain
+        newProperties.put("uuid", feature.getUUID());
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
