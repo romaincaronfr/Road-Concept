@@ -16,6 +16,7 @@ public class Simulator implements Runnable {
     private RoadManager roadManager;
     private PositionManager positionManager;
     private VehicleManager vehicleManager;
+    public static SimulationHistory simulationHistory;
 
     private double progress;
     private Thread simulatorThread;
@@ -31,6 +32,7 @@ public class Simulator implements Runnable {
         roadManager = new RoadManager();
         positionManager = new PositionManager();
         vehicleManager = new VehicleManager();
+        simulationHistory = new SimulationHistory();
 
 
         Position A = positionManager.addPosition(40, 0);

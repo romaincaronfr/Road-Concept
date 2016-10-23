@@ -40,11 +40,4 @@ public class Position {
     public boolean equals(Position pos) {
         return this.lat == pos.getLat() && this.lon == pos.getLon();
     }
-
-    static SpaceTimePosition getMean(Position A, Position B, long time) {
-        double lon = (A.lon + B.lon) / 2;
-        double lat = (A.lat + B.lat) / 2;
-        //todo compute angle from A and B
-        return new SpaceTimePosition(lon, lat, time);
-    }
 }

@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
+import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
@@ -21,8 +22,6 @@ public class Vehicle {
     private double v0;          //desired speed
     private double s0 = 2;      //minimum distance between two cars
     private long time;
-    private ArrayList<SpaceTimePosition> positionHistory;
-
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
@@ -41,10 +40,10 @@ public class Vehicle {
         this.frontSide = new Side(length + startPos, this, start);
         this.backSide = new Side(startPos, this, start);
         this.time = initialTime;
-        positionHistory = new ArrayList<SpaceTimePosition>();
-        positionHistory.add(getGPSPosition());
+        Simulator.simulationHistory.AddPosition(getGPSPosition());
     }
 
+    @Deprecated
     public void log() {
         System.out.println("ID: " + this.ID);
         System.out.println("distance: " + distanceDone);
@@ -94,7 +93,7 @@ public class Vehicle {
         frontSide.move(dDone);
         time++;
         if (log) {
-            positionHistory.add(getGPSPosition());
+            Simulator.simulationHistory.AddPosition(getGPSPosition());
         }
         Va += A * time;
     }
@@ -104,7 +103,6 @@ public class Vehicle {
     }
 
     public SpaceTimePosition getGPSPosition() {
-        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time);
+        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time,ID);
     }
-
 }
