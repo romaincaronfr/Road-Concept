@@ -8,7 +8,8 @@ app.mapDetailsPageView = Backbone.View.extend({
     tile: null,
 
     events: {
-        'click #osmButton': 'clickOnOSM'
+        'change #osmOppacity': 'clickOnOSM',
+        'click .close_map_info': 'clickCloseInfo'
     },
 
 
@@ -20,7 +21,6 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.mapDetailsCOllection.fetch();
         this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('sync', self.onSync, self);
-        $('#mapRow').class('');
     },
 
     render: function () {
@@ -40,29 +40,31 @@ app.mapDetailsPageView = Backbone.View.extend({
                 zoom: 14
             })
         });
+        this.tile.setOpacity($('#osmOppacity').val());
         var self = this;
-        //this.map.on('click', function(evt){
-        //    var pixel = evt.pixel;
-        //    console.log(pixel);
-        //    //loop through all features under this pixel coordinate
-        //    //and save them in array
-        //    self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-        //        if (feature) {
-        //            //var encore = new ol.format.GeoJSON();
-        //            //console.log(encore.writeFeature(feature));
-        //            //console.log(feature.getId());
-        //            console.log(feature.getProperties().properties);
-        //        }else {
-        //            console.log('feature null');
-        //        }
-        //    });
-        //});
+        this.map.on('click', function(evt){
+            var pixel = evt.pixel;
+            console.log(pixel);
+            //loop through all features under this pixel coordinate
+            //and save them in array
+            var featureKeep = null;
+            self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                if (feature) {
+                    //var encore = new ol.format.GeoJSON();
+                    //console.log(encore.writeFeature(feature));
+                    featureKeep = feature;
+                    console.log(feature.getProperties());
+                }
+            });
+            if (featureKeep){
+                self.renderFeatureInformations(featureKeep);
+            }
+        });
         return this;
 
     },
 
     onAddElement: function(element){
-        console.log("new element");
         //console.log(element);
         //var self = this;
         //var points = new Array();
@@ -96,9 +98,7 @@ app.mapDetailsPageView = Backbone.View.extend({
     },
 
     onSync: function(){
-        console.log('sync');
         if (this.mapDetailsCOllection.length > 0){
-            console.log('if ok');
             var geoJson = this.mapDetailsCOllection.toGeoJSON();
             var self = this;
             var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
@@ -109,10 +109,17 @@ app.mapDetailsPageView = Backbone.View.extend({
             });
             var vectorLayer = new ol.layer.Vector({
                 source: vectorSource,
-                style: function(feature, resolution){
+                style: function(feature, resolution) {
                     var type = feature.getProperties().type;
-                    return self.generateStyle(type,resolution);
+                    var oneway = 1;
+                    if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+                        console.log("oneway true");
+                        oneway = 0.5;
+                    }
+                    var style = self.generateStyle(type, resolution,oneway);
+                    return style;
                 }
+
             });
 
             this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
@@ -125,25 +132,30 @@ app.mapDetailsPageView = Backbone.View.extend({
                 format: new ol.format.GeoJSON()
             })
         }));*/
+        //var test = new app.models.mapDetailsModel({ "type": "Feature", "properties": {"type":3, "timestamp": "2015-05-07T20:04:46Z", "version": "4", "changeset": "30884050", "user": "brelevenix", "uid": "1467976", "highway": "residential", "name": "Avenue d\'Alsace", "ref:FR:FANTOIR": "221130035A"}, "geometry": { "type": "LineString", "coordinates": [ [ -3.4744614, 48.7443241], [ -3.4746925, 48.7442887] ]} },{parse: true});
+        //this.mapDetailsCOllection.add(test);
+        //test.save();
+        //newGeo = test.toGeoJSON();
+        //console.log(newGeo);
+        //var featuretest = new ol.format.GeoJSON().readFeature(newGeo, {
+        //    featureProjection: 'EPSG:3857'
+        //});
+        //vectorSource.addFeature(featuretest);
+        //this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
     },
 
     clickOnOSM: function(){
-        if (this.tile.getOpacity() == 1){
-            this.tile.setOpacity(0);
-        }else {
-            this.tile.setOpacity(1);
-        }
+            this.tile.setOpacity($('#osmOppacity').val());
     },
 
-    generateStyle: function(type,resolution){
-        console.log(resolution);
+    generateStyle: function(type,resolution,oneway){
         switch (type){
             case 1:
                 //SINGLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [241, 196, 15,1],
-                        width: 5/resolution
+                        width: (7/resolution)*oneway
                     })
                 });
                 return style;
@@ -153,18 +165,18 @@ app.mapDetailsPageView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [230, 126, 34,1],
-                        width: 6/resolution
+                        width: (14/resolution)*oneway
                     })
                 });
                 return style;
                 break;
             case 3:
+                console.log("triple road");
                 //TRIPLE ROAD
-                console.log("trois voies");
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [231, 76, 60,1],
-                        width: 10/resolution
+                        width: (21/resolution)*oneway
                     }),
 
                 });
@@ -177,25 +189,42 @@ app.mapDetailsPageView = Backbone.View.extend({
                     }),
                     stroke: new ol.style.Stroke({
                         color: [0,255,0,1],
-                        width: 4/resolution
+                        width: 3.5/resolution
                     })
                 });
                 return style;
                 break;
             case 5:
                 //RED_LIGHT
+                console.log(resolution);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
-                        size: [100, 200],
+                        size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1,
-                        src: 'http://www.clipartkid.com/images/21/traffic-light-red-clip-art-Ub1tgZ-clipart.png'
+                        scale: 0.1/resolution,
+                        src: 'assets/img/redlight.jpg'
                     })
                 });
                 return style;
                 break;
+            default:
+                console.log("default");
+                break;
         }
+    },
+
+    clickCloseInfo: function(){
+        $('#osmInfo').empty();
+    },
+
+    renderFeatureInformations: function(feature){
+        var featureid = feature.getProperties().id;
+        var model = this.mapDetailsCOllection.get(featureid);
+        console.log(model);
+        new app.mapPopUpInfoVisuView({
+            model: model
+        });
     }
 });

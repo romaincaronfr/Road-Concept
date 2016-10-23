@@ -43,9 +43,26 @@ body {
     width: 100%;
 }
 
-#osmButton {
+.osmSidebar {
     position: absolute;
-    top: 20px;
-    margin-left:50%;
+    top: 60px;
+    right: 0;
+    left: 0;
     z-index: 1000;
+}
+
+#osmInfo {
+    position: absolute;
+    top: 20%;
+    margin-bottom: 70px;
+    right: 10px;
+    width: 30%;
+    max-height: 60%;
+    background-color: #4f5d6b;
+    z-index: 999;
+    overflow: auto;
+}
+
+.not-active {
+    pointer-events: none;
 }
