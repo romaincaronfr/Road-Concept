@@ -42,8 +42,8 @@ public class Simulator implements Runnable {
 
         Road R = roadManager.addRoadSectionToRoad(A, B, 0);
         roadManager.addRoadSectionToRoad(B, C, 0);
-        roadManager.addRoadSectionToRoad(C, D, 0);
-        roadManager.addRoadSectionToRoad(D, A, 0);
+        roadManager.addRoadSectionToRoad(C, D, 1);
+        roadManager.addRoadSectionToRoad(D, A, 1);
 
         vehicleManager.addToSpawnArea(R);
 
