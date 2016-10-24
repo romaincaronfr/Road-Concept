@@ -100,7 +100,9 @@ app.mapView = Backbone.View.extend({
         var id = event.currentTarget.id;
         id = id.replace('remove_', '');
         console.log(id);
-        this.mapCollection.get(id).destroy({wait: true});
+        console.log(this.mapCollection.get(id));
+        var model = this.mapCollection.get(id);
+        model.destroy({wait: true});
     }
 
 });
