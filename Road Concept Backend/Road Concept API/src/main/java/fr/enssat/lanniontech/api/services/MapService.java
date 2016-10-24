@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class MapService extends AbstractService {
 
@@ -50,6 +51,10 @@ public class MapService extends AbstractService {
         map.setInfos(infos);
         map.setFeatures(features);
         return map;
+    }
+
+    public Feature getFeature(int mapID, UUID featureUUID) {
+        return mapFeatureRepository.get(mapID, featureUUID);
     }
 
     public boolean delete(Integer mapID) {

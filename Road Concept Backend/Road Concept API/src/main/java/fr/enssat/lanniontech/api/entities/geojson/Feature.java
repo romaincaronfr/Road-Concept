@@ -13,9 +13,8 @@ import java.util.UUID;
 @JsonIgnoreProperties({"_id"}) // "_id" is auto set by MongoDB
 public class Feature extends GeoJsonObject {
 
-    //  private static final String type = "Feature"; // case sensitive
     @JsonIgnore // Set in the 'properties'
-    private UUID uuid = UUID.randomUUID();
+    private final UUID uuid = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
@@ -52,10 +51,6 @@ public class Feature extends GeoJsonObject {
         return uuid;
     }
 
-    public void setUUID(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     @JsonIgnore
     public String getId() {
         return openStreetMapID;
@@ -68,11 +63,7 @@ public class Feature extends GeoJsonObject {
 
     @Override
     public String toString() {
-        return "Feature{properties=" + properties + ", geometry=" + geometry + ", id='" + uuid + "'}";
+        return "Feature{properties=" + properties + ", geometry=" + geometry + ", uuid='" + uuid + "'}";
     }
-
-    // public String getType() {
-    //    return type;
-    // }
 
 }

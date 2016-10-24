@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.Map;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
+import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 import fr.enssat.lanniontech.api.services.MapService;
@@ -23,6 +24,7 @@ import javax.ws.rs.BadRequestException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class MapsVerticle extends AbstractVerticle {
 
@@ -43,6 +45,21 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID").blockingHandler(this::processDeleteMap);
         router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
+
+        router.route(HttpMethod.GET, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processGetOneFeature);
+
+    }
+
+    private void processGetOneFeature(RoutingContext routingContext) {
+        try {
+            int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
+            UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
+
+            Feature feature = mapService.getFeature(mapID,featureUUID);
+            HttpResponseBuilder.buildOkResponse(routingContext,feature);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext,e);
+        }
     }
 
     private void processGetOneMap(RoutingContext routingContext) {

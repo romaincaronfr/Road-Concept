@@ -1,7 +1,9 @@
 package fr.enssat.lanniontech.api.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
@@ -15,6 +17,7 @@ import org.bson.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MapFeatureRepository extends MapRepository {
 
@@ -47,11 +50,28 @@ public class MapFeatureRepository extends MapRepository {
         }
     }
 
-    public Feature get(int featureID) {
-        throw new NotImplementedException(); //TODO
+    public Feature get(int mapID, UUID featureUUID) {
+        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
+            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
+
+            MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
+
+            try {
+                BasicDBObject query = new BasicDBObject();
+                query.put("properties.uuid",featureUUID);
+                FindIterable<Document> queryResult = collection.find(query);
+                Document item = queryResult.iterator().next();
+                Feature feature = new ObjectMapper().readValue(item.toJson(),Feature.class);
+                System.out.println("Feature retrived -> " + feature);
+                return feature;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
+            }
+        }
     }
 
-    public void delete(int featureID) {
+    public void delete(int mapID, int featureID) {
         throw new NotImplementedException(); //TODO
     }
 

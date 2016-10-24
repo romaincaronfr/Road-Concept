@@ -1,17 +1,11 @@
 package fr.enssat.lanniontech.api.services;
 
-import fr.enssat.lanniontech.core.Simulator;
+import fr.enssat.lanniontech.api.entities.Map;
 
 public class SimulatorService extends AbstractService {
 
-    private Simulator simulator = new Simulator(); // TODO: Store a Simulator instance in the session on login ?
-
-    public boolean simulate() {
-        boolean result = simulator.launchSimulation(24 * 3600, 0.1);
-        return result;
+    public boolean simulate(Map map) {
+        return true;
     }
 
-    public double getStatus() {
-        return this.simulator.getProgress();
-    }
 }
