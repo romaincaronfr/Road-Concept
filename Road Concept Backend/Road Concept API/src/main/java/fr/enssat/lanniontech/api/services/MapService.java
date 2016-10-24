@@ -79,7 +79,7 @@ public class MapService extends AbstractService {
         fromOSMAdaptation(features);
 
         for (Feature feature : features) {
-            System.out.println("OSM ID = " + feature.getId());
+            System.out.println("OSM ID = " + feature.getUuid());
             //TODO: Vérifier si éxiste déjà dans la mongo, si oui, supprimer des features à ajouter
         }
 
@@ -129,7 +129,7 @@ public class MapService extends AbstractService {
         Map<String, Object> newProperties = new HashMap<>();
         newProperties.put("type", getType(feature.getProperties()));
         newProperties.put("name", getName(feature.getProperties()));
-        newProperties.put("uuid", feature.getUUID());
+        newProperties.put("id", feature.getUUID());
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
