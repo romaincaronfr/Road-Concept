@@ -16,18 +16,15 @@ Récupérer le projet à l'aide du dépôt git hébergé sur GitHub
 ```sh
 $ git clone git@github.com:Webrom/Road-Concept.git
 ```
-Se placer dans le dossier ```Docker```
+Se placer dans le dossier ```developper-bin```
 ```sh
-$ cd Docker/
+$ cd developper-bin/
 ```
-Builder les images des services :
-```sh
-$ docker-commpose build
-```
+Lancer le deamon Docker. La commande dépends de votre système d'exploitation.
 
-Lancer les services en conteneurs :
+Lancer le script de déploiement du projet :
 ```sh
-$ docker-commpose up
+$ ./updateAndDeployDocker.sh
 ```
 
 Cette commande va lalancer les conteneurs suivants :
@@ -41,6 +38,17 @@ L'administrateur par défaut de l'application est :
 ```
 admin@enssat.fr
 admin
+```
+
+Si vous souhaitez supprimer les données de persistance de vos conteneurs Docker :
+```sh
+$ rm - rf ../Docker/mongodb/data;
+$ rm - rf ../Docker/postgresql/data
+```
+
+Pour supprimer définitivement les conteneurs et images Docker associés au projet :
+```sh
+$ ./dockerRemoveAll.sh
 ```
 
 **Free Software, Hell Yeah!**
