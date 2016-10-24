@@ -12,7 +12,7 @@ app.mapPopUpInfoVisuView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template);
         for(key in this.model.attributes) {
-            if (key != "bridge" && key != "id" && key != "geometry"){
+            if (key != "bridge" && key != "id" && key != "geometry" && this.model.attributes[key] ){
                 console.log(key+" = "+this.model.attributes[key]);
                 var modelSend = new Backbone.Model({'key':key.charAt(0).toUpperCase()+key.slice(1),'info':this.model.attributes[key]});
                 new app.mapPopUpInfoVisuEachView({
