@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Feature extends GeoJsonObject {
 
     @JsonIgnore // Set in the 'properties'
-    private final UUID uuid = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
@@ -48,7 +48,7 @@ public class Feature extends GeoJsonObject {
     }
 
     public UUID getUUID() {
-        return uuid;
+        return id;
     }
 
     @JsonIgnore
@@ -63,7 +63,7 @@ public class Feature extends GeoJsonObject {
 
     @Override
     public String toString() {
-        return "Feature{properties=" + properties + ", geometry=" + geometry + ", uuid='" + uuid + "'}";
+        return "Feature{properties=" + properties + ", geometry=" + geometry + ", id='" + id + "'}";
     }
 
 }

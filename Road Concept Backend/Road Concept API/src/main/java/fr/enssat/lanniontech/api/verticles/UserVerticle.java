@@ -136,6 +136,10 @@ public class UserVerticle extends AbstractVerticle {
             data.setLastName(body.getString("lastName"));
 
             User updated = userService.update(data);
+
+            if (id == logged.getId()) {
+                routingContext.session().put(Constants.SESSION_CURRENT_USER, updated);
+            }
             HttpResponseBuilder.buildOkResponse(routingContext, updated);
         } catch (DecodeException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
