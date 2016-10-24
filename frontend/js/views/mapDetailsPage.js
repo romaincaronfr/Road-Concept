@@ -31,6 +31,13 @@ app.mapDetailsPageView = Backbone.View.extend({
         });
         this.map = new ol.Map({
             target: 'map',
+            controls: ol.control.defaults({
+                attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                    collapsible: false
+                })
+            }).extend([
+                new ol.control.ScaleLine()
+            ]),
             layers: [
                 this.tile
             ],
