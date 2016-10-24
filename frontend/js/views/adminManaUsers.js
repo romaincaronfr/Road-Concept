@@ -7,7 +7,7 @@ app.adminManaUsersView = Backbone.View.extend({
     el: '#content',
 
     events: {
-        'click .modify_map': 'clickOnModifyUser',
+        'click .affichage_mod': 'clickOnModifyUser',
         'click .remove_User': 'clickOnRemove'
     },
 
@@ -20,19 +20,20 @@ app.adminManaUsersView = Backbone.View.extend({
         this.userCollection.on('sync', self.newSync, self);
         this.userCollection.on('destroy', self.newDestroy, self);
         this.userCollection.on('add',self.newElement,self);
-        this.userCollection.on()
+        console.log("admin mana user initialize");
     },
 
     render: function () {
         this.$el.html(this.template());
-
         this.userCollection.each(function (model) {
             var adminUserRow = new app.adminUserRowView({
                 model: model
             });
 
         });
+        console.log("admin mana user render bfetch");
         this.userCollection.fetch();
+        console.log("admin mana user render afetch");
         return this;
 
     },
@@ -49,16 +50,11 @@ app.adminManaUsersView = Backbone.View.extend({
 
 
     clickOnModifyUser: function (event) {
-        $('#submitModifyUserM').prop("disabled", true);
-        var firstname = $('#firstname').val();
-        var lastname = $('#lastName').val();
-        var email = $('#email').val();
-        var type = $('#type').val();
-        var id = event.currentTarget.id
-        id = id.replace('modify_','');
-        console.log(event.currentTarget.id);
-        this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email':email, 'type':type});
-        this.userCollection.get(id).save();
+        console.log("admin mana user clickOnModify bnewmodalUSer");
+        var id = event.currentTarget.id;
+        id = id.replace('affichage_modal_', '');
+        var modalview = new app.adminModalUserView(this.userCollection.get(id));
+        console.log("admin mana user clickOnModify anewmodalUSer");
     },
 
 
@@ -84,6 +80,5 @@ app.adminManaUsersView = Backbone.View.extend({
         console.log(element.attributes.id);
         var divName = '#user_Id_' + element.attributes.id;
         $(divName).remove();
-
     }
 });
