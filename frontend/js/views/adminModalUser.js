@@ -5,11 +5,7 @@
 
 app.adminModalUserView = Backbone.View.extend({
 
-    el: '#modal',
-
-    events: {
-        'click .modify_User': 'clickOnModifyUser'
-    },
+    el: '#Modal',
 
     initialize: function (model) {
 
@@ -24,21 +20,7 @@ app.adminModalUserView = Backbone.View.extend({
         $('#submitModifyUserM').modal('show');
 
         //return this;
-    },
-
-    clickOnModifyUser: function (event) {
-
-        var firstname = $('#firstname').val();
-        var lastname = $('#lastName').val();
-        var email = $('#email').val();
-        var type = $('#type').val();
-        var id = event.currentTarget.id;
-        console.log(id);
-        id = id.replace('modify_','');
-        console.log(id);
-        console.log(event.currentTarget.id);
-        this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email':email, 'type':type});
-        this.userCollection.get(id).save();
     }
+
 
 });

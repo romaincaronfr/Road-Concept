@@ -8,7 +8,8 @@ app.adminManaUsersView = Backbone.View.extend({
 
     events: {
         'click .affichage_mod': 'clickOnModifyUser',
-        'click .remove_User': 'clickOnRemove'
+        'click .remove_User': 'clickOnRemove',
+        'click .modify_User': 'clickOnValidModifyUser'
     },
 
     initialize: function () {
@@ -26,9 +27,11 @@ app.adminManaUsersView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template());
         this.userCollection.each(function (model) {
+            if (model.attributes.id != app.router.navBarV.model.attributes.id){
             var adminUserRow = new app.adminUserRowView({
                 model: model
             });
+            }
 
         });
         console.log("admin mana user render bfetch");
@@ -57,11 +60,27 @@ app.adminManaUsersView = Backbone.View.extend({
         console.log("admin mana user clickOnModify anewmodalUSer");
     },
 
+    clickOnValidModifyUser: function (event) {
+        console.log('click on modify');
+        var firstname = $('#firstName').val();
+        var lastname = $('#lastName').val();
+        var email = $('#email').val();
+        var type = $('#type').val();
+        var id = event.currentTarget.id;
+        console.log(id);
+        id = id.replace('modify_','');
+        console.log(id);
+        console.log(event.currentTarget.id);
+        this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email':email, 'type':type});
+        this.userCollection.get(id).save();
+    },
 
     newElement: function (element) {
-        new app.adminUserRowView({
-            model: element
-        });
+        if (model.attributes.id != app.router.navBarV.model.attributes.id) {
+            new app.adminUserRowView({
+                model: element
+            });
+        }
     },
 
     newChange: function (element) {
