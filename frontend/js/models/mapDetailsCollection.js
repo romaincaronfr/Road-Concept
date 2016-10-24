@@ -10,7 +10,7 @@ app.collections.mapDetailsCollection = Backbone.Collection.extend({
         return this.absURL + '/api/maps/' + this.id;
     },
     parse: function(response){
-        return response.features;
+        return response.features.features;
     },
     toGeoJSON: function(){
         var features = [];
