@@ -13,10 +13,17 @@ app.models.mapDetailsModel = Backbone.Model.extend({
     },
 
     toGeoJSON: function(){
-        console.log(this);
         return {
             "type": "Feature",
-            "properties": _.omit(this.toJSON(), 'geometry'),
+            "properties": _.omit(this.attributes, 'geometry'),
+            "geometry": this.get('geometry').toJSON()
+        };
+    },
+
+    toJSON: function(){
+        return {
+            "type": "Feature",
+            "properties": _.omit(this.attributes, 'geometry'),
             "geometry": this.get('geometry').toJSON()
         };
     }

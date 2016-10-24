@@ -29,7 +29,6 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
-        this.tile.setOpacity(0);
         this.map = new ol.Map({
             target: 'map',
             layers: [
