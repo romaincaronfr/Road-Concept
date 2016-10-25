@@ -1,29 +1,33 @@
 package fr.enssat.lanniontech.api.repositories;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.DeleteResult;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
-import fr.enssat.lanniontech.api.exceptions.NotImplementedException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
 import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 public class MapFeatureRepository extends MapRepository {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapFeatureRepository.class);
+
     private static final String MONGODB_MAP_COLLECTION_PREFIX = "map_";
 
-    public void create(int mapID, Feature feature) {
+    public Feature create(int mapID, Feature feature) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
@@ -31,6 +35,7 @@ public class MapFeatureRepository extends MapRepository {
             Document document = Document.parse(JSONHelper.toJSON(feature));
             collection.insertOne(document);
         }
+        return feature;
     }
 
     private String computeCollectionName(int mapID) {
@@ -50,7 +55,7 @@ public class MapFeatureRepository extends MapRepository {
         }
     }
 
-    public Feature get(int mapID, UUID featureUUID) {
+    public Feature getFromUUID(int mapID, UUID featureUUID) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
 
@@ -58,21 +63,34 @@ public class MapFeatureRepository extends MapRepository {
 
             try {
                 BasicDBObject query = new BasicDBObject();
-                query.put("properties.uuid",featureUUID);
+                query.put("properties.id", featureUUID.toString());
                 FindIterable<Document> queryResult = collection.find(query);
                 Document item = queryResult.iterator().next();
-                Feature feature = new ObjectMapper().readValue(item.toJson(),Feature.class);
-                System.out.println("Feature retrived -> " + feature);
-                return feature;
-            } catch (Exception e) {
+                return JSONHelper.fromJSON(item.toJson(), Feature.class);
+            } catch (NoSuchElementException e) {
                 e.printStackTrace();
+                return null;
+            } catch (Exception e) {
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
             }
         }
     }
 
-    public void delete(int mapID, int featureID) {
-        throw new NotImplementedException(); //TODO
+    public long delete(int mapID, UUID featureUUID) {
+        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
+            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
+
+            MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
+
+            try {
+                BasicDBObject query = new BasicDBObject();
+                query.put("properties.id", featureUUID.toString());
+                DeleteResult deleteResult = collection.deleteOne(query);
+                return deleteResult.getDeletedCount();
+            } catch (Exception e) {
+                throw new DatabaseOperationException("Error occured @@@ TODO", e);
+            }
+        }
     }
 
     public FeatureCollection getAll(int mapID) {
@@ -83,9 +101,8 @@ public class MapFeatureRepository extends MapRepository {
 
             try {
                 FeatureCollection features = new FeatureCollection();
-                ObjectMapper mapper = new ObjectMapper(); //TODO: Move to JSONHelper ?
                 for (Document item : collection.find()) {
-                    features.add(mapper.readValue(item.toJson(), Feature.class));
+                    features.add(JSONHelper.fromJSON(item.toJson(), Feature.class));
                 }
                 return features;
             } catch (Exception e) {
@@ -98,6 +115,26 @@ public class MapFeatureRepository extends MapRepository {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             db.getCollection(computeCollectionName(mapID)).drop();
+        }
+    }
+
+    public Feature getFromOSMID(int mapID, String openStreetMapID) {
+        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
+            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
+
+            MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
+
+            try {
+                BasicDBObject query = new BasicDBObject();
+                query.put("id", openStreetMapID);
+                FindIterable<Document> queryResult = collection.find(query);
+                Document item = queryResult.iterator().next();
+                return JSONHelper.fromJSON(item.toJson(), Feature.class);
+            } catch (NoSuchElementException e) {
+                return null;
+            } catch (Exception e) {
+                throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
+            }
         }
     }
 }

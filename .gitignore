@@ -97,3 +97,5 @@ local.properties
 Docker/hiveship-docker-compose.yml
 
 *.jar
+
+developper-bin/deployMaelig.sh

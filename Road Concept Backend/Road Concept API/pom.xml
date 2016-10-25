@@ -12,6 +12,13 @@
     <artifactId>road-concept-api</artifactId>
     <packaging>jar</packaging>
 
+    <repositories>
+        <repository>
+            <id>my.mvn.repo</id>
+            <url>https://github.com/keesun/mvn-repo/raw/master</url>
+        </repository>
+    </repositories>
+
     <properties>
         <jackson.version>2.8.3</jackson.version>
         <vertx.version>3.3.3</vertx.version>
@@ -111,6 +118,12 @@
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
             <version>${jersey-common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nhncorp</groupId>
+            <artifactId>mod-socket-io</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
         <!-- TEST DEPENDENCIES -->

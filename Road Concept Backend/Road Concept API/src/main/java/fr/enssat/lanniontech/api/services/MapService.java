@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.api.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
@@ -9,9 +8,11 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
-import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
+import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class MapService extends AbstractService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
 
     private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road", "traffic_signals"};
 
@@ -42,9 +45,7 @@ public class MapService extends AbstractService {
         if (infos == null) {
             throw new EntityNotExistingException(MapInfo.class);
         }
-        if (infos.getUserID() != user.getId()) { //TODO: Replace with 'canAccessMap()'
-            throw new UnconsistentException();
-        }
+        checkAccessMap(user, infos);
 
         FeatureCollection features = mapFeatureRepository.getAll(mapID);
         fr.enssat.lanniontech.api.entities.Map map = new fr.enssat.lanniontech.api.entities.Map();
@@ -54,7 +55,20 @@ public class MapService extends AbstractService {
     }
 
     public Feature getFeature(int mapID, UUID featureUUID) {
-        return mapFeatureRepository.get(mapID, featureUUID);
+        Feature feature = mapFeatureRepository.getFromUUID(mapID, featureUUID);
+        if (feature == null) {
+            throw new EntityNotExistingException(Feature.class);
+        }
+        return feature;
+    }
+
+    public Feature updateFeature(int mapID, Feature feature) {
+        long count = mapFeatureRepository.delete(mapID, feature.getUuid());
+        LOGGER.debug("Deleted count = " + count);
+        if (count == 0) {
+            throw new EntityNotExistingException(Feature.class);
+        }
+        return mapFeatureRepository.create(mapID, feature);
     }
 
     public boolean delete(Integer mapID) {
@@ -67,23 +81,28 @@ public class MapService extends AbstractService {
     // OPEN STREET MAP IMPORTS
     // =======================
 
-    public void importFromOSM(int mapID, String fileData) throws Exception { //TODO: handle exceptions
-        //TODO: Comment détecter les doublons ?
-        // Idée : stocker l'id fournis par OSM et faire une requête en base voir si ça existe. Si ca éxiste, on retire des features à ajouter.
+    public int importFromOSM(int mapID, String fileData) throws Exception {
         MapInfo infos = mapInfoRepository.get(mapID);
         if (infos == null) {
             throw new EntityNotExistingException();
         }
 
-        FeatureCollection features = new ObjectMapper().readValue(fileData, FeatureCollection.class);
+        FeatureCollection features = JSONHelper.fromJSON(fileData, FeatureCollection.class);
         fromOSMAdaptation(features);
 
+        FeatureCollection toAdd = new FeatureCollection();
         for (Feature feature : features) {
-            System.out.println("OSM ID = " + feature.getUuid());
-            //TODO: Vérifier si éxiste déjà dans la mongo, si oui, supprimer des features à ajouter
+            Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
+            if (retrieved == null) {
+                toAdd.add(feature);
+            }
         }
+        if (!toAdd.getFeatures().isEmpty()) {
+            mapFeatureRepository.createAll(mapID, toAdd);
+        }
+        LOGGER.debug("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
+        return toAdd.getFeatures().size();
 
-        mapFeatureRepository.createAll(mapID, features);
     }
 
     //FIXME: refactor
@@ -105,7 +124,7 @@ public class MapService extends AbstractService {
                     iterator.remove();
                 }
             } else {
-                //FIXME: get le highway qui ne serai pas dans les tags
+                //FIXME: getFromUUID le highway qui ne serai pas dans les tags
                 if (feature.getProperties().containsKey("tags")) {
                     Map tags = (LinkedHashMap) feature.getProperties().get("tags");
                     String highway = (String) tags.get("highway");
@@ -129,14 +148,14 @@ public class MapService extends AbstractService {
         Map<String, Object> newProperties = new HashMap<>();
         newProperties.put("type", getType(feature.getProperties()));
         newProperties.put("name", getName(feature.getProperties()));
-        newProperties.put("id", feature.getUUID());
+        newProperties.put("id", feature.getUuid());
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
         Integer time = getRedLightTime(feature.getProperties());
-        //if (time != null) { //TODO: Vérifier que à null, il n'est pas mis dans les properties
-        newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
-        // }
+        if (time != null) { //TODO: Vérifier que à null, il n'est pas mis dans les properties
+            newProperties.put("redlighttime", time);
+        }
         feature.getProperties().clear();
         feature.getProperties().putAll(newProperties);
     }
@@ -270,9 +289,6 @@ public class MapService extends AbstractService {
 
     private Integer getRedLightTime(Map<String, Object> properties) {
         if (getType(properties) == FeatureType.RED_LIGHT) {
-            if (properties.containsKey("redlighttime")) {
-                return Integer.valueOf((String) properties.get("redlighttime"));
-            }
             return 30; // Default value
         }
         return null;

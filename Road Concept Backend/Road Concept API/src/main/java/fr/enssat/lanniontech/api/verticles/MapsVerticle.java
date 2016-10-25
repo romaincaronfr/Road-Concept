@@ -9,6 +9,7 @@ import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
+import fr.enssat.lanniontech.api.utilities.JSONHelper;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
@@ -44,10 +45,27 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/api/maps").blockingHandler(this::processCreateMap);
         router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID").blockingHandler(this::processDeleteMap);
+        router.route(HttpMethod.PUT, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processUpdateFeature);
         router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
 
         router.route(HttpMethod.GET, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processGetOneFeature);
 
+    }
+
+    private void processUpdateFeature(RoutingContext routingContext) {
+        try {
+            int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
+            UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
+            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
+            feature.setUuid(featureUUID); //FIXME: It's just an ugly temporary fix...
+
+            Feature updated = mapService.updateFeature(mapID, feature);
+            HttpResponseBuilder.buildOkResponse(routingContext, updated);
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        }catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
     }
 
     private void processGetOneFeature(RoutingContext routingContext) {
@@ -55,10 +73,12 @@ public class MapsVerticle extends AbstractVerticle {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
             UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
 
-            Feature feature = mapService.getFeature(mapID,featureUUID);
-            HttpResponseBuilder.buildOkResponse(routingContext,feature);
-        } catch (Exception e) {
-            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext,e);
+            Feature feature = mapService.getFeature(mapID, featureUUID);
+            HttpResponseBuilder.buildOkResponse(routingContext, feature);
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        }catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
@@ -130,11 +150,13 @@ public class MapsVerticle extends AbstractVerticle {
 
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
 
-            mapService.importFromOSM(mapID, uploadedFile.toString());
+            int importedCount = mapService.importFromOSM(mapID, uploadedFile.toString());
 
             vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
 
-            HttpResponseBuilder.buildNoContentResponse(routingContext);
+            HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }

@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.api.services;
 
+import fr.enssat.lanniontech.api.entities.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
@@ -75,6 +76,13 @@ public class UserService extends AbstractService {
     public boolean delete(int id) {
         User user = new User();
         user.setId(id);
+
+        MapService mapService = new MapService();
+        List<MapInfo> userMaps = mapService.getAllMapsInfo(user);
+        for (MapInfo map : userMaps) {
+            mapService.delete(map.getId());
+        }
+
         int count = repository.delete(user);
         return count == 1; // If false, something goes wrong (0 or more than 1 rows deleted)
     }

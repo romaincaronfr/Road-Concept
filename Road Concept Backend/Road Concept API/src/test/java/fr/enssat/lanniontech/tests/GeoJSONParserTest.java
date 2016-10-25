@@ -48,7 +48,7 @@ public class GeoJSONParserTest {
         }
     }
 
-    @Test
+    //@Test
     public void testAntoine() {
         try {
             InputStream source = getClass().getResourceAsStream("/antoine-example.json");

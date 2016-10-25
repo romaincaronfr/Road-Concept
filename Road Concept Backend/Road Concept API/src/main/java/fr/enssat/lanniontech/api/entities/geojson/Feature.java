@@ -1,10 +1,10 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,23 +13,14 @@ import java.util.UUID;
 @JsonIgnoreProperties({"_id"}) // "_id" is auto set by MongoDB
 public class Feature extends GeoJsonObject {
 
-    @JsonIgnore // Set in the 'properties'
-    private final UUID uuid = UUID.randomUUID();
+    @JsonProperty(access = Access.WRITE_ONLY)
+    private UUID uuid = UUID.randomUUID(); //FIXME: Change sur un update par exemple... Problème de unmarshalling non prioritaire
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
     private GeoJsonObject geometry;
-    @JsonProperty("id")
+    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
     private String openStreetMapID;
-
-    public void setProperty(String key, Object value) {
-        properties.put(key, value);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getProperty(String key) {
-        return (T) properties.get(key);
-    }
 
     public Map<String, Object> getProperties() {
         return properties;
@@ -47,16 +38,18 @@ public class Feature extends GeoJsonObject {
         this.geometry = geometry;
     }
 
-    public UUID getUUID() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    @JsonIgnore
-    public String getUuid() {
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getOpenStreetMapID() {
         return openStreetMapID;
     }
 
-    @JsonProperty("id")
     public void setOpenStreetMapID(String openStreetMapID) {
         this.openStreetMapID = openStreetMapID;
     }

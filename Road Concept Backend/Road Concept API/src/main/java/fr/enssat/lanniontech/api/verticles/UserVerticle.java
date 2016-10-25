@@ -64,7 +64,6 @@ public class UserVerticle extends AbstractVerticle {
         }
     }
 
-
     private void processGetUser(RoutingContext routingContext) {
         try {
             checkAdminLevel(routingContext);
@@ -140,6 +139,7 @@ public class UserVerticle extends AbstractVerticle {
             if (id == logged.getId()) {
                 routingContext.session().put(Constants.SESSION_CURRENT_USER, updated);
             }
+
             HttpResponseBuilder.buildOkResponse(routingContext, updated);
         } catch (DecodeException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");

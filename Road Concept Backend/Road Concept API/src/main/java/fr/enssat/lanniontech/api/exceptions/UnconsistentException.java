@@ -1,34 +1,13 @@
 package fr.enssat.lanniontech.api.exceptions;
 
+import fr.enssat.lanniontech.api.entities.Entity;
+
 public class UnconsistentException extends RoadConceptException {
 
     /**
-     * Constructs a new AuthenticationException with default message.
+     * Constructs a new UnconsistentException.
      */
-    public UnconsistentException() {
-
-    }
-
-    /**
-     * Constructs a new AuthenticationException with specified detail message.
-     */
-    public UnconsistentException(String message) {
-        super(message);
-    }
-
-    /**
-     * Constructs a new AuthenticationException with specified detail message
-     * and nested Throwable.
-     */
-    public UnconsistentException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    /**
-     * Constructs a new AuthenticationException with specified nested Throwable
-     * and default message.
-     */
-    public UnconsistentException(Throwable cause) {
-        super(cause);
+    public UnconsistentException(Class<? extends Entity> clazz1, Class<? extends Entity> clazz2) {
+        super(clazz1 + " is not consistent with " + clazz2);
     }
 }
