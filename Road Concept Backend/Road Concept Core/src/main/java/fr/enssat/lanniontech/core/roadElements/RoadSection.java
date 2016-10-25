@@ -9,12 +9,13 @@ public class RoadSection {
     private double length;
 
 
-    private Lane laneA; //this lane is on rigth side in A -> B scenario
-    private Lane laneB; //this lane is on left side in A -> B scenario
+    private Lane laneAB; //this lane is on rigth side in A -> B scenario
+    private Lane laneBA; //this lane is on left side in A -> B scenario
     private PosFunction function;
     private Road myRoad;
 
 
+    @Deprecated
     public RoadSection(Position A, Position B) {
         this(A, B, null);
     }
@@ -24,13 +25,13 @@ public class RoadSection {
         this.B = B;
         length = Position.length(A, B);
         function = new PosFunction(A, B);
-        laneA = new Lane(this, length);
-        laneB = new Lane(this, length);
+        laneAB = new Lane(this, length);
+        laneBA = new Lane(this, length);
         this.myRoad = myRoad;
     }
 
     public Position getPosition(Lane myLane, double pos) {
-        if (myLane == laneA) {
+        if (myLane == laneAB) {
             return function.get(pos);
         } else {
             return function.get(length - pos);
@@ -44,7 +45,7 @@ public class RoadSection {
      * @return
      */
     public Position getPosition(Lane myLane, double pos, double widthPos) {
-        if (myLane == laneA) {
+        if (myLane == laneAB) {
             return function.get(pos, widthPos);
         } else {
             return function.get(length - pos, -widthPos);
@@ -53,26 +54,26 @@ public class RoadSection {
 
     public Lane getRightLane(Position P) {
         if (P == A) {
-            return laneA;
+            return laneAB;
         } else {
-            return laneB;
+            return laneBA;
         }
     }
 
     public Lane getLeftLane(Position P) {
         if (P == B) {
-            return laneA;
+            return laneAB;
         } else {
-            return laneB;
+            return laneBA;
         }
     }
 
-    public Lane getLaneA() {
-        return laneA;
+    public Lane getLaneAB() {
+        return laneAB;
     }
 
-    public Lane getLaneB() {
-        return laneB;
+    public Lane getLaneBA() {
+        return laneBA;
     }
 
     public double getLength() {
@@ -92,7 +93,7 @@ public class RoadSection {
     }
 
     public double getWPos(Lane lane, double width) {
-        if (lane == laneA) {
+        if (lane == laneAB) {
             return width / 2;
         } else {
             return -width / 2;
@@ -103,31 +104,7 @@ public class RoadSection {
         return myRoad;
     }
 
-    public void setMyRoad(Road myRoad) {
-        this.myRoad = myRoad;
-    }
-
     public boolean isLeftLane(Lane l) {
-        return laneB == l;
+        return laneBA == l;
     }
-/*
-    @Deprecated
-    public void setTrajectoryMap(Position P,Map<Integer, SimpleTrajectory> trajectoryMap) {
-        if(P==A){
-            laneB.setTrajectoryMap(trajectoryMap);
-        }else if(P==B){
-            laneA.setTrajectoryMap(trajectoryMap);
-        }
-    }
-
-    @Deprecated
-    public Map<Integer, SimpleTrajectory> getTrajectoryMap(Position P) {
-        if(P==A){
-            return laneB.getTrajectoryMap();
-        }else if(P==B){
-            return laneA.getTrajectoryMap();
-        }
-        return null;
-    }
-*/
 }

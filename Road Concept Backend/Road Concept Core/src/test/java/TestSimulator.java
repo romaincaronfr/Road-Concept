@@ -8,7 +8,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 1;
+        int vehicleNumber = 50;
 
         Position A = Sim.positionManager.addPosition(40, 0);
         Position B = Sim.positionManager.addPosition(40, 0.1);
@@ -17,8 +17,8 @@ public class TestSimulator {
 
         Road R = Sim.roadManager.addRoadSectionToRoad(A, B, 0);
         Sim.roadManager.addRoadSectionToRoad(B, C, 0);
-        Sim.roadManager.addRoadSectionToRoad(C, D, 0);
-        Sim.roadManager.addRoadSectionToRoad(D, A, 0);
+        Sim.roadManager.addRoadSectionToRoad(C, D, 1);
+        Sim.roadManager.addRoadSectionToRoad(D, A, 1);
         Sim.vehicleManager.addToSpawnArea(R);
 
         for (int i = 0; i < vehicleNumber; i++) {

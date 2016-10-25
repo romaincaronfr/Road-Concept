@@ -19,10 +19,10 @@ public class TestRoadManager {
         RoadSection RS1 = RM.addRoadSection(A, B);
         RoadSection RS2 = RM.addRoadSection(B, C);
 
-        Assert.assertTrue(RS1.getLaneA().getNextLane() == RS2.getLaneA());
-        Assert.assertTrue(RS2.getLaneB().getNextLane() == RS1.getLaneB());
-        Assert.assertNull(RS1.getLaneB().getNextLane());
-        Assert.assertNull(RS2.getLaneA().getNextLane());
+        Assert.assertTrue(RS1.getLaneAB().getNextLane() == RS2.getLaneAB());
+        Assert.assertTrue(RS2.getLaneBA().getNextLane() == RS1.getLaneBA());
+        Assert.assertNull(RS1.getLaneBA().getNextLane());
+        Assert.assertNull(RS2.getLaneAB().getNextLane());
     }
 
     @Test
@@ -35,10 +35,10 @@ public class TestRoadManager {
         RoadSection RS1 = RM.addRoadSection(A, B);
         RoadSection RS2 = RM.addRoadSection(C, A);
 
-        Assert.assertTrue(RS2.getLaneA().getNextLane() == RS1.getLaneA());
-        Assert.assertTrue(RS1.getLaneB().getNextLane() == RS2.getLaneB());
-        Assert.assertNull(RS2.getLaneB().getNextLane());
-        Assert.assertNull(RS1.getLaneA().getNextLane());
+        Assert.assertTrue(RS2.getLaneAB().getNextLane() == RS1.getLaneAB());
+        Assert.assertTrue(RS1.getLaneBA().getNextLane() == RS2.getLaneBA());
+        Assert.assertNull(RS2.getLaneBA().getNextLane());
+        Assert.assertNull(RS1.getLaneAB().getNextLane());
     }
 
     @Test
@@ -86,15 +86,18 @@ public class TestRoadManager {
     public void testJoint(){
         RoadManager RM = new RoadManager();
         Position I1 = new Position(0, -1);
-        Position I2 = new Position(0,1);
         Position A = new Position(1, 0);
         Position B = new Position(-1, 0);
 
         Road R1 = RM.addRoadSectionToRoad(A, I1, 0);
         Road R2 = RM.addRoadSectionToRoad(B, I1, 1);
 
-
         Intersection Inter1 = RM.getIntersection(I1);
+
+        Assert.assertNull(R1.get(0).getLaneBA().getInsertTrajectory().getNext());
+        Assert.assertNull(R2.get(0).getLaneBA().getInsertTrajectory().getNext());
+        Assert.assertNotNull(R1.get(0).getLaneAB().getInsertTrajectory().getNext());
+        Assert.assertNotNull(R2.get(0).getLaneAB().getInsertTrajectory().getNext());
 
 
         Assert.assertEquals(2,Inter1.getRoadSectionsSize());

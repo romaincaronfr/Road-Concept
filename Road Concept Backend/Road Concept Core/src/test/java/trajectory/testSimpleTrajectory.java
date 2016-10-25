@@ -80,7 +80,7 @@ public class testSimpleTrajectory {
 
         RoadSection Rs = new RoadSection(A, B);
 
-        Side S = new Side(0, null, Rs.getLaneA());
+        Side S = new Side(0, null, Rs.getLaneAB());
 
         Assert.assertEquals(Rs.getLength(), S.getDistanceToNextCar(), 0.01);
 
@@ -96,8 +96,8 @@ public class testSimpleTrajectory {
 
         RoadSection Rs = new RoadSection(A, B);
 
-        Side S1 = new Side(0, null, Rs.getLaneA());
-        Side S2 = new Side(100, null, Rs.getLaneA());
+        Side S1 = new Side(0, null, Rs.getLaneAB());
+        Side S2 = new Side(100, null, Rs.getLaneAB());
 
         Assert.assertEquals(S2.getPos(), S1.getDistanceToNextCar(), 0.01);
 
