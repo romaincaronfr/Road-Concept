@@ -42,8 +42,8 @@ public class Simulator implements Runnable {
 
         Road R = roadManager.addRoadSectionToRoad(A, B, 0);
         roadManager.addRoadSectionToRoad(B, C, 0);
-        roadManager.addRoadSectionToRoad(C, D, 1);
-        roadManager.addRoadSectionToRoad(D, A, 1);
+        roadManager.addRoadSectionToRoad(C, D, 0);
+        roadManager.addRoadSectionToRoad(D, A, 0);
 
         vehicleManager.addToSpawnArea(R);
 
@@ -77,7 +77,7 @@ public class Simulator implements Runnable {
         int j = 1;
         for (long i = 0; i < step; i++) {
 
-            if (j == 1000) {
+            if (j == 10/precision) {
                 vehicleManager.newStep(precision, true);
                 j = 1;
             } else {

@@ -90,7 +90,7 @@ public class PosFunction {
             k = M[0] / M[2];
             M[0] -= M[2] * k;
             M[1] -= M[3] * k;
-            R[0] -= R[3] * k;
+            R[0] -= R[1] * k;//todo verify this line
 
             p[1] = (R[0] / M[1]);
             p[0] = (R[1] - (p[1] * M[3])) / M[2];

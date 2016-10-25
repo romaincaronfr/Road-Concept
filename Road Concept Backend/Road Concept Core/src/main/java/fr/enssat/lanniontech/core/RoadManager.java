@@ -65,11 +65,9 @@ public class RoadManager {
         Road R = roads.get(id);
         if (R == null) {
             R = new Road(id);
-            R.addSection(addRoadSection(A, B, R));
             roads.put(id, R);
-        } else {
-            R.addSection(addRoadSection(A, B, R));
         }
+        R.addSection(addRoadSection(A, B, R));
         return R;
     }
 
@@ -85,7 +83,5 @@ public class RoadManager {
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
     }
-
-
 
 }

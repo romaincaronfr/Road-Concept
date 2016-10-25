@@ -3,7 +3,7 @@ import fr.enssat.lanniontech.core.Tools;
 
 public class TestSimulator {
     public static void main(String[] args) {
-        Simulator Sim = new Simulator(50);
+        Simulator Sim = new Simulator(1);
 
         try {
             Thread.sleep(2000);

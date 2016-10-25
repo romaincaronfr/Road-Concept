@@ -51,4 +51,5 @@ public class TestIntersection {
         Assert.assertFalse(Inter.removeRoadSection(9));
         Assert.assertEquals(Inter.getTrajectoriesSize(), 12);
     }
+
 }
