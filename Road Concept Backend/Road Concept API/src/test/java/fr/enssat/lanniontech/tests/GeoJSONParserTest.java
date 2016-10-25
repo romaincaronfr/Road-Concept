@@ -33,13 +33,10 @@ public class GeoJSONParserTest {
     }
 
     @Test
-    public void testSuccessSmallMap() {
+    public void testSuccessMarseille() {
         try {
-            InputStream source = getClass().getResourceAsStream("/geojson-small-map.json");
-
+            InputStream source = getClass().getResourceAsStream("/marseille-saint-antoine.json");
             FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
-
-            //    System.out.println(features);
 
         } catch (Exception e) {
             // Should not happen
@@ -51,15 +48,11 @@ public class GeoJSONParserTest {
     //@Test
     public void testAntoine() {
         try {
-            InputStream source = getClass().getResourceAsStream("/antoine-example.json");
+            InputStream source = getClass().getResourceAsStream("/test-antoine.json");
 
             Map map = new Map();
             FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
             map.setFeatures(features);
-
-            //     for (Feature feature : features) {
-            //         System.out.println(feature.getType());
-            //     }
 
         } catch (Exception e) {
             // Should not happen
