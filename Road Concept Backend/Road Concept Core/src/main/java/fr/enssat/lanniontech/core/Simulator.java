@@ -1,7 +1,5 @@
 package fr.enssat.lanniontech.core;
 
-import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.Road;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +56,7 @@ public class Simulator implements Runnable {
         int j = 1;
         for (long i = 0; i < step; i++) {
 
-            if (j == 10/precision) {
+            if (j == 10 / precision) {
                 vehicleManager.newStep(precision, true);
                 j = 1;
             } else {

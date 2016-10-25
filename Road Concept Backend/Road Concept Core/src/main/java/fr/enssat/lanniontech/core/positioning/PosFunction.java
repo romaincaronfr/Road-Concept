@@ -47,9 +47,6 @@ public class PosFunction {
     /**
      * return the intersection position of the two {@link PosFunction}
      *
-     * @param Pf
-     * @param myW
-     * @param PfW
      * @return [0]: my pos, [1]: Pf pos
      */
     public double[] getInterPos(PosFunction Pf, double myW, double PfW) {
@@ -101,9 +98,6 @@ public class PosFunction {
 
     /**
      * return a positive number if Pf cross from left side
-     *
-     * @param Pf
-     * @return
      */
     public double det(PosFunction Pf) {
         return alon * Pf.getAlat() - alat * Pf.getAlon();

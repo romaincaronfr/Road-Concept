@@ -5,12 +5,14 @@ import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class SimulationHistory {
-    private HashMap<Integer,LinkedHashMap<Long,SpaceTimePosition>> vehiclePositionsFromId;
+    private Map<Integer, LinkedHashMap<Long, SpaceTimePosition>> vehiclePositionsFromId;
     //structure: <VehicleId,<timestamp,Position>>
-    private LinkedHashMap<Long,TreeMap<Double,TreeMap<Double,Integer>>> vehicleIdFromPosition;
+    private Map<Long, TreeMap<Double, TreeMap<Double, Integer>>> vehicleIdFromPosition;
     //structure: <timestamp,<Longitude,<Latitude,VehicleId>>>
 
 
@@ -25,30 +27,30 @@ public class SimulationHistory {
         }
         vehiclePositionsFromId.get(P.getId()).put(P.getTime(), P);
 
-        vehicleIdFromPosition.putIfAbsent(P.getTime(),new TreeMap<>());
-        vehicleIdFromPosition.get(P.getTime()).putIfAbsent(P.getLon(),new TreeMap<>());
-        vehicleIdFromPosition.get(P.getTime()).get(P.getLon()).putIfAbsent(P.getLat(),P.getId());
+        vehicleIdFromPosition.putIfAbsent(P.getTime(), new TreeMap<>());
+        vehicleIdFromPosition.get(P.getTime()).putIfAbsent(P.getLon(), new TreeMap<>());
+        vehicleIdFromPosition.get(P.getTime()).get(P.getLon()).putIfAbsent(P.getLat(), P.getId());
 
     }
 
-    public ArrayList<SpaceTimePosition> getVehiclePosition(int vehicleId){
-        ArrayList<SpaceTimePosition> res = new ArrayList<>();
+    public List<SpaceTimePosition> getVehiclePosition(int vehicleId) {
+        List<SpaceTimePosition> res = new ArrayList<>();
 
         res.addAll(vehiclePositionsFromId.get(vehicleId).values());
 
         return res;
     }
 
-    public ArrayList<SpaceTimePosition> getVehiclesIn(double minLongitude,double maxLongitude,double minLatitude,double maxLatitude,long timestamp){
-        ArrayList<SpaceTimePosition> vehiclesIn =  new ArrayList<>();
-        for (double longitude : vehicleIdFromPosition.get(timestamp).keySet()){
-            if(longitude > maxLongitude){
+    public List<SpaceTimePosition> getVehiclesIn(double minLongitude, double maxLongitude, double minLatitude, double maxLatitude, long timestamp) {
+        List<SpaceTimePosition> vehiclesIn = new ArrayList<>();
+        for (double longitude : vehicleIdFromPosition.get(timestamp).keySet()) {
+            if (longitude > maxLongitude) {
                 break;
-            }else if (longitude > minLongitude){
-                for(double latitude:vehicleIdFromPosition.get(timestamp).get(longitude).keySet()){
-                    if(latitude > maxLatitude) {
+            } else if (longitude > minLongitude) {
+                for (double latitude : vehicleIdFromPosition.get(timestamp).get(longitude).keySet()) {
+                    if (latitude > maxLatitude) {
                         break;
-                    }else if (latitude > minLatitude){
+                    } else if (latitude > minLatitude) {
                         vehiclesIn.add(vehiclePositionsFromId.get(vehicleIdFromPosition.get(timestamp).get(longitude).get(latitude)).get(timestamp));
                     }
                 }

@@ -5,7 +5,7 @@ public class SpaceTimePosition extends Position {
     long time;
     double angle;
     int vehicleId;
-    
+
     //todo reset to private
     public SpaceTimePosition(double lon, double lat, long time, double angle, int vehicleId) {
         super(lon, lat);

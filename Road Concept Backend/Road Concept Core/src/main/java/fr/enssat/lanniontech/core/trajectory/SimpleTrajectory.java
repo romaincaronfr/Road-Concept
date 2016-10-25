@@ -5,11 +5,12 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SimpleTrajectory extends Trajectory {
-    private ArrayList<Trajectory> sourcesTrajectories;
+    private List<Trajectory> sourcesTrajectories;
     private TrajectoryType sourceType;
-    private ArrayList<Trajectory> destinationsTrajectories;
+    private List<Trajectory> destinationsTrajectories;
     private TrajectoryType destinationType;
     private PosFunction pF;
     private double width;
@@ -18,69 +19,67 @@ public class SimpleTrajectory extends Trajectory {
     private boolean inverted;
 
     public SimpleTrajectory(PosFunction pF, double start, double stop, double width) {
-        sourcesTrajectories = new ArrayList<>();
-        destinationsTrajectories = new ArrayList<>();
-        sourceType = TrajectoryType.Undefined;
-        destinationType = TrajectoryType.Undefined;
-        this.pF = pF;
-        this.start = start;
-        this.stop = stop;
-        this.inverted = start > stop;
-        if (inverted) {
+        setSourcesTrajectories(new ArrayList<>());
+        setDestinationsTrajectories(new ArrayList<>());
+        setSourceType(TrajectoryType.Undefined);
+        setDestinationType(TrajectoryType.Undefined);
+        this.setpF(pF);
+        this.setStart(start);
+        this.setStop(stop);
+        this.setInverted(start > stop);
+        if (isInverted()) {
             length = start - stop;
-            this.width = -width;
+            this.setWidth(-width);
         } else {
             length = stop - start;
-            this.width = width;
+            this.setWidth(width);
         }
     }
 
     /**
      * this method add a destination trajectory
-     *
-     * @param t
      */
     public void addDestination(SimpleTrajectory t) {
-        if (destinationType == TrajectoryType.Undefined) {
-            if (pF.cross(t.pF)) {
-                double Ps[] = pF.getInterPos(t.pF, width, t.width);
+        if (getDestinationType() == TrajectoryType.Undefined) {
+            if (getpF().cross(t.getpF())) {
+                double Ps[] = getpF().getInterPos(t.getpF(), getWidth(), t.getWidth());
 
                 setStop(Ps[0]);
                 t.setStart(Ps[1]);
 
-                destinationsTrajectories.add(t);
-                t.sourcesTrajectories.add(this);
+                getDestinationsTrajectories().add(t);
+                t.getSourcesTrajectories().add(this);
 
-                t.sourceType = TrajectoryType.SimpleTrajectory;
-                sourceType = TrajectoryType.SimpleTrajectory;
-            } else if (t.getGPS(stop).equals(getGPS(start))) {
-                destinationsTrajectories.add(t);
-                t.sourcesTrajectories.add(this);
+                t.setSourceType(TrajectoryType.SimpleTrajectory);
+                setSourceType(TrajectoryType.SimpleTrajectory);
+            } else if (t.getGPS(getStop()).equals(getGPS(getStart()))) {
+                getDestinationsTrajectories().add(t);
+                t.getSourcesTrajectories().add(this);
             }
         }
     }
 
     public void addDestination(AdvancedTrajectory t) {
-        if (destinationType != TrajectoryType.SimpleTrajectory) {
-            destinationsTrajectories.add(t);
-            if (inverted) {
-                setStop(stop + t.getSecurityDistance());
+        if (getDestinationType() != TrajectoryType.SimpleTrajectory) {
+            getDestinationsTrajectories().add(t);
+            if (isInverted()) {
+                setStop(getStop() + t.getSecurityDistance());
             } else {
-                setStop(stop - t.getSecurityDistance());
+                setStop(getStop() - t.getSecurityDistance());
             }
-            destinationType = TrajectoryType.AdvancedTrajectory;
+            setDestinationType(TrajectoryType.AdvancedTrajectory);
         }
     }
 
     public void addSource(AdvancedTrajectory t) {
-        if (sourceType != TrajectoryType.SimpleTrajectory) {
-            sourcesTrajectories.add(t);
-            if (inverted) {
-                setStart(start - t.getSecurityDistance());
+        if (getSourceType() != TrajectoryType.SimpleTrajectory) {
+            getSourcesTrajectories().add(t);
+            if (isInverted()) {
+                setStart(getStart() - t.getSecurityDistance());
             } else {
-                setStart(start + t.getSecurityDistance());
+                setStart(getStart() + t.getSecurityDistance());
             }
-            sourceType = TrajectoryType.AdvancedTrajectory;
+            setSourceType(TrajectoryType.AdvancedTrajectory);
         }
     }
 
@@ -94,24 +93,24 @@ public class SimpleTrajectory extends Trajectory {
 
     public void setStart(double start) {
         this.start = start;
-        if (inverted) {
-            length = start - stop;
+        if (isInverted()) {
+            length = start - getStop();
         } else {
-            length = stop - start;
+            length = getStop() - start;
         }
     }
 
     public void setStop(double stop) {
         this.stop = stop;
-        if (inverted) {
-            length = start - stop;
+        if (isInverted()) {
+            length = getStart() - stop;
         } else {
-            length = stop - start;
+            length = stop - getStart();
         }
     }
 
     public PosFunction getFunction() {
-        return pF;
+        return getpF();
     }
 
     public double getWidth() {
@@ -124,64 +123,70 @@ public class SimpleTrajectory extends Trajectory {
 
     //Trajectory class implementation
 
+    @Override
     public Trajectory getNext() {
-        if (destinationsTrajectories.size() == 0) {
+        if (getDestinationsTrajectories().size() == 0) {
             return null;
         } else {
-            return destinationsTrajectories.get(0);
+            return getDestinationsTrajectories().get(0);
         }
     }
 
+    @Override
     public double getSpeedOfFirst() {
         if (vehiclesSides.size() == 0) {
-            if (destinationsTrajectories.size() == 0) {
+            if (getDestinationsTrajectories().size() == 0) {
                 return 0;
             } else {
-                return destinationsTrajectories.get(0).getSpeedOfFirst();
+                return getDestinationsTrajectories().get(0).getSpeedOfFirst();
             }
         } else {
             return vehiclesSides.get(0).getMyVehicle().getSpeed();
         }
     }
 
+    @Override
     public double getNextCarSpeed(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            if (destinationsTrajectories.size() == 0) {
+            if (getDestinationsTrajectories().size() == 0) {
                 return 0;
             } else {
-                return destinationsTrajectories.get(0).getSpeedOfFirst();
+                return getDestinationsTrajectories().get(0).getSpeedOfFirst();
             }
         } else {
             return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
     }
 
+    @Override
     public double getDistanceToFirst() {
         if (vehiclesSides.size() == 0) {
-            if (destinationsTrajectories.size() == 0) {
+            if (getDestinationsTrajectories().size() == 0) {
                 return length;
             } else {
-                return length + destinationsTrajectories.get(0).getDistanceToFirst();
+                return length + getDestinationsTrajectories().get(0).getDistanceToFirst();
             }
         } else {
             return vehiclesSides.get(0).getPos();
         }
     }
 
+    @Override
     public double getDistanceToNext(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            if (destinationsTrajectories.size() == 0) {
+            if (getDestinationsTrajectories().size() == 0) {
                 return length - side.getPos();
             } else {
-                return length - side.getPos() + destinationsTrajectories.get(0).getDistanceToFirst();
+                return length - side.getPos() + getDestinationsTrajectories().get(0).getDistanceToFirst();
             }
         } else {
             return vehiclesSides.get(pos + 1).getPos() - side.getPos();
         }
     }
 
+    @Override
     public boolean rangeIsFree(double start, double end) {
         int i = 0;
         double pos;
@@ -197,13 +202,62 @@ public class SimpleTrajectory extends Trajectory {
         return true;
     }
 
+    @Override
     public Position getGPS(double pos) {
         Position P;
-        if (inverted) {
-            P = pF.get(start - pos, width);
+        if (isInverted()) {
+            P = getpF().get(getStart() - pos, getWidth());
         } else {
-            P = pF.get(start + pos, width);
+            P = getpF().get(getStart() + pos, getWidth());
         }
         return P;
+    }
+
+    public List<Trajectory> getSourcesTrajectories() {
+        return sourcesTrajectories;
+    }
+
+    public void setSourcesTrajectories(List<Trajectory> sourcesTrajectories) {
+        this.sourcesTrajectories = sourcesTrajectories;
+    }
+
+    public TrajectoryType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(TrajectoryType sourceType) {
+        this.sourceType = sourceType;
+    }
+
+    public List<Trajectory> getDestinationsTrajectories() {
+        return destinationsTrajectories;
+    }
+
+    public void setDestinationsTrajectories(List<Trajectory> destinationsTrajectories) {
+        this.destinationsTrajectories = destinationsTrajectories;
+    }
+
+    public TrajectoryType getDestinationType() {
+        return destinationType;
+    }
+
+    public void setDestinationType(TrajectoryType destinationType) {
+        this.destinationType = destinationType;
+    }
+
+    public PosFunction getpF() {
+        return pF;
+    }
+
+    public void setpF(PosFunction pF) {
+        this.pF = pF;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public void setInverted(boolean inverted) {
+        this.inverted = inverted;
     }
 }

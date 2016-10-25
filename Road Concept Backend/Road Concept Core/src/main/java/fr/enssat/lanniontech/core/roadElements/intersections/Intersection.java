@@ -6,11 +6,13 @@ import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Intersection {
+
     private Position P;
-    private Map<Integer, RoadSection> roadSections;
-    private Map<Integer, Map<Integer, AdvancedTrajectory>> trajectories;
+    private Map<UUID, RoadSection> roadSections;
+    private Map<UUID, Map<UUID, AdvancedTrajectory>> trajectories;
     //structure is <source ,<destination, AdvancedTrajectory>>
 
     public Intersection(Position P) {
@@ -19,19 +21,17 @@ public class Intersection {
         trajectories = new HashMap<>();
     }
 
-    private void addTrajectories(int id) {
+    private void addTrajectories(UUID id) {
         //find the missing trajectories
-        Map<Integer, AdvancedTrajectory> myTrajectories = new HashMap<>();
+        Map<UUID, AdvancedTrajectory> myTrajectories = new HashMap<>();
 
-        for (int i : roadSections.keySet()) {
-            if (id != i) {
-                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(i).getLeftLane(P).getInsertTrajectory(),
-                        roadSections.get(id).getRightLane(P).getInsertTrajectory());
-                trajectories.get(i).put(id, T);
+        for (UUID uuid : roadSections.keySet()) {
+            if (id != uuid) {
+                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory());
+                trajectories.get(uuid).put(id, T);
 
-                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(),
-                        roadSections.get(i).getRightLane(P).getInsertTrajectory());
-                myTrajectories.put(i, T);
+                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory());
+                myTrajectories.put(uuid, T);
             }
         }
         trajectories.put(id, myTrajectories);
@@ -48,8 +48,8 @@ public class Intersection {
 
     public int getTrajectoriesSize() {
         int s = 0;
-        for (int i : trajectories.keySet()) {
-            s += trajectories.get(i).size();
+        for (UUID uuid : trajectories.keySet()) {
+            s += trajectories.get(uuid).size();
         }
         return s;
     }
@@ -58,10 +58,10 @@ public class Intersection {
         return roadSections.size();
     }
 
-    public boolean removeRoadSection(int id) {
+    public boolean removeRoadSection(UUID id) {
         if (roadSections.containsKey(id)) {
-            for (int i : trajectories.keySet()) {
-                trajectories.get(i).remove(id);
+            for (UUID uuid : trajectories.keySet()) {
+                trajectories.get(uuid).remove(id);
             }
             trajectories.remove(id);
             roadSections.remove(id);

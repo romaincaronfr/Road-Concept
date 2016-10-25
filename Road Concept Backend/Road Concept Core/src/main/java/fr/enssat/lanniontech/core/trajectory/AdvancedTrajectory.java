@@ -5,13 +5,14 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AdvancedTrajectory extends Trajectory {
     private SimpleTrajectory source;
     private SimpleTrajectory destination;
-    private ArrayList<PosFunction> Pfs;
-    private ArrayList<Double> lengths;
-    private ArrayList<Double> Ps;
+    private List<PosFunction> Pfs;
+    private List<Double> lengths;
+    private List<Double> Ps;
     private double securityDistance;
 
     public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
@@ -68,6 +69,7 @@ public class AdvancedTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public double getNextCarSpeed(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -77,6 +79,7 @@ public class AdvancedTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public double getDistanceToFirst() {
         if (vehiclesSides.size() == 0) {
             return length + destination.getDistanceToFirst();
@@ -85,6 +88,7 @@ public class AdvancedTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public double getDistanceToNext(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -94,6 +98,7 @@ public class AdvancedTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public boolean rangeIsFree(double start, double end) {
         int i = 0;
         double pos;
@@ -109,6 +114,7 @@ public class AdvancedTrajectory extends Trajectory {
         return true;
     }
 
+    @Override
     public Position getGPS(double pos) {
         if (pos < lengths.get(0)) {
             return source.getGPS(source.getLength() + pos);

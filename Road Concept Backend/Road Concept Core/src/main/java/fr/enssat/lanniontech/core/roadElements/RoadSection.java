@@ -8,7 +8,6 @@ public class RoadSection {
     private Position B;
     private double length;
 
-
     private Lane laneAB; //this lane is on rigth side in A -> B scenario
     private Lane laneBA; //this lane is on left side in A -> B scenario
     private PosFunction function;
@@ -39,10 +38,8 @@ public class RoadSection {
     }
 
     /**
-     * @param myLane
-     * @param pos
-     * @param widthPos position of the vehicle from the left side of the road
-     * @return
+     * @param widthPos
+     *         position of the vehicle from the left side of the road
      */
     public Position getPosition(Lane myLane, double pos, double widthPos) {
         if (myLane == laneAB) {

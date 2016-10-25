@@ -3,36 +3,36 @@ package fr.enssat.lanniontech.core.roadElements;
 import fr.enssat.lanniontech.core.positioning.Position;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Road {
-    private int id;
-    private String name;
+    private UUID id;
     private double maxSpeed;
-    private ArrayList<RoadSection> sections;
+    private List<RoadSection> sections;
     private double length;
     private double timeWeigth;
     private Position A;
     private Position B;
 
-    public Road(int id) {
+    public Road(UUID id) {
         this(id, 50);
     }
 
-    public Road(int id, double maxSpeed) {
+    public Road(UUID id, double maxSpeed) {
         this.id = id;
         this.maxSpeed = maxSpeed;
-        this.sections = new ArrayList<RoadSection>();
+        this.sections = new ArrayList<>();
         this.length = 0;
         this.timeWeigth = 0;
-        this.name = "";
         A = null;
         B = null;
     }
 
     private void updateRoad() {
         length = 0;
-        for (int i = 0; i < sections.size(); i++) {
-            length += sections.get(i).getLength();
+        for (RoadSection section : sections) {
+            length += section.getLength();
         }
         timeWeigth = length / maxSpeed;
     }
@@ -66,7 +66,7 @@ public class Road {
         return sections.size();
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 }

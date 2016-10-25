@@ -3,12 +3,13 @@ package fr.enssat.lanniontech.core;
 import fr.enssat.lanniontech.core.positioning.Position;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PositionManager {
-    private ArrayList<Position> positions;
+    private List<Position> positions;
 
     public PositionManager() {
-        positions = new ArrayList<Position>();
+        positions = new ArrayList<>();
     }
 
     public Position addPosition(double lat, double lon) {

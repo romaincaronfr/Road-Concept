@@ -3,22 +3,21 @@ package fr.enssat.lanniontech.core.roadElements;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Lane {
     private RoadSection myRoadSection;
     private Lane nextLane;
     private double length;
     private double width;
-    private ArrayList<SimpleTrajectory> trajectories; //rigth side (0) << left side
+    private List<SimpleTrajectory> trajectories; //rigth side (0) << left side
 
     Lane(RoadSection myRoadSection, double length) {
         this.myRoadSection = myRoadSection;
         this.length = length;
-        this.nextLane = null;
         width = 3.5;
         trajectories = new ArrayList<>();
-        if (!myRoadSection.isLeftLane(this)
-                ) {
+        if (!myRoadSection.isLeftLane(this)) {
             trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, length, width / 2));
         } else {
             trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), length, 0, width / 2));
@@ -43,8 +42,6 @@ public class Lane {
 
     /**
      * set the next lane and assemble lanes trajectories
-     *
-     * @param nextLane
      */
     public void setNextLane(Lane nextLane) {
         this.nextLane = nextLane;

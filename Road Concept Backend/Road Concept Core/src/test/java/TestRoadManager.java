@@ -6,6 +6,8 @@ import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.UUID;
+
 
 public class TestRoadManager {
 
@@ -56,8 +58,8 @@ public class TestRoadManager {
         Position D = new Position(0, -1);
         Position E = new Position(1, 1);
 
-        Road R1 = RM.addRoadSectionToRoad(A, I, 0);
-        Road R2 = RM.addRoadSectionToRoad(B, I, 1);
+        Road R1 = RM.addRoadSectionToRoad(A, I, UUID.randomUUID());
+        Road R2 = RM.addRoadSectionToRoad(B, I, UUID.randomUUID());
 
         Intersection Inter = RM.getIntersection(I);
 
@@ -65,17 +67,17 @@ public class TestRoadManager {
         Assert.assertEquals(Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1),
                 Inter.getTrajectoriesSize());
 
-        Road R3 = RM.addRoadSectionToRoad(C, I, 2);
+        Road R3 = RM.addRoadSectionToRoad(C, I, UUID.randomUUID());
         Assert.assertEquals(3,Inter.getRoadSectionsSize());
         Assert.assertEquals(Inter.getTrajectoriesSize(),
                 Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
 
-        Road R4 = RM.addRoadSectionToRoad(D, I, 3);
+        Road R4 = RM.addRoadSectionToRoad(D, I, UUID.randomUUID());
         Assert.assertEquals(4,Inter.getRoadSectionsSize());
         Assert.assertEquals(Inter.getTrajectoriesSize(),
                 Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
 
-        Road R5 = RM.addRoadSectionToRoad(E, I, 4);
+        Road R5 = RM.addRoadSectionToRoad(E, I, UUID.randomUUID());
         Assert.assertEquals(5,Inter.getRoadSectionsSize());
         Assert.assertEquals(Inter.getTrajectoriesSize(),
                 Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
@@ -89,8 +91,8 @@ public class TestRoadManager {
         Position A = new Position(1, 0);
         Position B = new Position(-1, 0);
 
-        Road R1 = RM.addRoadSectionToRoad(A, I1, 0);
-        Road R2 = RM.addRoadSectionToRoad(B, I1, 1);
+        Road R1 = RM.addRoadSectionToRoad(A, I1, UUID.randomUUID());
+        Road R2 = RM.addRoadSectionToRoad(B, I1, UUID.randomUUID());
 
         Intersection Inter1 = RM.getIntersection(I1);
 
@@ -98,7 +100,6 @@ public class TestRoadManager {
         Assert.assertNull(R2.get(0).getLaneBA().getInsertTrajectory().getNext());
         Assert.assertNotNull(R1.get(0).getLaneAB().getInsertTrajectory().getNext());
         Assert.assertNotNull(R2.get(0).getLaneAB().getInsertTrajectory().getNext());
-
 
         Assert.assertEquals(2,Inter1.getRoadSectionsSize());
         Assert.assertEquals(Inter1.getRoadSectionsSize() * (Inter1.getRoadSectionsSize() - 1),

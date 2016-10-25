@@ -7,14 +7,16 @@ import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class RoadManager {
-    private Map<Position, ArrayList<RoadSection>> RoadEdges;
-    private ArrayList<RoadSection> roadSections;
-    private Map<Integer, Road> roads;
-    private Map<Position,Intersection> intersectionMap;
+    private Map<Position, List<RoadSection>> RoadEdges;
+    private List<RoadSection> roadSections;
+    private Map<UUID, Road> roads;
+    private Map<Position, Intersection> intersectionMap;
 
     public RoadManager() {
         RoadEdges = new HashMap<>();
@@ -46,12 +48,12 @@ public class RoadManager {
                 RoadEdges.remove(P);
             } else {
                 RoadEdges.get(P).add(Rs1);
-                if(!intersectionMap.containsKey(P)){
-                    intersectionMap.put(P,new Intersection(P));
-                    for(RoadSection Rs :RoadEdges.get(P)){
+                if (!intersectionMap.containsKey(P)) {
+                    intersectionMap.put(P, new Intersection(P));
+                    for (RoadSection Rs : RoadEdges.get(P)) {
                         intersectionMap.get(P).addRoadSection(Rs);
                     }
-                }else {
+                } else {
                     intersectionMap.get(P).addRoadSection(Rs1);
                 }
             }
@@ -61,7 +63,7 @@ public class RoadManager {
         }
     }
 
-    public Road addRoadSectionToRoad(Position A, Position B, int id) {
+    public Road addRoadSectionToRoad(Position A, Position B, UUID id) {
         Road R = roads.get(id);
         if (R == null) {
             R = new Road(id);
@@ -71,11 +73,11 @@ public class RoadManager {
         return R;
     }
 
-    public Road getRoad(int id) {
+    public Road getRoad(UUID id) {
         return roads.get(id);
     }
 
-    public Intersection getIntersection(Position P){
+    public Intersection getIntersection(Position P) {
         return intersectionMap.get(P);
     }
 

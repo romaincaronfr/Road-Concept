@@ -4,8 +4,6 @@ import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
-import java.util.ArrayList;
-
 public class Vehicle {
     private final double length;
     private double distanceDone;// in m
@@ -26,11 +24,16 @@ public class Vehicle {
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
      *
-     * @param ID       identifier for the vehicle
-     * @param start    lane where the vehicle is placed
-     * @param startPos position in the lane of the new vehicle
-     * @param length   length of the vehicle
-     * @param speed    maximum speed of the vehicle
+     * @param ID
+     *         identifier for the vehicle
+     * @param start
+     *         lane where the vehicle is placed
+     * @param startPos
+     *         position in the lane of the new vehicle
+     * @param length
+     *         length of the vehicle
+     * @param speed
+     *         maximum speed of the vehicle
      */
     public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime) {
         this.ID = ID;
@@ -65,8 +68,6 @@ public class Vehicle {
 
     /**
      * this method will return the distance to the next car
-     *
-     * @return
      */
     private double distanceToNextCar() {
         return frontSide.getDistanceToNextCar();
@@ -74,8 +75,6 @@ public class Vehicle {
 
     /**
      * this method will return the speed of the car toward
-     *
-     * @return
      */
     private double nextCarSpeed() {
         return frontSide.getNextCarSpeed();
@@ -83,8 +82,6 @@ public class Vehicle {
 
     /**
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
-     *
-     * @param time
      */
     public void updatePos(double time, boolean log) {
         double dDone = Va * time;
@@ -103,6 +100,6 @@ public class Vehicle {
     }
 
     public SpaceTimePosition getGPSPosition() {
-        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time,ID);
+        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID);
     }
 }

@@ -6,18 +6,19 @@ import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class VehicleManager {
-    private ArrayList<Vehicle> vehicles;
-    private ArrayList<Vehicle> activeVehicles;
-    private ArrayList<RoadSection> spawnArea;
+    private List<Vehicle> vehicles;
+    private List<Vehicle> activeVehicles;
+    private List<RoadSection> spawnArea;
     private Random gen;
 
     public VehicleManager() {
-        vehicles = new ArrayList<Vehicle>();
-        activeVehicles = new ArrayList<Vehicle>();
-        spawnArea = new ArrayList<RoadSection>();
+        vehicles = new ArrayList<>();
+        activeVehicles = new ArrayList<>();
+        spawnArea = new ArrayList<>();
         gen = new Random();
     }
 
@@ -55,12 +56,12 @@ public class VehicleManager {
     }
 
     public void newStep(double precision, boolean log) {
-        for (int j = 0; j < activeVehicles.size(); j++) {
-            activeVehicles.get(j).updateAcceleration();
+        for (Vehicle activeVehicle : activeVehicles) {
+            activeVehicle.updateAcceleration();
         }
 
-        for (int j = 0; j < activeVehicles.size(); j++) {
-            activeVehicles.get(j).updatePos(precision, log);
+        for (Vehicle activeVehicle : activeVehicles) {
+            activeVehicle.updatePos(precision, log);
         }
     }
 

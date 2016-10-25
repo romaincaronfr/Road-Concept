@@ -3,6 +3,8 @@ import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
 
+import java.util.UUID;
+
 public class TestSimulator {
     public static void main(String[] args) {
         //simulation init
@@ -15,10 +17,10 @@ public class TestSimulator {
         Position C = Sim.positionManager.addPosition(40.1, 0.1);
         Position D = Sim.positionManager.addPosition(40.1, 0);
 
-        Road R = Sim.roadManager.addRoadSectionToRoad(A, B, 0);
-        Sim.roadManager.addRoadSectionToRoad(B, C, 0);
-        Sim.roadManager.addRoadSectionToRoad(C, D, 1);
-        Sim.roadManager.addRoadSectionToRoad(D, A, 1);
+        Road R = Sim.roadManager.addRoadSectionToRoad(A, B, UUID.randomUUID());
+        Sim.roadManager.addRoadSectionToRoad(B, C, UUID.randomUUID());
+        Sim.roadManager.addRoadSectionToRoad(C, D, UUID.randomUUID());
+        Sim.roadManager.addRoadSectionToRoad(D, A, UUID.randomUUID());
         Sim.vehicleManager.addToSpawnArea(R);
 
         for (int i = 0; i < vehicleNumber; i++) {
