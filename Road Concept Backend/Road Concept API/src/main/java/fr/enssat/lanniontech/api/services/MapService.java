@@ -293,4 +293,12 @@ public class MapService extends AbstractService {
         }
         return null;
     }
+
+    public void deleteFeature(int mapID, Feature feature) {
+        mapFeatureRepository.delete(mapID, feature.getUuid());
+    }
+
+    public Feature addFeature(int mapID, Feature feature) {
+        return mapFeatureRepository.create(mapID, feature);
+    }
 }

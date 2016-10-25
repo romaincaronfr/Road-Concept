@@ -45,11 +45,39 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/api/maps").blockingHandler(this::processCreateMap);
         router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID").blockingHandler(this::processDeleteMap);
+
         router.route(HttpMethod.PUT, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processUpdateFeature);
-        router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
-
         router.route(HttpMethod.GET, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processGetOneFeature);
+        router.route(HttpMethod.POST, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processCreateFeature);
+        router.route(HttpMethod.DELETE, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processDeleteFeature);
 
+        router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
+    }
+
+    private void processCreateFeature(RoutingContext routingContext) {
+        try {
+            int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
+            UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
+            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
+
+            Feature created = mapService.addFeature(mapID, feature);
+            HttpResponseBuilder.buildCreatedResponse(routingContext, created);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    private void processDeleteFeature(RoutingContext routingContext) {
+        try {
+            int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
+            UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
+            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
+
+            mapService.deleteFeature(mapID, feature);
+            HttpResponseBuilder.buildNoContentResponse(routingContext);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
     }
 
     private void processUpdateFeature(RoutingContext routingContext) {
@@ -63,7 +91,7 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, updated);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        }catch (Exception e) {
+        } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -77,7 +105,7 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, feature);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        }catch (Exception e) {
+        } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
