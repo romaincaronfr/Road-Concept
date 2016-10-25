@@ -13,9 +13,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 public class Simulator implements Runnable {
     public static Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
-    private RoadManager roadManager;
-    private PositionManager positionManager;
-    private VehicleManager vehicleManager;
+    public RoadManager roadManager;
+    public PositionManager positionManager;
+    public VehicleManager vehicleManager;
     public static SimulationHistory simulationHistory;
 
     private double progress;
@@ -26,32 +26,13 @@ public class Simulator implements Runnable {
     private long startTime;
     private long stopTime;
 
-    public Simulator(int vehicleNumber) {
+    public Simulator() {
         l = new ReentrantReadWriteLock();
 
         roadManager = new RoadManager();
         positionManager = new PositionManager();
         vehicleManager = new VehicleManager();
         simulationHistory = new SimulationHistory();
-
-
-        Position A = positionManager.addPosition(40, 0);
-        Position B = positionManager.addPosition(40, 0.1);
-        Position C = positionManager.addPosition(40.1, 0.1);
-        Position D = positionManager.addPosition(40.1, 0);
-
-        Road R = roadManager.addRoadSectionToRoad(A, B, 0);
-        roadManager.addRoadSectionToRoad(B, C, 0);
-        roadManager.addRoadSectionToRoad(C, D, 0);
-        roadManager.addRoadSectionToRoad(D, A, 0);
-
-        vehicleManager.addToSpawnArea(R);
-
-        for (int i = 0; i < vehicleNumber; i++) {
-            System.out.println(vehicleManager.addVehicle());
-        }
-        System.out.println(vehicleManager.getVehiclesNumber());
-
 
         progress = 0;
 

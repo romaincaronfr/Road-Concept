@@ -93,19 +93,13 @@ public class TestRoadManager {
         Road R1 = RM.addRoadSectionToRoad(A, I1, 0);
         Road R2 = RM.addRoadSectionToRoad(B, I1, 1);
 
-        Road R3 = RM.addRoadSectionToRoad(I2, A, 0);
-        Road R4 = RM.addRoadSectionToRoad(I2,B, 1);
 
         Intersection Inter1 = RM.getIntersection(I1);
-        Intersection Inter2 = RM.getIntersection(I2);
+
 
         Assert.assertEquals(2,Inter1.getRoadSectionsSize());
         Assert.assertEquals(Inter1.getRoadSectionsSize() * (Inter1.getRoadSectionsSize() - 1),
                 Inter1.getTrajectoriesSize());
-
-        Assert.assertEquals(2,Inter2.getRoadSectionsSize());
-        Assert.assertEquals(Inter2.getRoadSectionsSize() * (Inter2.getRoadSectionsSize() - 1),
-                Inter2.getTrajectoriesSize());
 
     }
 }
