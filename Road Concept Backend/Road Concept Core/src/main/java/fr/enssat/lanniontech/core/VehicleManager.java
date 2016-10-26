@@ -36,7 +36,12 @@ public class VehicleManager {
         int size = 2 + gen.nextInt(12);
         int speed = gen.nextInt(30) + 10;
 
-        int startingRoad = gen.nextInt(spawnArea.size() - 1);
+
+        int startingRoad = 0;
+        if(spawnArea.size()>1){
+            startingRoad = gen.nextInt(spawnArea.size() - 1);
+        }
+
         Lane startingLane = gen.nextBoolean() ? spawnArea.get(startingRoad).getLaneAB() : spawnArea.get(startingRoad).getLaneBA();
         double startingPos = 10 + gen.nextInt((int) ((startingLane.getLength() - 15) * 10)) / 10.0;
         int k = 0;

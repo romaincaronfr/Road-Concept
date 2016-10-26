@@ -17,10 +17,14 @@ public class TestSimulator {
         Position C = Sim.positionManager.addPosition(40.1, 0.1);
         Position D = Sim.positionManager.addPosition(40.1, 0);
 
-        Road R = Sim.roadManager.addRoadSectionToRoad(A, B, UUID.randomUUID());
-        Sim.roadManager.addRoadSectionToRoad(B, C, UUID.randomUUID());
-        Sim.roadManager.addRoadSectionToRoad(C, D, UUID.randomUUID());
-        Sim.roadManager.addRoadSectionToRoad(D, A, UUID.randomUUID());
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+
+        Road R = Sim.roadManager.addRoadSectionToRoad(A, B, id1);
+        Sim.roadManager.addRoadSectionToRoad(B, C, id1);
+        Sim.roadManager.addRoadSectionToRoad(C, D, id1);
+        Sim.roadManager.addRoadSectionToRoad(D, A, id2);
+
         Sim.vehicleManager.addToSpawnArea(R);
 
         for (int i = 0; i < vehicleNumber; i++) {

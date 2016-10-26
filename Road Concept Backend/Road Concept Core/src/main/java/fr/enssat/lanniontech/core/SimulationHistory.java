@@ -61,6 +61,7 @@ public class SimulationHistory {
                 vehiclesIn.add(vehiclePositionsFromId.get(id).get(timestamp));
             }
         }
+        return vehiclesIn;
     }
 
     public double getRoadStatus(UUID id,long timestamp){
