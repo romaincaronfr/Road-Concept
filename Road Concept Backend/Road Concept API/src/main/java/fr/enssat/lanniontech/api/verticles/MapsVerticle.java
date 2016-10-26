@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.BadRequestException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -183,6 +184,8 @@ public class MapsVerticle extends AbstractVerticle {
             vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
 
             HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
+        } catch (NoSuchElementException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "The file to upload must be provided");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
