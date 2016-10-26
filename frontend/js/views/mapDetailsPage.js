@@ -11,7 +11,8 @@ app.mapDetailsPageView = Backbone.View.extend({
         'change #osmOppacity': 'clickOnOSM',
         'click .close_map_info': 'clickCloseInfo',
         'click #importButton': 'clickOnImport',
-        'click .importButton': 'importData'
+        'click .importButton': 'importData',
+        'hide.bs.modal #modalImport': 'hideModal'
     },
 
 
@@ -20,13 +21,15 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id:this.id});
         this.render();
         var self = this;
-        this.mapDetailsCOllection.fetch();
         this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('sync', self.onSync, self);
     },
 
     render: function () {
         $('#content').empty();
+        if ($('#mapRow').length){
+            $('#mapRow').remove();
+        }
         this.$el.append(this.template());
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
@@ -52,7 +55,6 @@ app.mapDetailsPageView = Backbone.View.extend({
         var self = this;
         this.map.on('click', function(evt){
             var pixel = evt.pixel;
-            console.log(pixel);
             //loop through all features under this pixel coordinate
             //and save them in array
             var featureKeep = null;
@@ -61,15 +63,20 @@ app.mapDetailsPageView = Backbone.View.extend({
                     //var encore = new ol.format.GeoJSON();
                     //console.log(encore.writeFeature(feature));
                     featureKeep = feature;
-                    console.log(feature.getProperties());
                 }
             });
             if (featureKeep){
                 self.renderFeatureInformations(featureKeep);
             }
         });
+        this.mapDetailsCOllection.fetch();
         return this;
 
+    },
+
+    changeID: function(id){
+        this.id = id;
+        this.mapDetailsCOllection.id = id;
     },
 
     onAddElement: function(element){
@@ -121,7 +128,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                     var type = feature.getProperties().type;
                     var oneway = 1;
                     if (feature.getProperties().oneway && feature.getProperties().oneway == true){
-                        console.log("oneway true");
                         oneway = 0.5;
                     }
                     var style = self.generateStyle(type, resolution,oneway);
@@ -179,7 +185,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 return style;
                 break;
             case 3:
-                console.log("triple road");
                 //TRIPLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
@@ -204,7 +209,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 break;
             case 5:
                 //RED_LIGHT
-                console.log(resolution);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
@@ -218,7 +222,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 return style;
                 break;
             default:
-                console.log("default");
                 break;
         }
     },
@@ -230,14 +233,12 @@ app.mapDetailsPageView = Backbone.View.extend({
     renderFeatureInformations: function(feature){
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
-        console.log(model);
         new app.mapPopUpInfoVisuView({
             model: model
         });
     },
 
     clickOnImport: function(){
-        console.log("importButton");
         if ($('#modalImport').length){
             $('#modalImport').remove();
         }
@@ -246,32 +247,47 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     importData: function(){
         var f = $('input[type=file]')[0].files[0];
-        console.log(f.name);
-        var re = /(?:\.([^.]+))?$/;
-        var extention = re.exec(f.name)[1];
-        switch (extention){
+        var extentionFile;
+        if (!f.name) {
+            extentionFile = "null.null";
+        }else {
+            var re = /(?:\.([^.]+))?$/;
+            extentionFile = re.exec(f.name)[1];
+        }
+        switch (extentionFile){
             case 'osm':
-
+                $('#formImport').addClass('hidden');
+                $('#parseMessage').removeClass('hidden');
+                $('#waitImport').removeClass('hidden');
+                this.encodeOSMtoGeoJSON(f);
                 break;
             case 'json':
+                $('#formImport').addClass('hidden');
+                $('#waitImport').removeClass('hidden');
                 this.sendImportData(f);
                 break;
             default:
-                $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, le fichier que vous essayez d'envoyer n'est pas au bon format");
+                $('#alertImport').removeClass('hidden');
                 break;
         }
-        console.log(extention);
-        if (f) {
+
+    },
+
+    encodeOSMtoGeoJSON: function(osm){
+        if (osm) {
             var r = new FileReader();
+            var self = this;
             r.onload = function(e) {
                 var contents = e.target.result;
-                console.log(contents);
                 var parser = new DOMParser();
                 var xmlDoc = parser.parseFromString(contents,"text/xml");
                 contents = osmtogeojson(xmlDoc);
-                console.log(contents);
+                contents = JSON.stringify(contents);
+                contents = new File([contents,"import.json"],{type: "application/json"});
+                $('#parseMessage').addClass('hidden');
+                self.sendImportData(contents);
             };
-            r.readAsText(f);
+            r.readAsText(osm);
         } else {
             alert("Failed to load file");
         }
@@ -286,19 +302,28 @@ app.mapDetailsPageView = Backbone.View.extend({
                 type: "POST",
                 processData: false,
                 data: formData,
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8"
-                },
-                contentType: "application/json"
+                contentType: false
             })
             .done(function (data, textStatus, jqXHR) {
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
+                self.fetchCollection();
+                $('#waitImport').addClass('hidden');
+                $('#alertSuccessImport').removeClass('hidden');
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("HTTP Request Failed : /api/maps/"+self.id+"/import");
+                $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, quelque chose s'est mal passée. Veuillez réessayer. (C'est encore le dev qui a du mal bosser...)");
+                $('#modalError').modal('show');
             })
             .always(function () {
                 /* ... */
             });
+    },
+
+    hideModal: function(){
+        $('#modalImport').remove();
+    },
+
+    fetchCollection: function(){
+        this.mapDetailsCOllection.fetch();
     }
 });

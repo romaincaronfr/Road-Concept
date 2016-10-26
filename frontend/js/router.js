@@ -43,6 +43,7 @@ app.Router = Backbone.Router.extend({
         this.navBarV = null;
         this.adminV = null;
         this.adminMV = null;
+        this.detailPageV = null;
     },
 
     start: function () {
@@ -84,7 +85,13 @@ app.Router = Backbone.Router.extend({
 
     mapDetail: function(id){
         this.checkAndInitNavBar();
-        new app.mapDetailsPageView({id:id})
+        if (!this.detailPageV){
+            this.detailPageV = new app.mapDetailsPageView({id:id});
+        } else {
+            this.detailPageV.changeID(id);
+            this.detailPageV.render();
+        }
+
     },
 
     user: function () {
