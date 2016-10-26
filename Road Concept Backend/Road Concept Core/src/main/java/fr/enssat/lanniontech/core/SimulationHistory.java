@@ -2,12 +2,7 @@ package fr.enssat.lanniontech.core;
 
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SimulationHistory {
     private Map<Integer, LinkedHashMap<Long, SpaceTimePosition>> vehiclePositionsFromId;
@@ -57,6 +52,20 @@ public class SimulationHistory {
             }
         }
         return vehiclesIn;
+    }
+
+    public List<SpaceTimePosition> getAllVehicleAt(long timestamp){
+        List<SpaceTimePosition> vehiclesIn = new ArrayList<>();
+        for(TreeMap<Double,Integer> values : vehicleIdFromPosition.get(timestamp).values() ){
+            for (int id : values.values()){
+                vehiclesIn.add(vehiclePositionsFromId.get(id).get(timestamp));
+            }
+        }
+    }
+
+    public double getRoadStatus(UUID id,long timestamp){
+        //todo add road metrics to history
+        return 0;
     }
 
 }
