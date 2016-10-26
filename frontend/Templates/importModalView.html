@@ -1,0 +1,31 @@
+<div id="modalImport" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Importer des données</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <p>Vous pouvez uniquement importé des données depuis OpenStreetMap. L'exportation des données OSM peuvent se faire <a href="https://www.openstreetmap.org/export" target="_blank">ici</a>. Nous acceptons les données OSM au format .osm et .json. Veuillez noter qui si vous nous envoyez un fichier .osm (format par défaut d'exportation) le temps de traitement est un peu plus long.</p>
+                    <div class="form-group">
+
+                        <label for="importFileInput" class="col-sm-2 control-label">
+                            Fichier .osm ou .json
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="file" class="form-control" id="importFileInput"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success importButton">Importer</button>
+            </div>
+        </div>
+
+    </div>
+</div>

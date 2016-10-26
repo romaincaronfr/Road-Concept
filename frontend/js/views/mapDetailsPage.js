@@ -9,7 +9,9 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
-        'click .close_map_info': 'clickCloseInfo'
+        'click .close_map_info': 'clickCloseInfo',
+        'click #importButton': 'clickOnImport',
+        'click .importButton': 'importData'
     },
 
 
@@ -232,5 +234,71 @@ app.mapDetailsPageView = Backbone.View.extend({
         new app.mapPopUpInfoVisuView({
             model: model
         });
+    },
+
+    clickOnImport: function(){
+        console.log("importButton");
+        if ($('#modalImport').length){
+            $('#modalImport').remove();
+        }
+        new app.importModalView();
+    },
+
+    importData: function(){
+        var f = $('input[type=file]')[0].files[0];
+        console.log(f.name);
+        var re = /(?:\.([^.]+))?$/;
+        var extention = re.exec(f.name)[1];
+        switch (extention){
+            case 'osm':
+
+                break;
+            case 'json':
+                this.sendImportData(f);
+                break;
+            default:
+                $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, le fichier que vous essayez d'envoyer n'est pas au bon format");
+                break;
+        }
+        console.log(extention);
+        if (f) {
+            var r = new FileReader();
+            r.onload = function(e) {
+                var contents = e.target.result;
+                console.log(contents);
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(contents,"text/xml");
+                contents = osmtogeojson(xmlDoc);
+                console.log(contents);
+            };
+            r.readAsText(f);
+        } else {
+            alert("Failed to load file");
+        }
+    },
+
+    sendImportData: function(dataS){
+        var formData = new FormData();
+        formData.append('data',dataS);
+        var self = this;
+        $.ajax({
+                url: Backbone.Collection.prototype.absURL + "/api/maps/"+self.id+"/import",
+                type: "POST",
+                processData: false,
+                data: formData,
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8"
+                },
+                contentType: "application/json"
+            })
+            .done(function (data, textStatus, jqXHR) {
+                console.log("HTTP Request Succeeded: " + jqXHR.status);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.log("HTTP Request Failed : /api/maps/"+self.id+"/import");
+            })
+            .always(function () {
+                /* ... */
+            });
     }
 });
