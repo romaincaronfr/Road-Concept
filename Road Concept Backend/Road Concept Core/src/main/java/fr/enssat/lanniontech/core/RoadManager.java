@@ -4,6 +4,8 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +86,16 @@ public class RoadManager {
     private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
+    }
+
+    public void closeRoads(){
+        for (Position P : RoadEdges.keySet() ){
+            if(RoadEdges.get(P).size()==1){
+                SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
+                SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
+                new EndRoadTrajectory(source,destination);
+            }
+        }
     }
 
 }

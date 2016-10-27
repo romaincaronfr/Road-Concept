@@ -9,7 +9,7 @@ public class EndRoadTrajectory extends Trajectory {
     private SimpleTrajectory source;
     private PosFunction pf;
 
-    EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
+    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
         this.source = source;
         this.destination = destination;
 
@@ -65,11 +65,7 @@ public class EndRoadTrajectory extends Trajectory {
         }
     }
 
-    public boolean rangeIsFree(double start, double end) {
-        return false;
-    }
-
     public Position getGPS(double pos) {
-        return null;
+        return pf.get(pos);
     }
 }

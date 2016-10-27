@@ -45,6 +45,24 @@ public abstract class Trajectory {
     }
 
     /**
+     * return true if the range between start and stop is free
+     */
+    public boolean rangeIsFree(double start, double end){
+        int i = 0;
+        double pos;
+        while (i < vehiclesSides.size()) {
+            pos = vehiclesSides.get(i).getPos();
+            if (pos >= start && pos <= end) {
+                return false;
+            } else if (pos > end) {
+                return true;
+            }
+            i++;
+        }
+        return true;
+    }
+
+    /**
      * return the next default trajectory
      */
     public abstract Trajectory getNext();
@@ -68,11 +86,6 @@ public abstract class Trajectory {
      * return the distance to the first vehicle
      */
     public abstract double getDistanceToFirst();
-
-    /**
-     * return true if the range between start and stop is free
-     */
-    public abstract boolean rangeIsFree(double start, double end);
 
     /**
      * return the GPS position on the current trajectory
