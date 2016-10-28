@@ -77,3 +77,11 @@ body {
     background-color: #4f5d6b;
     z-index: 999;
 }
+
+#editMenu {
+    position: absolute;
+    left: 0;
+    top : 0;
+    right: 0;
+    height: 80%;
+}
