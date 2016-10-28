@@ -13,7 +13,6 @@ app.mapEditionView = Backbone.View.extend({
         'click .close_map_info': 'clickCloseInfo'
     },
 
-
     initialize: function (options) {
         this.id = options.id;
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id:this.id});
@@ -26,6 +25,9 @@ app.mapEditionView = Backbone.View.extend({
 
     render: function () {
         $('#content').empty();
+        if ($('#mapRow').length){
+            $('#mapRow').remove();
+        }
         this.$el.append(this.template());
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
@@ -40,6 +42,7 @@ app.mapEditionView = Backbone.View.extend({
                 zoom: 14
             })
         });
+
         this.tile.setOpacity($('#osmOppacity').val());
         var self = this;
         this.map.on('click', function(evt){

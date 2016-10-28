@@ -68,18 +68,12 @@ body {
 }
 
 #editBarMenu {
-    width: 200px;
-    height: 200px;
-    background-color: #1b6d85;
     position: absolute;
-    top: 70%;
-    margin-bottom: 70px;
-    right: 100px;
-    width: 10%;
-    max-height: 60%;
+    width: 80%;
+    bottom: 0;
+    left : 10%;
+    height: 8%;
+    border-radius: 10px 10px 0px 0px;
     background-color: #4f5d6b;
     z-index: 999;
-    overflow: auto;
-
-
 }
