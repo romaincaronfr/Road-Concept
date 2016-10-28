@@ -33,6 +33,7 @@ app.Router = Backbone.Router.extend({
         "map": "map",
         "logout": "logout",
         "map/:id": "mapDetail",
+        "editmap/:id": "mapEdition",
         "users": "users"
     },
 
@@ -92,6 +93,11 @@ app.Router = Backbone.Router.extend({
             this.detailPageV.render();
         }
 
+    },
+
+    mapEdition : function(id){
+        this.checkAndInitNavBar();
+        new app.mapEditionView({id:id})
     },
 
     user: function () {
