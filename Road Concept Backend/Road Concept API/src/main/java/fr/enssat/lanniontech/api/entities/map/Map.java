@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.entities;
+package fr.enssat.lanniontech.api.entities.map;
 
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 

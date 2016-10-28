@@ -1,7 +1,7 @@
 package fr.enssat.lanniontech.tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.enssat.lanniontech.api.entities.Map;
+import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.geojson.GeoJsonObject;

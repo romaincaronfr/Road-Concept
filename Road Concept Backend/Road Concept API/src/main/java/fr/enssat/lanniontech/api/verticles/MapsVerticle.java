@@ -1,7 +1,7 @@
 package fr.enssat.lanniontech.api.verticles;
 
-import fr.enssat.lanniontech.api.entities.Map;
-import fr.enssat.lanniontech.api.entities.MapInfo;
+import fr.enssat.lanniontech.api.entities.map.Map;
+import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;

@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.services;
 
-import fr.enssat.lanniontech.api.entities.MapInfo;
+import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
 

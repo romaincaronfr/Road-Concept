@@ -1,7 +1,8 @@
-package fr.enssat.lanniontech.api.entities;
+package fr.enssat.lanniontech.api.entities.map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import fr.enssat.lanniontech.api.entities.SQLStoredEntity;
 
 public class MapInfo implements SQLStoredEntity {
 

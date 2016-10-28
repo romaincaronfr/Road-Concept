@@ -120,12 +120,6 @@
             <version>${jersey-common.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.nhncorp</groupId>
-            <artifactId>mod-socket-io</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-
         <!-- TEST DEPENDENCIES -->
         <dependency>
             <groupId>junit</groupId>

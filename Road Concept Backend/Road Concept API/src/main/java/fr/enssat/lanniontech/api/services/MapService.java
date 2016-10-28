@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.services;
 
-import fr.enssat.lanniontech.api.entities.MapInfo;
+import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
@@ -39,7 +39,7 @@ public class MapService extends AbstractService {
         return mapInfoRepository.getAll(user);
     }
 
-    public fr.enssat.lanniontech.api.entities.Map getMap(User user, int mapID) {
+    public fr.enssat.lanniontech.api.entities.map.Map getMap(User user, int mapID) {
         MapInfo infos = mapInfoRepository.get(mapID);
 
         if (infos == null) {
@@ -48,7 +48,7 @@ public class MapService extends AbstractService {
         checkAccessMap(user, infos);
 
         FeatureCollection features = mapFeatureRepository.getAll(mapID);
-        fr.enssat.lanniontech.api.entities.Map map = new fr.enssat.lanniontech.api.entities.Map();
+        fr.enssat.lanniontech.api.entities.map.Map map = new fr.enssat.lanniontech.api.entities.map.Map();
         map.setInfos(infos);
         map.setFeatures(features);
         return map;
