@@ -146,16 +146,16 @@ app.mapDetailsPageView = Backbone.View.extend({
                 format: new ol.format.GeoJSON()
             })
         }));*/
-        var test = new app.models.mapDetailsModel({ "type": "Feature", "properties": {"type":3, "timestamp": "2015-05-07T20:04:46Z", "version": "4", "changeset": "30884050", "user": "brelevenix", "id": "1467976", "highway": "residential", "name": "Avenue d\'Alsace", "ref:FR:FANTOIR": "221130035A"}, "geometry": { "type": "LineString", "coordinates": [ [ -3.4744614, 48.7443241], [ -3.4746925, 48.7442887] ]} },{parse: true});
-        this.mapDetailsCOllection.add(test);
+        //var test = new app.models.mapDetailsModel({ "type": "Feature", "properties": {"type":3, "timestamp": "2015-05-07T20:04:46Z", "version": "4", "changeset": "30884050", "user": "brelevenix", "id": "1467976", "highway": "residential", "name": "Avenue d\'Alsace", "ref:FR:FANTOIR": "221130035A"}, "geometry": { "type": "LineString", "coordinates": [ [ -3.4744614, 48.7443241], [ -3.4746925, 48.7442887] ]} },{parse: true});
+        //this.mapDetailsCOllection.add(test);
 
         //test.save();
-        newGeo = test.toGeoJSON();
+        //newGeo = test.toGeoJSON();
         //console.log(newGeo);
-        var featuretest = new ol.format.GeoJSON().readFeature(newGeo, {
-            featureProjection: 'EPSG:3857'
-        });
-        console.log(featuretest.getId());
+        //var featuretest = new ol.format.GeoJSON().readFeature(newGeo, {
+        //    featureProjection: 'EPSG:3857'
+        //});
+        //console.log(featuretest.getId());
         //vectorSource.addFeature(featuretest);
         //this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
     },
