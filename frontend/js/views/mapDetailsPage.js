@@ -30,7 +30,7 @@ app.mapDetailsPageView = Backbone.View.extend({
         if ($('#mapRow').length){
             $('#mapRow').remove();
         }
-        this.$el.append(this.template());
+        this.$el.append(this.template(new Backbone.Model({"id":this.mapDetailsCOllection.id})));
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
