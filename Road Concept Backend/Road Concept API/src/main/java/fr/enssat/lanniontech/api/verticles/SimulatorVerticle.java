@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.api.verticles;
 
+import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
 import io.vertx.core.AbstractVerticle;
@@ -28,8 +29,9 @@ public class SimulatorVerticle extends AbstractVerticle {
 
     private void processSimulation(RoutingContext routingContext) {
         try {
-            boolean result = simulatorService.simulate(null);
-            HttpResponseBuilder.buildOkResponse(routingContext, result);
+           // boolean result = simulatorService.simulate(null);
+            FeatureCollection simulationResult = simulatorService.getFakeSimulationResult();
+            HttpResponseBuilder.buildOkResponse(routingContext, simulationResult);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }

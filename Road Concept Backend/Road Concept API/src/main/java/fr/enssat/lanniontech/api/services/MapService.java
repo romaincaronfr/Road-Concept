@@ -92,6 +92,7 @@ public class MapService extends AbstractService {
 
         FeatureCollection toAdd = new FeatureCollection();
         for (Feature feature : features) {
+            LOGGER.debug("OSM ID = " + feature.getOpenStreetMapID());
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
                 toAdd.add(feature);
@@ -106,7 +107,7 @@ public class MapService extends AbstractService {
     }
 
     //FIXME: refactor
-    private void fromOSMAdaptation(FeatureCollection features) {
+    public void fromOSMAdaptation(FeatureCollection features) {
         for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
 
