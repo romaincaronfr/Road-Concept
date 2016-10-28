@@ -1,7 +1,7 @@
 package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.Entity;
-import fr.enssat.lanniontech.api.entities.SQLStoredEntity;
+import fr.enssat.lanniontech.api.entities.SQLEntity;
 import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
@@ -25,7 +25,7 @@ public abstract class AbstractRepository {
     // SQL - UPDATE ENTITY
     // ===================
 
-    protected void updateStringField(String tableName, String columnName, SQLStoredEntity entity, String newValue) {
+    protected void updateStringField(String tableName, String columnName, SQLEntity entity, String newValue) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
                 statement.setString(1, newValue);
@@ -37,7 +37,7 @@ public abstract class AbstractRepository {
         }
     }
 
-    protected void updateIntField(String tableName, String columnName, SQLStoredEntity entity, int newValue) {
+    protected void updateIntField(String tableName, String columnName, SQLEntity entity, int newValue) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
                 statement.setObject(1, entity.getIdentifierValue());
@@ -59,7 +59,7 @@ public abstract class AbstractRepository {
     // SQL - DELETE ENTITY
     // ===================
 
-    protected final int delete(String tableName, SQLStoredEntity entity) throws DatabaseOperationException {
+    protected final int delete(String tableName, SQLEntity entity) throws DatabaseOperationException {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
                 statement.setObject(1, entity.getIdentifierValue());

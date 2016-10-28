@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.api.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-public class User implements SQLStoredEntity {
+public class User implements SQLEntity {
 
     private int id;
     private String email;

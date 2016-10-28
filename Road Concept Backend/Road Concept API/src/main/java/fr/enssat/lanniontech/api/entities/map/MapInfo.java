@@ -2,9 +2,9 @@ package fr.enssat.lanniontech.api.entities.map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-import fr.enssat.lanniontech.api.entities.SQLStoredEntity;
+import fr.enssat.lanniontech.api.entities.SQLEntity;
 
-public class MapInfo implements SQLStoredEntity {
+public class MapInfo implements SQLEntity {
 
     private int id;
     @JsonProperty(access = Access.WRITE_ONLY)

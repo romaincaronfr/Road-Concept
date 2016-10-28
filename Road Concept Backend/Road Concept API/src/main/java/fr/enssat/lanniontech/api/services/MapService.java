@@ -92,7 +92,6 @@ public class MapService extends AbstractService {
 
         FeatureCollection toAdd = new FeatureCollection();
         for (Feature feature : features) {
-            LOGGER.debug("OSM ID = " + feature.getOpenStreetMapID());
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
                 toAdd.add(feature);
