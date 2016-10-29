@@ -76,7 +76,7 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     newElement: function (element) {
-        if (model.attributes.id != app.router.navBarV.model.attributes.id) {
+        if (element.attributes.id != app.router.navBarV.model.attributes.id) {
             new app.adminUserRowView({
                 model: element
             });

@@ -30,7 +30,11 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     render: function () {
         //Supression du content
+        this.mapDetailsCOllection.reset();
         $('#content').empty();
+        if (this.vectorSource){
+            this.vectorSource.clear();
+        }
 
         //Si la div existait déjà
         if ($('#mapRow').length) {
@@ -97,7 +101,7 @@ app.mapDetailsPageView = Backbone.View.extend({
             layers: [this.vectorLayer],
             condition: ol.events.condition.pointerMove,
             style: function (feature, resolution) {
-                return self.generateSelectStyle(feature, resolution);
+                return self.generateSelectMoveStyle(feature, resolution);
             }
         });
         this.map.addInteraction(this.selectPointerMove);
@@ -219,7 +223,139 @@ app.mapDetailsPageView = Backbone.View.extend({
         }
     },
 
-    generateSelectStyle: function (feature, resolution) {
+    generateSelectStyle: function(feature,resolution){
+        var type = feature.getProperties().type;
+        var geometry = feature.getGeometry();
+        var startCoord = geometry.getFirstCoordinate();
+        var endCoord = geometry.getLastCoordinate();
+        var oneway = 1;
+        var circle = new ol.style.Circle({
+            stroke: new ol.style.Stroke({
+                color: [50, 50, 50,1]
+            }),
+            fill: new ol.style.Fill({
+                color: [200, 200, 200,0.8]
+            }),
+            radius: 10
+        });
+        var firstPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(startCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'A',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        var lastPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(endCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'B',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+            console.log("oneway true");
+            oneway = 0.5;
+        }
+        switch (type){
+            case 1:
+                //SINGLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((7+2)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((14+2)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((21+1)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [250,178,102,1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (3.5+2)/resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                console.log(resolution);
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: 0.1/resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                console.log("default");
+                break;
+        }
+    },
+
+    generateSelectMoveStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
         var oneway = 1;
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
@@ -371,7 +507,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
                 self.fetchCollection();
                 $('#waitImport').addClass('hidden');
-                $('#importButton').addClass('hidden');
+                $('#importModalFooter').addClass('hidden');
                 $('#alertSuccessImport').removeClass('hidden');
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
