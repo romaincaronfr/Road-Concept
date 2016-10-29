@@ -6,6 +6,8 @@ app.mapDetailsPageView = Backbone.View.extend({
     el: '#body',
     map: null,
     tile: null,
+    vectorSource: null,
+    vectorLayer: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -21,19 +23,27 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id:this.id});
         this.render();
         var self = this;
-        this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('sync', self.onSync, self);
     },
 
     render: function () {
+        //Supression du content
         $('#content').empty();
+
+        //Si la div existait déjà
         if ($('#mapRow').length){
             $('#mapRow').remove();
         }
+
+        //Ajout de la template au body
         this.$el.append(this.template(new Backbone.Model({"id":this.mapDetailsCOllection.id})));
+
+        //Fond de carte OSM
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
+
+        //Création de la map, si la variable était déjà inialisé on écrase
         this.map = new ol.Map({
             target: 'map',
             controls: ol.control.defaults({
@@ -51,25 +61,45 @@ app.mapDetailsPageView = Backbone.View.extend({
                 zoom: 14
             })
         });
+
+        //Réglage de l'opacité du fond de carte OSM
         this.tile.setOpacity($('#osmOppacity').val());
+
+        //Préparation du layer pour notre GeoJSON
+        this.vectorSource = new ol.source.Vector();
+        var vectorLayer = new ol.layer.Vector({
+            source: this.vectorSource,
+            style: function(feature, resolution) {
+                return self.generateStyle(feature, resolution);
+            }
+        });
+        this.map.addLayer(vectorLayer);
+
+        //Trigger du click sur la map
         var self = this;
-        this.map.on('click', function(evt){
+        /*this.map.on('click', function(evt){
             var pixel = evt.pixel;
-            //loop through all features under this pixel coordinate
-            //and save them in array
             var featureKeep = null;
             self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
                 if (feature && featureKeep == null) {
-                    //var encore = new ol.format.GeoJSON();
-                    //console.log(encore.writeFeature(feature));
                     featureKeep = feature;
                 }
             });
             if (featureKeep){
                 self.renderFeatureInformations(featureKeep);
             }
+        });*/
+
+        var selectPointerMove = new ol.interaction.Select();
+        selectPointerMove.on('select',function(e){
+           console.log(e);
+            //selectPointerMove.getFeatures().clear()
         });
+        this.map.addInteraction(selectPointerMove);
+
+        //Fetch de la collection
         this.mapDetailsCOllection.fetch();
+
         return this;
 
     },
@@ -79,39 +109,6 @@ app.mapDetailsPageView = Backbone.View.extend({
         this.mapDetailsCOllection.id = id;
     },
 
-    onAddElement: function(element){
-        //console.log(element);
-        //var self = this;
-        //var points = new Array();
-        //var coords = element.getGPSCoordinates();
-        //var style = this.generateStyle(element.getTypeProperties());
-        //console.log(element.getTypeProperties());
-        //var type = element.getGeometryType();
-        //
-        //for(var i= 0; i < coords.length; i++)
-        //{
-        //    points.push(ol.proj.transform([coords[i][0],coords[i][1]], 'EPSG:4326',   'EPSG:3857'));
-        //}
-        //
-        //var layerLines = new ol.layer.Vector({
-        //    source: new ol.source.Vector({
-        //        features: [new ol.Feature({
-        //            geometry: new ol.geom.LineString(points, 'XY'),
-        //            name: 'Line',
-        //            id: element.attributes.id,
-        //            properties: element.attributes.properties
-        //        })]
-        //    }),
-        //    style: function(feature, resolution){
-        //        var type = feature.getProperties().properties.type;
-        //        console.log('ououuoeueroeour');
-        //        return self.generateStyle(type);
-        //    }
-        //});
-        //this.map.addLayer(layerLines);
-        //console.log(JSON.stringify(this.mapDetailsCOllection.toJSON()));
-    },
-
     onSync: function(){
         if (this.mapDetailsCOllection.length > 0){
             var geoJson = this.mapDetailsCOllection.toGeoJSON();
@@ -119,25 +116,8 @@ app.mapDetailsPageView = Backbone.View.extend({
             var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
                 featureProjection: 'EPSG:3857'
             });
-            var vectorSource = new ol.source.Vector({
-                features: featuresSource
-            });
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource,
-                style: function(feature, resolution) {
-                    var type = feature.getProperties().type;
-                    var oneway = 1;
-                    if (feature.getProperties().oneway && feature.getProperties().oneway == true){
-                        oneway = 0.5;
-                    }
-                    var style = self.generateStyle(type, resolution,oneway);
-                    return style;
-                }
-
-            });
-
-            this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
-            this.map.addLayer(vectorLayer);
+            this.vectorSource.addFeatures(featuresSource);
+            this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
         }
         /*this.map.addLayer(new ol.layer.Vector({
             title: 'added Layer',
@@ -164,7 +144,12 @@ app.mapDetailsPageView = Backbone.View.extend({
             this.tile.setOpacity($('#osmOppacity').val());
     },
 
-    generateStyle: function(type,resolution,oneway){
+    generateStyle: function(feature,resolution){
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+            oneway = 0.5;
+        }
         switch (type){
             case 1:
                 //SINGLE ROAD
@@ -310,6 +295,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
                 self.fetchCollection();
                 $('#waitImport').addClass('hidden');
+                $('#importButton').addClass('hidden');
                 $('#alertSuccessImport').removeClass('hidden');
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
