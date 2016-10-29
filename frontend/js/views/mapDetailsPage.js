@@ -343,7 +343,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1/resolution,
+                        scale: (0.1 + 0.2)/resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });
