@@ -80,8 +80,7 @@ body {
 
 #editMenu {
     position: absolute;
-    left: 0;
-    top : 0;
-    right: 0;
-    height: 80%;
+    right: 3%;
+    left : 3%;
+    height: 100%;
 }

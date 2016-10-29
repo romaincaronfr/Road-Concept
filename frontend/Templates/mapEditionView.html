@@ -16,25 +16,24 @@
     </div>
     <div style="background-color: white" id="map"></div>
     <div id="editBarMenu">
-        <div class="btn-group" id="editMenu" data-toggle="buttons">
-            <label class="btn btn-info active">
-                <input type="radio" id="road" autocomplete="off" checked> Route
-            </label>
-            <label class="btn btn-info">
-                <input type="radio" id="roundabout" autocomplete="off"> Rond-point
-            </label>
-            <label class="btn btn-info">
-                <input type="radio" id="traffic-light" autocomplete="off"> Feu tricolore
-            </label>
-            <label class="btn btn-info">
-                <input type="radio" id="crash" autocomplete="off"> Accident
-            </label>
-            <label class="btn btn-info">
-                <input type="radio" id="habitation" autocomplete="off"> Zone Habitation
-            </label>
-            <label class="btn btn-info">
-                <input type="radio" id="work" autocomplete="off"> Zone Travail
-            </label>
+        <div class="row">
+            <div id="editButtonChooseTool" >
+                <div class="col-md-2">
+                    <button class="btn btn-info btn-block " name="chooseTool" value="LineString">Route</button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-info btn-block" name="chooseTool" value="Polygon">Rond-point</button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-info btn-block" name="chooseTool" value="Point">Feu tricolore</button>
+                </div>
+            </div>
+
+            <div id="editButtonCancel" hidden>
+                <div class="col-md-2">
+                    <button class="btn btn-info btn-block dropdown-toggle" id="cancel">Annuler</button>
+                </div>
+            </div>
         </div>
     </div>
 

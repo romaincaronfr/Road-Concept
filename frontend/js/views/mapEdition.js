@@ -7,10 +7,15 @@ app.mapEditionView = Backbone.View.extend({
     el: '#body',
     map: null,
     tile: null,
+    value : null,
+    draw : null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
-        'click .close_map_info': 'clickCloseInfo'
+        'click .close_map_info': 'clickCloseInfo',
+        'click button[name=chooseTool]': 'hasChooseTool',
+        'click button[id=cancel]': 'cancelHasChooseTool'
+
     },
 
     initialize: function (options) {
@@ -45,7 +50,7 @@ app.mapEditionView = Backbone.View.extend({
 
         this.tile.setOpacity($('#osmOppacity').val());
         var self = this;
-        this.map.on('click', function(evt){
+        /*this.map.on('click', function(evt){
             var pixel = evt.pixel;
             console.log(pixel);
             //loop through all features under this pixel coordinate
@@ -62,7 +67,7 @@ app.mapEditionView = Backbone.View.extend({
             if (featureKeep){
                 self.renderFeatureInformations(featureKeep);
             }
-        });
+        });*/
         return this;
 
     },
@@ -229,5 +234,55 @@ app.mapEditionView = Backbone.View.extend({
         new app.mapPopUpInfoVisuView({
             model: model
         });
+    },
+
+
+    addInteraction : function () {
+        console.log('Draw : start '+this.value);
+        if(this.value != 'None'){
+            this.draw = new ol.interaction.Draw({
+                source: new ol.source.Vector({wrapX: false}),
+                type: this.value
+            });
+
+            this.map.addInteraction(this.draw);
+
+            this.draw.on('drawend', function(event) {
+                console.log('Draw : end');
+                var feature = event.feature;
+                var JSONFeature  = new ol.format.GeoJSON().writeFeature(feature);
+
+                console.log(JSONFeature);
+
+                /*var format = new ol.format.GeoJSON();
+                var routeFeatures = format.writeFeatures(feature);
+                console.log(format);*/
+            });
+
+        }
+    },
+
+
+    hasChooseTool: function(e) {
+        this.value = $(e.currentTarget).attr('value');
+        console.log('Tool chosen : '+this.value);
+        this.addInteraction(this.value);
+        this.changeChooseToolToCancel();
+    },
+
+    cancelHasChooseTool: function () {
+        $('#editButtonCancel').hide();
+        $('#editButtonChooseTool').show();
+        this.value = 'None';
+        console.log('Draw : Stop');
+        this.map.removeInteraction(this.draw);
+    },
+
+    changeChooseToolToCancel : function(){
+        $('#editButtonChooseTool').hide();
+        $('#editButtonCancel').show();
     }
+
+
+
 });
