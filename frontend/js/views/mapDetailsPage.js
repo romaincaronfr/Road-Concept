@@ -8,10 +8,12 @@ app.mapDetailsPageView = Backbone.View.extend({
     tile: null,
     vectorSource: null,
     vectorLayer: null,
+    selectPointerMove: null,
+    selectPointer: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
-        'click .close_map_info': 'clickCloseInfo',
+        //'click .close_map_info': 'clickCloseInfo',
         'click #importButton': 'clickOnImport',
         'click .importButton': 'importData',
         'hide.bs.modal #modalImport': 'hideModal'
@@ -20,7 +22,7 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     initialize: function (options) {
         this.id = options.id;
-        this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id:this.id});
+        this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         this.render();
         var self = this;
         this.mapDetailsCOllection.on('sync', self.onSync, self);
@@ -31,12 +33,12 @@ app.mapDetailsPageView = Backbone.View.extend({
         $('#content').empty();
 
         //Si la div existait déjà
-        if ($('#mapRow').length){
+        if ($('#mapRow').length) {
             $('#mapRow').remove();
         }
 
         //Ajout de la template au body
-        this.$el.append(this.template(new Backbone.Model({"id":this.mapDetailsCOllection.id})));
+        this.$el.append(this.template(new Backbone.Model({"id": this.mapDetailsCOllection.id})));
 
         //Fond de carte OSM
         this.tile = new ol.layer.Tile({
@@ -57,7 +59,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 this.tile
             ],
             view: new ol.View({
-                center: ol.proj.fromLonLat([ 5.336409, 43.36051]),
+                center: ol.proj.fromLonLat([5.336409, 43.36051]),
                 zoom: 14
             })
         });
@@ -67,35 +69,39 @@ app.mapDetailsPageView = Backbone.View.extend({
 
         //Préparation du layer pour notre GeoJSON
         this.vectorSource = new ol.source.Vector();
-        var vectorLayer = new ol.layer.Vector({
+        this.vectorLayer = new ol.layer.Vector({
             source: this.vectorSource,
-            style: function(feature, resolution) {
+            style: function (feature, resolution) {
                 return self.generateStyle(feature, resolution);
             }
         });
-        this.map.addLayer(vectorLayer);
+        this.map.addLayer(this.vectorLayer);
 
         //Trigger du click sur la map
         var self = this;
-        /*this.map.on('click', function(evt){
-            var pixel = evt.pixel;
-            var featureKeep = null;
-            self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-                if (feature && featureKeep == null) {
-                    featureKeep = feature;
-                }
-            });
-            if (featureKeep){
-                self.renderFeatureInformations(featureKeep);
+        this.selectPointer = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            style: function (feature, resolution) {
+                return self.generateSelectStyle(feature, resolution);
             }
-        });*/
-
-        var selectPointerMove = new ol.interaction.Select();
-        selectPointerMove.on('select',function(e){
-           console.log(e);
-            //selectPointerMove.getFeatures().clear()
         });
-        this.map.addInteraction(selectPointerMove);
+        this.selectPointer.on('select', function (e) {
+            if (e.deselected.length > 0) {
+                self.clickCloseInfo();
+            }
+            if (e.selected.length > 0) {
+                self.renderFeatureInformations(e.selected[0]);
+            }
+        });
+        this.selectPointerMove = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            condition: ol.events.condition.pointerMove,
+            style: function (feature, resolution) {
+                return self.generateSelectStyle(feature, resolution);
+            }
+        });
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
 
         //Fetch de la collection
         this.mapDetailsCOllection.fetch();
@@ -104,15 +110,15 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     },
 
-    changeID: function(id){
+    changeID: function (id) {
         this.id = id;
         this.mapDetailsCOllection.id = id;
     },
 
-    onSync: function(){
-        if (this.mapDetailsCOllection.length > 0){
+    onSync: function () {
+        if (this.mapDetailsCOllection.length > 0) {
+            this.vectorSource.clear();
             var geoJson = this.mapDetailsCOllection.toGeoJSON();
-            var self = this;
             var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
                 featureProjection: 'EPSG:3857'
             });
@@ -120,12 +126,12 @@ app.mapDetailsPageView = Backbone.View.extend({
             this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
         }
         /*this.map.addLayer(new ol.layer.Vector({
-            title: 'added Layer',
-            source: new ol.source.Vector({
-                url: 'Templates/from-osm-lannion-center.json',
-                format: new ol.format.GeoJSON()
-            })
-        }));*/
+         title: 'added Layer',
+         source: new ol.source.Vector({
+         url: 'Templates/from-osm-lannion-center.json',
+         format: new ol.format.GeoJSON()
+         })
+         }));*/
         //var test = new app.models.mapDetailsModel({ "type": "Feature", "properties": {"type":3, "timestamp": "2015-05-07T20:04:46Z", "version": "4", "changeset": "30884050", "user": "brelevenix", "id": "1467976", "highway": "residential", "name": "Avenue d\'Alsace", "ref:FR:FANTOIR": "221130035A"}, "geometry": { "type": "LineString", "coordinates": [ [ -3.4744614, 48.7443241], [ -3.4746925, 48.7442887] ]} },{parse: true});
         //this.mapDetailsCOllection.add(test);
 
@@ -140,23 +146,23 @@ app.mapDetailsPageView = Backbone.View.extend({
         //this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
     },
 
-    clickOnOSM: function(){
-            this.tile.setOpacity($('#osmOppacity').val());
+    clickOnOSM: function () {
+        this.tile.setOpacity($('#osmOppacity').val());
     },
 
-    generateStyle: function(feature,resolution){
+    generateStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
         var oneway = 1;
-        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
         }
-        switch (type){
+        switch (type) {
             case 1:
                 //SINGLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [241, 196, 15,1],
-                        width: (7/resolution)*oneway
+                        color: [241, 196, 15, 1],
+                        width: (7 / resolution) * oneway
                     })
                 });
                 return style;
@@ -165,8 +171,8 @@ app.mapDetailsPageView = Backbone.View.extend({
                 //DOUBLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [230, 126, 34,1],
-                        width: (14/resolution)*oneway
+                        color: [230, 126, 34, 1],
+                        width: (14 / resolution) * oneway
                     })
                 });
                 return style;
@@ -175,8 +181,8 @@ app.mapDetailsPageView = Backbone.View.extend({
                 //TRIPLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [231, 76, 60,1],
-                        width: (21/resolution)*oneway
+                        color: [231, 76, 60, 1],
+                        width: (21 / resolution) * oneway
                     }),
 
                 });
@@ -185,11 +191,11 @@ app.mapDetailsPageView = Backbone.View.extend({
             case 4:
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color: [250,178,102,1]
+                        color: [250, 178, 102, 1]
                     }),
                     stroke: new ol.style.Stroke({
-                        color: [0,255,0,1],
-                        width: 3.5/resolution
+                        color: [0, 255, 0, 1],
+                        width: 3.5 / resolution
                     })
                 });
                 return style;
@@ -202,7 +208,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1/resolution,
+                        scale: 0.1 / resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });
@@ -213,11 +219,81 @@ app.mapDetailsPageView = Backbone.View.extend({
         }
     },
 
-    clickCloseInfo: function(){
+    generateSelectStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            oneway = 0.5;
+        }
+        switch (type) {
+            case 1:
+                //SINGLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((7 + 2) / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((14 + 2) / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((21 + 1) / resolution) * oneway
+                    }),
+
+                });
+                return style;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [26, 155, 252, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (3.5 + 2) / resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: (0.1 + 0.2) / resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                break;
+        }
+    },
+
+    clickCloseInfo: function () {
+        //this.selectPointer.getFeatures().clear();
         $('#osmInfo').empty();
     },
 
-    renderFeatureInformations: function(feature){
+    renderFeatureInformations: function (feature) {
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
         new app.mapPopUpInfoVisuView({
@@ -225,23 +301,23 @@ app.mapDetailsPageView = Backbone.View.extend({
         });
     },
 
-    clickOnImport: function(){
-        if ($('#modalImport').length){
+    clickOnImport: function () {
+        if ($('#modalImport').length) {
             $('#modalImport').remove();
         }
         new app.importModalView();
     },
 
-    importData: function(){
+    importData: function () {
         var f = $('input[type=file]')[0].files[0];
         var extentionFile;
         if (!f.name) {
             extentionFile = "null.null";
-        }else {
+        } else {
             var re = /(?:\.([^.]+))?$/;
             extentionFile = re.exec(f.name)[1];
         }
-        switch (extentionFile){
+        switch (extentionFile) {
             case 'osm':
                 $('#formImport').addClass('hidden');
                 $('#parseMessage').removeClass('hidden');
@@ -260,17 +336,17 @@ app.mapDetailsPageView = Backbone.View.extend({
 
     },
 
-    encodeOSMtoGeoJSON: function(osm){
+    encodeOSMtoGeoJSON: function (osm) {
         if (osm) {
             var r = new FileReader();
             var self = this;
-            r.onload = function(e) {
+            r.onload = function (e) {
                 var contents = e.target.result;
                 var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(contents,"text/xml");
+                var xmlDoc = parser.parseFromString(contents, "text/xml");
                 contents = osmtogeojson(xmlDoc);
                 contents = JSON.stringify(contents);
-                contents = new File([contents,"import.json"],{type: "application/json"});
+                contents = new File([contents, "import.json"], {type: "application/json"});
                 $('#parseMessage').addClass('hidden');
                 self.sendImportData(contents);
             };
@@ -280,12 +356,12 @@ app.mapDetailsPageView = Backbone.View.extend({
         }
     },
 
-    sendImportData: function(dataS){
+    sendImportData: function (dataS) {
         var formData = new FormData();
-        formData.append('data',dataS);
+        formData.append('data', dataS);
         var self = this;
         $.ajax({
-                url: Backbone.Collection.prototype.absURL + "/api/maps/"+self.id+"/import",
+                url: Backbone.Collection.prototype.absURL + "/api/maps/" + self.id + "/import",
                 type: "POST",
                 processData: false,
                 data: formData,
@@ -307,11 +383,11 @@ app.mapDetailsPageView = Backbone.View.extend({
             });
     },
 
-    hideModal: function(){
+    hideModal: function () {
         $('#modalImport').remove();
     },
 
-    fetchCollection: function(){
+    fetchCollection: function () {
         this.mapDetailsCOllection.fetch();
     }
 });
