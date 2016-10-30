@@ -127,7 +127,6 @@ app.mapEditionView = Backbone.View.extend({
     onAddElement: function(element){
         console.log("add");
         var geojsonModel = element.toGeoJSON();
-        console.log(geojsonModel);
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
             featureProjection: 'EPSG:3857'
         });
