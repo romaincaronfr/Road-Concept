@@ -1,4 +1,4 @@
-<div id="mapRow" class="">
+<div id="mapRow" class="" xmlns="http://www.w3.org/1999/html">
     <div class="osmSidebar">
         <div class="row">
             <div class="col-md-2 col-md-offset-1">
@@ -16,25 +16,23 @@
     </div>
     <div style="background-color: white" id="map"></div>
     <div id="editBarMenu">
-        <div class="row">
-            <div id="editButtonChooseTool" >
-                <div class="col-md-2">
-                    <button class="btn btn-info btn-block " name="chooseTool" value="LineString">Route</button>
+            <div id="editButtonChooseTool" class="col-md-12 btn-group-lg" role="group">
+                <div class="col-xs-2 ">
+                    <button class="btn btn-default " name="chooseTool" value="LineString"><span class="glyphicon glyphicon-road"></span>&nbsp;  Route</button>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-info btn-block" name="chooseTool" value="Polygon">Rond-point</button>
+                <div class="col-xs-2 ">
+                    <button class="btn btn-default " name="chooseTool" value="Polygon"><span class="icon icon-roundabout"></span>&nbsp;  Rond-point</button>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-info btn-block" name="chooseTool" value="Point">Feu tricolore</button>
+                <div class="col-xs-2 ">
+                    <button class="btn btn-default" name="chooseTool" value="Point"><img src="assets/img/traffic-light.svg">&nbsp;Feu tricolore</button>
                 </div>
             </div>
 
             <div id="editButtonCancel" hidden>
-                <div class="col-md-2">
+                <div class="col-md-2 centre">
                     <button class="btn btn-info btn-block dropdown-toggle" id="cancel">Annuler</button>
                 </div>
             </div>
-        </div>
     </div>
 
 </div>

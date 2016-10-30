@@ -84,3 +84,14 @@ body {
     left : 3%;
     height: 100%;
 }
+
+#editButtonChooseTool {
+    position: absolute;
+    top : 10%;
+    height: 80%;
+}
+
+.centre {
+    float: none;
+    margin: 0 auto;
+}
