@@ -5,7 +5,8 @@ import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
-import fr.enssat.lanniontech.api.exceptions.UnconsistentException;
+import fr.enssat.lanniontech.api.exceptions.InconsistentException;
+import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -47,9 +48,9 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/maps/:mapID").blockingHandler(this::processGetOneMap);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID").blockingHandler(this::processDeleteMap);
 
+        router.route(HttpMethod.POST, "/api/maps/:mapID/features").blockingHandler(this::processCreateFeature);
         router.route(HttpMethod.PUT, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processUpdateFeature);
         router.route(HttpMethod.GET, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processGetOneFeature);
-        router.route(HttpMethod.POST, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processCreateFeature);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processDeleteFeature);
 
         router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
@@ -58,11 +59,16 @@ public class MapsVerticle extends AbstractVerticle {
     private void processCreateFeature(RoutingContext routingContext) {
         try {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
-            UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
             Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
 
             Feature created = mapService.addFeature(mapID, feature);
             HttpResponseBuilder.buildCreatedResponse(routingContext, created);
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext,e);
+        } catch (InconsistentException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext,"User and Map are not consistent");
+        } catch (JSONProcessingException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext,"Invalid GeoJSON");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -72,10 +78,15 @@ public class MapsVerticle extends AbstractVerticle {
         try {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
             UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
-            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
 
-            mapService.deleteFeature(mapID, feature);
+            mapService.deleteFeature(mapID, featureUUID);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
+        } catch (IllegalArgumentException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid UUID");
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        } catch (InconsistentException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "Entities are not consistent");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -90,8 +101,14 @@ public class MapsVerticle extends AbstractVerticle {
 
             Feature updated = mapService.updateFeature(mapID, feature);
             HttpResponseBuilder.buildOkResponse(routingContext, updated);
+        } catch (IllegalArgumentException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid UUID");
+        } catch (JSONProcessingException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext,"Invalid GeoJSON");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        } catch (InconsistentException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "Entities are not consistent");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -104,8 +121,12 @@ public class MapsVerticle extends AbstractVerticle {
 
             Feature feature = mapService.getFeature(mapID, featureUUID);
             HttpResponseBuilder.buildOkResponse(routingContext, feature);
+        } catch (IllegalArgumentException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid UUID");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        } catch (InconsistentException e) {
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "Entities are not consistent");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -122,7 +143,7 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (NumberFormatException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Incorrect map ID.");
-        } catch (UnconsistentException e) {
+        } catch (InconsistentException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "The authenticated user and the given map ID are not consistent.");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -144,7 +165,7 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, mapInfo);
         } catch (DecodeException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
-        } catch (Exception e) {
+        } catch (Exception e) { //TODO
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -154,7 +175,7 @@ public class MapsVerticle extends AbstractVerticle {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             List<MapInfo> maps = mapService.getAllMapsInfo(currentUser);
             HttpResponseBuilder.buildOkResponse(routingContext, maps);
-        } catch (Exception e) {
+        } catch (Exception e) { //TODO
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -164,7 +185,7 @@ public class MapsVerticle extends AbstractVerticle {
             Integer mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
             mapService.delete(mapID);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
-        } catch (Exception e) {
+        } catch (Exception e) { //TODO
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
@@ -185,7 +206,7 @@ public class MapsVerticle extends AbstractVerticle {
 
             HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
         } catch (NoSuchElementException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext, "The file to upload must be provided");
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Nothing to process");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {

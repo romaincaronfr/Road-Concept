@@ -7,48 +7,54 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import fr.enssat.lanniontech.api.entities.geojson.Point;
-import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 public class SimulatorService extends AbstractService {
 
-    public boolean simulate(Map map) {
-        FeatureCollection features = map.getFeatures();
-
-        //        Simulator simulator = new Simulator();
-        //        for (Feature feature : features) {
-        //            if (feature.getGeometry() instanceof LineString) {
-        //                LineString road = (LineString) feature.getGeometry();
-        //                for (Coordinates coordinates : road.getCoordinates()) {
-        //                    Position A = new Position(coordinates.getLongitude(),coordinates.getLatitude());
-        //                    Position B = new Position();
-        //                    simulator.roadManager.addRoadSectionToRoad(A, B, feature.getUuid());
-        //                    // FIXME: Voir avec Antoine si il créé une méthode pour ajouter point à point ou faut il diviser en road sections ?
-        //                }
-        //
-        //
-        //            }
-        //            //TODO: Prévoir les ronds points et les feux rouges
-        //        }
-
-        return true;
-    }
-
     private Simulator simulator = new Simulator();
 
-    public FeatureCollection getFakeSimulationResult(FeatureCollection features) {
+    public FeatureCollection simulate(FeatureCollection features) {
         sendFeatures(features);
         //TODO: sendVehicles
         simulator.launchSimulation(3600, 0.1);
-        simulator.waitForEnd(); // FIXME: ne peu pas être fait ici
+        //simulator.waitForEnd(); // FIXME: ne peu pas être fait ici
+
         return null;
+    }
+
+    public void getResult(FeatureCollection features) {
+        long timestamp = 0; //TODO: Voir avec Antoine et Romain
+        for (Feature feature : features) {
+            double status = simulator.simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
+            RoadCongestionLevel congestion = null;
+            if (status <= (1 / 3.0) * 100) {
+                congestion = RoadCongestionLevel.LOW;
+            } else if (status >= (2 / 3.0) * 100) {
+                congestion = RoadCongestionLevel.HIGH;
+            } else {
+                congestion = RoadCongestionLevel.MEDIUM;
+            }
+            feature.getProperties().put("congestion", congestion);
+
+        }
+        List<SpaceTimePosition> vehicles = simulator.simulationHistory.getAllVehicleAt(timestamp);
+        for (SpaceTimePosition vehicle : vehicles) {
+            Feature feature = new Feature(); // Gestion problématique UUID d'une requête sur l'autre
+            Point point = new Point(new Coordinates(vehicle.getLon(), vehicle.getLat()));
+            feature.setGeometry(point);
+            features.getFeatures().add(feature);
+        }
+
+        //TODO: à tester...
     }
 
     public void sendFeatures(FeatureCollection features) {
@@ -57,7 +63,7 @@ public class SimulatorService extends AbstractService {
                 LineString road = (LineString) feature.getGeometry();
                 Coordinates last = road.getCoordinates().get(0);
 
-                for (int i = 1; i < road.getCoordinates().size(); i++) {
+                for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
                     Position A = simulator.positionManager.addPosition(last.getLongitude(), last.getLongitude());
                     Position B = simulator.positionManager.addPosition(coordinates.getLongitude(), coordinates.getLongitude());
@@ -67,6 +73,7 @@ public class SimulatorService extends AbstractService {
             }
             //TODO: Prévoir les ronds points et les feux rouges
         }
+        simulator.roadManager.closeRoads();
     }
 
     public FeatureCollection getFakeSimulationResult() throws IOException {

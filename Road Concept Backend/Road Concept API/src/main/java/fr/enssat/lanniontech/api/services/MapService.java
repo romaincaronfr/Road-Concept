@@ -124,7 +124,6 @@ public class MapService extends AbstractService {
                     iterator.remove();
                 }
             } else {
-                //FIXME: getFromUUID le highway qui ne serai pas dans les tags
                 if (feature.getProperties().containsKey("tags")) {
                     Map tags = (LinkedHashMap) feature.getProperties().get("tags");
                     String highway = (String) tags.get("highway");
@@ -224,21 +223,15 @@ public class MapService extends AbstractService {
         return "Unnamed unit road";
     }
 
-    private boolean getOneWay(Map<String, Object> properties) {
+    private String getOneWay(Map<String, Object> properties) {
         if (properties.containsKey("oneway")) {
-            String oneway = (String) properties.get("oneway");
-            if (oneway.equals("yes")) {
-                return true;
-            }
+            return(String) properties.get("oneway");
         }
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("oneway")) {
-            String oneway = (String) tags.get("oneway");
-            if (oneway.equals("yes")) {
-                return true;
-            }
+            return (String) tags.get("oneway");
         }
-        return false;
+        return null;
     }
 
     private boolean getBridge(Map<String, Object> properties) {
@@ -294,11 +287,12 @@ public class MapService extends AbstractService {
         return null;
     }
 
-    public void deleteFeature(int mapID, Feature feature) {
-        mapFeatureRepository.delete(mapID, feature.getUuid());
+    public void deleteFeature(int mapID, UUID featureUUID) {
+        mapFeatureRepository.delete(mapID, featureUUID);
     }
 
     public Feature addFeature(int mapID, Feature feature) {
+        feature.getProperties().put("id",feature.getUuid());
         return mapFeatureRepository.create(mapID, feature);
     }
 }

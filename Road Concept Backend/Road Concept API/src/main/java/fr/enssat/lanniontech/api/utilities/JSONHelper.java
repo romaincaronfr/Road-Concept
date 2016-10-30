@@ -22,7 +22,7 @@ public class JSONHelper {
         MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 
-    public static String toJSON(Object object) {
+    public static String toJSON(Object object) throws JSONProcessingException {
         try {
             return MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -31,7 +31,7 @@ public class JSONHelper {
         }
     }
 
-    public static <T> T fromJSON(String jsonString, Class<T> valueType) {
+    public static <T> T fromJSON(String jsonString, Class<T> valueType) throws JSONProcessingException {
         try {
             return MAPPER.readValue(jsonString, valueType);
         } catch (IOException e) {
