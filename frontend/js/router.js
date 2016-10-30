@@ -45,6 +45,7 @@ app.Router = Backbone.Router.extend({
         this.adminV = null;
         this.adminMV = null;
         this.detailPageV = null;
+        this.editmapV = null;
     },
 
     start: function () {
@@ -97,7 +98,13 @@ app.Router = Backbone.Router.extend({
 
     mapEdition : function(id){
         this.checkAndInitNavBar();
-        new app.mapEditionView({id:id})
+        if (!this.editmapV){
+            this.editmapV = new app.mapEditionView({id:id});
+        } else {
+            this.editmapV.changeID(id);
+            this.editmapV.render();
+        }
+
     },
 
     user: function () {

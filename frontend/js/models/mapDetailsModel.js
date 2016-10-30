@@ -3,6 +3,11 @@
  */
 app.models.mapDetailsModel = Backbone.Model.extend({
 
+    urlRoot: function() {
+        // Backbone adds the model id automatically
+        return this.collection.url()+"/features";
+    },
+
     parse: function(response){
         var newResponse = {};
         newResponse.geometry = new Backbone.Model(response.geometry);

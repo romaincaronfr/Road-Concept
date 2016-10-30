@@ -9,10 +9,15 @@ app.mapEditionView = Backbone.View.extend({
     tile: null,
     value : null,
     draw : null,
+    vectorSource: null,
+    vectorLayer: null,
+    selectPointerMove: null,
+    selectPointer: null,
+    mapDetailsCOllection:null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
-        'click .close_map_info': 'clickCloseInfo',
+        //'click .close_map_info': 'clickCloseInfo',
         'click button[name=chooseTool]': 'hasChooseTool',
         'click button[id=cancel]': 'cancelHasChooseTool'
 
@@ -20,150 +25,152 @@ app.mapEditionView = Backbone.View.extend({
 
     initialize: function (options) {
         this.id = options.id;
-        this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id:this.id});
+        this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         this.render();
         var self = this;
-        this.mapDetailsCOllection.fetch();
-        this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('sync', self.onSync, self);
+        this.mapDetailsCOllection.on('add', self.onAddElement, self);
+        this.mapDetailsCOllection.on('remove', self.onRemoveElement, self);
     },
 
     render: function () {
+        //Supression du content
+        this.mapDetailsCOllection.reset();
         $('#content').empty();
-        if ($('#mapRow').length){
+        if (this.vectorSource){
+            this.vectorSource.clear();
+        }
+
+        //Si la div existait déjà
+        if ($('#mapRow').length) {
             $('#mapRow').remove();
         }
-        this.$el.append(this.template());
+
+        //Ajout de la template au body
+        this.$el.append(this.template(new Backbone.Model({"id": this.mapDetailsCOllection.id})));
+
+        //Fond de carte OSM
         this.tile = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
+
+        //Création de la map, si la variable était déjà inialisé on écrase
         this.map = new ol.Map({
             target: 'map',
+            controls: ol.control.defaults({
+                attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                    collapsible: false
+                })
+            }).extend([
+                new ol.control.ScaleLine()
+            ]),
             layers: [
                 this.tile
             ],
             view: new ol.View({
-                center: ol.proj.fromLonLat([ 5.336409, 43.36051]),
+                center: ol.proj.fromLonLat([5.336409, 43.36051]),
                 zoom: 14
             })
         });
 
+        //Réglage de l'opacité du fond de carte OSM
         this.tile.setOpacity($('#osmOppacity').val());
-        var self = this;
-        /*this.map.on('click', function(evt){
-            var pixel = evt.pixel;
-            console.log(pixel);
-            //loop through all features under this pixel coordinate
-            //and save them in array
-            var featureKeep = null;
-            self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
-                if (feature) {
-                    //var encore = new ol.format.GeoJSON();
-                    //console.log(encore.writeFeature(feature));
-                    featureKeep = feature;
-                    console.log(feature.getProperties());
-                }
-            });
-            if (featureKeep){
-                self.renderFeatureInformations(featureKeep);
+
+        //Préparation du layer pour notre GeoJSON
+        this.vectorSource = new ol.source.Vector();
+        this.vectorLayer = new ol.layer.Vector({
+            source: this.vectorSource,
+            style: function (feature, resolution) {
+                return self.generateStyle(feature, resolution);
             }
-        });*/
+        });
+        this.map.addLayer(this.vectorLayer);
+
+        //Trigger du click sur la map
+        var self = this;
+        this.selectPointer = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            style: function (feature, resolution) {
+                return self.generateSelectStyle(feature, resolution);
+            }
+        });
+        this.selectPointer.on('select', function (e) {
+            if (e.deselected.length > 0) {
+                self.clickCloseInfo();
+            }
+            if (e.selected.length > 0) {
+                self.renderFeatureInformations(e.selected[0]);
+            }
+        });
+        this.selectPointerMove = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            condition: ol.events.condition.pointerMove,
+            style: function (feature, resolution) {
+                return self.generateSelectMoveStyle(feature, resolution);
+            }
+        });
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+
+        //Fetch de la collection
+        this.fetchCollection();
+
         return this;
 
     },
 
+    changeID: function (id) {
+        this.id = id;
+        this.mapDetailsCOllection.id = id;
+    },
+
     onAddElement: function(element){
-        //console.log(element);
-        //var self = this;
-        //var points = new Array();
-        //var coords = element.getGPSCoordinates();
-        //var style = this.generateStyle(element.getTypeProperties());
-        //console.log(element.getTypeProperties());
-        //var type = element.getGeometryType();
-        //
-        //for(var i= 0; i < coords.length; i++)
-        //{
-        //    points.push(ol.proj.transform([coords[i][0],coords[i][1]], 'EPSG:4326',   'EPSG:3857'));
-        //}
-        //
-        //var layerLines = new ol.layer.Vector({
-        //    source: new ol.source.Vector({
-        //        features: [new ol.Feature({
-        //            geometry: new ol.geom.LineString(points, 'XY'),
-        //            name: 'Line',
-        //            id: element.attributes.id,
-        //            properties: element.attributes.properties
-        //        })]
-        //    }),
-        //    style: function(feature, resolution){
-        //        var type = feature.getProperties().properties.type;
-        //        console.log('ououuoeueroeour');
-        //        return self.generateStyle(type);
-        //    }
-        //});
-        //this.map.addLayer(layerLines);
-        //console.log(JSON.stringify(this.mapDetailsCOllection.toJSON()));
+        console.log("add");
+        var geojsonModel = element.toGeoJSON();
+        console.log(geojsonModel);
+        var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+            featureProjection: 'EPSG:3857'
+        });
+        this.vectorSource.addFeature(newfeature);
+    },
+
+    onRemoveElement: function(element){
+        console.log("remove");
     },
 
     onSync: function(){
-        if (this.mapDetailsCOllection.length > 0){
+        console.log('sync');
+        /*if (this.mapDetailsCOllection.length > 0) {
+            this.vectorSource.clear();
             var geoJson = this.mapDetailsCOllection.toGeoJSON();
-            var self = this;
             var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
                 featureProjection: 'EPSG:3857'
             });
-            var vectorSource = new ol.source.Vector({
-                features: featuresSource
-            });
-            var vectorLayer = new ol.layer.Vector({
-                source: vectorSource,
-                style: function(feature, resolution) {
-                    var type = feature.getProperties().type;
-                    var oneway = 1;
-                    if (feature.getProperties().oneway && feature.getProperties().oneway == true){
-                        console.log("oneway true");
-                        oneway = 0.5;
-                    }
-                    var style = self.generateStyle(type, resolution,oneway);
-                    return style;
-                }
-
-            });
-
-            this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
-            this.map.addLayer(vectorLayer);
-        }
-        /*this.map.addLayer(new ol.layer.Vector({
-         title: 'added Layer',
-         source: new ol.source.Vector({
-         url: 'Templates/from-osm-lannion-center.json',
-         format: new ol.format.GeoJSON()
-         })
-         }));*/
-        //var test = new app.models.mapDetailsModel({ "type": "Feature", "properties": {"type":3, "timestamp": "2015-05-07T20:04:46Z", "version": "4", "changeset": "30884050", "user": "brelevenix", "uid": "1467976", "highway": "residential", "name": "Avenue d\'Alsace", "ref:FR:FANTOIR": "221130035A"}, "geometry": { "type": "LineString", "coordinates": [ [ -3.4744614, 48.7443241], [ -3.4746925, 48.7442887] ]} },{parse: true});
-        //this.mapDetailsCOllection.add(test);
-        //test.save();
-        //newGeo = test.toGeoJSON();
-        //console.log(newGeo);
-        //var featuretest = new ol.format.GeoJSON().readFeature(newGeo, {
-        //    featureProjection: 'EPSG:3857'
-        //});
-        //vectorSource.addFeature(featuretest);
-        //this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
+            this.vectorSource.addFeatures(featuresSource);
+            this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
+        }*/
+        var self = this;
+        this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
+        //this.mapDetailsCOllection.on('add', self.onAddElement, self);
     },
 
     clickOnOSM: function(){
         this.tile.setOpacity($('#osmOppacity').val());
     },
 
-    generateStyle: function(type,resolution,oneway){
-        switch (type){
+    generateStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            oneway = 0.5;
+        }
+        switch (type) {
             case 1:
                 //SINGLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [241, 196, 15,1],
-                        width: (7/resolution)*oneway
+                        color: [241, 196, 15, 1],
+                        width: (7 / resolution) * oneway
                     })
                 });
                 return style;
@@ -172,19 +179,18 @@ app.mapEditionView = Backbone.View.extend({
                 //DOUBLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [230, 126, 34,1],
-                        width: (14/resolution)*oneway
+                        color: [230, 126, 34, 1],
+                        width: (14 / resolution) * oneway
                     })
                 });
                 return style;
                 break;
             case 3:
-                console.log("triple road");
                 //TRIPLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [231, 76, 60,1],
-                        width: (21/resolution)*oneway
+                        color: [231, 76, 60, 1],
+                        width: (21 / resolution) * oneway
                     }),
 
                 });
@@ -193,11 +199,141 @@ app.mapEditionView = Backbone.View.extend({
             case 4:
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
+                        color: [250, 178, 102, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [0, 255, 0, 1],
+                        width: 3.5 / resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: 0.1 / resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                break;
+        }
+    },
+
+    generateSelectStyle: function(feature,resolution){
+        var type = feature.getProperties().type;
+        var geometry = feature.getGeometry();
+        var startCoord = geometry.getFirstCoordinate();
+        var endCoord = geometry.getLastCoordinate();
+        var oneway = 1;
+        var circle = new ol.style.Circle({
+            stroke: new ol.style.Stroke({
+                color: [50, 50, 50,1]
+            }),
+            fill: new ol.style.Fill({
+                color: [200, 200, 200,0.8]
+            }),
+            radius: 10
+        });
+        var firstPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(startCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'A',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        var lastPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(endCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'B',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+            console.log("oneway true");
+            oneway = 0.5;
+        }
+        switch (type){
+            case 1:
+                //SINGLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((7+2)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((14+2)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((21+1)/resolution)*oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
                         color: [250,178,102,1]
                     }),
                     stroke: new ol.style.Stroke({
-                        color: [0,255,0,1],
-                        width: 3.5/resolution
+                        color: [26, 155, 252, 1],
+                        width: (3.5+2)/resolution
                     })
                 });
                 return style;
@@ -211,7 +347,7 @@ app.mapEditionView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1/resolution,
+                        scale: (0.1 + 0.2)/resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });
@@ -223,6 +359,75 @@ app.mapEditionView = Backbone.View.extend({
         }
     },
 
+    generateSelectMoveStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            oneway = 0.5;
+        }
+        switch (type) {
+            case 1:
+                //SINGLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((7 + 2) / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((14 + 2) / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: ((21 + 1) / resolution) * oneway
+                    }),
+
+                });
+                return style;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [26, 155, 252, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (3.5 + 2) / resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: (0.1 + 0.2) / resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                break;
+        }
+    },
+
     clickCloseInfo: function(){
         $('#osmInfo').empty();
     },
@@ -230,7 +435,6 @@ app.mapEditionView = Backbone.View.extend({
     renderFeatureInformations: function(feature){
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
-        console.log(model);
         new app.mapPopUpInfoVisuView({
             model: model
         });
@@ -241,24 +445,65 @@ app.mapEditionView = Backbone.View.extend({
         console.log('Draw : start '+this.value);
         if(this.value != 'None'){
             this.draw = new ol.interaction.Draw({
-                source: new ol.source.Vector({wrapX: false}),
+                //source: new ol.source.Vector(),
+                source: new ol.source.Vector(),
                 type: this.value
             });
 
             this.map.addInteraction(this.draw);
+            var self = this;
 
             this.draw.on('drawend', function(event) {
                 console.log('Draw : end');
                 var feature = event.feature;
-                var JSONFeature  = new ol.format.GeoJSON().writeFeature(feature);
+                var JSONFeature  = new ol.format.GeoJSON().writeFeature(feature, {
+                    dataProjection:'EPSG:3857',
+                    featureProjection:'EPSG:3857'
+                });
+                JSONFeature = JSON.parse(JSONFeature);
 
+                switch (self.value){
+                    case 'Polygon':
+                        console.log('Polygon');
+                        JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates()[0]);
+                        JSONFeature.geometry.type = "LineString";
+                        JSONFeature.properties = {type:4, maxspeed : 30};
+                        break;
+                    case 'LineString':
+                        console.log('LineString');
+                        JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates());
+                        JSONFeature.properties = {type:1, maxspeed : 50, oneway: false};
+                        //TODO adapter au futur système de oneway
+                        break;
+                    case 'Point':
+                        var coord = feature.getGeometry().getCoordinates();
+                        coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+                        JSONFeature.geometry.coordinates = coord;
+                        JSONFeature.properties = {type:5, redlighttime:30};
+                        break;
+                }
+                JSONFeature.properties.name = "A definir";
                 console.log(JSONFeature);
-
+                var newModel = new app.models.mapDetailsModel(JSONFeature,{parse: true,collection:self.mapDetailsCOllection});
+                console.log(newModel);
+                newModel.save(null, {
+                    success: (function () {
+                        console.log('success add');
+                        self.mapDetailsCOllection.add(newModel);
+                        /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
+                        var selectFeatures = this.selectPointer.getFeatures();
+                        selectFeatures.push(feature);*/
+                    })
+                });
+                //self.mapDetailsCOllection.add(newModel);
+                /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
+                var selectFeatures = this.selectPointer.getFeatures();
+                selectFeatures.push(feature);*/
+                self.cancelHasChooseTool();
                 /*var format = new ol.format.GeoJSON();
                 var routeFeatures = format.writeFeatures(feature);
                 console.log(format);*/
             });
-
         }
     },
 
@@ -266,6 +511,7 @@ app.mapEditionView = Backbone.View.extend({
     hasChooseTool: function(e) {
         this.value = $(e.currentTarget).attr('value');
         console.log('Tool chosen : '+this.value);
+        this.map.removeInteraction(this.selectPointer);
         this.addInteraction(this.value);
         this.changeChooseToolToCancel();
     },
@@ -276,11 +522,25 @@ app.mapEditionView = Backbone.View.extend({
         this.value = 'None';
         console.log('Draw : Stop');
         this.map.removeInteraction(this.draw);
+        this.map.addInteraction(this.selectPointer);
     },
 
     changeChooseToolToCancel : function(){
         $('#editButtonChooseTool').hide();
         $('#editButtonCancel').show();
+    },
+
+    fetchCollection: function () {
+        var self = this;
+        //this.mapDetailsCOllection.off("add");
+        this.mapDetailsCOllection.fetch();
+    },
+
+    transoformToGps: function(coordinates){
+        for (var i=0;i<coordinates.length;i++){
+            coordinates[i] = ol.proj.transform(coordinates[i], 'EPSG:3857', 'EPSG:4326');
+        }
+        return coordinates;
     }
 
 
