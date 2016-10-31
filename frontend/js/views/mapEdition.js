@@ -475,8 +475,7 @@ app.mapEditionView = Backbone.View.extend({
                     case 'LineString':
                         console.log('LineString');
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates());
-                        JSONFeature.properties = {type:1, maxspeed : 50, oneway: false};
-                        //TODO adapter au futur système de oneway
+                        JSONFeature.properties = {type:1, maxspeed : 50, oneway: "no"};
                         break;
                     case 'Point':
                         var coord = feature.getGeometry().getCoordinates();
