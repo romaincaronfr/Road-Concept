@@ -153,7 +153,6 @@ app.mapEditionView = Backbone.View.extend({
             this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
         }*/
         var self = this;
-        this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
         //this.mapDetailsCOllection.on('add', self.onAddElement, self);
     },
 
@@ -537,7 +536,11 @@ app.mapEditionView = Backbone.View.extend({
     fetchCollection: function () {
         var self = this;
         //this.mapDetailsCOllection.off("add");
-        this.mapDetailsCOllection.fetch();
+        this.mapDetailsCOllection.fetch({
+            success: function(){
+                self.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
+            }
+        });
     },
 
     transoformToGps: function(coordinates){
