@@ -13,6 +13,7 @@ app.mapEditionView = Backbone.View.extend({
     vectorLayer: null,
     selectPointerMove: null,
     selectPointer: null,
+    snap: null,
     mapDetailsCOllection:null,
 
     events: {
@@ -109,14 +110,17 @@ app.mapEditionView = Backbone.View.extend({
                 return self.generateSelectMoveStyle(feature, resolution);
             }
         });
+        this.snap = new ol.interaction.Snap({
+            source: this.vectorSource
+        });
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
 
         //Fetch de la collection
         this.fetchCollection();
 
         return this;
-
     },
 
     changeID: function (id) {
@@ -450,6 +454,7 @@ app.mapEditionView = Backbone.View.extend({
             });
 
             this.map.addInteraction(this.draw);
+            this.map.addInteraction(this.snap);
             var self = this;
 
             this.draw.on('drawend', function(event) {
