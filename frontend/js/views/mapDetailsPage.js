@@ -104,8 +104,12 @@ app.mapDetailsPageView = Backbone.View.extend({
                 return self.generateSelectMoveStyle(feature, resolution);
             }
         });
+        this.snap = new ol.interaction.Snap({
+            source: this.vectorSource
+        });
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
 
         //Fetch de la collection
         this.mapDetailsCOllection.fetch();
