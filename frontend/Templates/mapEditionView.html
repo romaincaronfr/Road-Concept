@@ -15,22 +15,21 @@
     <div id="osmInfo">
     </div>
     <div style="background-color: white" id="map"></div>
-    <div id="editBarMenu">
-            <div id="editButtonChooseTool" class="col-md-12 btn-group-lg" role="group">
-                <div class="col-xs-2 ">
-                    <button class="btn btn-default " name="chooseTool" value="LineString"><span class="glyphicon glyphicon-road"></span>&nbsp;  Route</button>
+    <div id="editBarMenu" class="col-md-12">
+            <div id="editButtonChooseTool" class=" btn-group-lg" role="group">
+                <div class="col-md-4 col-md-offset-0 ">
+                    <button class="btn btn-default btn-block" name="chooseTool" value="LineString"><span class="glyphicon glyphicon-road"></span>&nbsp;  Route</button>
                 </div>
-                <div class="col-xs-2 ">
-                    <button class="btn btn-default " name="chooseTool" value="Polygon"><span class="icon icon-roundabout"></span>&nbsp;  Rond-point</button>
+                <div class="col-md-4 col-md-offset-0">
+                    <button class="btn btn-default btn-block" name="chooseTool" value="Polygon"><span class="glyphicon glyphicon-refresh"></span>&nbsp;  Rond-point</button>
                 </div>
-                <div class="col-xs-2 ">
-                    <button class="btn btn-default" name="chooseTool" value="Point"><img src="assets/img/traffic-light.svg">&nbsp;Feu tricolore</button>
+                <div class="col-md-4 col-md-offset-0">
+                    <button class="btn btn-default btn-block" name="chooseTool" value="Point"><img src="assets/img/traffic-light.svg">&nbsp;Feu tricolore</button>
                 </div>
             </div>
-
-            <div id="editButtonCancel" hidden>
-                <div class="col-md-2 centre">
-                    <button class="btn btn-info btn-block dropdown-toggle" id="cancel">Annuler</button>
+            <div id="editButtonCancel" class="col-md-12" hidden>
+                <div class="btn-group col-md-12">
+                    <button class="btn btn-block btn-default " id="cancel">Annuler</button>
                 </div>
             </div>
     </div>

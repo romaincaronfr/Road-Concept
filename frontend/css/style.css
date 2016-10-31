@@ -86,12 +86,23 @@ body {
 }
 
 #editButtonChooseTool {
-    position: absolute;
-    top : 10%;
-    height: 80%;
+    border-radius: 10px 10px 0px 0px;
+    height: 100%;
+    width: 100%;
+}
+#editButtonChooseTool .btn {
+    display:block;
+    margin-top : 7px;
+    height: 100%;
+    border-radius: 10px 10px 10px 10px;
 }
 
-.centre {
-    float: none;
-    margin: 0 auto;
+#editButtonCancel {
+    border-radius: 10px 10px 0px 0px;
+    height: 100%;
+    width: 100%;
+}
+#cancel{
+    margin-top : 7px;
+    border-radius: 10px 10px 10px 10px;
 }
