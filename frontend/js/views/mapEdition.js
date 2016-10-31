@@ -15,6 +15,7 @@ app.mapEditionView = Backbone.View.extend({
     selectPointer: null,
     snap: null,
     mapDetailsCOllection:null,
+    interactionZoomDoubleClick : null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -120,6 +121,19 @@ app.mapEditionView = Backbone.View.extend({
         //Fetch de la collection
         this.fetchCollection();
 
+        /**
+         * Get the interaction in interactionZoomDoubleClick : zoom when doubleclick
+         */
+        var interactions = this.map.getInteractions();
+        console.log(interactions);
+        for (var i = 0; i < interactions.getLength(); i++) {
+            var interaction = interactions.item(i);
+            if (interaction instanceof ol.interaction.DoubleClickZoom) {
+                this.interactionZoomDoubleClick = interaction;
+                console.log("interaction Zoom Double Click");
+                console.log(this.interactionZoomDoubleClick);
+            }
+        }
         return this;
     },
 
@@ -455,6 +469,13 @@ app.mapEditionView = Backbone.View.extend({
             this.map.addInteraction(this.draw);
             this.map.addInteraction(this.snap);
             var self = this;
+            
+            this.draw.on('drawstart', function (evt) {
+                console.log('drawStart');
+
+                    self.interactionZoomDoubleClick.setActive(false);
+
+            });
 
             this.draw.on('drawend', function(event) {
                 console.log('Draw : end');
@@ -505,10 +526,13 @@ app.mapEditionView = Backbone.View.extend({
                 /*var format = new ol.format.GeoJSON();
                 var routeFeatures = format.writeFeatures(feature);
                 console.log(format);*/
+                setTimeout(function(){
+                    self.interactionZoomDoubleClick.setActive(true);
+                },251);
+
             });
         }
     },
-
 
     hasChooseTool: function(e) {
         this.value = $(e.currentTarget).attr('value');
@@ -547,7 +571,18 @@ app.mapEditionView = Backbone.View.extend({
             coordinates[i] = ol.proj.transform(coordinates[i], 'EPSG:3857', 'EPSG:4326');
         }
         return coordinates;
-    }
+    },
+
+    controlDoubleClickZoom : function (active){
+        for (var i = 0; i < this.interactionZoomDoubleClick.getLength(); i++) {
+            var interaction = this.interactionZoomDoubleClick.item(i);
+            if (interaction instanceof ol.interaction.DoubleClickZoom) {
+                interaction.setActive(active);
+            }
+        }
+    },
+
+
 
 
 
