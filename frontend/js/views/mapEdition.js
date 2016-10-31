@@ -373,7 +373,7 @@ app.mapEditionView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((7 + 2) / resolution) * oneway
+                        width: (7 / resolution) * oneway
                     })
                 });
                 return style;
@@ -383,7 +383,7 @@ app.mapEditionView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((14 + 2) / resolution) * oneway
+                        width: (14 / resolution) * oneway
                     })
                 });
                 return style;
@@ -393,7 +393,7 @@ app.mapEditionView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((21 + 1) / resolution) * oneway
+                        width: (21 / resolution) * oneway
                     }),
 
                 });
@@ -406,7 +406,7 @@ app.mapEditionView = Backbone.View.extend({
                     }),
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: (3.5 + 2) / resolution
+                        width: 3.5 / resolution
                     })
                 });
                 return style;
@@ -484,7 +484,7 @@ app.mapEditionView = Backbone.View.extend({
                         JSONFeature.properties = {type:5, redlighttime:30};
                         break;
                 }
-                JSONFeature.properties.name = "A definir";
+                JSONFeature.properties.name = "Unnamed unit road";
                 console.log(JSONFeature);
                 var newModel = new app.models.mapDetailsModel(JSONFeature,{parse: true,collection:self.mapDetailsCOllection});
                 console.log(newModel);

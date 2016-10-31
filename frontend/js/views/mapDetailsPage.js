@@ -371,7 +371,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((7 + 2) / resolution) * oneway
+                        width: (7 / resolution) * oneway
                     })
                 });
                 return style;
@@ -381,7 +381,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((14 + 2) / resolution) * oneway
+                        width: (14 / resolution) * oneway
                     })
                 });
                 return style;
@@ -391,7 +391,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: ((21 + 1) / resolution) * oneway
+                        width: (21 / resolution) * oneway
                     }),
 
                 });
@@ -404,7 +404,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                     }),
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: (3.5 + 2) / resolution
+                        width: 3.5 / resolution
                     })
                 });
                 return style;
