@@ -3,6 +3,9 @@ info:
   title: Portail d'intéractions du simulateur de traffic Road Concept
   description: Aide à l'utilisation de l'API
   version: "0.1"
+  contact:
+    name: Entreprise LannionTech
+    email: lanniontech@gmail.com
 host: localhost:8080
 schemes:
   - http
@@ -16,6 +19,12 @@ parameters:
     required: true
     type: integer
     format: int32
+  featureUUID:
+    name: featureUUID
+    in: path
+    required: true
+    type: string
+    format: uuid
 
 paths:
   /login:
@@ -198,7 +207,7 @@ paths:
             $ref: '#/definitions/MapInfoCreate'
       description: Créer une nouvelle carte
       tags:
-        - Utilisateurs
+        - Cartes
       responses:
         201:
           description: Carte créée
@@ -259,11 +268,94 @@ paths:
           description: Fichier XML contenant la carte à importer. Doit provenir du site Open Street Map.
       description: Importe des données d'Open Street Map dans une carte éxistante
       tags:
-        - Maps
+        - Cartes
         - Import
       responses:
         204:
           description: Fichier importé. A préciser...
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/maps/{mapID}/features:
+    parameters:
+      - $ref: '#/parameters/mapID'
+    post:
+      parameters:
+        - name: feature
+          in: body
+          description: Feature complète
+          required: true
+          schema:
+            $ref: '#/definitions/Map'
+      description: Ajouter une feature à une map existante
+      tags:
+        - Cartes
+      responses:
+        201:
+          description: Feature créée. Retourne la feature complète avec son ID.
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/maps/{mapID}/features/{featureUUID}:
+    parameters:
+      - $ref: '#/parameters/mapID'
+      - $ref: '#/parameters/featureUUID'
+    get:
+      description: Ajouter une feature à une map existante
+      tags:
+        - Cartes
+      responses:
+        201:
+          description: Feature complète
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+    delete:
+      description: Ajouter une feature à une map existante
+      tags:
+        - Cartes
+      responses:
+        204:
+          description: OK
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+    put:
+      description: Modifier une feature éxistante
+      parameters:
+        - name: feature
+          in: body
+          description: Feature complète
+          required: true
+          schema:
+            $ref: '#/definitions/Map'
+      tags:
+        - Cartes
+      responses:
+        200:
+          description: Feature complète
+        404:
+          $ref: '#/responses/404'
         401:
           $ref: '#/responses/401'
         403:
