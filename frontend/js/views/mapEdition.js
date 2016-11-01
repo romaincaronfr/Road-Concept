@@ -73,8 +73,8 @@ app.mapEditionView = Backbone.View.extend({
                 this.tile
             ],
             view: new ol.View({
-                center: ol.proj.fromLonLat([5.336409, 43.36051]),
-                zoom: 14
+                center: ol.proj.fromLonLat([-3.459144, 48.732084]),
+                zoom: 12
             })
         });
 
