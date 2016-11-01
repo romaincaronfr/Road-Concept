@@ -2,4 +2,5 @@
 .idea/
 mongodb/data
 postgresql/data
-
+certs/*.pem
+nginx/frontend/
