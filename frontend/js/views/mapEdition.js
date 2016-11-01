@@ -21,7 +21,10 @@ app.mapEditionView = Backbone.View.extend({
         'change #osmOppacity': 'clickOnOSM',
         //'click .close_map_info': 'clickCloseInfo',
         'click button[name=chooseTool]': 'hasChooseTool',
-        'click button[id=cancel]': 'cancelHasChooseTool'
+        'click button[id=cancel]': 'cancelHasChooseTool',
+        'change #onwayRoad': 'selectOneWay',
+        'click .validModif': 'validModif',
+        'click .removeModif': 'removeModif'
 
     },
 
@@ -153,6 +156,9 @@ app.mapEditionView = Backbone.View.extend({
 
     onRemoveElement: function(element){
         console.log("remove");
+        $('#osmInfo').empty();
+        this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
+        this.selectPointer.getFeatures().clear();
     },
 
     onSync: function(){
@@ -451,9 +457,26 @@ app.mapEditionView = Backbone.View.extend({
     renderFeatureInformations: function(feature){
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
-        new app.mapPopUpInfoVisuView({
-            model: model
-        });
+        switch (model.attributes.type){
+            case 1:
+            case 2:
+            case 3:
+                new app.mapPopUpEditRoadsView({
+                    model: model
+                });
+                break;
+            case 4:
+                new app.mapPopUpEditRondPointView({
+                    model: model
+                });
+                break;
+            case 5:
+                new app.mapPopUpEditRedlightsView({
+                    model: model
+                });
+                break;
+        }
+
     },
 
 
@@ -597,6 +620,69 @@ app.mapEditionView = Backbone.View.extend({
         }
         console.log(intersectionsArray);
         return intersectionsArray;
+    },
+
+    selectOneWay: function(event){
+        if ($('#onwayRoad').val() == "no"){
+            $('#wayDiv').addClass('hidden');
+        } else {
+            $('#wayDiv').removeClass('hidden');
+        }
+    },
+
+    validModif: function(event){
+        var id = event.currentTarget.id;
+        console.log(id);
+        var model = this.mapDetailsCOllection.get(id);
+        console.log(model);
+        if (model.attributes.type == 1 || model.attributes.type == 2 ||model.attributes.type == 3) {
+            console.log('if ok');
+            model.set({
+                type: parseInt($('#selectTypeRoad').val()),
+                name: $('#roadName').val(),
+                maxspeed: parseInt($('#maxspeedRoad').val())
+            });
+            if ($('#onwayRoad').val() == "no") {
+                model.set({oneway: "no"});
+            } else {
+                if ($('#wayRoad').val() == "yes") {
+                    model.set({oneway: "yes"});
+                } else {
+                    model.set({oneway: "-1"});
+                }
+            }
+        } else if (model.attributes.type == 5){
+            model.set({
+                name: $('#redName').val(),
+                redlighttime: parseInt($('#redlightT').val())
+            });
+        } else if (model.attributes.type == 4){
+            model.set({
+                name: $('#RPName').val(),
+                maxspeed: parseInt($('#maxspeedRP').val())
+            });
+        }
+        var self = this;
+        model.save(null,{
+            success: function(){
+                $('#osmInfo').empty();
+                self.vectorSource.removeFeature(self.vectorSource.getFeatureById(model.attributes.id));
+                var geojsonModel = model.toGeoJSON();
+                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                    featureProjection: 'EPSG:3857'
+                });
+                self.selectPointer.getFeatures().clear();
+                self.vectorSource.addFeature(newfeature);
+            }
+        });
+        console.log(model.attributes);
+    },
+
+    removeModif: function(event){
+        var id = event.currentTarget.id;
+        id = id.replace('removeRoad_', '');
+        var model = this.mapDetailsCOllection.get(id);
+        model.destroy({wait: true});
     }
 
 

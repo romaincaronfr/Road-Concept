@@ -1,16 +1,16 @@
 /**
  * Created by Romain on 01/11/2016.
  */
-app.mapPopUpInfoEditInputView = Backbone.View.extend({
+app.mapPopUpEditRedlightsView = Backbone.View.extend({
 
-    el: '#formmodif',
+    el: '#osmInfo',
 
     initialize: function () {
         this.render();
     },
 
     render: function () {
-        this.$el.append(this.template(this.model.attributes));
+        this.$el.html(this.template(this.model.attributes));
         return this;
     }
 
