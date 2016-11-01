@@ -492,6 +492,7 @@ app.mapEditionView = Backbone.View.extend({
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates()[0]);
                         JSONFeature.geometry.type = "LineString";
                         JSONFeature.properties = {type:4, maxspeed : 30};
+                        //JSONFeature.properties.intersections = self.getIntersection(feature.getGeometry().getCoordinates()[0]);
                         break;
                     case 'LineString':
                         console.log('LineString');
@@ -509,6 +510,7 @@ app.mapEditionView = Backbone.View.extend({
                 console.log(JSONFeature);
                 var newModel = new app.models.mapDetailsModel(JSONFeature,{parse: true,collection:self.mapDetailsCOllection});
                 console.log(newModel);
+                console.log(newModel.get('geometry').get('coordinates'));
                 newModel.save(null, {
                     success: (function () {
                         console.log('success add');
@@ -573,17 +575,29 @@ app.mapEditionView = Backbone.View.extend({
         return coordinates;
     },
 
-    controlDoubleClickZoom : function (active){
-        for (var i = 0; i < this.interactionZoomDoubleClick.getLength(); i++) {
-            var interaction = this.interactionZoomDoubleClick.item(i);
-            if (interaction instanceof ol.interaction.DoubleClickZoom) {
-                interaction.setActive(active);
+    getIntersection: function(coordinates){
+        var intersectionsArray = {};
+        for (var i = 0; i<coordinates.length;i++){
+            var featureAtCoord = this.vectorSource.getClosestFeatureToCoordinate(coordinates[i]);
+            this.map.forEachFeatureAtPixel(coordinates[i],function(feature, layer){
+                console.log(coordinates[i]);
+                console.log(feature);
+            });
+            if (featureAtCoord.length > 0){
+                console.log("intersection");
+                for (var j = 0; j<featureAtCoord.length;j++){
+                    var id = featureAtCoord[j].getId;
+                    if (intersectionsArray[i]){
+                        intersectionsArray[i].push(id);
+                    } else {
+                        intersectionsArray[i] = [id];
+                    }
+                }
             }
         }
-    },
-
-
-
+        console.log(intersectionsArray);
+        return intersectionsArray;
+    }
 
 
 });
