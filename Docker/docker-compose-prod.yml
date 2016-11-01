@@ -1,6 +1,12 @@
 version: '2'
 
 services:
+  frontend:
+    build: ./nginx
+    ports:
+      - "80:80"
+    links:
+      - "backend"
   backend:
     build: ./roadconcept
     ports:
