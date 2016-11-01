@@ -459,12 +459,14 @@ app.mapDetailsPageView = Backbone.View.extend({
         }
         switch (extentionFile) {
             case 'osm':
+                $('#importModalFooter').addClass('hidden');
                 $('#formImport').addClass('hidden');
                 $('#parseMessage').removeClass('hidden');
                 $('#waitImport').removeClass('hidden');
                 this.encodeOSMtoGeoJSON(f);
                 break;
             case 'json':
+                $('#importModalFooter').addClass('hidden');
                 $('#formImport').addClass('hidden');
                 $('#waitImport').removeClass('hidden');
                 this.sendImportData(f);
@@ -511,7 +513,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 console.log("HTTP Request Succeeded: " + jqXHR.status);
                 self.fetchCollection();
                 $('#waitImport').addClass('hidden');
-                $('#importModalFooter').addClass('hidden');
                 $('#alertSuccessImport').removeClass('hidden');
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
