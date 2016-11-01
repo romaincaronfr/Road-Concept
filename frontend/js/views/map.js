@@ -8,7 +8,8 @@ app.mapView = Backbone.View.extend({
     events: {
         'click #submitCreateMap': 'clickOnCreateNewMap',
         'click .remove_map': 'clickOnRemove',
-        'click .print_map': 'clickOnPrintMap'
+        'click .print_map': 'clickOnPrintMap',
+        'click .remove_map_confirm': 'clickOnremove_map_confirm'
     },
 
     initialize: function () {
@@ -93,14 +94,22 @@ app.mapView = Backbone.View.extend({
         console.log(element);
         var divName = '#div_mapId_' + element.attributes.id;
         $(divName).remove();
+        $('#modalRemoveMap').modal('hide');
     },
 
     clickOnRemove: function (event) {
         console.log('click on remove');
         var id = event.currentTarget.id;
         id = id.replace('remove_', '');
-        console.log(id);
-        console.log(this.mapCollection.get(id));
+        var model = this.mapCollection.get(id);
+        new app.modalRemoveMapView({
+            model: model
+        });
+    },
+
+    clickOnremove_map_confirm: function(event){
+        var id = event.currentTarget.id;
+        id = id.replace('confirmRemoveMap_', '');
         var model = this.mapCollection.get(id);
         model.destroy({wait: true});
     }
