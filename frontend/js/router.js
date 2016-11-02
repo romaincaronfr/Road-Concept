@@ -34,6 +34,7 @@ app.Router = Backbone.Router.extend({
         "logout": "logout",
         "map/:id": "mapDetail",
         "editmap/:id": "mapEdition",
+        "simmap" : "mapSimulation",
         "users": "users"
     },
 
@@ -46,6 +47,7 @@ app.Router = Backbone.Router.extend({
         this.adminMV = null;
         this.detailPageV = null;
         this.editmapV = null;
+        this.simmapView = null;
     },
 
     start: function () {
@@ -105,6 +107,16 @@ app.Router = Backbone.Router.extend({
             this.editmapV.render();
         }
 
+    },
+
+    mapSimulation : function (){
+
+        this.checkAndInitNavBar();
+        if (!this.simmapView){
+            this.simmapView = new app.mapSimulationView();
+        } else {
+            this.simmapView.render();
+        }
     },
 
     user: function () {

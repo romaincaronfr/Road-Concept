@@ -5,7 +5,7 @@
 var userModel = null;
 $(document).ready(function () {
     console.log("document ready");
-    app.loadTemplates(["loginView", "mapView", "mapTableView", "navBarView", "userView", 'waitView', "adminManaView", "adminPanelOptionsView", "logoutView","mapDetailsPageView","mapPopUpInfoVisuView","mapPopUpInfoVisuEachView","adminManaUsersView",'adminUserRowView',"importModalView","mapEditionView","mapPopUpEditRoadsView","mapPopUpEditRedlightsView","mapPopUpEditRondPointView","modalRemoveMapView","adminModalUserView"],
+    app.loadTemplates(["loginView", "mapView", "mapTableView", "navBarView", "userView", 'waitView', "adminManaView", "adminPanelOptionsView", "logoutView","mapDetailsPageView","mapPopUpInfoVisuView","mapPopUpInfoVisuEachView","adminManaUsersView",'adminUserRowView',"importModalView","mapEditionView","mapPopUpEditRoadsView","mapPopUpEditRedlightsView","mapPopUpEditRondPointView","modalRemoveMapView","adminModalUserView","mapSimulationView"],
         function () {
             app.router = new app.Router();
             Backbone.history.start();
