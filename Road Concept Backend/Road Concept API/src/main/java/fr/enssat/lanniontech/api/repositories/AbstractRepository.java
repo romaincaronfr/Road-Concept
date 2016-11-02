@@ -40,8 +40,8 @@ public abstract class AbstractRepository {
     protected void updateIntField(String tableName, String columnName, SQLEntity entity, int newValue) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
-                statement.setObject(1, entity.getIdentifierValue());
-                statement.setInt(2, newValue);
+                statement.setInt(1, newValue);
+                statement.setObject(2, entity.getIdentifierValue());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {

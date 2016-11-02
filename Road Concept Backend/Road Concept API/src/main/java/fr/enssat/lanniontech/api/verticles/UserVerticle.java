@@ -130,9 +130,11 @@ public class UserVerticle extends AbstractVerticle {
             }
 
             User data = new User();
+            data.setId(id);
             data.setEmail(body.getString("email"));
             data.setFirstName(body.getString("firstName"));
             data.setLastName(body.getString("lastName"));
+            data.setType(UserType.forValue(body.getInteger("type")));
 
             User updated = userService.update(data);
 

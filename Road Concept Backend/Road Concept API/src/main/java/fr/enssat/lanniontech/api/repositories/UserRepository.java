@@ -69,6 +69,10 @@ public class UserRepository extends AbstractRepository {
         updateStringField("final_user", "email", user, newValue);
     }
 
+    public void updateType(User user, UserType newValue) throws DatabaseOperationException {
+        updateIntField("final_user", "type", user, newValue.getJsonID());
+    }
+
     // ===
     // GET
     // ===

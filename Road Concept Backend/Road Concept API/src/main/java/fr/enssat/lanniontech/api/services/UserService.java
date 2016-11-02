@@ -54,7 +54,7 @@ public class UserService extends AbstractService {
     }
 
     public User update(User user) {
-        User current = repository.getFromEmail(user.getEmail());
+        User current = repository.getFromId(user.getId());
         if (current == null) {
             throw new EntityNotExistingException(User.class);
         }
@@ -67,8 +67,12 @@ public class UserService extends AbstractService {
             current.setLastName(user.getLastName());
         }
         if (!user.getEmail().equals(current.getEmail())) {
-            repository.updateLastName(user, user.getEmail());
+            repository.updateEmail(user, user.getEmail());
             current.setLastName(user.getEmail());
+        }
+        if (!user.getType().equals(current.getType())) {
+            repository.updateType(user, user.getType());
+            current.setType(user.getType());
         }
         return current;
     }

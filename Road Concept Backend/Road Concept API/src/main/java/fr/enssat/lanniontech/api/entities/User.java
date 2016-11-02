@@ -55,7 +55,7 @@ public class User implements SQLEntity {
 
     @Override
     public Object getIdentifierValue() {
-        return getEmail();
+        return getId();
     }
 
     public String getEmail() {
@@ -68,10 +68,7 @@ public class User implements SQLEntity {
 
     @Override
     public String getIdentifierName() {
-        return "email";
+        return "id";
     }
 
-    public String toString() {
-        return "foo";
-    }
 }
