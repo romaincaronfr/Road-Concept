@@ -1,4 +1,7 @@
 <div class="col-lg-offset-3 col-lg-6">
+    <div class="alert alert-success hidden" id="alertAddUser">
+        <strong>Ok</strong> L'utilisateur a bien été créé.
+    </div>
     <form class="form-horizontal">
         <fieldset>
             <legend>Ajout d'un utilisateur</legend>
@@ -27,9 +30,9 @@
             </div>
 
             <div class="form-group">
-                <label for="passwordInput" class="control-label col-sm-2">Password</label>
+                <label for="passwordInput" class="control-label col-sm-2">Mot de passe</label>
                 <div class="col-sm-10">
-                    <input type="password" class="form-control" id="passwordInput" placeholder="password" required="">
+                    <input type="password" class="form-control" id="passwordInput" placeholder="Mot de passe" required="">
 
                 </div>
             </div>
@@ -37,8 +40,8 @@
             <div class=form-group">
                 <label for="userInput">Type</label>
                 <select class="form-control" id="userinput">
-                    <option value=1>User</option>
-                    <option value=2>Admin</option>
+                    <option value=1>Utilisateur</option>
+                    <option value=2>Administrateur</option>
                 </select>
             </div>
 

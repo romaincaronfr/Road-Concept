@@ -22,17 +22,26 @@ app.adminManaView = Backbone.View.extend({
     clickOnAjoutUser: function () {
         var usermail = $('#emailInput').val();
         var userLname = $('#nameInput').val();
-        var usertype = $('#userinput').val();
+        var usertype = parseInt($('#userinput').val());
         var userPassword = $('#passwordInput').val()
         var userFname = $('#prenomInput').val();
         user = new app.models.userModel({
             email: usermail,
-            lastname: userLname,
-            firstname: userFname,
+            lastName: userLname,
+            firstName: userFname,
             password: userPassword,
             type: usertype
         });
         console.log(user);
-        user.save();
+        user.save(null,{
+            success: function(){
+                $('#alertAddUser').removeClass('hidden');
+                $('#emailInput').val('');
+                $('#nameInput').val('');
+                $('#userinput').val('');
+                $('#passwordInput').val('');
+                $('#prenomInput').val('');
+            }
+        });
     },
 });

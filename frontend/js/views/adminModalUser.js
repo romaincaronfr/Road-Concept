@@ -15,8 +15,9 @@ app.adminModalUserView = Backbone.View.extend({
     render: function (model){
 
         console.log(model);
-        this.$el.append(this.template(model.attributes));
+        this.$el.html(this.template(model.attributes));
         //$('#submitModifyUserM').modal();
+        $('#type').val(model.attributes.type);
         $('#submitModifyUserM').modal('show');
 
         //return this;
