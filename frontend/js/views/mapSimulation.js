@@ -116,6 +116,7 @@ app.mapSimulationView = Backbone.View.extend({
 
         //Fetch de la collection
         this.fetchCollection();
+        $('#modalAvertissementSimulation').modal('show');
 
 
         return this;
