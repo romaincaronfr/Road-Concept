@@ -4,3 +4,4 @@ mongodb/data
 postgresql/data
 certs/*.pem
 nginx/frontend/
+roadconcept/road-concept-api-0.1-SNAPSHOT-fat.jar
