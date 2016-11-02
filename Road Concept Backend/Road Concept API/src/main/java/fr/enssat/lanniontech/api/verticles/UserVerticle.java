@@ -105,7 +105,7 @@ public class UserVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (ClassCastException e) {
+        } catch (ClassCastException | BadRequestException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Bad format for parameters. Check the API documentation.");
         } catch (InvalidParameterException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, e.getMessage());

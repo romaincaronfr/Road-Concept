@@ -418,11 +418,13 @@ definitions:
         type: string
         description: Prénom de l'utilisateur
       type:
-        type: string
+        type: integer
+        format: int32
         enum:
           - 1
           - 2
         description: Status de l'utilisateur. 1 = Utilisateur et 2 = Administrateur
+
   UserCreate:
     properties:
       email:
@@ -439,7 +441,8 @@ definitions:
         format: password
         description: password de l'utilisateur (en clair)
       type:
-        type: string
+        type: integer
+        format: int32
         enum:
           - 1
           - 2
