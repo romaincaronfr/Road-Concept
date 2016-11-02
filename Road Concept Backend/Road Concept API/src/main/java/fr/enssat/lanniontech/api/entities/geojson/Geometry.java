@@ -1,12 +1,11 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedList;
 
 public abstract class Geometry<T> extends GeoJsonObject {
 
-    private List<T> coordinates = new ArrayList<T>();
+    private LinkedList<T> coordinates = new LinkedList<T>(); // Need to keep order
 
     @SafeVarargs
     public Geometry(T... elements) {
@@ -18,11 +17,11 @@ public abstract class Geometry<T> extends GeoJsonObject {
         return this;
     }
 
-    public List<T> getCoordinates() {
+    public LinkedList<T> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<T> coordinates) {
+    public void setCoordinates(LinkedList<T> coordinates) {
         this.coordinates = coordinates;
     }
 
