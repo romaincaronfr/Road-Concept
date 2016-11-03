@@ -75,7 +75,7 @@ public class PosFunction {
         //|R[1]|
 
         R[0] = Pf.getBlat() - blat + PfW * Pf.getClat() - myW * clat;
-        R[0] = Pf.getBlon() - blon + PfW * Pf.getClon() - myW * clon;
+        R[1] = Pf.getBlon() - blon + PfW * Pf.getClon() - myW * clon;
 
         if (M[0] == 0 || M[1] == 0 || M[2] == 0 || M[3] == 0) {
             if (M[0] == 0) {
@@ -95,7 +95,7 @@ public class PosFunction {
             k = M[0] / M[2];
             M[0] -= M[2] * k;
             M[1] -= M[3] * k;
-            R[0] -= R[1] * k;//todo verify this line
+            R[0] -= R[1] * k;
 
             p[1] = (R[0] / M[1]);
             p[0] = (R[1] - (p[1] * M[3])) / M[2];
