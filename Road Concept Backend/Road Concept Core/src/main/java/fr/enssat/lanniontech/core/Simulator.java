@@ -51,29 +51,34 @@ public class Simulator implements Runnable {
     }
 
     public void run() {
-        long step = (long) (length / precision);
-        WriteLock wl = l.writeLock();
-        int j = 1;
-        for (long i = 0; i < step; i++) {
+        try {
+            long step = (long) (length / precision);
+            WriteLock wl = l.writeLock();
+            int j = 1;
+            for (long i = 0; i < step; i++) {
 
-            if (j == 10 / precision) {
-                vehicleManager.newStep(precision, true);
-                j = 1;
-            } else {
-                vehicleManager.newStep(precision, false);
-                j++;
+                if (j == 10 / precision) {
+                    vehicleManager.newStep(precision, true);
+                    j = 1;
+                } else {
+                    vehicleManager.newStep(precision, false);
+                    j++;
+                }
+
+
+                wl.lock();
+                try {
+                    progress = (double) i / step;
+                } finally {
+                    wl.unlock();
+                }
             }
-
-
-            wl.lock();
-            try {
-                progress = (double) i / step;
-            } finally {
-                wl.unlock();
-            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            progress = 1;
+            stopTime = System.currentTimeMillis();
         }
-        progress = 1;
-        stopTime = System.currentTimeMillis();
     }
 
     public double getProgress() {
