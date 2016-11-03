@@ -32,7 +32,13 @@ public class Side {
         if (this.pos > pos) {
             myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext();
-            myTrajectory.getIn(this);
+            try{
+                myTrajectory.getIn(this);
+            } catch ( NullPointerException e ){
+                System.err.println(myTrajectory);
+                throw e;
+            }
+
         }
         this.pos = pos;
     }

@@ -1,6 +1,14 @@
 package fr.enssat.lanniontech.core.positioning;
 
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PosFunction {
+
+    public static Logger LOG = LoggerFactory.getLogger(PosFunction.class);
+
+
     private double alat;
     private double blat;
     private double clat;
@@ -75,7 +83,7 @@ public class PosFunction {
                 p[0] = (R[1] - (p[1] * M[3])) / M[2];
             } else if (M[1] == 0) {
                 p[0] = R[0] / M[0];
-                p[1] = (R[1] - (p[0] * M[2])) / M[3];
+                p[1] = (R[1] - (-p[0] * M[2])) / M[3];
             } else if (M[2] == 0) {
                 p[1] = R[1] / M[3];
                 p[0] = (R[0] - (p[1]) * M[1]) / M[0];
@@ -91,6 +99,10 @@ public class PosFunction {
 
             p[1] = (R[0] / M[1]);
             p[0] = (R[1] - (p[1] * M[3])) / M[2];
+        }
+
+        if(p[0]<0 || p[1]<0 ){
+            LOG.debug("p[0] = "+ p[0] + " p[1] = " + p[1]);
         }
 
         return p;

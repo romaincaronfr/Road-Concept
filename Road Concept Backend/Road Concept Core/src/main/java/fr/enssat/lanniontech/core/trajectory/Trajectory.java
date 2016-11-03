@@ -1,7 +1,10 @@
 package fr.enssat.lanniontech.core.trajectory;
 
+import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;

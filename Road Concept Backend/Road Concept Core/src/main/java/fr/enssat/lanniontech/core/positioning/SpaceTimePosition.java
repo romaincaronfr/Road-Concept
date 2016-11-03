@@ -13,9 +13,14 @@ public class SpaceTimePosition extends Position {
         this.vehicleId = vehicleId;
         this.time = time;
         this.angle = angle;
+
+        System.out.println("id : "+ this.vehicleId + " " + super.toString());
     }
 
     public static SpaceTimePosition getMean(Position A, Position B, long time, int vehicleId) {
+        System.out.println("avt: "+A);
+        System.out.println("avt: "+B);
+
         double lon = (A.lon + B.lon) / 2;
         double lat = (A.lat + B.lat) / 2;
         //todo compute angle from A and B

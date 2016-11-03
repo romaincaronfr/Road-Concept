@@ -3,11 +3,16 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleTrajectory extends Trajectory {
+
+    public static Logger LOG = LoggerFactory.getLogger(SimpleTrajectory.class);
+
     private List<Trajectory> sourcesTrajectories;
     private TrajectoryType sourceType;
     private List<Trajectory> destinationsTrajectories;
@@ -24,8 +29,8 @@ public class SimpleTrajectory extends Trajectory {
         setSourceType(TrajectoryType.Undefined);
         setDestinationType(TrajectoryType.Undefined);
         this.setpF(pF);
-        this.setStart(start);
-        this.setStop(stop);
+        this.start=start;
+        this.stop=start;
         this.setInverted(start > stop);
         if (isInverted()) {
             length = start - stop;
@@ -34,6 +39,8 @@ public class SimpleTrajectory extends Trajectory {
             length = stop - start;
             this.setWidth(width);
         }
+        LOG.debug("length = "+this.length);
+
     }
 
     /**
@@ -56,30 +63,31 @@ public class SimpleTrajectory extends Trajectory {
                 getDestinationsTrajectories().add(t);
                 t.getSourcesTrajectories().add(this);
             }
+            destinationType = TrajectoryType.SimpleTrajectory;
         }
     }
 
     public void addDestination(AdvancedTrajectory t) {
-        if (getDestinationType() != TrajectoryType.SimpleTrajectory) {
+        if (destinationType != TrajectoryType.SimpleTrajectory) {
             destinationsTrajectories.add(t);
             if (isInverted()) {
                 setStop(getStop() + t.getSecurityDistance());
             } else {
                 setStop(getStop() - t.getSecurityDistance());
             }
-            setDestinationType(TrajectoryType.AdvancedTrajectory);
+            destinationType = TrajectoryType.AdvancedTrajectory;
         }
     }
 
     public void addSource(AdvancedTrajectory t) {
-        if (getSourceType() != TrajectoryType.SimpleTrajectory) {
+        if (sourceType != TrajectoryType.SimpleTrajectory) {
             sourcesTrajectories.add(t);
             if (isInverted()) {
                 setStart(getStart() - t.getSecurityDistance());
             } else {
                 setStart(getStart() + t.getSecurityDistance());
             }
-            setSourceType(TrajectoryType.AdvancedTrajectory);
+            sourceType = TrajectoryType.AdvancedTrajectory;
         }
     }
 
@@ -104,18 +112,18 @@ public class SimpleTrajectory extends Trajectory {
     public void setStart(double start) {
         this.start = start;
         if (isInverted()) {
-            length = start - getStop();
+            length = start - stop;
         } else {
-            length = getStop() - start;
+            length = stop - start;
         }
     }
 
     public void setStop(double stop) {
         this.stop = stop;
         if (isInverted()) {
-            length = getStart() - stop;
+            length = start - stop;
         } else {
-            length = stop - getStart();
+            length = stop - start;
         }
     }
 
