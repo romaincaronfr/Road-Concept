@@ -563,7 +563,14 @@ app.mapEditionView = Backbone.View.extend({
                     featureProjection: 'EPSG:3857'
                 });
                 JSONFeature = JSON.parse(JSONFeature);
-
+                var newIntersections = [];
+                for (var i = 0;i<self.intersections.length;i++){
+                    newIntersections[i] = [];
+                    for (key in self.intersections[i]){
+                        newIntersections[i].push(key);
+                    }
+                }
+                self.intersections = newIntersections;
                 switch (self.value) {
                     case 'Polygon':
                         console.log('Polygon');
