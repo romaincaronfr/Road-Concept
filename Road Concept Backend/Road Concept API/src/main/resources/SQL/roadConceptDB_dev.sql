@@ -34,3 +34,13 @@ CREATE TABLE IF NOT EXISTS "map_info" (
   "image_url"   VARCHAR(100),
   "description" TEXT
 );
+
+-- ==============================================================================
+-- SIMULATION PARAMETERS
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS "simulation" (
+  "uuid"        VARCHAR(40) PRIMARY KEY,
+  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL
+);
