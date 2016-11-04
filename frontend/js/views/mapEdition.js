@@ -495,19 +495,30 @@ app.mapEditionView = Backbone.View.extend({
             var eventClick = this.map.on('click', function (event) {
                 var pixel = event.pixel;
                 var features = {};
+                var marge=0;
                 var resolution = self.map.getView().getResolution();
-                self.map.forEachFeatureAtPixel(pixel, function (feature) {
-                    if (feature.getProperties().id && !features[feature.getProperties().id]) {
-                        features[feature.getProperties().id] = feature.getProperties().id;
-                    }
-                });
-                if (features.length < 1) {
-                    console.log("tableau vide");
-                    for (var i = event.pixel[0] - 10; i < event.pixel[0] + 10; i++) {
-                        for (var j = event.pixel[1] - 10; j < event.pixel[1] + 10; j++) {
-                            var newPixel = new Array();
-                            newPixel[0] = i;
-                            newPixel[1] = j;
+
+                if (resolution>0.5 && resolution<1) {
+                    marge = 3;
+                } else if (resolution<2) {
+                    marge = 7;
+                } else if (resolution<4) {
+                    marge = 8;
+                } else {
+                    marge = 9;
+                }
+
+                if (marge == 0) {
+                    self.map.forEachFeatureAtPixel(pixel, function (feature) {
+                        if (feature.getProperties().id && !features[feature.getProperties().id]) {
+                            features[feature.getProperties().id] = feature.getProperties().id;
+                        }
+                    });
+                } else {
+                    for (var i = pixel[0] - marge; i < pixel[0] + marge; i++) {
+                        for (var j = pixel[1] - marge; j < pixel[1] + marge; j++) {
+                            var newPixel = [i,j];
+
                             self.map.forEachFeatureAtPixel(newPixel, function (feature) {
                                 if (feature.getProperties().id && !features[feature.getProperties().id]) {
                                     features[feature.getProperties().id] = feature.getProperties().id;
@@ -516,10 +527,12 @@ app.mapEditionView = Backbone.View.extend({
                         }
                     }
                 }
-                console.log(features);
-                console.log(features.length);
-                    intersections[index] = features;
+
+                intersections[index] = features;
                 index++;
+                console.log(resolution);
+                console.log(features);
+                console.log(intersections);
             });
 
             this.map.addInteraction(this.draw);
@@ -554,13 +567,12 @@ app.mapEditionView = Backbone.View.extend({
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates()[0]);
                         JSONFeature.geometry.type = "LineString";
                         JSONFeature.properties = {type: 4, maxspeed: 30};
-                        //JSONFeature.properties.intersections = self.getIntersection(feature.getGeometry().getCoordinates()[0]);
                         break;
                     case 'LineString':
                         console.log('LineString');
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates());
                         JSONFeature.properties = {type: 1, maxspeed: 50, oneway: "no"};
-                        console.log(self.vectorSource.getFeaturesAtCoordinate(feature.getGeometry().getCoordinates()[0]));
+                        //console.log(self.vectorSource.getFeaturesAtCoordinate(feature.getGeometry().getCoordinates()[0]));
                         break;
                     case 'Point':
                         var coord = feature.getGeometry().getCoordinates();
@@ -569,14 +581,16 @@ app.mapEditionView = Backbone.View.extend({
                         JSONFeature.properties = {type: 5, redlighttime: 30};
                         break;
                 }
+                JSONFeature.properties.intersections = intersections;
                 JSONFeature.properties.name = "Unnamed unit road";
+                console.log(JSONFeature.properties);
                 console.log(JSONFeature);
                 var newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
                     collection: self.mapDetailsCOllection
                 });
-                console.log(newModel);
-                console.log(newModel.get('geometry').get('coordinates'));
+                //console.log(newModel);
+                //console.log(newModel.get('geometry').get('coordinates'));
                 newModel.save(null, {
                     success: (function () {
                         console.log('success add');
@@ -594,7 +608,7 @@ app.mapEditionView = Backbone.View.extend({
                 /*var format = new ol.format.GeoJSON();
                  var routeFeatures = format.writeFeatures(feature);
                  console.log(format);*/
-                console.log(intersections);
+                //console.log(intersections);
                 setTimeout(function () {
                     self.interactionZoomDoubleClick.setActive(true);
                 }, 251);
