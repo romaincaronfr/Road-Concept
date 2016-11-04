@@ -119,6 +119,9 @@ app.mapSimulationView = Backbone.View.extend({
         $('#modalAvertissementSimulation').modal('show');
 
 
+        // Slide bar of the simulation
+        $("#sliderSimulation").slider({min  : 0, max  : 10, value: 0, tooltip_position:'bottom'});
+
         return this;
     },
 
