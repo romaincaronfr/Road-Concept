@@ -53,3 +53,13 @@ CREATE TRIGGER "map_info_update_trigger"
 BEFORE UPDATE ON "map_info"
 FOR EACH ROW EXECUTE PROCEDURE check_id_change();
 
+
+-- ==============================================================================
+-- SIMULATION PARAMETERS
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS "simulation" (
+  "uuid"        VARCHAR(40) PRIMARY KEY,
+  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL
+);
