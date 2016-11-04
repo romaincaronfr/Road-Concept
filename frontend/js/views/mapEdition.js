@@ -16,6 +16,8 @@ app.mapEditionView = Backbone.View.extend({
     snap: null,
     mapDetailsCOllection: null,
     interactionZoomDoubleClick: null,
+    index:null,
+    intersections: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -489,8 +491,9 @@ app.mapEditionView = Backbone.View.extend({
                 type: this.value
             });
 
-            var index = 0;
-            var intersections = {};
+            this.index = 0;
+            this.intersections = [];
+            console.log(this.intersections);
             var self = this;
             var eventClick = this.map.on('click', function (event) {
                 var pixel = event.pixel;
@@ -528,11 +531,11 @@ app.mapEditionView = Backbone.View.extend({
                     }
                 }
 
-                intersections[index] = features;
-                index++;
+                self.intersections[self.index] = features;
+                self.index++;
                 console.log(resolution);
                 console.log(features);
-                console.log(intersections);
+                console.log(self.intersections);
             });
 
             this.map.addInteraction(this.draw);
@@ -581,7 +584,7 @@ app.mapEditionView = Backbone.View.extend({
                         JSONFeature.properties = {type: 5, redlighttime: 30};
                         break;
                 }
-                JSONFeature.properties.intersections = intersections;
+                JSONFeature.properties.intersections = self.intersections;
                 JSONFeature.properties.name = "Unnamed unit road";
                 console.log(JSONFeature.properties);
                 console.log(JSONFeature);
