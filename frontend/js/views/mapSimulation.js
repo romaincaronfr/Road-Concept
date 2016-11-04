@@ -174,29 +174,6 @@ app.mapSimulationView = Backbone.View.extend({
             color = [192,57,43,1];
         }
 
-       /* switch(congestion && type==1){
-            case 'LOW':
-                 color = [46,204,113,1];
-                 console.log('LOW');
-                 break;
-             case 'MEDIUM':
-                 color = [211,84,0,1];
-                 console.log('MEDIUM');
-
-                 break;
-             case 'HIGHT':
-                 color = [192,57,43,1];
-                 console.log('HIGHT');
-
-                 break;
-             default :
-                 console.log('NOTHING');
-                 color = [255,255,255,1];
-                 break;
-         }*/
-
-
-
         // TODO : récupérer les valeurs d'afluence des routes et afficher la couelur en fonction de ça
         var oneway = 1;
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
