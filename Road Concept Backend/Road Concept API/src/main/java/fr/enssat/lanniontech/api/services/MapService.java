@@ -105,7 +105,7 @@ public class MapService extends AbstractService {
 
     }
 
-    //FIXME: refactor
+    //FIXME: refactor + extraire en constante les colonnes
     public void fromOSMAdaptation(FeatureCollection features) {
         for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
