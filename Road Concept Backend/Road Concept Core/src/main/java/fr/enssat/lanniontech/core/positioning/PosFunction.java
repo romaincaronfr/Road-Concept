@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.core.positioning;
 
-import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,21 +24,8 @@ public class PosFunction {
         blon = P1.lon;
         alon = (P2.lon - P1.lon) / length;
 
-        clat = -alat;
-        clon = alon;
-    }
-
-    @Deprecated
-    public PosFunction(Position P1, Position P2, double length) {
-        //calculate the parameters
-        blat = P1.lat;
-        alat = (P2.lat - P1.lat) / length;
-        blon = P1.lon;
-        alon = (P2.lon - P1.lon) / length;
-
-        clat = -alat;
-        clon = alon;
-
+        clat = alon;
+        clon = -alat;
     }
 
     public Position get(double pos) {
