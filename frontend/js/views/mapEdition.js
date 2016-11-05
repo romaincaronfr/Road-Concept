@@ -18,6 +18,7 @@ app.mapEditionView = Backbone.View.extend({
     interactionZoomDoubleClick: null,
     index:null,
     intersections: null,
+    newModel: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -26,8 +27,9 @@ app.mapEditionView = Backbone.View.extend({
         'click button[id=cancel]': 'cancelHasChooseTool',
         'change #onwayRoad': 'selectOneWay',
         'click .validModif': 'validModif',
-        'click .removeModif': 'removeModif'
-
+        'click .removeModif': 'removeModif',
+        'click .validModel': 'validModel',
+        'click .removeModel': 'removeModel'
     },
 
     initialize: function (options) {
@@ -481,12 +483,33 @@ app.mapEditionView = Backbone.View.extend({
 
     },
 
+    renderFeatureCreation: function (model) {
+        switch (model.attributes.type) {
+            case 1:
+            case 2:
+            case 3:
+                new app.mapPopUpCreateRoadsView({
+                    model: model
+                });
+                break;
+            case 4:
+                new app.mapPopUpCreateRondPointView({
+                    model: model
+                });
+                break;
+            case 5:
+                new app.mapPopUpCreateRedlightsView({
+                    model: model
+                });
+                break;
+        }
+
+    },
 
     addInteraction: function () {
         console.log('Draw : start ' + this.value);
         if (this.value != 'None') {
             this.draw = new ol.interaction.Draw({
-                //source: new ol.source.Vector(),
                 source: new ol.source.Vector(),
                 type: this.value
             });
@@ -593,28 +616,35 @@ app.mapEditionView = Backbone.View.extend({
                 }
                 JSONFeature.properties.intersections = self.intersections;
                 JSONFeature.properties.name = "Unnamed unit road";
+                JSONFeature.properties.id = "1";
                 console.log(JSONFeature.properties);
                 console.log(JSONFeature);
-                var newModel = new app.models.mapDetailsModel(JSONFeature, {
+                this.newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
                     collection: self.mapDetailsCOllection
                 });
-                //console.log(newModel);
-                //console.log(newModel.get('geometry').get('coordinates'));
-                newModel.save(null, {
+
+                self.renderFeatureCreation(this.newModel);
+
+                var geojsonModel = this.newModel.toGeoJSON();
+                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                    featureProjection: 'EPSG:3857'
+                });
+                self.vectorSource.addFeature(newfeature);
+                /*this.newModel.save(null, {
                     success: (function () {
                         console.log('success add');
-                        self.mapDetailsCOllection.add(newModel);
+                        self.mapDetailsCOllection.add(this.newModel);
                         /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
                          var selectFeatures = this.selectPointer.getFeatures();
                          selectFeatures.push(feature);*/
-                    })
-                });
+                    /*})
+                });*/
                 //self.mapDetailsCOllection.add(newModel);
                 /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
                  var selectFeatures = this.selectPointer.getFeatures();
                  selectFeatures.push(feature);*/
-                self.cancelHasChooseTool();
+                self.underCreation();
                 /*var format = new ol.format.GeoJSON();
                  var routeFeatures = format.writeFeatures(feature);
                  console.log(format);*/
@@ -623,7 +653,6 @@ app.mapEditionView = Backbone.View.extend({
                     self.interactionZoomDoubleClick.setActive(true);
                 }, 251);
                 self.map.unByKey(eventClick);
-
             });
         }
     },
@@ -643,6 +672,16 @@ app.mapEditionView = Backbone.View.extend({
         console.log('Draw : Stop');
         this.map.removeInteraction(this.draw);
         this.map.addInteraction(this.selectPointer);
+    },
+
+    underCreation: function () {
+        $('#editButtonCancel').hide();
+        $('#editButtonChooseTool').show();
+        $('#editBarMenu').hide();
+        this.value = 'None';
+        console.log('Draw : Stop');
+        this.map.removeInteraction(this.draw);
+        this.map.removeInteraction(this.selectPointerMove);
     },
 
     changeChooseToolToCancel: function () {
@@ -752,6 +791,74 @@ app.mapEditionView = Backbone.View.extend({
         id = id.replace('removeRoad_', '');
         var model = this.mapDetailsCOllection.get(id);
         model.destroy({wait: true});
+    },
+
+    validModel: function (event) {
+        console.log("validModel");
+        var model = this.newModel;
+        console.log(model);
+        if (model.attributes.type == 1 || model.attributes.type == 2 || model.attributes.type == 3) {
+            console.log('if ok');
+            model.set({
+                type: parseInt($('#selectTypeRoad').val()),
+                name: $('#roadName').val(),
+                maxspeed: parseInt($('#maxspeedRoad').val())
+            });
+            if ($('#onwayRoad').val() == "no") {
+                model.set({oneway: "no"});
+            } else {
+                if ($('#wayRoad').val() == "yes") {
+                    model.set({oneway: "yes"});
+                } else {
+                    model.set({oneway: "-1"});
+                }
+            }
+        } else if (model.attributes.type == 5) {
+            model.set({
+                name: $('#redName').val(),
+                redlighttime: parseInt($('#redlightT').val())
+            });
+        } else if (model.attributes.type == 4) {
+            model.set({
+                name: $('#RPName').val(),
+                maxspeed: parseInt($('#maxspeedRP').val())
+            });
+        }
+        var self = this;
+        model.save(null, {
+            success: function () {
+                $('#osmInfo').empty();
+                $('#editBarMenu').show();
+                this.map.addInteraction(this.selectPointerMove);
+                self.mapDetailsCOllection.add(model);
+                this.newModel = null;
+
+                /*self.vectorSource.removeFeature(self.vectorSource.getFeatureById(model.attributes.id));
+                var geojsonModel = model.toGeoJSON();
+                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                    featureProjection: 'EPSG:3857'
+                });
+                self.selectPointer.getFeatures().clear();
+                self.vectorSource.addFeature(newfeature);*/
+            }
+        });
+        console.log(model.attributes);
+    },
+
+    removeModel: function (event) {
+        /*var id = event.currentTarget.id;
+        id = id.replace('removeRoad_', '');
+        var model = this.mapDetailsCOllection.get(id);
+        model.destroy({wait: true});*/
+        console.log("removemodel");
+        self.vectorSource.removeFeature(self.vectorSource.getFeatureById(event.currentTarget.id));
+        //this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
+        this.newModel = null;
+
+        $('#osmInfo').empty();
+        $('#editBarMenu').show();
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
     }
 
 
