@@ -18,6 +18,8 @@ public class testSimpleTrajectory {
 
         SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 0);
 
+        Assert.assertFalse(sT.isInverted());
+
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 
         Assert.assertEquals(pF.get(0), sT.getGPS(0));
@@ -33,6 +35,8 @@ public class testSimpleTrajectory {
         PosFunction pF = new PosFunction(A, B);
 
         SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 0);
+
+        Assert.assertTrue(sT.isInverted());
 
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 

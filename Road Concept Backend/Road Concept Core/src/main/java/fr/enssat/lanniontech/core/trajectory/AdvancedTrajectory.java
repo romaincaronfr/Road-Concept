@@ -27,8 +27,15 @@ public class AdvancedTrajectory extends Trajectory {
 
         Pfs.add(source.getFunction());
         Pfs.add(destination.getFunction());
-
-        double[] p = Pfs.get(0).getInterPos(Pfs.get(1), source.getWidth(), destination.getWidth());
+        double[] p;
+        if (Pfs.get(0).cross(Pfs.get(1))){
+             p = Pfs.get(0).getInterPos(Pfs.get(1), source.getWidth(), destination.getWidth());
+        }else{
+            p = new double[2];
+            p[0] = source.getStop();
+            p[1] = destination.getStart();
+            //todo handle properly the fusion
+        }
 
         source.addDestination(this);
         Ps.add(source.getStop());

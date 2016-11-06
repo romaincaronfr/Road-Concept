@@ -34,10 +34,10 @@ public class SimpleTrajectory extends Trajectory {
         this.setInverted(start > stop);
         if (isInverted()) {
             length = start - stop;
-            this.setWidth(-width);
+            this.width = -width;
         } else {
             length = stop - start;
-            this.setWidth(width);
+            this.width = width;
         }
         LOG.debug("length = "+this.length);
 

@@ -87,9 +87,7 @@ public class PosFunction {
             p[0] = (R[1] - (p[1] * M[3])) / M[2];
         }
 
-        if(p[0]<0 || p[1]<0 ){
-            LOG.debug("p[0] = "+ p[0] + " p[1] = " + p[1]);
-        }
+        //LOG.debug("p[0] = "+ p[0] + " p[1] = " + p[1]);
 
         return p;
     }

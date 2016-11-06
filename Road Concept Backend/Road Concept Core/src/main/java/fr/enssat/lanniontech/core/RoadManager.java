@@ -6,6 +6,7 @@ import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +97,20 @@ public class RoadManager {
                 new EndRoadTrajectory(source,destination);
             }
         }
+    }
+
+    public boolean checkIntegrity(){
+        boolean result = true;
+        for (RoadSection r : roadSections) {
+            if(r.getLaneAB().getInsertTrajectory().getLength()<=0){
+                result = false;
+            }
+            if(r.getLaneBA().getInsertTrajectory().getLength()<=0){
+                result = false;
+            }
+        }
+        //todo check if all trajectories are accessible
+        return result;
     }
 
 }
