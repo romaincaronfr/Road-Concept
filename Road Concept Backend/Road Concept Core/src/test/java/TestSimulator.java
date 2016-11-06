@@ -31,7 +31,11 @@ public class TestSimulator {
         Sim.roadManager.addRoadSectionToRoad(E, F, id3);
         Sim.roadManager.addRoadSectionToRoad(F, A, id3);
 
-        Sim.roadManager.checkIntegrity();
+        int integrity = Sim.roadManager.checkIntegrity();
+        if(integrity > 0){
+            System.err.println(integrity + " roads corrupted !!!");
+            return;
+        }
 
         Sim.vehicleManager.addToSpawnArea(R);
 
@@ -48,7 +52,7 @@ public class TestSimulator {
 
         //run simulation
 
-        Sim.launchSimulation(6000, 0.1);
+        Sim.launchSimulation(60, 0.1);
 
         while (Sim.getProgress() < 1) {
             System.out.println("Sim time: " + Sim.getDuration());

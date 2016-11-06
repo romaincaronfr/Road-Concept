@@ -39,7 +39,6 @@ public class SimpleTrajectory extends Trajectory {
             length = stop - start;
             this.width = width;
         }
-        LOG.debug("length = "+this.length);
 
     }
 
@@ -53,6 +52,15 @@ public class SimpleTrajectory extends Trajectory {
 
                 setStop(Ps[0]);
                 t.setStart(Ps[1]);
+                if(length < 0){
+                    LOG.debug("t1 : " + length);
+                    LOG.debug("is inverted : " + isInverted());
+                    LOG.debug("Ps0 : " + Ps[0]);
+                }
+                if(t.getLength()<0){
+                    LOG.debug("t2 : " + t.getLength());
+                    LOG.debug("Ps1 : " + Ps[1]);
+                }
 
                 getDestinationsTrajectories().add(t);
                 t.getSourcesTrajectories().add(this);

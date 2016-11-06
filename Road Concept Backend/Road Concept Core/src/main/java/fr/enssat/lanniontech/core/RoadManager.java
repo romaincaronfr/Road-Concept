@@ -99,14 +99,14 @@ public class RoadManager {
         }
     }
 
-    public boolean checkIntegrity(){
-        boolean result = true;
+    public int checkIntegrity(){
+        int result = 0;
         for (RoadSection r : roadSections) {
             if(r.getLaneAB().getInsertTrajectory().getLength()<=0){
-                result = false;
+                result++;
             }
             if(r.getLaneBA().getInsertTrajectory().getLength()<=0){
-                result = false;
+                result++;
             }
         }
         //todo check if all trajectories are accessible
