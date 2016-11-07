@@ -120,7 +120,7 @@ app.mapSimulationView = Backbone.View.extend({
 
 
         // Slide bar of the simulation
-        $("#sliderSimulation").slider({min  : 0, max  : 10, value: 0, tooltip_position:'bottom'});
+        $("#sliderSimulation").slider({min  : "22:30", max  : "23:00", value: 0, tooltip_position:'bottom'});
 
         return this;
     },
