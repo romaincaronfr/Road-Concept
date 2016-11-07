@@ -29,7 +29,7 @@ app.mapEditionView = Backbone.View.extend({
         'click .validModif': 'validModif',
         'click .removeModif': 'removeModif',
         'click .validModel': 'validModel',
-        'click .removeModel': 'removeModel'
+        'click .removeModel': 'cancelUnderCreation'
     },
 
     initialize: function (options) {
@@ -619,14 +619,14 @@ app.mapEditionView = Backbone.View.extend({
                 JSONFeature.properties.id = "1";
                 console.log(JSONFeature.properties);
                 console.log(JSONFeature);
-                this.newModel = new app.models.mapDetailsModel(JSONFeature, {
+                self.newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
                     collection: self.mapDetailsCOllection
                 });
 
-                self.renderFeatureCreation(this.newModel);
+                self.renderFeatureCreation(self.newModel);
 
-                var geojsonModel = this.newModel.toGeoJSON();
+                var geojsonModel = self.newModel.toGeoJSON();
                 var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                     featureProjection: 'EPSG:3857'
                 });
@@ -684,6 +684,15 @@ app.mapEditionView = Backbone.View.extend({
         this.map.removeInteraction(this.selectPointerMove);
     },
 
+    cancelUnderCreation: function () {
+        $('#osmInfo').empty();
+        $('#editBarMenu').show();
+        this.newModel = null;
+        this.vectorSource.removeFeature(this.vectorSource.getFeatureById("1"));
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+    },
+
     changeChooseToolToCancel: function () {
         $('#editButtonChooseTool').hide();
         $('#editButtonCancel').show();
@@ -704,30 +713,6 @@ app.mapEditionView = Backbone.View.extend({
             coordinates[i] = ol.proj.transform(coordinates[i], 'EPSG:3857', 'EPSG:4326');
         }
         return coordinates;
-    },
-
-    getIntersection: function (coordinates) {
-        var intersectionsArray = {};
-        for (var i = 0; i < coordinates.length; i++) {
-            var featureAtCoord = this.vectorSource.getClosestFeatureToCoordinate(coordinates[i]);
-            this.map.forEachFeatureAtPixel(coordinates[i], function (feature, layer) {
-                console.log(coordinates[i]);
-                console.log(feature);
-            });
-            if (featureAtCoord.length > 0) {
-                console.log("intersection");
-                for (var j = 0; j < featureAtCoord.length; j++) {
-                    var id = featureAtCoord[j].getId;
-                    if (intersectionsArray[i]) {
-                        intersectionsArray[i].push(id);
-                    } else {
-                        intersectionsArray[i] = [id];
-                    }
-                }
-            }
-        }
-        console.log(intersectionsArray);
-        return intersectionsArray;
     },
 
     selectOneWay: function (event) {
@@ -793,10 +778,9 @@ app.mapEditionView = Backbone.View.extend({
         model.destroy({wait: true});
     },
 
-    validModel: function (event) {
-        console.log("validModel");
+    validModel: function () {
         var model = this.newModel;
-        console.log(model);
+        console.log(this);
         if (model.attributes.type == 1 || model.attributes.type == 2 || model.attributes.type == 3) {
             console.log('if ok');
             model.set({
@@ -824,14 +808,12 @@ app.mapEditionView = Backbone.View.extend({
                 maxspeed: parseInt($('#maxspeedRP').val())
             });
         }
+        model.unset("id");
         var self = this;
         model.save(null, {
             success: function () {
-                $('#osmInfo').empty();
-                $('#editBarMenu').show();
-                this.map.addInteraction(this.selectPointerMove);
                 self.mapDetailsCOllection.add(model);
-                this.newModel = null;
+                self.cancelUnderCreation();
 
                 /*self.vectorSource.removeFeature(self.vectorSource.getFeatureById(model.attributes.id));
                 var geojsonModel = model.toGeoJSON();
@@ -843,23 +825,5 @@ app.mapEditionView = Backbone.View.extend({
             }
         });
         console.log(model.attributes);
-    },
-
-    removeModel: function (event) {
-        /*var id = event.currentTarget.id;
-        id = id.replace('removeRoad_', '');
-        var model = this.mapDetailsCOllection.get(id);
-        model.destroy({wait: true});*/
-        console.log("removemodel");
-        self.vectorSource.removeFeature(self.vectorSource.getFeatureById(event.currentTarget.id));
-        //this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
-        this.newModel = null;
-
-        $('#osmInfo').empty();
-        $('#editBarMenu').show();
-        this.map.addInteraction(this.selectPointerMove);
-        this.map.addInteraction(this.selectPointer);
     }
-
-
 });
