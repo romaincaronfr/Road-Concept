@@ -51,6 +51,16 @@ body {
     z-index: 1000;
 }
 
+#osmSlider {
+    position: absolute;
+    top: 100px;
+    bottom: 60px;
+    height: 50%;
+    left: 15px;
+    z-index: 1001;
+}
+
+
 #osmInfo {
     position: absolute;
     top: 20%;
