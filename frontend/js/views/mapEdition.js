@@ -21,7 +21,6 @@ app.mapEditionView = Backbone.View.extend({
     newModel: null,
 
     events: {
-        'change #osmOppacity': 'clickOnOSM',
         //'click .close_map_info': 'clickCloseInfo',
         'click button[name=chooseTool]': 'hasChooseTool',
         'click button[id=cancel]': 'cancelHasChooseTool',
@@ -83,7 +82,7 @@ app.mapEditionView = Backbone.View.extend({
         });
 
         //Réglage de l'opacité du fond de carte OSM
-        this.tile.setOpacity($('#osmOppacity').val());
+        this.tile.setOpacity(0.3);
 
         //Préparation du layer pour notre GeoJSON
         this.vectorSource = new ol.source.Vector();
@@ -127,6 +126,18 @@ app.mapEditionView = Backbone.View.extend({
 
         //Fetch de la collection
         this.fetchCollection();
+
+        $( "#osmSlider" ).slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: 1,
+                step: 0.1,
+                value: 0.3,
+            slide: function( event, ui ) {
+                self.changeOppacity(ui.value);
+            }
+        });
 
         /**
          * Get the interaction in interactionZoomDoubleClick : zoom when doubleclick
@@ -180,8 +191,8 @@ app.mapEditionView = Backbone.View.extend({
         //this.mapDetailsCOllection.on('add', self.onAddElement, self);
     },
 
-    clickOnOSM: function () {
-        this.tile.setOpacity($('#osmOppacity').val());
+    changeOppacity: function (value) {
+        this.tile.setOpacity(value);
     },
 
     generateStyle: function (feature, resolution) {
