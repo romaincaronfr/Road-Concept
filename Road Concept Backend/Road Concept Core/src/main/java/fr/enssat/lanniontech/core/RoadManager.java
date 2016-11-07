@@ -102,10 +102,10 @@ public class RoadManager {
     public int checkIntegrity(){
         int result = 0;
         for (RoadSection r : roadSections) {
-            if(r.getLaneAB().getInsertTrajectory().getLength()<=0){
+            if(r.getLaneAB().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneAB().getInsertTrajectory().getLength())){
                 result++;
             }
-            if(r.getLaneBA().getInsertTrajectory().getLength()<=0){
+            if(r.getLaneBA().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneBA().getInsertTrajectory().getLength())){
                 result++;
             }
         }

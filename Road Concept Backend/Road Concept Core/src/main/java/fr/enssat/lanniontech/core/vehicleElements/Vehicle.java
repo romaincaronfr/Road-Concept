@@ -63,7 +63,8 @@ public class Vehicle {
     public void updateAcceleration() {
         double Sa = this.distanceToNextCar();
         double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
-        A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
+        //A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
+        A = 1;
     }
 
     /**
@@ -86,6 +87,9 @@ public class Vehicle {
     public void updatePos(double time, boolean log) {
         double dDone = Va * time;
         this.distanceDone += dDone;
+        if(Double.isNaN(dDone)){
+            System.err.println("overflow");
+        }
         backSide.move(dDone);
         frontSide.move(dDone);
         time++;

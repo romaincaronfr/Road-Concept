@@ -28,6 +28,7 @@ public class Side {
     }
 
     public void move(double distance) {
+
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
             myTrajectory.getOut(this);

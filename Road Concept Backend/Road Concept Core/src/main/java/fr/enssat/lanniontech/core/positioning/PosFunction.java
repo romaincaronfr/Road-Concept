@@ -35,6 +35,9 @@ public class PosFunction {
     public Position get(double pos, double wpos) {
         double lat = alat * pos + blat + clat * wpos;
         double lon = alon * pos + blon + clon * wpos;
+        if(Double.isNaN(lat)||Double.isNaN(lon)){
+            LOG.debug("out of bound");
+        }
         return new Position(lat, lon);
     }
 
