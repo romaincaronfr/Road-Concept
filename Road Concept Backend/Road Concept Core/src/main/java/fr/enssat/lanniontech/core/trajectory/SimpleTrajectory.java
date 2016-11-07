@@ -30,9 +30,9 @@ public class SimpleTrajectory extends Trajectory {
         setDestinationType(TrajectoryType.Undefined);
         this.setpF(pF);
         this.start=start;
-        this.stop=start;
-        this.setInverted(start > stop);
-        if (isInverted()) {
+        this.stop=stop;
+        inverted = start > stop;
+        if (inverted) {
             length = start - stop;
             this.width = -width;
         } else {
@@ -52,15 +52,6 @@ public class SimpleTrajectory extends Trajectory {
 
                 setStop(Ps[0]);
                 t.setStart(Ps[1]);
-                if(length < 0){
-                    LOG.debug("t1 : " + length);
-                    LOG.debug("is inverted : " + isInverted());
-                    LOG.debug("Ps0 : " + Ps[0]);
-                }
-                if(t.getLength()<0){
-                    LOG.debug("t2 : " + t.getLength());
-                    LOG.debug("Ps1 : " + Ps[1]);
-                }
 
                 getDestinationsTrajectories().add(t);
                 t.getSourcesTrajectories().add(this);
@@ -76,14 +67,16 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     public void addDestination(AdvancedTrajectory t) {
-        if (destinationType != TrajectoryType.SimpleTrajectory) {
-            destinationsTrajectories.add(t);
-            if (isInverted()) {
-                setStop(getStop() + t.getSecurityDistance());
+        if (destinationType == TrajectoryType.Undefined) {
+            if (inverted) {
+                setStop(stop + t.getSecurityDistance());
             } else {
-                setStop(getStop() - t.getSecurityDistance());
+                setStop(stop - t.getSecurityDistance());
             }
             destinationType = TrajectoryType.AdvancedTrajectory;
+            destinationsTrajectories.add(t);
+        }else if(destinationType == TrajectoryType.AdvancedTrajectory){
+            destinationsTrajectories.add(t);
         }
     }
 
@@ -91,9 +84,9 @@ public class SimpleTrajectory extends Trajectory {
         if (sourceType != TrajectoryType.SimpleTrajectory) {
             sourcesTrajectories.add(t);
             if (isInverted()) {
-                setStart(getStart() - t.getSecurityDistance());
+                setStart(start - t.getSecurityDistance());
             } else {
-                setStart(getStart() + t.getSecurityDistance());
+                setStart(start + t.getSecurityDistance());
             }
             sourceType = TrajectoryType.AdvancedTrajectory;
         }
@@ -119,7 +112,7 @@ public class SimpleTrajectory extends Trajectory {
 
     public void setStart(double start) {
         this.start = start;
-        if (isInverted()) {
+        if (inverted) {
             length = start - stop;
         } else {
             length = stop - start;
@@ -128,7 +121,7 @@ public class SimpleTrajectory extends Trajectory {
 
     public void setStop(double stop) {
         this.stop = stop;
-        if (isInverted()) {
+        if (inverted) {
             length = start - stop;
         } else {
             length = stop - start;

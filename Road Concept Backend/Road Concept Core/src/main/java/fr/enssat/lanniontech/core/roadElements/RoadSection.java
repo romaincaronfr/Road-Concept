@@ -25,28 +25,8 @@ public class RoadSection {
         length = Position.length(A, B);
         function = new PosFunction(A, B);
         laneAB = new Lane(this, length);
-        laneBA = new Lane(this, length);
+        laneBA = new Lane(this, -length);
         this.myRoad = myRoad;
-    }
-
-    public Position getPosition(Lane myLane, double pos) {
-        if (myLane == laneAB) {
-            return function.get(pos);
-        } else {
-            return function.get(length - pos);
-        }
-    }
-
-    /**
-     * @param widthPos
-     *         position of the vehicle from the left side of the road
-     */
-    public Position getPosition(Lane myLane, double pos, double widthPos) {
-        if (myLane == laneAB) {
-            return function.get(pos, widthPos);
-        } else {
-            return function.get(length - pos, -widthPos);
-        }
     }
 
     public Lane getRightLane(Position P) {
@@ -99,9 +79,5 @@ public class RoadSection {
 
     public Road getMyRoad() {
         return myRoad;
-    }
-
-    public boolean isLeftLane(Lane l) {
-        return laneBA == l;
     }
 }

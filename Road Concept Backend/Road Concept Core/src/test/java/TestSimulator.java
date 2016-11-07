@@ -52,7 +52,7 @@ public class TestSimulator {
 
         //run simulation
 
-        Sim.launchSimulation(60, 0.1);
+        Sim.launchSimulation(6000, 0.1);
 
         while (Sim.getProgress() < 1) {
             System.out.println("Sim time: " + Sim.getDuration());

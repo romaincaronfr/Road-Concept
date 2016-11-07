@@ -3,6 +3,8 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ public class AdvancedTrajectory extends Trajectory {
     private List<Double> lengths;
     private List<Double> Ps;
     private double securityDistance;
+
+    public static Logger LOG = LoggerFactory.getLogger(AdvancedTrajectory.class);
 
     public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
         this.source = source;

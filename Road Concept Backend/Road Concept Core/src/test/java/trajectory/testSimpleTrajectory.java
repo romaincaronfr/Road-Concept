@@ -103,6 +103,9 @@ public class testSimpleTrajectory {
         Side S1 = new Side(0, null, Rs.getLaneAB());
         Side S2 = new Side(100, null, Rs.getLaneAB());
 
+        Assert.assertFalse(Rs.getLaneAB().getInsertTrajectory().isInverted());
+        Assert.assertTrue(Rs.getLaneBA().getInsertTrajectory().isInverted());
+
         Assert.assertEquals(S2.getPos(), S1.getDistanceToNextCar(), 0.01);
 
         S1.move(10);

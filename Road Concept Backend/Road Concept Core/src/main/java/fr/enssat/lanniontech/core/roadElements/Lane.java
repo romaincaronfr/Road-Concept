@@ -14,26 +14,18 @@ public class Lane {
 
     Lane(RoadSection myRoadSection, double length) {
         this.myRoadSection = myRoadSection;
-        this.length = length;
+        this.length = Math.abs(length);
         width = 3.5;
         trajectories = new ArrayList<>();
-        if (!myRoadSection.isLeftLane(this)) {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, length, width / 2));
+        if (length>0) {
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2));
         } else {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), length, 0, width / 2));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2));
         }
     }
 
     public double getLength() {
         return length;
-    }
-
-    public double getMyWPos() {
-        return myRoadSection.getWPos(this, width);
-    }
-
-    public RoadSection getMyRoadSection() {
-        return myRoadSection;
     }
 
     public Lane getNextLane() {
