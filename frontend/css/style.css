@@ -116,3 +116,18 @@ body {
     margin-top : 7px;
     border-radius: 10px 10px 10px 10px;
 }
+
+#sliderSimulation{
+    margin-top: 2%;
+    width: 80%;
+}
+
+#custom-handle-simulation {
+    width: 3em;
+    height: 1.6em;
+    top: 50%;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+

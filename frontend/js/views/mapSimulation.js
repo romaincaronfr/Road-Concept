@@ -116,11 +116,40 @@ app.mapSimulationView = Backbone.View.extend({
 
         //Fetch de la collection
         this.fetchCollection();
-        $('#modalAvertissementSimulation').modal('show');
+       // $('#modalAvertissementSimulation').modal('show');
+
+        // Slider for time simulation
+        /*$( "#sliderSimulation" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            min: 0,
+            max: 24,
+            step: 0.1,
+            value: 0.3,
+            slide: function( event, ui ) {
+                console.log(ui.value);
+            }
+        });*/
 
 
-        // Slide bar of the simulation
-        $("#sliderSimulation").slider({min  : "22:30", max  : "23:00", value: 0, tooltip_position:'bottom'});
+        var handle = $( "#custom-handle-simulation" );
+        $( "#sliderSimulation" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            min: 0,
+            max: 1440,
+            step: 60,
+            value: 0,
+            create: function() {
+                handle.text( $( this ).slider( "value" ) );
+            },
+            slide: function( event, ui ) {
+                console.log(ui.value);
+                handle.text( ui.value );
+
+            }
+        });
+
 
         return this;
     },
