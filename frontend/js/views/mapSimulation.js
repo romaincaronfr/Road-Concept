@@ -17,6 +17,7 @@ app.mapSimulationView = Backbone.View.extend({
     selectPointer: null,
     snap: null,
     mapDetailsCollectionSimulation:null,
+    stepMinute: 15, // On veut un step sur le slider de 15min
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -116,37 +117,29 @@ app.mapSimulationView = Backbone.View.extend({
 
         //Fetch de la collection
         this.fetchCollection();
+        // TODO : remettre le modal d'avertissament à la fin
        // $('#modalAvertissementSimulation').modal('show');
 
         // Slider for time simulation
-        /*$( "#sliderSimulation" ).slider({
-            orientation: "horizontal",
-            range: "min",
-            min: 0,
-            max: 24,
-            step: 0.1,
-            value: 0.3,
-            slide: function( event, ui ) {
-                console.log(ui.value);
-            }
-        });*/
-
-
         var handle = $( "#custom-handle-simulation" );
         $( "#sliderSimulation" ).slider({
             orientation: "horizontal",
             range: "min",
             min: 0,
             max: 1440,
-            step: 60,
+            step: this.stepMinute,
             value: 0,
             create: function() {
                 handle.text( $( this ).slider( "value" ) );
             },
             slide: function( event, ui ) {
-                console.log(ui.value);
-                handle.text( ui.value );
-
+                var minutes = ui.value;
+                var h = Math.floor(minutes / 60);
+                var m = minutes % 60;
+                h = h < 10 ? '0' + h : h;
+                m = m < 10 ? '0' + m : m;
+                var time = h + ':' + m;
+                handle.text(time);
             }
         });
 
@@ -503,8 +496,5 @@ app.mapSimulationView = Backbone.View.extend({
             model: model
         });
     },
-
-
-
-
+    
 });
