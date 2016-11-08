@@ -7,8 +7,8 @@
 Pour pouvoir compiler et éxécuter le projet en local sur votre poste, les dépendances suivantes sont nécéssaires :
 * [Oracle JDK8] - Le simulateur ainsi que l'API permettant d'y accéder sont développés en Java
 * [Maven] - Ces deux projets utilisent le gestionaire de projet Maven
-* [Docker] - 
-* [Docker-compose] - 
+* [Docker] - Automatisation du déploiement de l'application dans des conteneurs logiciels
+* [Docker Compose] - Utilitaire Docker pour gérer des applications multi conteneurs
 
 ## Comment déployer localement le projet ?
 
@@ -60,3 +60,5 @@ $ ./dockerRemoveAll.sh
    [Oracle JDK8]: <http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html>
    [MongoDB]: <https://www.mongodb.com/>
    [Documentation API]: <http://localhost:8080/doc/>
+   [Docker]: <https://www.docker.com/>
+   [Docker Compose]: <https://docs.docker.com/compose/>
