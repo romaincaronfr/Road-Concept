@@ -150,8 +150,10 @@ app.Router = Backbone.Router.extend({
         this.checkAndDestroyMap();
         this.checkAndInitNavBar();
         if (!this.editmapV){
+            console.log("homeSimulation null");
             this.homeSimuV = new app.simulationHomeView({id:id});
         } else {
+            console.log("homeSimulation non null");
             this.homeSimuV.changeID(id);
             this.homeSimuV.render();
         }

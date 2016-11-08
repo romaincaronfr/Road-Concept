@@ -26,6 +26,7 @@ app.simulationHomeView = Backbone.View.extend({
     },
 
     changeID: function (id) {
+        console.log("change id = "+id);
         this.id = id;
         //this.mapDetailsCOllection.id = id;
     }
