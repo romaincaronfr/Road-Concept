@@ -5,7 +5,7 @@
 -- ** 	module: Road Concept API                                               **
 -- ** version: 0.1-SNAPSHOT                                                    **
 -- ** 	date: 05/10/2016                                                       **
--- ** file: src/main/resources/roadConceptDB_dev.sql                       **
+-- ** file: src/main/resources/roadConceptDB_dev.sql                           **
 -- ** author: Maëlig NANTEL						                                         **
 -- ******************************************************************************
 
@@ -33,4 +33,14 @@ CREATE TABLE IF NOT EXISTS "map_info" (
   "from_osm"    BOOLEAN     NOT NULL,
   "image_url"   VARCHAR(100),
   "description" TEXT
+);
+
+-- ==============================================================================
+-- SIMULATION PARAMETERS
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS "simulation" (
+  "uuid"        VARCHAR(40) PRIMARY KEY,
+  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL
 );

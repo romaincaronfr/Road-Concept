@@ -7,6 +7,7 @@ import java.util.UUID;
 public class Simulation {
 
     private UUID uuid = UUID.randomUUID();
+    private String name;
     private User user; // Creator of the simulation
     private int mapID;
 
@@ -32,5 +33,13 @@ public class Simulation {
 
     public void setMapID(int mapID) {
         this.mapID = mapID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

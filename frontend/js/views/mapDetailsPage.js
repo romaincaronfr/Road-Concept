@@ -12,7 +12,6 @@ app.mapDetailsPageView = Backbone.View.extend({
     selectPointer: null,
 
     events: {
-        'change #osmOppacity': 'clickOnOSM',
         //'click .close_map_info': 'clickCloseInfo',
         'click #importButton': 'clickOnImport',
         'click .importButton': 'importData',
@@ -69,7 +68,7 @@ app.mapDetailsPageView = Backbone.View.extend({
         });
 
         //Réglage de l'opacité du fond de carte OSM
-        this.tile.setOpacity($('#osmOppacity').val());
+        this.tile.setOpacity(0.3);
 
         //Préparation du layer pour notre GeoJSON
         this.vectorSource = new ol.source.Vector();
@@ -114,6 +113,18 @@ app.mapDetailsPageView = Backbone.View.extend({
         //Fetch de la collection
         this.mapDetailsCOllection.fetch();
 
+        $( "#osmSlider" ).slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: 1,
+            step: 0.1,
+            value: 0.3,
+            slide: function( event, ui ) {
+                self.changeOppacity(ui.value);
+            }
+        });
+
         return this;
 
     },
@@ -154,8 +165,8 @@ app.mapDetailsPageView = Backbone.View.extend({
         //this.map.getView().fit(vectorSource.getExtent(), this.map.getSize());
     },
 
-    clickOnOSM: function () {
-        this.tile.setOpacity($('#osmOppacity').val());
+    changeOppacity: function (value) {
+        this.tile.setOpacity(value);
     },
 
     generateStyle: function (feature, resolution) {

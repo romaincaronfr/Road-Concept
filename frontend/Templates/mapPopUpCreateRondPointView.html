@@ -1,0 +1,44 @@
+<form class="form-horizontal" style="margin: 4px;">
+    <fieldset>
+
+
+        <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
+
+
+        <!-- Form Name -->
+        <legend>Initialisation des paramètres du rond point</legend>
+
+
+        <!-- Text input http://getbootstrap.com/css/#forms -->
+        <div class="form-group">
+            <label for="RPName" class="control-label col-sm-2">Nom</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="RPName" placeholder="Nom du feu" required="" value="<%= name %>">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="maxspeedRP" class="control-label col-sm-2">Limitation de vitesse</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="maxspeedRP" placeholder="Vitesse" required="" value="<%= maxspeed %>">
+                <p class="help-block">en km/h</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="text-right col-sm-12">
+                <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModel" aria-label="">Valider</button>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="text-right col-sm-12">
+                <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModel" aria-label="">Annuler</button>
+
+            </div>
+        </div>
+
+    </fieldset>
+</form>
