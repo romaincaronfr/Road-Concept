@@ -47,6 +47,8 @@ public class SimulatorService extends AbstractService {
 
         Map map = mapService.getMap(simulation.getUser(), simulation.getMapID());
         List<Road> roads = sendFeatures(map.getFeatures());
+        int integrity = simulator.roadManager.checkIntegrity();
+        LOGGER.debug("Road manager integrity = " + integrity);
         simulator.vehicleManager.addToSpawnArea(roads.get(0));
         boolean result = simulator.vehicleManager.addVehicle();
         LOGGER.debug("addVechile => " + result);
@@ -82,6 +84,7 @@ public class SimulatorService extends AbstractService {
             Feature feature = new Feature(); // Gestion problématique UUID d'une requête sur l'autre
             Point point = new Point(new Coordinates(vehicle.getLon(), vehicle.getLat()));
             feature.setGeometry(point);
+            feature.getProperties().put("vehicle_id",vehicle.getId());
             features.getFeatures().add(feature);
         }
 
@@ -97,8 +100,8 @@ public class SimulatorService extends AbstractService {
 
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulator.positionManager.addPosition(last.getLongitude(), last.getLongitude());
-                    Position B = simulator.positionManager.addPosition(coordinates.getLongitude(), coordinates.getLongitude());
+                    Position A = simulator.positionManager.addPosition(last.getLatitude(), last.getLongitude());
+                    Position B = simulator.positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
                     roads.add(simulator.roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
                     last = coordinates;
                 }

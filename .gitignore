@@ -99,3 +99,5 @@ Docker/hiveship-docker-compose.yml
 *.jar
 
 developper-bin/deployMaelig.sh
+
+Road Concept Backend/Road Concept API/src/main/java/fr/enssat/lanniontech/api/utilities/Constants.java
