@@ -1,9 +1,9 @@
 package fr.enssat.lanniontech.api.verticles;
 
-import fr.enssat.lanniontech.api.entities.map.Map;
-import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
+import fr.enssat.lanniontech.api.entities.map.Map;
+import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InconsistentException;
 import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
@@ -64,11 +64,11 @@ public class MapsVerticle extends AbstractVerticle {
             Feature created = mapService.addFeature(mapID, feature);
             HttpResponseBuilder.buildCreatedResponse(routingContext, created);
         } catch (EntityNotExistingException e) {
-            HttpResponseBuilder.buildNotFoundException(routingContext,e);
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (InconsistentException e) {
-            HttpResponseBuilder.buildForbiddenResponse(routingContext,"User and Map are not consistent");
+            HttpResponseBuilder.buildForbiddenResponse(routingContext, "User and Map are not consistent");
         } catch (JSONProcessingException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext,"Invalid GeoJSON");
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid GeoJSON");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -104,7 +104,7 @@ public class MapsVerticle extends AbstractVerticle {
         } catch (IllegalArgumentException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid UUID");
         } catch (JSONProcessingException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext,"Invalid GeoJSON");
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid GeoJSON");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (InconsistentException e) {

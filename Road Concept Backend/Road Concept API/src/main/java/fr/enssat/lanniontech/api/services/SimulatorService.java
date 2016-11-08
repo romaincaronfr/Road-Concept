@@ -45,12 +45,12 @@ public class SimulatorService extends AbstractService {
         simulator.vehicleManager.addToSpawnArea(roads.get(0));
         boolean result = simulator.vehicleManager.addVehicle();
         LOGGER.debug("addVechile => " + result);
-      //  long stepsCounts = (long) (600 / 0.1);
-        return simulator.launchSimulation(600,0.1, 10);
+        //  long stepsCounts = (long) (600 / 0.1);
+        return simulator.launchSimulation(600, 0.1, 10);
     }
 
     public FeatureCollection getResult(UUID simulationUUID, long timestamp) {
-      //  Simulation simulation = // TODO: Get from UUID
+        //  Simulation simulation = // TODO: Get from UUID
         Map map = mapService.getMap(simulation.getUser(), simulation.getMapID());
         getResultAt(map.getFeatures(), timestamp);
         return map.getFeatures();
@@ -69,9 +69,9 @@ public class SimulatorService extends AbstractService {
             Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
             Point point = new Point(new Coordinates(vehicle.getLon(), vehicle.getLat()));
             feature.setGeometry(point);
-            feature.getProperties().put("type",FeatureType.VEHICLE);
+            feature.getProperties().put("type", FeatureType.VEHICLE);
             feature.getProperties().put("vehicle_id", vehicle.getId());
-            feature.getProperties().put("angle",vehicle.getAngle());
+            feature.getProperties().put("angle", vehicle.getAngle());
             features.getFeatures().add(feature);
         }
     }

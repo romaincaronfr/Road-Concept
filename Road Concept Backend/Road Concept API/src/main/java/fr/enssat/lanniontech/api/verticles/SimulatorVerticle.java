@@ -68,12 +68,12 @@ public class SimulatorVerticle extends AbstractVerticle {
 
             boolean started = simulatorService.simulate(simulation);
             if (started) { //TODO: Ouverture WebSocket ici pour renvoyer la progression au FrontEnd
-                HttpResponseBuilder.buildOkResponse(routingContext,simulation);
+                HttpResponseBuilder.buildOkResponse(routingContext, simulation);
             } else {
                 throw new BadRequestException();
             }
         } catch (BadRequestException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext,"Simulation not started");
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "Simulation not started");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }

@@ -7,9 +7,7 @@ import java.util.Random;
 
 @Deprecated
 public enum RoadCongestionLevel {
-    LOW,
-    MEDIUM,
-    HIGH;
+    LOW, MEDIUM, HIGH;
 
     private static final List<RoadCongestionLevel> VALUES = Collections.unmodifiableList(Arrays.asList(values()));
     private static final int SIZE = VALUES.size();

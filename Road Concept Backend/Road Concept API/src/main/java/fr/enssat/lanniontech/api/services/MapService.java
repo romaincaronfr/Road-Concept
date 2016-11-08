@@ -102,7 +102,7 @@ public class MapService extends AbstractService {
 
         for (Feature one : toAdd) {
             for (Feature two : toAdd) {
-                if (! (one == two)) {
+                if (!(one == two)) {
                     detectIntersections(mapID, one, two, false);
                 }
             }
@@ -236,7 +236,7 @@ public class MapService extends AbstractService {
 
     private String getOneWay(Map<String, Object> properties) {
         if (properties.containsKey("oneway")) {
-            return(String) properties.get("oneway");
+            return (String) properties.get("oneway");
         }
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("oneway")) {
@@ -310,10 +310,10 @@ public class MapService extends AbstractService {
                     continue;
                 } else {
                     String[] point = potentialIntersections.get(i);
-                    for (int j = 0; j < point.length ; j ++) {
+                    for (int j = 0; j < point.length; j++) {
                         String uuidToCheck = point[j];
-                        Feature featureToCheck = getFeature(mapID,UUID.fromString(uuidToCheck));
-                        detectIntersections(mapID,feature,featureToCheck, true);
+                        Feature featureToCheck = getFeature(mapID, UUID.fromString(uuidToCheck));
+                        detectIntersections(mapID, feature, featureToCheck, true);
                     }
                 }
             }
@@ -325,7 +325,7 @@ public class MapService extends AbstractService {
         return mapFeatureRepository.create(mapID, feature);
     }
 
-    private void detectIntersections(int mapID, Feature one, Feature two, boolean fullMode){
+    private void detectIntersections(int mapID, Feature one, Feature two, boolean fullMode) {
         if (fullMode) {
             detectFullIntersections(mapID, one, two);
         } else {
