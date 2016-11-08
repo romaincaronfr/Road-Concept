@@ -1,11 +1,13 @@
 package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
+import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
+import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
+import java.util.List;
 import java.util.UUID;
 
 public class SimulatorVerticle extends AbstractVerticle {
@@ -33,6 +36,20 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/simulate").handler(this::processFakeSimulation);
         router.route(HttpMethod.POST, "/api/maps/:mapID/simulation").handler(this::processSimulation);
         router.route(HttpMethod.GET, "/api/maps/:mapID/simulation/:simulationUUID/results").handler(this::processGetSimulationResult);
+        router.route(HttpMethod.GET, "/api/maps/:mapID/simulation/:simulationUUID/vehicles/:vehicleID").handler(this::processGetVehiclePositionHistory);
+
+    }
+
+    private void processGetVehiclePositionHistory(RoutingContext routingContext) {
+        try {
+            int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
+
+            Feature positionsHistory = simulatorService.getVehiculePositionsHistory(vehicleID); //TODO: Convertir en GeoJSON ?
+            HttpResponseBuilder.buildOkResponse(routingContext, result);
+
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
     }
 
     private void processFakeSimulation(RoutingContext routingContext) {

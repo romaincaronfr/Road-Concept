@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static fr.enssat.lanniontech.core.Simulator.simulationHistory;
+
 public class SimulatorService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
@@ -52,6 +54,7 @@ public class SimulatorService extends AbstractService {
         simulator.vehicleManager.addToSpawnArea(roads.get(0));
         boolean result = simulator.vehicleManager.addVehicle();
         LOGGER.debug("addVechile => " + result);
+      //  long stepsCounts = (long) (600 / 0.1);
         return simulator.launchSimulation(600,0.1);
     }
 
@@ -65,7 +68,7 @@ public class SimulatorService extends AbstractService {
     public void getResult(FeatureCollection features) {
         long timestamp = 0; //TODO: Voir avec Antoine et Romain
         for (Feature feature : features) {
-            double status = simulator.simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
+            double status = simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
             RoadCongestionLevel congestion;
             if (status <= (1 / 3.0) * 100) {
                 congestion = RoadCongestionLevel.LOW;
@@ -77,18 +80,30 @@ public class SimulatorService extends AbstractService {
             feature.getProperties().put("congestion", congestion);
         }
 
-        List<SpaceTimePosition> vehicles = simulator.simulationHistory.getAllVehicleAt(timestamp);
+        List<SpaceTimePosition> vehicles = simulationHistory.getAllVehicleAt(timestamp);
         LOGGER.debug("Nombre de véhicules = " + vehicles.size());
         for (SpaceTimePosition vehicle : vehicles) {
             LOGGER.debug("Space Time Position = " + vehicle);
-            Feature feature = new Feature(); // Gestion problématique UUID d'une requête sur l'autre
+            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
             Point point = new Point(new Coordinates(vehicle.getLon(), vehicle.getLat()));
             feature.setGeometry(point);
-            feature.getProperties().put("vehicle_id",vehicle.getId());
+            feature.getProperties().put("type",FeatureType.VEHICLE);
+            feature.getProperties().put("vehicle_id", vehicle.getId());
+            feature.getGeometry().put("angle",);
             features.getFeatures().add(feature);
         }
 
         //TODO: à tester...
+    }
+
+    public Feature getVehiculePositionsHistory(int vehicleID) {
+        List<SpaceTimePosition> history = simulator.simulationHistory.getVehiclePosition(vehicleID);
+        Feature result = new Feature();
+        result.setGeometry(new LineString());
+
+
+
+        return result;
     }
 
     public List<Road> sendFeatures(FeatureCollection features) {
