@@ -58,16 +58,8 @@ public class SimulatorService extends AbstractService {
 
     private void getResultAt(FeatureCollection features, long timestamp) {
         for (Feature feature : features) {
-            double status = simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
-            RoadCongestionLevel congestion;
-            if (status <= (1 / 3.0) * 100) {
-                congestion = RoadCongestionLevel.LOW;
-            } else if (status >= (2 / 3.0) * 100) {
-                congestion = RoadCongestionLevel.HIGH;
-            } else {
-                congestion = RoadCongestionLevel.MEDIUM;
-            }
-            feature.getProperties().put("congestion", congestion);
+            Double status = simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
+            feature.getProperties().put("congestion", status.intValue());
         }
 
         List<SpaceTimePosition> vehicles = simulationHistory.getAllVehicleAt(timestamp);

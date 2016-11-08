@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+@Deprecated
 public enum RoadCongestionLevel {
     LOW,
     MEDIUM,
