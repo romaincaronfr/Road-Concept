@@ -19,7 +19,8 @@ public class Vehicle {
     private double lambda = 4;
     private double v0;          //desired speed
     private double s0 = 2;      //minimum distance between two cars
-    private long time;
+
+    private long time; // timespamp
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
@@ -92,7 +93,7 @@ public class Vehicle {
         }
         backSide.move(dDone);
         frontSide.move(dDone);
-        time++;
+        this.time++;
         if (log) {
             Simulator.simulationHistory.AddPosition(getGPSPosition());
         }
