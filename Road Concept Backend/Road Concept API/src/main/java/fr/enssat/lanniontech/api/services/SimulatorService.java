@@ -35,15 +35,6 @@ public class SimulatorService extends AbstractService {
 
     private Simulation simulation;
 
-    public FeatureCollection simulate(FeatureCollection features) {
-        sendFeatures(features);
-        //TODO: sendVehicles
-        simulator.launchSimulation(3600, 0.1);
-        //simulator.waitForEnd(); // FIXME: ne peu pas être fait ici
-
-        return null;
-    }
-
     public boolean simulate(Simulation simulation) {
         this.simulation = simulation;
 
@@ -55,18 +46,17 @@ public class SimulatorService extends AbstractService {
         boolean result = simulator.vehicleManager.addVehicle();
         LOGGER.debug("addVechile => " + result);
       //  long stepsCounts = (long) (600 / 0.1);
-        return simulator.launchSimulation(600,0.1);
+        return simulator.launchSimulation(600,0.1, 10);
     }
 
-    public FeatureCollection getResult(UUID simulationUUID) {
+    public FeatureCollection getResult(UUID simulationUUID, long timestamp) {
       //  Simulation simulation = // TODO: Get from UUID
         Map map = mapService.getMap(simulation.getUser(), simulation.getMapID());
-        getResult(map.getFeatures());
+        getResultAt(map.getFeatures(), timestamp);
         return map.getFeatures();
     }
 
-    public void getResult(FeatureCollection features) {
-        long timestamp = 0; //TODO: Voir avec Antoine et Romain
+    private void getResultAt(FeatureCollection features, long timestamp) {
         for (Feature feature : features) {
             double status = simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
             RoadCongestionLevel congestion;
@@ -89,20 +79,24 @@ public class SimulatorService extends AbstractService {
             feature.setGeometry(point);
             feature.getProperties().put("type",FeatureType.VEHICLE);
             feature.getProperties().put("vehicle_id", vehicle.getId());
-            feature.getGeometry().put("angle",);
+            feature.getProperties().put("angle",vehicle.getAngle());
             features.getFeatures().add(feature);
         }
-
-        //TODO: à tester...
     }
 
-    public Feature getVehiculePositionsHistory(int vehicleID) {
+    public FeatureCollection getVehiculePositionsHistory(int vehicleID) {
         List<SpaceTimePosition> history = simulator.simulationHistory.getVehiclePosition(vehicleID);
-        Feature result = new Feature();
-        result.setGeometry(new LineString());
+        FeatureCollection result = new FeatureCollection();
 
+        for (SpaceTimePosition position : history) {
+            Feature feature = new Feature();
+            feature.getProperties().put("type", FeatureType.VEHICLE);
+            feature.getProperties().put("vehicle_id", position.getId());
+            feature.getProperties().put("angle", position.getAngle());
+            feature.setGeometry(new Point(new Coordinates(position.getLon(), position.getLat())));
 
-
+            result.getFeatures().add(feature);
+        }
         return result;
     }
 
@@ -127,6 +121,7 @@ public class SimulatorService extends AbstractService {
         return roads;
     }
 
+    @Deprecated
     public FeatureCollection getFakeSimulationResult() throws IOException {
         InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
 
