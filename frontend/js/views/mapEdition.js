@@ -28,7 +28,10 @@ app.mapEditionView = Backbone.View.extend({
         'click .validModif': 'validModif',
         'click .removeModif': 'removeModif',
         'click .validModel': 'validModel',
-        'click .removeModel': 'cancelUnderCreation'
+        'click .removeModel': 'cancelUnderCreation',
+        'click #importButton': 'clickOnImport',
+        'click .importButton': 'importData',
+        'hide.bs.modal #modalImport': 'hideModal'
     },
 
     initialize: function (options) {
@@ -836,5 +839,93 @@ app.mapEditionView = Backbone.View.extend({
             }
         });
         console.log(model.attributes);
+    },
+
+    clickOnImport: function () {
+        if ($('#modalImport').length) {
+            $('#modalImport').remove();
+        }
+        new app.importModalView();
+    },
+
+    importData: function () {
+        var f = $('input[type=file]')[0].files[0];
+        var extentionFile;
+        if (!f.name) {
+            extentionFile = "null.null";
+        } else {
+            var re = /(?:\.([^.]+))?$/;
+            extentionFile = re.exec(f.name)[1];
+        }
+        switch (extentionFile) {
+            case 'osm':
+                $('#importModalFooter').addClass('hidden');
+                $('#formImport').addClass('hidden');
+                $('#parseMessage').removeClass('hidden');
+                $('#waitImport').removeClass('hidden');
+                this.encodeOSMtoGeoJSON(f);
+                break;
+            case 'json':
+                $('#importModalFooter').addClass('hidden');
+                $('#formImport').addClass('hidden');
+                $('#waitImport').removeClass('hidden');
+                this.sendImportData(f);
+                break;
+            default:
+                $('#alertImport').removeClass('hidden');
+                break;
+        }
+
+    },
+
+    encodeOSMtoGeoJSON: function (osm) {
+        if (osm) {
+            var r = new FileReader();
+            var self = this;
+            r.onload = function (e) {
+                var contents = e.target.result;
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(contents, "text/xml");
+                contents = osmtogeojson(xmlDoc);
+                contents = JSON.stringify(contents);
+                contents = new File([contents, "import.json"], {type: "application/json"});
+                $('#parseMessage').addClass('hidden');
+                self.sendImportData(contents);
+            };
+            r.readAsText(osm);
+        } else {
+            alert("Failed to load file");
+        }
+    },
+
+    sendImportData: function (dataS) {
+        var formData = new FormData();
+        formData.append('data', dataS);
+        var self = this;
+        $.ajax({
+                url: Backbone.Collection.prototype.absURL + "/api/maps/" + self.id + "/import",
+                type: "POST",
+                processData: false,
+                data: formData,
+                contentType: false
+            })
+            .done(function (data, textStatus, jqXHR) {
+                console.log("HTTP Request Succeeded: " + jqXHR.status);
+                self.vectorSource.clear();
+                self.fetchCollection();
+                $('#waitImport').addClass('hidden');
+                $('#alertSuccessImport').removeClass('hidden');
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, quelque chose s'est mal passée. Veuillez réessayer. (C'est encore le dev qui a du mal bosser...)");
+                $('#modalError').modal('show');
+            })
+            .always(function () {
+                /* ... */
+            });
+    },
+
+    hideModal: function () {
+        $('#modalImport').remove();
     }
 });
