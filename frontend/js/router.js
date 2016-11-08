@@ -35,7 +35,8 @@ app.Router = Backbone.Router.extend({
         "map/:id": "mapDetail",
         "editmap/:id": "mapEdition",
         "simmap" : "mapSimulation",
-        "users": "users"
+        "users": "users",
+        "homeSimulation/:id": "homeSimulation"
     },
 
     initialize: function () {
@@ -48,6 +49,7 @@ app.Router = Backbone.Router.extend({
         this.detailPageV = null;
         this.editmapV = null;
         this.simmapView = null;
+        this.homeSimuV = null;
     },
 
     start: function () {
@@ -142,6 +144,16 @@ app.Router = Backbone.Router.extend({
     logout: function () {
         this.checkAndDestroyMap();
         new app.logoutView();
+    },
+
+    homeSimulation: function(id){
+        this.checkAndInitNavBar();
+        if (!this.editmapV){
+            this.homeSimuV = new app.simulationHomeView({id:id});
+        } else {
+            this.homeSimuV.changeID(id);
+            this.homeSimuV.render();
+        }
     },
 
     checkAndInitNavBar: function () {
