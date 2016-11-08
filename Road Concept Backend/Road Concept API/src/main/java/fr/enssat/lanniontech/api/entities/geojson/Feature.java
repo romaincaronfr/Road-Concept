@@ -59,4 +59,21 @@ public class Feature extends GeoJsonObject {
         return "Feature{properties=" + properties + ", geometry=" + geometry + ", uuid='" + uuid + "'}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Feature feature = (Feature) o;
+        return feature.getUuid().equals(getUuid());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (properties != null ? properties.hashCode() : 0);
+        result = 31 * result + (geometry != null ? geometry.hashCode() : 0);
+        result = 31 * result + (openStreetMapID != null ? openStreetMapID.hashCode() : 0);
+        return result;
+    }
 }
