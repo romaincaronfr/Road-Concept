@@ -35,4 +35,8 @@ public class SpaceTimePosition extends Position {
     public int getId() {
         return vehicleId;
     }
+
+    public double getAngle() {
+        return angle;
+    }
 }
