@@ -23,6 +23,7 @@ public class Simulator implements Runnable {
     private ReentrantReadWriteLock l;
     private long startTime;
     private long stopTime;
+    private int samplingRate;
 
     public Simulator() {
         l = new ReentrantReadWriteLock();
@@ -37,10 +38,11 @@ public class Simulator implements Runnable {
         simulatorThread = new Thread(this);
     }
 
-    public boolean launchSimulation(double length, double precision) {
+    public boolean launchSimulation(double length, double precision, int samplingRate) {
         if (simulatorThread.isAlive()) {
             return false;
         } else {
+            this.samplingRate = samplingRate;
             this.length = length;
             this.precision = precision;
             startTime = System.currentTimeMillis();
@@ -57,14 +59,13 @@ public class Simulator implements Runnable {
             int j = 1;
             for (long i = 0; i < step; i++) {
 
-                if (j == 10 / precision) {
+                if (j == samplingRate) {
                     vehicleManager.newStep(precision, true);
                     j = 1;
                 } else {
                     vehicleManager.newStep(precision, false);
                     j++;
                 }
-
 
                 wl.lock();
                 try {
