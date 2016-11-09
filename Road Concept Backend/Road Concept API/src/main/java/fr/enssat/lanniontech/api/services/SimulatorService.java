@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import static fr.enssat.lanniontech.core.Simulator.simulationHistory;
-
 public class SimulatorService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
@@ -58,11 +56,11 @@ public class SimulatorService extends AbstractService {
 
     private void getResultAt(FeatureCollection features, long timestamp) {
         for (Feature feature : features) {
-            Double status = simulationHistory.getRoadStatus(feature.getUuid(), timestamp);
+            Double status = simulator.historyManager.getRoadStatus(feature.getUuid(), timestamp);
             feature.getProperties().put("congestion", status.intValue());
         }
 
-        List<SpaceTimePosition> vehicles = simulationHistory.getAllVehicleAt(timestamp);
+        List<SpaceTimePosition> vehicles = simulator.historyManager.getAllVehicleAt(timestamp);
         LOGGER.debug("Nombre de véhicules = " + vehicles.size());
         for (SpaceTimePosition vehicle : vehicles) {
             LOGGER.debug("Space Time Position = " + vehicle);
@@ -77,7 +75,7 @@ public class SimulatorService extends AbstractService {
     }
 
     public FeatureCollection getVehiculePositionsHistory(int vehicleID) {
-        List<SpaceTimePosition> history = simulator.simulationHistory.getVehiclePosition(vehicleID);
+        List<SpaceTimePosition> history = simulator.historyManager.getVehiclePosition(vehicleID);
         FeatureCollection result = new FeatureCollection();
 
         for (SpaceTimePosition position : history) {
