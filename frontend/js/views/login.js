@@ -10,7 +10,9 @@ app.loginView = Backbone.View.extend({
     },
 
     events: {
-        'click #submitLogin': 'clickOnSubmitLogin'
+        'click #submitLogin': 'clickOnSubmitLogin',
+        'keypress #exampleInputPassword1': 'pressEnter',
+        'keypress #exampleInputEmail1': 'pressEnter'
     },
 
     render: function () {
@@ -66,6 +68,12 @@ app.loginView = Backbone.View.extend({
             .always(function () {
                 /* ... */
             });
+    },
+
+    pressEnter: function(event){
+        if(event.which === 13 && $('#exampleInputEmail1').val() != '' && $('#exampleInputPassword1').val() !=''){
+            this.clickOnSubmitLogin();
+        }
     }
 
 });
