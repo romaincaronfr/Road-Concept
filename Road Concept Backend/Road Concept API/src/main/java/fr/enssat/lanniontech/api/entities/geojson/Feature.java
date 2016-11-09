@@ -14,7 +14,7 @@ import java.util.UUID;
 public class Feature extends GeoJsonObject {
 
     @JsonProperty(access = Access.WRITE_ONLY)
-    private UUID uuid = UUID.randomUUID(); //FIXME: Change sur un update par exemple... Problème de unmarshalling non prioritaire
+    private UUID uuid = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)

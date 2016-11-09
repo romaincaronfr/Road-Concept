@@ -393,17 +393,10 @@ public class MapService extends AbstractService {
     private List<Feature> splitOldFeature(Feature one, int oneIntersectionPointIndex, Coordinates NewCoordinate) {
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
-        newOneRoad1.setProperties(one.getProperties());
-        newOneRoad2.setProperties(one.getProperties());
+        newOneRoad1.setProperties(new HashMap<>(one.getProperties()));
+        newOneRoad2.setProperties(new HashMap<>(one.getProperties()));
         newOneRoad1.setGeometry(new LineString());
         newOneRoad2.setGeometry(new LineString());
-
-        Feature newTwoRoad1 = new Feature();
-        Feature newTwoRoad2 = new Feature();
-        newTwoRoad1.setProperties(one.getProperties());
-        newTwoRoad2.setProperties(one.getProperties());
-        newTwoRoad1.setGeometry(new LineString());
-        newTwoRoad2.setGeometry(new LineString());
 
         LineString oneRoad = (LineString) one.getGeometry();
 
@@ -418,8 +411,8 @@ public class MapService extends AbstractService {
         ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
 
         newOneRoad1.getProperties().remove("id");
-        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
         newOneRoad2.getProperties().remove("id");
+        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
         newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
 
         List<Feature> listToReturn = new ArrayList<>();
