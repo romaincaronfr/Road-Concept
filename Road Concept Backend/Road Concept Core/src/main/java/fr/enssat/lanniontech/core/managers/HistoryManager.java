@@ -4,14 +4,14 @@ import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 
 import java.util.*;
 
-public class SimulationHistory {
+public class HistoryManager {
     private Map<Integer, LinkedHashMap<Long, SpaceTimePosition>> vehiclePositionsFromId;
     //structure: <VehicleId,<timestamp,Position>>
     private Map<Long, TreeMap<Double, TreeMap<Double, Integer>>> vehicleIdFromPosition;
     //structure: <timestamp,<Longitude,<Latitude,VehicleId>>>
 
 
-    public SimulationHistory() {
+    public HistoryManager() {
         vehiclePositionsFromId = new HashMap<>();
         vehicleIdFromPosition = new LinkedHashMap<>();
     }

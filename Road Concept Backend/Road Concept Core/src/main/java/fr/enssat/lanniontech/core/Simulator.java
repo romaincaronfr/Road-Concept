@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.core;
 
 import fr.enssat.lanniontech.core.managers.PositionManager;
 import fr.enssat.lanniontech.core.managers.RoadManager;
-import fr.enssat.lanniontech.core.managers.SimulationHistory;
+import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class Simulator implements Runnable {
     public RoadManager roadManager;
     public PositionManager positionManager;
     public VehicleManager vehicleManager;
-    public static SimulationHistory simulationHistory;
+    public HistoryManager historyManager;
 
     private double progress;
     private Thread simulatorThread;
@@ -34,8 +34,8 @@ public class Simulator implements Runnable {
 
         roadManager = new RoadManager();
         positionManager = new PositionManager();
-        vehicleManager = new VehicleManager();
-        simulationHistory = new SimulationHistory();
+        historyManager = new HistoryManager();
+        vehicleManager = new VehicleManager(historyManager);
 
         progress = 0;
 

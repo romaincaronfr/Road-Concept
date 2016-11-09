@@ -1,4 +1,4 @@
-import fr.enssat.lanniontech.core.managers.SimulationHistory;
+import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import org.junit.Assert;
 import org.junit.Test;
@@ -6,7 +6,7 @@ import org.junit.Test;
 public class TestSimulationHistory {
     @Test
     public void getPositionFromId(){
-        SimulationHistory SH = new SimulationHistory();
+        HistoryManager SH = new HistoryManager();
 
         SpaceTimePosition STP1 = new SpaceTimePosition(0,0,0,0,0);
 

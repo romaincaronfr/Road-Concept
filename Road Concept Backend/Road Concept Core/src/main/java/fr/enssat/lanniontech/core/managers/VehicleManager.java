@@ -14,8 +14,10 @@ public class VehicleManager {
     private List<Vehicle> activeVehicles;
     private List<RoadSection> spawnArea;
     private Random gen;
+    private HistoryManager historyManager;
 
-    public VehicleManager() {
+    public VehicleManager(HistoryManager history) {
+        historyManager = history;
         vehicles = new ArrayList<>();
         activeVehicles = new ArrayList<>();
         spawnArea = new ArrayList<>();
@@ -54,7 +56,7 @@ public class VehicleManager {
             }
             k++;
         }
-        Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size, speed, 0);
+        Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size, speed, 0, historyManager);
         vehicles.add(V);
         activeVehicles.add(V);
         return true;

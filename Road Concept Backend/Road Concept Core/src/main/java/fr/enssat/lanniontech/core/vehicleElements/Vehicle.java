@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
-import fr.enssat.lanniontech.core.Simulator;
+import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 
@@ -10,6 +10,7 @@ public class Vehicle {
     private Side frontSide;
     private Side backSide;
     private int ID;
+    private HistoryManager historyManager;
 
     private double Va = 0;      //speed in m/s
     private double A;           //acceleration
@@ -24,19 +25,18 @@ public class Vehicle {
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
-     *
-     * @param ID
+     *  @param ID
      *         identifier for the vehicle
      * @param start
      *         lane where the vehicle is placed
      * @param startPos
-     *         position in the lane of the new vehicle
+ *         position in the lane of the new vehicle
      * @param length
-     *         length of the vehicle
+*         length of the vehicle
      * @param speed
-     *         maximum speed of the vehicle
+     * @param historyManager
      */
-    public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime) {
+    public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime, HistoryManager historyManager) {
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
@@ -44,7 +44,8 @@ public class Vehicle {
         this.frontSide = new Side(length + startPos, this, start);
         this.backSide = new Side(startPos, this, start);
         this.time = initialTime;
-        Simulator.simulationHistory.AddPosition(getGPSPosition());
+        this.historyManager = historyManager;
+        historyManager.AddPosition(getGPSPosition());
     }
 
     @Deprecated
@@ -95,7 +96,7 @@ public class Vehicle {
         frontSide.move(dDone);
         this.time++;
         if (log) {
-            Simulator.simulationHistory.AddPosition(getGPSPosition());
+            historyManager.AddPosition(getGPSPosition());
         }
         Va += A * time;
     }

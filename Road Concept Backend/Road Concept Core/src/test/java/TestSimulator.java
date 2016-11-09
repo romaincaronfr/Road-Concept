@@ -42,7 +42,7 @@ public class TestSimulator {
         Sim.vehicleManager.addToSpawnArea(R);
 
         for (int i = 0; i < vehicleNumber; i++) {
-            System.out.println(Sim.vehicleManager.addVehicle());
+            Sim.vehicleManager.addVehicle();
         }
         System.out.println(Sim.vehicleManager.getVehiclesNumber());
 
