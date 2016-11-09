@@ -1,7 +1,12 @@
 package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.entities.geojson.*;
+import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
+import fr.enssat.lanniontech.api.entities.geojson.Feature;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
+import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
+import fr.enssat.lanniontech.api.entities.geojson.LineString;
+import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
@@ -11,7 +16,17 @@ import fr.enssat.lanniontech.api.utilities.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class MapService extends AbstractService {
 
@@ -342,7 +357,7 @@ public class MapService extends AbstractService {
             }
         }
 
-        for (Map.Entry<Feature, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
+        for (Entry<Feature, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
             List<Feature> myNewFeatures = new ArrayList<>();
             Feature myFirstFeature = entry.getKey();
             myNewFeatures.add(entry.getKey());
@@ -362,7 +377,8 @@ public class MapService extends AbstractService {
                     }
                 }
             }
-            deleteFeature(mapID, myFirstFeature.getUuid());
+            long deletedCount = mapFeatureRepository.delete(mapID, myFirstFeature.getUuid()); // FIXME: Pourquoi le uuid change?
+            LOGGER.debug("@@@ deleted feature count : " + deletedCount);
             for (Feature toAdd : myNewFeatures) {
                 mapFeatureRepository.create(mapID, toAdd);
             }
@@ -392,14 +408,19 @@ public class MapService extends AbstractService {
         LineString oneRoad = (LineString) one.getGeometry();
 
         LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
-        oneRoadFirstPart.addAll(oneRoad.getCoordinates().subList(0, oneIntersectionPointIndex+1));
+        oneRoadFirstPart.addAll(oneRoad.getCoordinates().subList(0, oneIntersectionPointIndex + 1));
         oneRoadFirstPart.add(NewCoordinate);
         LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
         oneRoadLastPart.add(NewCoordinate);
-        oneRoadLastPart.addAll(oneRoad.getCoordinates().subList(oneIntersectionPointIndex+1, oneRoad.getCoordinates().size()));
+        oneRoadLastPart.addAll(oneRoad.getCoordinates().subList(oneIntersectionPointIndex + 1, oneRoad.getCoordinates().size()));
 
         ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
         ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
+
+        newOneRoad1.getProperties().remove("id");
+        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
+        newOneRoad2.getProperties().remove("id");
+        newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
 
         List<Feature> listToReturn = new ArrayList<>();
         listToReturn.add(newOneRoad1);

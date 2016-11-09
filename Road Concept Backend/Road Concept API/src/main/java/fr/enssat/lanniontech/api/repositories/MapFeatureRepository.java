@@ -68,7 +68,10 @@ public class MapFeatureRepository extends MapRepository {
                 FindIterable<Document> queryResult = collection.find(query);
 
                 Document item = queryResult.iterator().next(); //FIXME: Ressource
-                return JSONHelper.fromJSON(item.toJson(), Feature.class);
+                Feature result = JSONHelper.fromJSON(item.toJson(), Feature.class);
+                String uuid = (String) result.getProperties().get("id");
+                result.setUuid(UUID.fromString(uuid));
+                return result;
             } catch (NoSuchElementException e) {
                 e.printStackTrace();
                 return null;
@@ -105,7 +108,11 @@ public class MapFeatureRepository extends MapRepository {
             try {
                 FeatureCollection features = new FeatureCollection();
                 for (Document item : collection.find()) {
-                    features.getFeatures().add(JSONHelper.fromJSON(item.toJson(), Feature.class));
+                    Feature result = JSONHelper.fromJSON(item.toJson(), Feature.class);
+                    String uuid = (String) result.getProperties().get("id");
+                    result.setUuid(UUID.fromString(uuid));
+
+                    features.getFeatures().add(result);
                 }
                 return features;
             } catch (Exception e) {
@@ -132,7 +139,11 @@ public class MapFeatureRepository extends MapRepository {
                 query.put("id", openStreetMapID);
                 FindIterable<Document> queryResult = collection.find(query);
                 Document item = queryResult.iterator().next();
-                return JSONHelper.fromJSON(item.toJson(), Feature.class);
+
+                Feature result = JSONHelper.fromJSON(item.toJson(), Feature.class);
+                String uuid = (String) result.getProperties().get("id");
+                result.setUuid(UUID.fromString(uuid));
+                return result;
             } catch (NoSuchElementException e) {
                 return null;
             } catch (Exception e) {
