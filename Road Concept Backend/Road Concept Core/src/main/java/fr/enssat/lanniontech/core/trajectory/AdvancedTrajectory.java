@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class AdvancedTrajectory extends Trajectory {
     private SimpleTrajectory source;
@@ -19,7 +20,8 @@ public class AdvancedTrajectory extends Trajectory {
 
     public static Logger LOG = LoggerFactory.getLogger(AdvancedTrajectory.class);
 
-    public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
+    public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination,UUID roadId) {
+        super(roadId);
         this.source = source;
         this.destination = destination;
 
@@ -70,6 +72,11 @@ public class AdvancedTrajectory extends Trajectory {
 
     public Trajectory getNext() {
         return destination;
+    }
+
+    @Override
+    public Trajectory getNext(UUID destination) {
+        return getNext();
     }
 
     public double getSpeedOfFirst() {

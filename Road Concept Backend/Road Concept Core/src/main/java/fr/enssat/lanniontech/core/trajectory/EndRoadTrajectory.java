@@ -4,12 +4,15 @@ import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
+import java.util.UUID;
+
 public class EndRoadTrajectory extends Trajectory {
     SimpleTrajectory destination;
     private SimpleTrajectory source;
     private PosFunction pf;
 
-    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination) {
+    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination,UUID roadId) {
+        super(roadId);
         this.source = source;
         this.destination = destination;
 
@@ -29,6 +32,11 @@ public class EndRoadTrajectory extends Trajectory {
 
     public Trajectory getNext() {
         return destination;
+    }
+
+    @Override
+    public Trajectory getNext(UUID destination) {
+        return getNext();
     }
 
     public double getSpeedOfFirst() {

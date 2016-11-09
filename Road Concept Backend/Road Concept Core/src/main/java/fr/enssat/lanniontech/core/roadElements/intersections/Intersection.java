@@ -25,10 +25,10 @@ public class Intersection {
 
         for (UUID uuid : roadSections.keySet()) {
             if (id != uuid) {
-                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory());
+                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory(),id);
                 trajectories.get(uuid).put(id, T);
 
-                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory());
+                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory(),uuid);
                 myTrajectories.put(uuid, T);
             }
         }

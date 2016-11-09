@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.core.managers;
 
-import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
@@ -102,7 +101,7 @@ public class RoadManager {
             if(RoadEdges.get(P).size()==1){
                 SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
                 SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
-                deadEnds.add(new EndRoadTrajectory(source,destination));
+                deadEnds.add(new EndRoadTrajectory(source,destination,source.getRoadId()));
             }
         }
     }
@@ -189,7 +188,7 @@ public class RoadManager {
             problem++;
         }
 
-        for (Trajectory trajectory : lane.getInsertTrajectory().getSourcesTrajectories()) {
+        for (Trajectory trajectory : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
             if(trajectory == null){
                 problem ++;
             }

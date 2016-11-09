@@ -1,20 +1,21 @@
 package fr.enssat.lanniontech.core.trajectory;
 
-import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class Trajectory {
 
     protected List<Side> vehiclesSides;
     protected double length;
+    protected UUID roadId;
 
-    public Trajectory() {
+    public Trajectory(UUID roadId) {
+        this.roadId = roadId;
         this.vehiclesSides = new ArrayList<>();
     }
 
@@ -71,6 +72,11 @@ public abstract class Trajectory {
     public abstract Trajectory getNext();
 
     /**
+     *  return the next trajectory to the road
+     */
+    public abstract Trajectory getNext(UUID destination);
+
+    /**
      * return the speed of the vehicle ahead
      */
     public abstract double getNextCarSpeed(Side side);
@@ -94,6 +100,13 @@ public abstract class Trajectory {
      * return the GPS position on the current trajectory
      */
     public abstract Position getGPS(double pos);
+
+    /**
+     * return the id of the trajectory road
+     */
+    public UUID getRoadId(){
+        return roadId;
+    }
 
     public double getLength() {
         return length;

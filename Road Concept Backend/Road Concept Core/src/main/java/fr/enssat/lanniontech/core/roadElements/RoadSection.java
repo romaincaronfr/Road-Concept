@@ -22,11 +22,11 @@ public class RoadSection {
     public RoadSection(Position A, Position B, Road myRoad) {
         this.A = A;
         this.B = B;
+        this.myRoad = myRoad;
         length = Position.length(A, B);
         function = new PosFunction(A, B);
         laneAB = new Lane(this, length);
         laneBA = new Lane(this, -length);
-        this.myRoad = myRoad;
     }
 
     public Lane getRightLane(Position P) {

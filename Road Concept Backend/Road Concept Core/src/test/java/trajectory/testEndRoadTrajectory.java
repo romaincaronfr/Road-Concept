@@ -8,6 +8,8 @@ import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.UUID;
+
 public class testEndRoadTrajectory {
 
     @Test
@@ -23,14 +25,14 @@ public class testEndRoadTrajectory {
         SimpleTrajectory AB = RS.getLaneAB().getInsertTrajectory();
         SimpleTrajectory BA = RS.getLaneBA().getInsertTrajectory();
 
-        EndRoadTrajectory BB = new EndRoadTrajectory(AB,BA);
+        EndRoadTrajectory BB = new EndRoadTrajectory(AB,BA, UUID.randomUUID());
 
         Assert.assertEquals(BB,AB.getNext());
         Assert.assertEquals(BA,BB.getNext());
 
         Assert.assertNull(BA.getNext());
 
-        EndRoadTrajectory AA = new EndRoadTrajectory(BA,AB);
+        EndRoadTrajectory AA = new EndRoadTrajectory(BA,AB,UUID.randomUUID());
 
         Assert.assertEquals(AA,BA.getNext());
         Assert.assertEquals(AB,AA.getNext());
