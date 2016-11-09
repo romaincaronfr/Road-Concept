@@ -4,9 +4,7 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Intersection {
 
@@ -69,5 +67,15 @@ public class Intersection {
             return false;
         }
         return true;
+    }
+
+    public List<AdvancedTrajectory> getTrajectories() {
+        List<AdvancedTrajectory> trajectories = new ArrayList<>();
+        for (Map<UUID,AdvancedTrajectory> map : this.trajectories.values()){
+            for (AdvancedTrajectory trajectory : map.values()){
+                trajectories.add(trajectory);
+            }
+        }
+        return trajectories;
     }
 }

@@ -68,4 +68,12 @@ public class EndRoadTrajectory extends Trajectory {
     public Position getGPS(double pos) {
         return pf.get(pos);
     }
+
+    public SimpleTrajectory getSource() {
+        return source;
+    }
+
+    public SimpleTrajectory getDestination() {
+        return destination;
+    }
 }

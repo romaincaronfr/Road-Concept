@@ -117,4 +117,12 @@ public class AdvancedTrajectory extends Trajectory {
             return destination.getGPS(pos - length);
         }
     }
+
+    public SimpleTrajectory getSource() {
+        return source;
+    }
+
+    public SimpleTrajectory getDestination() {
+        return destination;
+    }
 }

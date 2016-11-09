@@ -31,6 +31,8 @@ public class TestSimulator {
         Sim.roadManager.addRoadSectionToRoad(E, F, id3);
         Sim.roadManager.addRoadSectionToRoad(F, A, id3);
 
+        Sim.roadManager.closeRoads();
+
         int integrity = Sim.roadManager.checkIntegrity();
         if(integrity > 0){
             System.err.println(integrity + " roads corrupted !!!");

@@ -1,12 +1,14 @@
 package fr.enssat.lanniontech.core.managers;
 
+import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
-import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
-import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
-import fr.enssat.lanniontech.core.trajectory.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,10 @@ import java.util.UUID;
 
 
 public class RoadManager {
+
+    public static Logger LOG = LoggerFactory.getLogger(RoadManager.class);
+
+
     private Map<Position, List<RoadSection>> RoadEdges;
     private List<RoadSection> roadSections;
     private Map<UUID, Road> roads;
@@ -102,31 +108,93 @@ public class RoadManager {
     }
 
     public int checkIntegrity(){
-        int result = 0;
+        int lanesProblems = 0;
+        int intersectionProblems = 0;
+        int deadEndProblems = 0;
         Map<Trajectory,Integer> trajectoryToCheck = new HashMap<>();
 
         //check integrity for simple trajectories
-        for (RoadSection r : roadSections) {
-            if(r.getLaneAB().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneAB().getInsertTrajectory().getLength())){
-                result++;
-            }
-            if(r.getLaneBA().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneBA().getInsertTrajectory().getLength())){
-                result++;
-            }
 
-            //todo check if there is no null destination and source
+        for (RoadSection r : roadSections) {
+            lanesProblems += checkLane(r.getLaneAB());
+            lanesProblems += checkLane(r.getLaneBA());
 
             trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(),0);
             trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(),0);
         }
+        LOG.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
-        //todo check integrity for intersection
+        for (Intersection i : intersectionMap.values()){
+            List<AdvancedTrajectory> trajectories = i.getTrajectories();
+            if (trajectories.size() == 0){
+                intersectionProblems++;
+            }
+            for (AdvancedTrajectory trajectory : trajectories){
+                if(trajectory.getLength()<0){
+                    intersectionProblems++;
+                    LOG.error("AdvancedTrajectory length negative");
+                }
 
-        //todo check integrity for dead-ends
+                if(trajectory.getSource()==null){
+                    intersectionProblems++;
+                    LOG.error("AdvancedTrajectory source is null");
+                }
+
+                if(trajectory.getDestination()==null){
+                    intersectionProblems++;
+                    LOG.error("AdvancedTrajectory destination is null");
+                }
+
+                trajectoryToCheck.put(trajectory,0);
+            }
+        }
+        LOG.debug("integrity check result for Intersections(" + intersectionMap.size() + "): " + intersectionProblems);
+
+        for (EndRoadTrajectory trajectory : deadEnds){
+            if(trajectory.getLength()<0){
+                deadEndProblems++;
+                LOG.error("EndRoadTrajectory length negative");
+            }
+
+            if(trajectory.getSource()==null){
+                deadEndProblems++;
+                LOG.error("EndRoadTrajectory source is null");
+            }
+
+            if(trajectory.getDestination()==null){
+                deadEndProblems++;
+                LOG.error("EndRoadTrajectory destination is null");
+            }
+
+            trajectoryToCheck.put(trajectory,0);
+        }
+        LOG.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
 
         //todo check if all trajectories are accessible
 
-        return result;
+        return intersectionProblems+lanesProblems+deadEndProblems;
+    }
+
+    private int checkLane(Lane lane){
+        int problem = 0;
+        if(lane.getInsertTrajectory().getLength()<=0 || Double.isNaN(lane.getInsertTrajectory().getLength())){
+            problem++;
+        }
+
+        if(lane.getInsertTrajectory().getDestinationType() == TrajectoryType.Undefined){
+            problem++;
+        }
+
+        if(lane.getInsertTrajectory().getDestinationsTrajectories().size()==0){
+            problem++;
+        }
+
+        for (Trajectory trajectory : lane.getInsertTrajectory().getSourcesTrajectories()) {
+            if(trajectory == null){
+                problem ++;
+            }
+        }
+        return problem;
     }
 
 }
