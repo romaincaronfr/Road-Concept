@@ -12,6 +12,13 @@ import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.*;
 
 public class MapService extends AbstractService {
@@ -111,6 +118,14 @@ public class MapService extends AbstractService {
                 toAdd.getFeatures().add(feature);
             }
         }
+
+//        for (Feature one : toAdd) {
+//            for (Feature two : toAdd) {
+//                if (!(one == two)) {
+//                    detectIntersections(mapID, one, two, false);
+//                }
+//            }
+//        }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
