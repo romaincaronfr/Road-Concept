@@ -12,10 +12,13 @@ import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import fr.enssat.lanniontech.api.utilities.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -99,13 +102,13 @@ public class MapService extends AbstractService {
             }
         }
 
-//        for (Feature one : toAdd) {
-//            for (Feature two : toAdd) {
-//                if (!(one == two)) {
-//                    detectIntersections(mapID, one, two, false);
-//                }
-//            }
-//        }
+        //        for (Feature one : toAdd) {
+        //            for (Feature two : toAdd) {
+        //                if (!(one == two)) {
+        //                    detectIntersections(mapID, one, two, false);
+        //                }
+        //            }
+        //        }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
@@ -305,6 +308,12 @@ public class MapService extends AbstractService {
 
     public Feature addFeature(int mapID, Feature feature) {
         LineString createdRoad = (LineString) feature.getGeometry();
+
+        Map<Feature, List<Tuple<Coordinates, Coordinates>>> tab = new HashMap<>();
+
+        List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
+        Collections.fill(splitNewFeatureAt, Boolean.TRUE);
+
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
 
         for (int i = 0; i < potentialIntersections.size(); i++) {
@@ -315,8 +324,8 @@ public class MapService extends AbstractService {
                     LineString coordinaToCheck = (LineString) featureToCheck.getGeometry();
 
                     for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 2; j++) {
-                        Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j) ; // A = to check
-                        Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j+1);
+                        Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j); // A = to check
+                        Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j + 1);
 
                         Coordinates firstPointRoadB; // B = qu'on créé
                         Coordinates lastPointRoadB;
@@ -326,21 +335,29 @@ public class MapService extends AbstractService {
                             lastPointRoadB = createdRoad.getCoordinates().get(1);
                         } else {
                             firstPointRoadB = createdRoad.getCoordinates().get(i - 1);
-                            lastPointRoadB =createdRoad.getCoordinates().get(i);
+                            lastPointRoadB = createdRoad.getCoordinates().get(i);
                         }
 
                         Coordinates intersectionPoint = FuckIt.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
                         LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
                         if (intersectionPoint != null) {
-
+                            splitNewFeatureAt.set(i, true);
+                            if (tab.containsKey(featureToCheck)) {
+                                tab.get(featureToCheck).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), intersectionPoint));
+                            } else {
+                                List<Tuple<Coordinates, Coordinates>> list = new ArrayList<>();
+                                list.add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
+                                tab.put(featureToCheck, list);
+                            }
                         }
                     }
                 }
             }
         }
+        LOGGER.debug("" + tab);
 
-        mapFeatureRepository.create(mapID,feature);
+        feature.getProperties().put("id", feature.getUuid());
+        mapFeatureRepository.create(mapID, feature);
         return null;
     }
-
 }
