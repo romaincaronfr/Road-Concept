@@ -77,16 +77,28 @@ body {
     pointer-events: none;
 }
 
-#editBarMenu {
+#editBarMenu-part1 {
     position: absolute;
-    width: 80%;
+    width: 65%;
     bottom: 0;
-    left : 10%;
+    left : 5%;
     height: 8%;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 0px 0px 0px;
     background-color: #4f5d6b;
     z-index: 999;
 }
+#editBarMenu-part2 {
+    position: absolute;
+    width: 20%;
+    bottom: 0;
+    left : 70%;
+    height: 8%;
+    border-radius: 0px 10px 0px 0px;
+    background-color: #4f5d6b;
+    z-index: 999;
+}
+
+
 
 #editMenu {
     position: absolute;
@@ -130,4 +142,19 @@ body {
     text-align: center;
     line-height: 1.6em;
 }
+
+#timepicker {
+    top : 5px;
+    width: 100px;
+    border-radius: 5px 5px 5px 10px;
+}
+
+#timepicker-glyphicon {
+    width: 20%;
+}
+
+#timepicker-input {
+    width: 80%;
+}
+
 

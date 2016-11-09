@@ -6,7 +6,6 @@
  */
 
 app.mapSimulationView = Backbone.View.extend({
-// TODO : créer un fichier pareil que mapDetailCollection mais pour la simu, faire copier coler mais changer juste le lien (voir l'api de Maelig)
     el: '#body',
     map: null,
     tile: null,
@@ -140,8 +139,40 @@ app.mapSimulationView = Backbone.View.extend({
                 m = m < 10 ? '0' + m : m;
                 var time = h + ':' + m;
                 handle.text(time);
+                $('#timepicker').timepicker('setTime', time);
+
+                // TODO : enlever boucle infinie
+            },
+            change : function(event, ui){
+                var minutes = ui.value;
+                var h = Math.floor(minutes / 60);
+                var m = minutes % 60;
+                h = h < 10 ? '0' + h : h;
+                m = m < 10 ? '0' + m : m;
+                var time = h + ':' + m;
+                handle.text(time);
+
             }
         });
+
+        // Time picker
+        $('#timepicker').timepicker({
+            minuteStep: this.stepMinute,
+            template: false,
+            appendWidgetTo: 'body',
+            showSeconds: true,
+            showMeridian: false,
+            defaultTime: "10:30:00",
+            modalBackDrop : true
+        });
+
+        $('#timepicker').timepicker().on('changeTime.timepicker', function(e) {
+            console.log(e.time.hours+':'+e.time.minutes+':'+e.time.seconds);
+            var time = (e.time.hours*60) + e.time.minutes;
+            $( "#sliderSimulation" ).slider( "option", "value", time );
+        });
+
+        //$('#timepicker').timepicker('setTime', '12:45 AM');
 
 
         return this;
@@ -266,7 +297,6 @@ app.mapSimulationView = Backbone.View.extend({
             case 6:
                 //CAR
                 var angle = feature.getProperties().angle;
-                console.log(angle);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
@@ -496,5 +526,5 @@ app.mapSimulationView = Backbone.View.extend({
             model: model
         });
     },
-    
+
 });
