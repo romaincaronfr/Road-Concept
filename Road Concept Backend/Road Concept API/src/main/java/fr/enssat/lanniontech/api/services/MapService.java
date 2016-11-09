@@ -377,7 +377,7 @@ public class MapService extends AbstractService {
                     }
                 }
             }
-            long deletedCount = mapFeatureRepository.delete(mapID, myFirstFeature.getUuid()); // FIXME: Pourquoi le uuid change?
+            long deletedCount = mapFeatureRepository.delete(mapID, myFirstFeature.getUuid());
             LOGGER.debug("@@@ deleted feature count : " + deletedCount);
             for (Feature toAdd : myNewFeatures) {
                 mapFeatureRepository.create(mapID, toAdd);
