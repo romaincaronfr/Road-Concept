@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -100,13 +99,13 @@ public class MapService extends AbstractService {
             }
         }
 
-        for (Feature one : toAdd) {
-            for (Feature two : toAdd) {
-                if (!(one == two)) {
-                    detectIntersections(mapID, one, two, false);
-                }
-            }
-        }
+//        for (Feature one : toAdd) {
+//            for (Feature two : toAdd) {
+//                if (!(one == two)) {
+//                    detectIntersections(mapID, one, two, false);
+//                }
+//            }
+//        }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
@@ -302,127 +301,46 @@ public class MapService extends AbstractService {
         mapFeatureRepository.delete(mapID, featureUUID);
     }
 
+    //=============================================================
+
     public Feature addFeature(int mapID, Feature feature) {
+        LineString createdRoad = (LineString) feature.getGeometry();
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
-        boolean intersectionDeteted = false;
 
-        for (List<String> potentialIntersection : potentialIntersections) {
-            if (!potentialIntersection.isEmpty()) { //FIXME: C'est une intersections potential au point i de la nouvelle route
-                LOGGER.debug("Working on potential intersection : " + potentialIntersection);
+        for (int i = 0; i < potentialIntersections.size(); i++) {
+            if (!potentialIntersections.get(i).isEmpty()) {
 
-                for (String uuidToCheck : potentialIntersection) {
+                for (String uuidToCheck : potentialIntersections.get(i)) {
                     Feature featureToCheck = getFeature(mapID, UUID.fromString(uuidToCheck));
-                    boolean tmp = detectIntersections(mapID, feature, featureToCheck, true, indexToCheck);
-                    if (!intersectionDeteted && tmp) {
-                        intersectionDeteted = true;
+                    LineString coordinaToCheck = (LineString) featureToCheck.getGeometry();
+
+                    for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 2; j++) {
+                        Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j) ; // A = to check
+                        Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j+1);
+
+                        Coordinates firstPointRoadB; // B = qu'on créé
+                        Coordinates lastPointRoadB;
+
+                        if (i == 0) {
+                            firstPointRoadB = createdRoad.getCoordinates().get(0);
+                            lastPointRoadB = createdRoad.getCoordinates().get(1);
+                        } else {
+                            firstPointRoadB = createdRoad.getCoordinates().get(i - 1);
+                            lastPointRoadB =createdRoad.getCoordinates().get(i);
+                        }
+
+                        Coordinates intersectionPoint = FuckIt.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+                        LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
+                        if (intersectionPoint != null) {
+
+                        }
                     }
                 }
             }
         }
 
-        // Ne pas create si les intersections ont fait un split
-        if (!intersectionDeteted) {
-            feature.getProperties().put("id", feature.getUuid());
-            mapFeatureRepository.create(mapID, feature);
-        }
-        return null; //mapFeatureRepository.create(mapID, feature);
+        mapFeatureRepository.create(mapID,feature);
+        return null;
     }
 
-    private boolean detectIntersections(int mapID, Feature one, Feature two, boolean fullMode, Integer indexToCheck) {
-        return fullMode ? detectFullIntersections(mapID, one, two, indexToCheck) : detectBasicIntersections(mapID, one, two);
-    }
-
-    private boolean detectFullIntersections(int mapID, Feature one, Feature two, int indexToCheck) { // indexto check index d'un point de la feature B (la nouvelle)
-        LOGGER.debug("Start detect full intersections");
-        if (one.getGeometry() instanceof LineString && two.getGeometry() instanceof LineString) {
-
-            LineString oneRoad = (LineString) one.getGeometry();
-            LineString twoRoad = (LineString) two.getGeometry();
-
-            for (Coordinates coord : oneRoad.getCoordinates()) {
-
-            }
-
-
-
-
-            // FIXME: Ne pas faire entre premier et dernier point mais il faut le faire entre chaque segment 2 à 2 en coordonées
-            Coordinates firstPointRoadA = oneRoad.getCoordinates().getFirst();
-            Coordinates lastPointRoadA = oneRoad.getCoordinates().getLast();
-            Coordinates firstPointRoadB = twoRoad.getCoordinates().getFirst();
-            Coordinates lastPointRoadB = twoRoad.getCoordinates().getLast();
-
-            Coordinates intersectionPoint = FuckIt.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
-            LOGGER.debug("intersection point computed = " + intersectionPoint);
-            if (intersectionPoint != null) {
-                oneRoad.add(intersectionPoint); //FIXME: Faut il trier pour insérer au bon endroit ?
-                twoRoad.add(intersectionPoint);
-                return detectBasicIntersections(mapID, one, two);
-            }
-        }
-        return false;
-    }
-
-    // Détection d'intersection quand deux features ont un point en commun (pour OSM)
-    private boolean detectBasicIntersections(int mapID, Feature one, Feature two) {
-        boolean result = false;
-        if (one.getGeometry() instanceof LineString && two.getGeometry() instanceof LineString) {
-            LineString oneRoad = (LineString) one.getGeometry();
-            LineString twoRoad = (LineString) two.getGeometry();
-
-            for (Coordinates oneCoord : oneRoad.getCoordinates()) {
-                for (Coordinates twoCoord : twoRoad.getCoordinates()) {
-                    if (oneCoord.getLatitude() == twoCoord.getLatitude() && oneCoord.getLongitude() == twoCoord.getLongitude()) {
-                        LOGGER.debug("Intersection détectée au point : " + oneCoord);
-
-                        int oneIntersectionPointIndex = oneRoad.getCoordinates().indexOf(oneCoord); // oneCoord == twoCoord
-                        int twoIntersectionPointIndex = twoRoad.getCoordinates().indexOf(twoCoord);
-
-                        Feature newOneRoad1 = new Feature();
-                        Feature newOneRoad2 = new Feature();
-                        newOneRoad1.setProperties(one.getProperties());
-                        newOneRoad2.setProperties(one.getProperties());
-                        newOneRoad1.setGeometry(new LineString());
-                        newOneRoad2.setGeometry(new LineString());
-
-                        Feature newTwoRoad1 = new Feature();
-                        Feature newTwoRoad2 = new Feature();
-                        newTwoRoad1.setProperties(one.getProperties());
-                        newTwoRoad2.setProperties(one.getProperties());
-                        newTwoRoad1.setGeometry(new LineString());
-                        newTwoRoad2.setGeometry(new LineString());
-
-                        LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
-                        oneRoadFirstPart.addAll(oneRoad.getCoordinates().subList(0, oneIntersectionPointIndex));
-                        LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
-                        oneRoadLastPart.addAll(oneRoad.getCoordinates().subList(oneIntersectionPointIndex, oneRoad.getCoordinates().size()));
-                        LinkedList<Coordinates> twoRoadFirstPart = new LinkedList<>();
-                        oneRoadFirstPart.addAll(twoRoad.getCoordinates().subList(0, twoIntersectionPointIndex));
-                        LinkedList<Coordinates> twoRoadLastPart = new LinkedList<>();
-                        oneRoadLastPart.addAll(twoRoad.getCoordinates().subList(twoIntersectionPointIndex, twoRoad.getCoordinates().size()));
-
-                        ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
-                        ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
-                        ((LineString) newTwoRoad1.getGeometry()).setCoordinates(twoRoadFirstPart);
-                        ((LineString) newTwoRoad2.getGeometry()).setCoordinates(twoRoadLastPart);
-
-                        deleteFeature(mapID, one.getUuid());
-                        deleteFeature(mapID, two.getUuid());
-
-                        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
-                        newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
-                        newTwoRoad1.getProperties().put("id", newTwoRoad1.getUuid());
-                        newTwoRoad2.getProperties().put("id", newTwoRoad2.getUuid());
-
-                        mapFeatureRepository.create(mapID, newOneRoad1);
-                        mapFeatureRepository.create(mapID, newOneRoad2);
-                        mapFeatureRepository.create(mapID, newTwoRoad1);
-                        mapFeatureRepository.create(mapID, newTwoRoad2);
-                        result = true;
-                    }
-                }
-            }
-        }
-        return result;
-    }
 }
