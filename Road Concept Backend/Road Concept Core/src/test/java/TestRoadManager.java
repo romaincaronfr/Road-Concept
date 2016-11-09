@@ -17,9 +17,10 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
+        Road R = new Road(UUID.randomUUID());
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(B, C);
+        RoadSection RS1 = RM.addRoadSection(A, B,R);
+        RoadSection RS2 = RM.addRoadSection(B, C,R);
 
         Assert.assertTrue(RS1.getLaneAB().getNextLane() == RS2.getLaneAB());
         Assert.assertTrue(RS2.getLaneBA().getNextLane() == RS1.getLaneBA());
@@ -33,9 +34,10 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
+        Road R = new Road(UUID.randomUUID());
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(C, A);
+        RoadSection RS1 = RM.addRoadSection(A, B, R);
+        RoadSection RS2 = RM.addRoadSection(C, A, R);
 
         Assert.assertTrue(RS2.getLaneAB().getNextLane() == RS1.getLaneAB());
         Assert.assertTrue(RS1.getLaneBA().getNextLane() == RS2.getLaneBA());

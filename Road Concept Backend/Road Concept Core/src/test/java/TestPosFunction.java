@@ -1,9 +1,12 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.UUID;
 
 /**
  * Created by 4r3 on 04/10/16.

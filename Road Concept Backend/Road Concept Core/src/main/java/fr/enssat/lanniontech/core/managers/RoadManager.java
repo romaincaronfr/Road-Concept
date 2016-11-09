@@ -33,10 +33,11 @@ public class RoadManager {
 
     @Deprecated
     public RoadSection addRoadSection(Position A, Position B) {
-        return addRoadSection(A, B, null);
+        Road R = new Road(UUID.randomUUID());
+        return addRoadSection(A, B, R);
     }
 
-    private RoadSection addRoadSection(Position A, Position B, Road myRoad) {
+    public RoadSection addRoadSection(Position A, Position B, Road myRoad) {
         RoadSection RS1 = new RoadSection(A, B, myRoad);
 
         roadSections.add(RS1);

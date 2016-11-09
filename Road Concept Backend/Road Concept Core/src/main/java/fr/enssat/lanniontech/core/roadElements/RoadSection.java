@@ -3,6 +3,8 @@ package fr.enssat.lanniontech.core.roadElements;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 
+import java.util.UUID;
+
 public class RoadSection {
     private Position A;
     private Position B;
@@ -16,7 +18,7 @@ public class RoadSection {
 
     @Deprecated
     public RoadSection(Position A, Position B) {
-        this(A, B, null);
+        this(A, B, new Road(UUID.randomUUID()));
     }
 
     public RoadSection(Position A, Position B, Road myRoad) {

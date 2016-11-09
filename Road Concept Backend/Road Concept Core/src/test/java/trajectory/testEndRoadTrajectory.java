@@ -17,7 +17,7 @@ public class testEndRoadTrajectory {
         Position A = new Position(0,0);
         Position B = new Position(0,1);
 
-        RoadSection RS = new RoadSection(A,B,null);
+        RoadSection RS = new RoadSection(A,B);
 
         Assert.assertNull(RS.getLaneAB().getInsertTrajectory().getNext());
         Assert.assertNull(RS.getLaneBA().getInsertTrajectory().getNext());
