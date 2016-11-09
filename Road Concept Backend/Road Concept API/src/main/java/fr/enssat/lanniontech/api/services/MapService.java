@@ -12,7 +12,9 @@ import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -133,6 +135,7 @@ public class MapService extends AbstractService {
         LOGGER.debug("@@@ TIME SPENT ON EXPERIMENTAL STUFF : " + duration / 1000000 + "milliseconds");
         LOGGER.debug("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
         return toAdd.getFeatures().size();
+
     }
 
     //FIXME: refactor + extraire en constante les colonnes

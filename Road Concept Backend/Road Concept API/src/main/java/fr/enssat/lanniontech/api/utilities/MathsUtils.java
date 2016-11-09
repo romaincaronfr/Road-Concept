@@ -12,7 +12,7 @@ public final class MathsUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(MathsUtils.class);
 
     public static double roundGPS(double value) {
-        return round(value, 9);
+        return round(value, 7);
     }
 
     public static double round(double value, int places) {
