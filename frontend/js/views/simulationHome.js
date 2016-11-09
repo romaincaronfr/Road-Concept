@@ -5,7 +5,6 @@
 app.simulationHomeView = Backbone.View.extend({
 
     el: '#content',
-    id: null,
 
     events: {
 
