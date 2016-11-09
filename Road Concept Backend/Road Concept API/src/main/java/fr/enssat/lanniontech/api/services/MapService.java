@@ -96,7 +96,7 @@ public class MapService extends AbstractService {
         for (Feature feature : features) {
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
-                toAdd.add(feature);
+                toAdd.getFeatures().add(feature);
             }
         }
 
@@ -303,42 +303,69 @@ public class MapService extends AbstractService {
     }
 
     public Feature addFeature(int mapID, Feature feature) {
-        List<String[]> potentialIntersections = (List<String[]>) feature.getProperties().get("intersections");
-        if (potentialIntersections != null) {
-            for (int i = 0; i < potentialIntersections.size(); i++) {
-                if (potentialIntersections.get(i).length < 1) {
-                    continue;
-                } else {
-                    String[] point = potentialIntersections.get(i);
-                    for (int j = 0; j < point.length; j++) {
-                        String uuidToCheck = point[j];
-                        Feature featureToCheck = getFeature(mapID, UUID.fromString(uuidToCheck));
-                        detectIntersections(mapID, feature, featureToCheck, true);
+        List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
+        boolean intersectionDeteted = false;
+
+        for (List<String> potentialIntersection : potentialIntersections) {
+            if (!potentialIntersection.isEmpty()) { //FIXME: C'est une intersections potential au point i de la nouvelle route
+                LOGGER.debug("Working on potential intersection : " + potentialIntersection);
+
+                for (String uuidToCheck : potentialIntersection) {
+                    Feature featureToCheck = getFeature(mapID, UUID.fromString(uuidToCheck));
+                    boolean tmp = detectIntersections(mapID, feature, featureToCheck, true, indexToCheck);
+                    if (!intersectionDeteted && tmp) {
+                        intersectionDeteted = true;
                     }
                 }
             }
-            //LOGGER.debug("@@@ " + foo.getClass());
-            //LOGGER.debug("@@@ " + foo);
         }
 
-        feature.getProperties().put("id", feature.getUuid());
-        return mapFeatureRepository.create(mapID, feature);
-    }
-
-    private void detectIntersections(int mapID, Feature one, Feature two, boolean fullMode) {
-        if (fullMode) {
-            detectFullIntersections(mapID, one, two);
-        } else {
-            detectBasicIntersections(mapID, one, two);
+        // Ne pas create si les intersections ont fait un split
+        if (!intersectionDeteted) {
+            feature.getProperties().put("id", feature.getUuid());
+            mapFeatureRepository.create(mapID, feature);
         }
+        return null; //mapFeatureRepository.create(mapID, feature);
     }
 
-    private void detectFullIntersections(int mapID, Feature one, Feature two) {
+    private boolean detectIntersections(int mapID, Feature one, Feature two, boolean fullMode, Integer indexToCheck) {
+        return fullMode ? detectFullIntersections(mapID, one, two, indexToCheck) : detectBasicIntersections(mapID, one, two);
+    }
 
+    private boolean detectFullIntersections(int mapID, Feature one, Feature two, int indexToCheck) { // indexto check index d'un point de la feature B (la nouvelle)
+        LOGGER.debug("Start detect full intersections");
+        if (one.getGeometry() instanceof LineString && two.getGeometry() instanceof LineString) {
+
+            LineString oneRoad = (LineString) one.getGeometry();
+            LineString twoRoad = (LineString) two.getGeometry();
+
+            for (Coordinates coord : oneRoad.getCoordinates()) {
+
+            }
+
+
+
+
+            // FIXME: Ne pas faire entre premier et dernier point mais il faut le faire entre chaque segment 2 à 2 en coordonées
+            Coordinates firstPointRoadA = oneRoad.getCoordinates().getFirst();
+            Coordinates lastPointRoadA = oneRoad.getCoordinates().getLast();
+            Coordinates firstPointRoadB = twoRoad.getCoordinates().getFirst();
+            Coordinates lastPointRoadB = twoRoad.getCoordinates().getLast();
+
+            Coordinates intersectionPoint = FuckIt.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+            LOGGER.debug("intersection point computed = " + intersectionPoint);
+            if (intersectionPoint != null) {
+                oneRoad.add(intersectionPoint); //FIXME: Faut il trier pour insérer au bon endroit ?
+                twoRoad.add(intersectionPoint);
+                return detectBasicIntersections(mapID, one, two);
+            }
+        }
+        return false;
     }
 
     // Détection d'intersection quand deux features ont un point en commun (pour OSM)
-    private void detectBasicIntersections(int mapID, Feature one, Feature two) {
+    private boolean detectBasicIntersections(int mapID, Feature one, Feature two) {
+        boolean result = false;
         if (one.getGeometry() instanceof LineString && two.getGeometry() instanceof LineString) {
             LineString oneRoad = (LineString) one.getGeometry();
             LineString twoRoad = (LineString) two.getGeometry();
@@ -349,7 +376,7 @@ public class MapService extends AbstractService {
                         LOGGER.debug("Intersection détectée au point : " + oneCoord);
 
                         int oneIntersectionPointIndex = oneRoad.getCoordinates().indexOf(oneCoord); // oneCoord == twoCoord
-                        int twoIntersectionPointIndex = twoRoad.getCoordinates().indexOf(twoCoord); // oneCoord == twoCoord
+                        int twoIntersectionPointIndex = twoRoad.getCoordinates().indexOf(twoCoord);
 
                         Feature newOneRoad1 = new Feature();
                         Feature newOneRoad2 = new Feature();
@@ -381,13 +408,21 @@ public class MapService extends AbstractService {
 
                         deleteFeature(mapID, one.getUuid());
                         deleteFeature(mapID, two.getUuid());
-                        addFeature(mapID, newOneRoad1);
-                        addFeature(mapID, newOneRoad2);
-                        addFeature(mapID, newTwoRoad1);
-                        addFeature(mapID, newTwoRoad2);
+
+                        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
+                        newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
+                        newTwoRoad1.getProperties().put("id", newTwoRoad1.getUuid());
+                        newTwoRoad2.getProperties().put("id", newTwoRoad2.getUuid());
+
+                        mapFeatureRepository.create(mapID, newOneRoad1);
+                        mapFeatureRepository.create(mapID, newOneRoad2);
+                        mapFeatureRepository.create(mapID, newTwoRoad1);
+                        mapFeatureRepository.create(mapID, newTwoRoad2);
+                        result = true;
                     }
                 }
             }
         }
+        return result;
     }
 }

@@ -2,13 +2,13 @@ package fr.enssat.lanniontech.api.entities.geojson;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import fr.enssat.lanniontech.api.utilities.jackson.LngLatAltDeserializer;
-import fr.enssat.lanniontech.api.utilities.jackson.LngLatAltSerializer;
+import fr.enssat.lanniontech.api.utilities.jackson.CoordinatesDeserializer;
+import fr.enssat.lanniontech.api.utilities.jackson.CoordinatesSerializer;
 
 import java.io.Serializable;
 
-@JsonDeserialize(using = LngLatAltDeserializer.class)
-@JsonSerialize(using = LngLatAltSerializer.class)
+@JsonDeserialize(using = CoordinatesDeserializer.class)
+@JsonSerialize(using = CoordinatesSerializer.class)
 public class Coordinates implements Serializable {
 
     private double longitude;

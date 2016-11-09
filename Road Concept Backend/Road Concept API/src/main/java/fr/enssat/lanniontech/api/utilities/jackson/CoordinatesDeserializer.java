@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LngLatAltDeserializer extends JsonDeserializer<Coordinates> {
+public class CoordinatesDeserializer extends JsonDeserializer<Coordinates> {
 
     @Override
     public Coordinates deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {

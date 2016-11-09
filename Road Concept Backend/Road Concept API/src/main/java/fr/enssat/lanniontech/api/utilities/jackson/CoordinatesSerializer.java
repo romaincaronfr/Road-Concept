@@ -7,7 +7,7 @@ import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
 
 import java.io.IOException;
 
-public class LngLatAltSerializer extends JsonSerializer<Coordinates> {
+public class CoordinatesSerializer extends JsonSerializer<Coordinates> {
 
     private static final long POW10[] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
 

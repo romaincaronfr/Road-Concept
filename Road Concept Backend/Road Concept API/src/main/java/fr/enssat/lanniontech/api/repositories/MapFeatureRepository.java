@@ -12,6 +12,7 @@ import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +66,8 @@ public class MapFeatureRepository extends MapRepository {
                 BasicDBObject query = new BasicDBObject();
                 query.put("properties.id", featureUUID.toString());
                 FindIterable<Document> queryResult = collection.find(query);
-                Document item = queryResult.iterator().next();
+
+                Document item = queryResult.iterator().next(); //FIXME: Ressource
                 return JSONHelper.fromJSON(item.toJson(), Feature.class);
             } catch (NoSuchElementException e) {
                 e.printStackTrace();
@@ -88,6 +90,7 @@ public class MapFeatureRepository extends MapRepository {
                 DeleteResult deleteResult = collection.deleteOne(query);
                 return deleteResult.getDeletedCount();
             } catch (Exception e) {
+                LOGGER.error(ExceptionUtils.getStackTrace(e));
                 throw new DatabaseOperationException("Error occured @@@ TODO", e);
             }
         }
@@ -102,7 +105,7 @@ public class MapFeatureRepository extends MapRepository {
             try {
                 FeatureCollection features = new FeatureCollection();
                 for (Document item : collection.find()) {
-                    features.add(JSONHelper.fromJSON(item.toJson(), Feature.class));
+                    features.getFeatures().add(JSONHelper.fromJSON(item.toJson(), Feature.class));
                 }
                 return features;
             } catch (Exception e) {
