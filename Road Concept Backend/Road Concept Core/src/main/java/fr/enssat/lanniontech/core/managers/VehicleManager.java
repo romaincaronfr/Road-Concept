@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.managers;
 
+import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
@@ -15,13 +16,15 @@ public class VehicleManager {
     private List<RoadSection> spawnArea;
     private Random gen;
     private HistoryManager historyManager;
+    private PathFinder pathFinder;
 
-    public VehicleManager(HistoryManager history) {
+    public VehicleManager(HistoryManager history,RoadManager roadManager) {
         historyManager = history;
         vehicles = new ArrayList<>();
         activeVehicles = new ArrayList<>();
         spawnArea = new ArrayList<>();
         gen = new Random();
+        pathFinder = new PathFinder(roadManager);
     }
 
     public void addToSpawnArea(Road R) {

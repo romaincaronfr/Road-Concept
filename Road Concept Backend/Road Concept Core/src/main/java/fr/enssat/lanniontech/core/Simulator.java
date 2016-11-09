@@ -35,7 +35,7 @@ public class Simulator implements Runnable {
         roadManager = new RoadManager();
         positionManager = new PositionManager();
         historyManager = new HistoryManager();
-        vehicleManager = new VehicleManager(historyManager);
+        vehicleManager = new VehicleManager(historyManager,roadManager);
 
         progress = 0;
 
