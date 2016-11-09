@@ -108,24 +108,9 @@ public class MapService extends AbstractService {
 
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
-                toAdd.add(feature);
+                toAdd.getFeatures().add(feature);
             }
         }
-
-        //        for (Feature one : toAdd) {
-        //            for (Feature two : toAdd) {
-        //                if (!(one == two)) {
-        //                    detectIntersections(mapID, one, two, false);
-        //                }
-        //            }
-        //        }
-//        for (Feature one : toAdd) {
-//            for (Feature two : toAdd) {
-//                if (!(one == two)) {
-//                    detectIntersections(mapID, one, two, false);
-//                }
-//            }
-//        }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
@@ -133,7 +118,6 @@ public class MapService extends AbstractService {
         LOGGER.debug("@@@ TIME SPENT ON EXPERIMENTAL STUFF : " + duration / 1000000 + "milliseconds");
         LOGGER.debug("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
         return toAdd.getFeatures().size();
-
     }
 
     //FIXME: refactor + extraire en constante les colonnes
@@ -384,6 +368,8 @@ public class MapService extends AbstractService {
                     }
                 }
             }
+            //LOGGER.debug("@@@ " + foo.getClass());
+            //LOGGER.debug("@@@ " + foo);
         }
 
         for (Map.Entry<UUID,Feature> entry : tab.entrySet()){
@@ -521,4 +507,3 @@ public class MapService extends AbstractService {
         return newOneRoad1;
     }
 }
-
