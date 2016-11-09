@@ -6,6 +6,7 @@ import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public abstract class Trajectory {
@@ -100,6 +101,11 @@ public abstract class Trajectory {
      * return the GPS position on the current trajectory
      */
     public abstract Position getGPS(double pos);
+
+    /**
+     * explore the trajectory and set its value in Map at true, used to verify the integrity of the model
+     */
+    public abstract void explore(Map<Trajectory, Boolean> trajectoryMap);
 
     /**
      * return the id of the trajectory road

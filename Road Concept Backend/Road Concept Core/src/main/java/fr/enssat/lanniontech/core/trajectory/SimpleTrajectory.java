@@ -266,4 +266,13 @@ public class SimpleTrajectory extends Trajectory {
     public void setInverted(boolean inverted) {
         this.inverted = inverted;
     }
+
+    public void explore(Map<Trajectory,Boolean> trajectoryMap){
+        if(!trajectoryMap.get(this)){
+            trajectoryMap.replace(this,true);
+            for (Trajectory trajectory : destinationsTrajectories.values()){
+                trajectory.explore(trajectoryMap);
+            }
+        }
+    }
 }

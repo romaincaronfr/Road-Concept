@@ -62,8 +62,8 @@ public class Vehicle {
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        double Sa = this.distanceToNextCar();
-        double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
+        //double Sa = this.distanceToNextCar();
+        //double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
         //A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
         A = 1;
     }

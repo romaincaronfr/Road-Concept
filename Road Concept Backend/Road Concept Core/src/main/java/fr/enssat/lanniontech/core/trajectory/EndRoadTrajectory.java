@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class EndRoadTrajectory extends Trajectory {
@@ -83,5 +84,12 @@ public class EndRoadTrajectory extends Trajectory {
 
     public SimpleTrajectory getDestination() {
         return destination;
+    }
+
+    public void explore(Map<Trajectory,Boolean> trajectoryMap){
+        if(!trajectoryMap.get(this)){
+            trajectoryMap.replace(this,true);
+            this.getDestination().explore(trajectoryMap);
+        }
     }
 }

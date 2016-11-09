@@ -9,11 +9,7 @@ import fr.enssat.lanniontech.core.trajectory.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public class RoadManager {
@@ -110,7 +106,8 @@ public class RoadManager {
         int lanesProblems = 0;
         int intersectionProblems = 0;
         int deadEndProblems = 0;
-        Map<Trajectory,Integer> trajectoryToCheck = new HashMap<>();
+        int trajectoryProblems = 0;
+        Map<Trajectory,Boolean> trajectoryToCheck = new HashMap<>();
 
         //check integrity for simple trajectories
 
@@ -118,8 +115,8 @@ public class RoadManager {
             lanesProblems += checkLane(r.getLaneAB());
             lanesProblems += checkLane(r.getLaneBA());
 
-            trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(),0);
-            trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(),0);
+            trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(),false);
+            trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(),false);
         }
         LOG.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
@@ -144,7 +141,7 @@ public class RoadManager {
                     LOG.error("AdvancedTrajectory destination is null");
                 }
 
-                trajectoryToCheck.put(trajectory,0);
+                trajectoryToCheck.put(trajectory,false);
             }
         }
         LOG.debug("integrity check result for Intersections(" + intersectionMap.size() + "): " + intersectionProblems);
@@ -165,13 +162,13 @@ public class RoadManager {
                 LOG.error("EndRoadTrajectory destination is null");
             }
 
-            trajectoryToCheck.put(trajectory,0);
+            trajectoryToCheck.put(trajectory,false);
         }
         LOG.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
 
-        //todo check if all trajectories are accessible
+        trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
 
-        return intersectionProblems+lanesProblems+deadEndProblems;
+        return intersectionProblems+lanesProblems+deadEndProblems+trajectoryProblems;
     }
 
     private int checkLane(Lane lane){
@@ -194,6 +191,27 @@ public class RoadManager {
             }
         }
         return problem;
+    }
+
+    private int checkTrajectoryAccess(Map<Trajectory,Boolean> trajectoryMap){
+        int notExploredTrajetories = 0;
+        LOG.debug("Total trajectories: " + trajectoryMap.size());
+        Trajectory start = (Trajectory) trajectoryMap.keySet().toArray()[0];
+        try {
+            start.explore(trajectoryMap);
+        }catch (StackOverflowError e){
+            return 1;
+        }
+
+
+        for(boolean explored : trajectoryMap.values()){
+            if (!explored){
+                notExploredTrajetories++;
+            }
+        }
+        LOG.debug(" trajectories not reached: " + notExploredTrajetories);
+
+        return notExploredTrajetories;
     }
 
 }

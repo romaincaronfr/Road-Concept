@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class AdvancedTrajectory extends Trajectory {
@@ -131,5 +132,12 @@ public class AdvancedTrajectory extends Trajectory {
 
     public SimpleTrajectory getDestination() {
         return destination;
+    }
+
+    public void explore(Map<Trajectory,Boolean> trajectoryMap){
+        if(!trajectoryMap.get(this)){
+            trajectoryMap.replace(this,true);
+            this.getDestination().explore(trajectoryMap);
+        }
     }
 }
