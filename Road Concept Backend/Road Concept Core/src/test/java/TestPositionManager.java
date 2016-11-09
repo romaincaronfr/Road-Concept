@@ -1,4 +1,4 @@
-import fr.enssat.lanniontech.core.PositionManager;
+import fr.enssat.lanniontech.core.managers.PositionManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import org.junit.Assert;
 import org.junit.Test;

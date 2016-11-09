@@ -1,4 +1,4 @@
-import fr.enssat.lanniontech.core.SimulationHistory;
+import fr.enssat.lanniontech.core.managers.SimulationHistory;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import org.junit.Assert;
 import org.junit.Test;

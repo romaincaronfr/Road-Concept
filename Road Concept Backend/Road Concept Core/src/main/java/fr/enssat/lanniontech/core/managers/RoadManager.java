@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.core;
+package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
@@ -20,10 +20,12 @@ public class RoadManager {
     private List<RoadSection> roadSections;
     private Map<UUID, Road> roads;
     private Map<Position, Intersection> intersectionMap;
+    private List<EndRoadTrajectory> deadEnds;
 
     public RoadManager() {
         RoadEdges = new HashMap<>();
         roadSections = new ArrayList<>();
+        deadEnds = new ArrayList<>();
         roads = new HashMap<>();
         intersectionMap = new HashMap<>();
     }
@@ -94,13 +96,16 @@ public class RoadManager {
             if(RoadEdges.get(P).size()==1){
                 SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
                 SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
-                new EndRoadTrajectory(source,destination);
+                deadEnds.add(new EndRoadTrajectory(source,destination));
             }
         }
     }
 
     public int checkIntegrity(){
         int result = 0;
+        Map<Trajectory,Integer> trajectoryToCheck = new HashMap<>();
+
+        //check integrity for simple trajectories
         for (RoadSection r : roadSections) {
             if(r.getLaneAB().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneAB().getInsertTrajectory().getLength())){
                 result++;
@@ -108,8 +113,19 @@ public class RoadManager {
             if(r.getLaneBA().getInsertTrajectory().getLength()<=0 || Double.isNaN(r.getLaneBA().getInsertTrajectory().getLength())){
                 result++;
             }
+
+            //todo check if there is no null destination and source
+
+            trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(),0);
+            trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(),0);
         }
+
+        //todo check integrity for intersection
+
+        //todo check integrity for dead-ends
+
         //todo check if all trajectories are accessible
+
         return result;
     }
 

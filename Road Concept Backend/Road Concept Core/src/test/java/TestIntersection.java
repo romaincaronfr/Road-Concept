@@ -1,4 +1,4 @@
-import fr.enssat.lanniontech.core.RoadManager;
+import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;

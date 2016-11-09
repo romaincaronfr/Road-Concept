@@ -1,5 +1,9 @@
 package fr.enssat.lanniontech.core;
 
+import fr.enssat.lanniontech.core.managers.PositionManager;
+import fr.enssat.lanniontech.core.managers.RoadManager;
+import fr.enssat.lanniontech.core.managers.SimulationHistory;
+import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

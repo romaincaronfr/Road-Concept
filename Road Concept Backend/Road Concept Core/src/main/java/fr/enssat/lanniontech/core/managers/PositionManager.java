@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.core;
+package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.Position;
 
