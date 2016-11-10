@@ -31,6 +31,7 @@ app.mapSimulationView = Backbone.View.extend({
     },
 
     render: function () {
+        var self = this;
         //Supression du content
         this.mapDetailsCollectionSimulation.reset();
         $('#content').empty();
@@ -85,7 +86,6 @@ app.mapSimulationView = Backbone.View.extend({
         this.map.addLayer(this.vectorLayer);
 
         //Trigger du click sur la map
-        var self = this;
         this.selectPointer = new ol.interaction.Select({
             layers: [this.vectorLayer],
             style: function (feature, resolution) {
@@ -132,24 +132,13 @@ app.mapSimulationView = Backbone.View.extend({
                 handle.text( $( this ).slider( "value" ) );
             },
             slide: function( event, ui ) {
-                var minutes = ui.value;
-                var h = Math.floor(minutes / 60);
-                var m = minutes % 60;
-                h = h < 10 ? '0' + h : h;
-                m = m < 10 ? '0' + m : m;
-                var time = h + ':' + m;
+                var time = self.convertMinsToHoursMins(ui.value);
                 handle.text(time);
                 $('#timepicker').timepicker('setTime', time);
-
-                // TODO : enlever boucle infinie
+                
             },
             change : function(event, ui){
-                var minutes = ui.value;
-                var h = Math.floor(minutes / 60);
-                var m = minutes % 60;
-                h = h < 10 ? '0' + h : h;
-                m = m < 10 ? '0' + m : m;
-                var time = h + ':' + m;
+                var time = self.convertMinsToHoursMins(ui.value);
                 handle.text(time);
 
             }
@@ -527,4 +516,12 @@ app.mapSimulationView = Backbone.View.extend({
         });
     },
 
+    convertMinsToHoursMins: function (minutes) {
+        var h = Math.floor(minutes / 60);
+        var m = minutes % 60;
+        h = h < 10 ? '0' + h : h;
+        m = m < 10 ? '0' + m : m;
+        var time = h + ':' + m;
+        return time;
+    },
 });
