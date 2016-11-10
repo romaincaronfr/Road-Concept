@@ -310,6 +310,8 @@ public class MapService extends AbstractService {
     //=============================================================
 
     public Feature addFeature(int mapID, Feature feature) {
+        int intersectionsDetectedCount = 0;
+
         LineString createdRoad = (LineString) feature.getGeometry();
 
         Map<UUID, List<Tuple<Coordinates, Coordinates>>> tab = new HashMap<>();
@@ -355,6 +357,7 @@ public class MapService extends AbstractService {
                             LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
                         }
                         if (intersectionPoint != null) {
+                            intersectionsDetectedCount++;
                             splitNewFeatureAt.set(i, true);
                             if (tab.containsKey(featureToCheck.getUuid())) {
                                 tab.get(featureToCheck.getUuid()).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
@@ -389,13 +392,12 @@ public class MapService extends AbstractService {
                     }
                 }
             }
-            long deletedCount = mapFeatureRepository.delete(mapID, myFirstFeature.getUuid());
-            LOGGER.debug("@@@ deleted feature count : " + deletedCount);
+            mapFeatureRepository.delete(mapID, myFirstFeature.getUuid());
             for (Feature toAdd : myNewFeatures) {
                 mapFeatureRepository.create(mapID, toAdd);
             }
         }
-        LOGGER.debug("" + tab);
+        LOGGER.debug("Nombre d'intersections détectées : " + intersectionsDetectedCount);
 
         feature.getProperties().put("id", feature.getUuid());
         mapFeatureRepository.create(mapID, feature);
