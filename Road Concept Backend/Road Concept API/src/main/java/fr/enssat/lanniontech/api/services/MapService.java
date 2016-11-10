@@ -345,7 +345,7 @@ public class MapService extends AbstractService {
                         if (intersectionPoint != null) {
                             splitNewFeatureAt.set(i, true);
                             if (tab.containsKey(featureToCheck.getUuid())) {
-                                tab.get(featureToCheck.getUuid()).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), intersectionPoint));
+                                tab.get(featureToCheck.getUuid()).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
                             } else {
                                 List<Tuple<Coordinates, Coordinates>> list = new ArrayList<>();
                                 list.add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
