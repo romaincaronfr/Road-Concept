@@ -25,10 +25,10 @@ public class Intersection {
 
         for (UUID uuid : roadSections.keySet()) {
             if (id != uuid) {
-                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory(),id);
+                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory(),id,this);
                 trajectories.get(uuid).put(id, T);
 
-                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory(),uuid);
+                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory(),uuid,this);
                 myTrajectories.put(uuid, T);
             }
         }
@@ -72,10 +72,14 @@ public class Intersection {
     public List<AdvancedTrajectory> getTrajectories() {
         List<AdvancedTrajectory> trajectories = new ArrayList<>();
         for (Map<UUID,AdvancedTrajectory> map : this.trajectories.values()){
-            for (AdvancedTrajectory trajectory : map.values()){
-                trajectories.add(trajectory);
-            }
+            trajectories.addAll(map.values());
         }
+        return trajectories;
+    }
+
+    public List<AdvancedTrajectory> getTrajectoriesFrom(UUID source) {
+        List<AdvancedTrajectory> trajectories = new ArrayList<>();
+        trajectories.addAll(this.trajectories.get(source).values());
         return trajectories;
     }
 }

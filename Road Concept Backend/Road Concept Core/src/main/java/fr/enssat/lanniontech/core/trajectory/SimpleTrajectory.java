@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.core.trajectory;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -273,6 +274,15 @@ public class SimpleTrajectory extends Trajectory {
             for (Trajectory trajectory : destinationsTrajectories.values()){
                 trajectory.explore(trajectoryMap);
             }
+        }
+    }
+
+    @Override
+    public Intersection getNextIntersection() {
+        if(destinationType == TrajectoryType.AdvancedTrajectory){
+            return ((AdvancedTrajectory) getNext()).getMyIntersection();
+        }else {
+            return getNext().getNextIntersection();
         }
     }
 }

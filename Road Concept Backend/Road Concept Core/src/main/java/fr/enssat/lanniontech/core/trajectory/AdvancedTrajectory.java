@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.core.trajectory;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,13 @@ public class AdvancedTrajectory extends Trajectory {
     private List<Double> lengths;
     private List<Double> Ps;
     private double securityDistance;
+    private Intersection myIntersection;
 
     public static Logger LOG = LoggerFactory.getLogger(AdvancedTrajectory.class);
 
-    public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination,UUID roadId) {
+    public AdvancedTrajectory(SimpleTrajectory source, SimpleTrajectory destination, UUID roadId, Intersection myIntersection) {
         super(roadId);
+        this.myIntersection = myIntersection;
         this.source = source;
         this.destination = destination;
 
@@ -67,6 +70,18 @@ public class AdvancedTrajectory extends Trajectory {
 
     public double getSecurityDistance() {
         return securityDistance;
+    }
+
+    public SimpleTrajectory getSource() {
+        return source;
+    }
+
+    public SimpleTrajectory getDestination() {
+        return destination;
+    }
+
+    public Intersection getMyIntersection() {
+        return myIntersection;
     }
 
     //Trajectory class implementation
@@ -126,18 +141,16 @@ public class AdvancedTrajectory extends Trajectory {
         }
     }
 
-    public SimpleTrajectory getSource() {
-        return source;
-    }
-
-    public SimpleTrajectory getDestination() {
-        return destination;
-    }
-
+    @Override
     public void explore(Map<Trajectory,Boolean> trajectoryMap){
         if(!trajectoryMap.get(this)){
             trajectoryMap.replace(this,true);
             this.getDestination().explore(trajectoryMap);
         }
+    }
+
+    @Override
+    public Intersection getNextIntersection() {
+        return destination.getNextIntersection();
     }
 }

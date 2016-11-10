@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.core.trajectory;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.Map;
@@ -91,5 +92,10 @@ public class EndRoadTrajectory extends Trajectory {
             trajectoryMap.replace(this,true);
             this.getDestination().explore(trajectoryMap);
         }
+    }
+
+    @Override
+    public Intersection getNextIntersection() {
+        return destination.getNextIntersection();
     }
 }

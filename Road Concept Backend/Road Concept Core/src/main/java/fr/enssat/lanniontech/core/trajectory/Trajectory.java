@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.trajectory;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 
@@ -68,6 +69,21 @@ public abstract class Trajectory {
     }
 
     /**
+     * return the id of the trajectory road
+     */
+    public UUID getRoadId(){
+        return roadId;
+    }
+
+    /**
+     *
+     * return the length of the trajectory
+     */
+    public double getLength() {
+        return length;
+    }
+
+    /**
      * return the next default trajectory
      */
     public abstract Trajectory getNext();
@@ -108,13 +124,8 @@ public abstract class Trajectory {
     public abstract void explore(Map<Trajectory, Boolean> trajectoryMap);
 
     /**
-     * return the id of the trajectory road
+     * return the position of the next intersection
      */
-    public UUID getRoadId(){
-        return roadId;
-    }
+    public abstract Intersection getNextIntersection();
 
-    public double getLength() {
-        return length;
-    }
 }

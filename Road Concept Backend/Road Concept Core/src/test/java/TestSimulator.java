@@ -19,9 +19,9 @@ public class TestSimulator {
         Position A = Sim.positionManager.addPosition(40.1, 0.1);
         Position F = Sim.positionManager.addPosition(40.2, 0.1);
 
-        UUID id1 = UUID.randomUUID();
-        UUID id2 = UUID.randomUUID();
-        UUID id3 = UUID.randomUUID();
+        UUID id1 = UUID.fromString("1-1-1-1-1");
+        UUID id2 = UUID.fromString("2-2-2-2-2");
+        UUID id3 = UUID.fromString("3-3-3-3-3");
 
         Road R = Sim.roadManager.addRoadSectionToRoad(A, B, id1);
         Sim.roadManager.addRoadSectionToRoad(B, C, id1);
@@ -34,6 +34,7 @@ public class TestSimulator {
         Sim.roadManager.closeRoads();
 
         int integrity = Sim.roadManager.checkIntegrity();
+
         if(integrity > 0){
             System.err.println(integrity + " roads corrupted !!!");
             return;
@@ -46,6 +47,7 @@ public class TestSimulator {
         }
         System.out.println(Sim.vehicleManager.getVehiclesNumber());
 
+        /*
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -68,6 +70,6 @@ public class TestSimulator {
         }
         //Sim.waitForEnd();
 
-        System.out.println(Sim.getDuration());
+        System.out.println(Sim.getDuration());*/
     }
 }
