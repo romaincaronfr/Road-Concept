@@ -12,6 +12,7 @@ import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import fr.enssat.lanniontech.api.utilities.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -340,7 +341,8 @@ public class MapService extends AbstractService {
                             lastPointRoadB = createdRoad.getCoordinates().get(i);
                         }
 
-                        Coordinates intersectionPoint = FuckIt.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+                        //FIXME: On ne détecte que 1 point d'intersection sur 2 :(
+                        Coordinates intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
                         LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
                         if (intersectionPoint != null) {
                             splitNewFeatureAt.set(i, true);
