@@ -61,5 +61,6 @@ FOR EACH ROW EXECUTE PROCEDURE check_id_change();
 CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"        VARCHAR(40) PRIMARY KEY,
   "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "name"        VARCHAR(31) NOT NULL
+  "name"        VARCHAR(31) NOT NULL,
+  "id_map"      INTEGER     NOT NULL
 );
