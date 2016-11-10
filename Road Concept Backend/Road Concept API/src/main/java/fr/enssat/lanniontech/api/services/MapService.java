@@ -311,7 +311,7 @@ public class MapService extends AbstractService {
     public Feature addFeature(int mapID, Feature feature) {
         LineString createdRoad = (LineString) feature.getGeometry();
 
-        Map<Feature, List<Tuple<Coordinates, Coordinates>>> tab = new HashMap<>();
+        Map<UUID, List<Tuple<Coordinates, Coordinates>>> tab = new HashMap<>();
 
         List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
         Collections.fill(splitNewFeatureAt, Boolean.TRUE);
@@ -344,12 +344,12 @@ public class MapService extends AbstractService {
                         LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
                         if (intersectionPoint != null) {
                             splitNewFeatureAt.set(i, true);
-                            if (tab.containsKey(featureToCheck)) {
-                                tab.get(featureToCheck).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), intersectionPoint));
+                            if (tab.containsKey(featureToCheck.getUuid())) {
+                                tab.get(featureToCheck.getUuid()).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), intersectionPoint));
                             } else {
                                 List<Tuple<Coordinates, Coordinates>> list = new ArrayList<>();
                                 list.add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
-                                tab.put(featureToCheck, list);
+                                tab.put(featureToCheck.getUuid(), list);
                             }
                         }
                     }
@@ -357,10 +357,10 @@ public class MapService extends AbstractService {
             }
         }
 
-        for (Entry<Feature, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
+        for (Entry<UUID, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
             List<Feature> myNewFeatures = new ArrayList<>();
-            Feature myFirstFeature = entry.getKey();
-            myNewFeatures.add(entry.getKey());
+            Feature myFirstFeature = getFeature(mapID,entry.getKey());
+            myNewFeatures.add(myFirstFeature);
             for (Tuple<Coordinates, Coordinates> tuple : entry.getValue()) {
                 myBoucleToBreak:
                 for (int i = 0; i < myNewFeatures.size(); i++) {
