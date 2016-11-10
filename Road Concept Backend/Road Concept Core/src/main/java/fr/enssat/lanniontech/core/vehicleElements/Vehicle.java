@@ -1,8 +1,12 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
+import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.managers.HistoryManager;
+import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+
+import java.util.UUID;
 
 public class Vehicle {
     private final double length;
@@ -11,8 +15,9 @@ public class Vehicle {
     private Side backSide;
     private int ID;
     private HistoryManager historyManager;
+    private Path myPath;
 
-    private double Va = 0;      //speed in m/s
+    private double Va = Tools.kphToMph(90);      //speed in m/s
     private double A;           //acceleration
     private double a = 2;       //max acceleration
     private double b = 1;       //deceleration
@@ -36,11 +41,12 @@ public class Vehicle {
      * @param speed
      * @param historyManager
      */
-    public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime, HistoryManager historyManager) {
+    public Vehicle(int ID, Lane start, double startPos, double length, double speed, long initialTime, HistoryManager historyManager, Path myPath) {
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
         this.v0 = speed;
+        this.myPath = myPath;
         this.frontSide = new Side(length + startPos, this, start);
         this.backSide = new Side(startPos, this, start);
         this.time = initialTime;
@@ -66,7 +72,7 @@ public class Vehicle {
         //double Sa = this.distanceToNextCar();
         //double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
         //A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
-        A = 1;
+        A = 0;
     }
 
     /**
@@ -92,8 +98,8 @@ public class Vehicle {
         if(Double.isNaN(dDone)){
             System.err.println("overflow");
         }
-        backSide.move(dDone);
-        frontSide.move(dDone);
+        backSide.moveOnPath(dDone);
+        frontSide.moveOnPath(dDone);
         this.time++;
         if (log) {
             historyManager.AddPosition(getGPSPosition());
@@ -107,5 +113,9 @@ public class Vehicle {
 
     public SpaceTimePosition getGPSPosition() {
         return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID);
+    }
+
+    public UUID getPathStep(int i) {
+        return myPath.getStep(i);
     }
 }

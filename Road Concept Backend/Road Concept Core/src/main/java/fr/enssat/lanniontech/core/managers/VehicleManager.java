@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.managers;
 
+import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
@@ -60,8 +61,9 @@ public class VehicleManager {
             k++;
         }
 
-        pathFinder.getRandomPath(startingLane.getInsertTrajectory(),10);
-        Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size, speed, 0, historyManager);
+        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(),10);
+        Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size,
+                speed, 0, historyManager,myPath);
         vehicles.add(V);
         activeVehicles.add(V);
         return true;

@@ -19,9 +19,16 @@ public class TestSimulator {
         Position A = Sim.positionManager.addPosition(40.1, 0.1);
         Position F = Sim.positionManager.addPosition(40.2, 0.1);
 
-        UUID id1 = UUID.fromString("1-1-1-1-1");
-        UUID id2 = UUID.fromString("2-2-2-2-2");
-        UUID id3 = UUID.fromString("3-3-3-3-3");
+        Position G0 = Sim.positionManager.addPosition(40.1, 0.2);
+        Position G1 = Sim.positionManager.addPosition(40, 0.3);
+        Position G2 = Sim.positionManager.addPosition(40.2, 0.3);
+
+        UUID id1 = UUID.fromString("0-0-0-0-1");
+        UUID id2 = UUID.fromString("0-0-0-0-2");
+        UUID id3 = UUID.fromString("0-0-0-0-3");
+        UUID id4 = UUID.fromString("0-0-0-0-4");
+        UUID id5 = UUID.fromString("0-0-0-0-5");
+        UUID id6 = UUID.fromString("0-0-0-0-6");
 
         Road R = Sim.roadManager.addRoadSectionToRoad(A, B, id1);
         Sim.roadManager.addRoadSectionToRoad(B, C, id1);
@@ -30,6 +37,9 @@ public class TestSimulator {
         Sim.roadManager.addRoadSectionToRoad(D, E, id3);
         Sim.roadManager.addRoadSectionToRoad(E, F, id3);
         Sim.roadManager.addRoadSectionToRoad(F, A, id3);
+        Sim.roadManager.addRoadSectionToRoad(A, G0, id4);
+        Sim.roadManager.addRoadSectionToRoad(G0, G1, id5);
+        Sim.roadManager.addRoadSectionToRoad(G0, G2, id6);
 
         Sim.roadManager.closeRoads();
 
@@ -47,7 +57,7 @@ public class TestSimulator {
         }
         System.out.println(Sim.vehicleManager.getVehiclesNumber());
 
-        /*
+
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -70,6 +80,6 @@ public class TestSimulator {
         }
         //Sim.waitForEnd();
 
-        System.out.println(Sim.getDuration());*/
+        System.out.println(Sim.getDuration());
     }
 }

@@ -43,6 +43,7 @@ public class PathFinder {
                 step=possibleNext.get(next).getRoadId();
                 nextInter = possibleNext.get(next).getNextIntersection();
             }
+            myPath.addToPath(step);
             LOG.debug("next road : " + step);
         }
 
