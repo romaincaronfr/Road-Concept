@@ -341,9 +341,19 @@ public class MapService extends AbstractService {
                             lastPointRoadB = createdRoad.getCoordinates().get(i);
                         }
 
-                        //FIXME: On ne détecte que 1 point d'intersection sur 2 :(
                         Coordinates intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
                         LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
+                        if (intersectionPoint == null) {
+                            if (i == createdRoad.getCoordinates().size()-1) {
+                                firstPointRoadB = createdRoad.getCoordinates().get(i-1);
+                                lastPointRoadB = createdRoad.getCoordinates().get(i);
+                            } else {
+                                firstPointRoadB = createdRoad.getCoordinates().get(i);
+                                lastPointRoadB = createdRoad.getCoordinates().get(i+1);
+                            }
+                            intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+                            LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
+                        }
                         if (intersectionPoint != null) {
                             splitNewFeatureAt.set(i, true);
                             if (tab.containsKey(featureToCheck.getUuid())) {
