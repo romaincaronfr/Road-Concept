@@ -1,11 +1,15 @@
 package fr.enssat.lanniontech.api.utilities;
 
 import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public final class MathsUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MathsUtils.class);
 
     public static double roundGPS(double value) {
         return round(value, 7);
@@ -28,7 +32,9 @@ public final class MathsUtils {
         double s = (-s1_y * (p0.getLongitude() - p2.getLongitude()) + s1_x * (p0.getLatitude() - p2.getLatitude())) / (-s2_x * s1_y + s1_x * s2_y);
         double t = (s2_x * (p0.getLatitude() - p2.getLatitude()) - s2_y * (p0.getLongitude() - p2.getLongitude())) / (-s2_x * s1_y + s1_x * s2_y);
 
-        if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+        //if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
+        LOGGER.debug("s = " + s + " | t = " + t);
+        if (s >= -0.1 && s <= 0.9 && t >= -0.1 && t <= 1.1) {
             double i_x = p0.getLongitude() + (t * s1_x);
             double i_y = p0.getLatitude() + (t * s1_y);
 
