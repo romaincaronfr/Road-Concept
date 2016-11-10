@@ -39,7 +39,28 @@ public class Coordinates implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Coordinates that = (Coordinates) o;
+
+        return Double.compare(that.getLongitude(), longitude) == 0 && Double.compare(that.getLatitude(), latitude) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(longitude);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "Coordinates{" + "longitude=" + longitude + ", latitude=" + latitude + ", altitude=" + '}';
+        return "Coordinates{" + "longitude=" + longitude + ", latitude=" + latitude + '}';
     }
 }
