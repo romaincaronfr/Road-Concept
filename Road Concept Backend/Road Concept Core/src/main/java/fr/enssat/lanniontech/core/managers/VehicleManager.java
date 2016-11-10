@@ -77,6 +77,16 @@ public class VehicleManager {
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updatePos(precision, log);
         }
+
+        int i = 0;
+        while (i<activeVehicles.size()){
+            if(activeVehicles.get(i).isArrived()){
+                activeVehicles.remove(i);
+            }else {
+                i++;
+            }
+        }
+
     }
 
     public int getVehiclesNumber() {

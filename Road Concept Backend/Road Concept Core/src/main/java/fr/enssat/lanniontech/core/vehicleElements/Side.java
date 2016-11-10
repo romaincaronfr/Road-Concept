@@ -94,4 +94,8 @@ public class Side {
     public Position getGPS() {
         return myTrajectory.getGPS(pos);
     }
+
+    public UUID getNextRoad() {
+        return nextRoad;
+    }
 }

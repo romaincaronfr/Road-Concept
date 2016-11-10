@@ -2,6 +2,7 @@ import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -66,7 +67,7 @@ public class TestSimulator {
 
         //run simulation
 
-        Sim.launchSimulation(6000, 0.1,10);
+        Sim.launchSimulation(24*3600, 0.1,10);
 
         while (Sim.getProgress() < 1) {
             System.out.println("Sim time: " + Sim.getDuration());

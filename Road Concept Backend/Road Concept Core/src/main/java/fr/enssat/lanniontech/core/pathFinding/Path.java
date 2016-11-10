@@ -16,6 +16,12 @@ public class Path {
     }
 
     public UUID getStep(int step){
-        return path.get(step);
+        UUID stepUuid = null;
+        try {
+            stepUuid = path.get(step);
+        }catch (Exception e){
+
+        }
+        return stepUuid;
     }
 }

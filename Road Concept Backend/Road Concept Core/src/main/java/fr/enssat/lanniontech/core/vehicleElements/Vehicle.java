@@ -54,17 +54,6 @@ public class Vehicle {
         historyManager.AddPosition(getGPSPosition());
     }
 
-    @Deprecated
-    public void log() {
-        System.out.println("ID: " + this.ID);
-        System.out.println("distance: " + distanceDone);
-        System.out.println("speed: " + Va);
-        System.out.println("Acceleration: " + A);
-        System.out.println("distance to next car: " + distanceToNextCar());
-        System.out.println("Position: " + getGPSPosition());
-        System.out.println("-----------------------------------------");
-    }
-
     /**
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
@@ -117,5 +106,9 @@ public class Vehicle {
 
     public UUID getPathStep(int i) {
         return myPath.getStep(i);
+    }
+
+    public boolean isArrived(){
+        return backSide.getNextRoad()==null;
     }
 }
