@@ -12,7 +12,7 @@ import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
-import fr.enssat.lanniontech.api.exceptions.SimulationNotFinishedException;
+import fr.enssat.lanniontech.api.exceptions.SimulationImcompleteException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
@@ -37,7 +37,7 @@ public class SimulatorService extends AbstractService {
     private Simulator simulator = new Simulator();
     private MapService mapService = new MapService();
 
-    public Simulation create(User user, String name, int mapID, long durationS) {
+    public Simulation create(User user, String name, int mapID, int durationS) {
         Simulation simulation = new Simulation();
         simulation.setCreatorID(user.getId());
         simulation.setMapID(mapID);
@@ -48,7 +48,7 @@ public class SimulatorService extends AbstractService {
         return simulation;
     }
 
-    public Simulation get(UUID simulationUUID) {
+    public Simulation get(UUID simulationUUID) throws EntityNotExistingException {
         Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
         if (simulation == null) {
             throw new EntityNotExistingException(Simulation.class);
@@ -56,7 +56,7 @@ public class SimulatorService extends AbstractService {
         return simulation;
     }
 
-    public boolean start(UUID simulationUUID) {
+    public boolean start(UUID simulationUUID) throws EntityNotExistingException {
         Simulation simulation = get(simulationUUID);
 
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
@@ -70,8 +70,8 @@ public class SimulatorService extends AbstractService {
         return simulationParametersRepository.getAllFromMap(user, mapID);
     }
 
-    public List<Simulation> getAll(User user) {
-        return simulationParametersRepository.getAll(user);
+    public List<Simulation> getAll(int userID) {
+        return simulationParametersRepository.getAll(userID);
     }
 
     public boolean delete(UUID simulationUUID) {
@@ -81,17 +81,17 @@ public class SimulatorService extends AbstractService {
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public FeatureCollection getResult(UUID simulationUUID, long timestamp) {
+    public FeatureCollection getResult(UUID simulationUUID, int timestamp) throws SimulationImcompleteException {
         Simulation simulation = get(simulationUUID);
         if (simulation.isFinish()) {
             Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
             getResultAt(map.getFeatures(), timestamp);
             return map.getFeatures();
         }
-        throw new SimulationNotFinishedException();
+        throw new SimulationImcompleteException();
     }
 
-    private void getResultAt(FeatureCollection features, long timestamp) {
+    private void getResultAt(FeatureCollection features, int timestamp) {
         for (Feature feature : features) {
             Double status = simulator.historyManager.getRoadStatus(feature.getUuid(), timestamp);
             feature.getProperties().put("congestion", status.intValue());
@@ -102,8 +102,7 @@ public class SimulatorService extends AbstractService {
         for (SpaceTimePosition vehicle : vehicles) {
             LOGGER.debug("Space Time Position = " + vehicle);
             Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
-            Point point = new Point(new Coordinates(vehicle.getLon(), vehicle.getLat()));
-            feature.setGeometry(point);
+            feature.setGeometry(new Point(new Coordinates(vehicle.getLon(), vehicle.getLat())));
             feature.getProperties().put("type", FeatureType.VEHICLE);
             feature.getProperties().put("vehicle_id", vehicle.getId());
             feature.getProperties().put("angle", vehicle.getAngle());
@@ -111,7 +110,7 @@ public class SimulatorService extends AbstractService {
         }
     }
 
-    public FeatureCollection getVehiculePositionsHistory(int vehicleID) {
+    public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
         List<SpaceTimePosition> history = simulator.historyManager.getVehiclePosition(vehicleID);
         FeatureCollection result = new FeatureCollection();
 

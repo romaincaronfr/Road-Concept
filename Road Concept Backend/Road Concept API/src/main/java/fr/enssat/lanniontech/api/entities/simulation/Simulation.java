@@ -11,7 +11,7 @@ public class Simulation implements SQLEntity{
     private int creatorID; // Creator of the simulation
     private int mapID;
 
-    private long durationS;
+    private int durationS;
     private boolean finish;
 
     public UUID getUuid() {
@@ -44,11 +44,11 @@ public class Simulation implements SQLEntity{
         this.name = name;
     }
 
-    public long getDurationS() {
+    public int getDurationS() {
         return durationS;
     }
 
-    public void setDurationS(long durationS) {
+    public void setDurationS(int durationS) {
         this.durationS = durationS;
     }
 

@@ -27,7 +27,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, long duration) throws DatabaseOperationException {
+    public Simulation create(int creatorID, String name, int mapID, int duration) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -36,7 +36,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                 statement.setInt(2, creatorID);
                 statement.setString(3,name);
                 statement.setInt(4, mapID);
-                statement.setLong(5, duration);
+                statement.setInt(5, duration);
                 statement.setBoolean(6, false);
 
                 try (ResultSet result = statement.executeQuery()) {
@@ -65,10 +65,10 @@ public class SimulationParametersRepository extends SimulationRepository {
     // GET
     // ===
 
-    public List<Simulation> getAll(User user) throws DatabaseOperationException {
+    public List<Simulation> getAll(int userID) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
-                statement.setInt(1, user.getId());
+                statement.setInt(1, userID);
 
                 try (ResultSet result = statement.executeQuery()) {
                     List<Simulation> simulations = new ArrayList<>();
@@ -76,7 +76,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                     while (result.next()) {
                         Simulation simulation = new Simulation();
                         simulation.setUuid(UUID.fromString(result.getString("uuid")));
-                        simulation.setCreatorID(result.getInt("id_user"));
+                        simulation.setCreatorID(userID);
                         simulation.setName(result.getString("name"));
                         simulation.setMapID(result.getInt("id_map"));
 

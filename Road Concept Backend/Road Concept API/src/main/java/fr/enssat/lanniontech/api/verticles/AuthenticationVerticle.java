@@ -48,7 +48,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/login").blockingHandler(this::processLogin);
 
         router.route(HttpMethod.POST, "/api/logout").handler(this::processLogout);
-        router.route(HttpMethod.GET, "/api/me").blockingHandler(this::processUserDetails);
+        router.route(HttpMethod.GET, "/api/me").handler(this::processUserDetails);
     }
 
     // ========
