@@ -271,6 +271,11 @@ th {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+#editButtonCancel .glyphicon-question-sign {
+  font-size: 200%;
+  padding-top: 20%;
+  padding-left: 30%;
+ }
 .glyphicon-asterisk:before {
   content: "\002a";
 }
@@ -5979,6 +5984,9 @@ button.close {
   font-size: 13px;
   opacity: 0;
   filter: alpha(opacity=0);
+}
+#helpSign .tooltip {
+  width: 200px;
 }
 .tooltip.in {
   opacity: 0.9;

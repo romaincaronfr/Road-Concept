@@ -119,6 +119,9 @@ app.mapDetailsPageView = Backbone.View.extend({
             }
         });
 
+        //Tooltip bootstrap
+        $('[data-toggle="tooltip"]').tooltip();
+
         return this;
 
     },
