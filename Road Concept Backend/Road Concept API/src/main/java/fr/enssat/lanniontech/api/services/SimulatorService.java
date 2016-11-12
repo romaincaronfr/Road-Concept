@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.api.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
@@ -10,6 +11,9 @@ import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.SimulationNotFinishedException;
+import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
@@ -28,30 +32,58 @@ public class SimulatorService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
+    SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
+
     private Simulator simulator = new Simulator();
     private MapService mapService = new MapService();
 
-    private Simulation simulation;
+    public Simulation create() {
+        Simulation simulation = new Simulation();
+        //TODO
+        return simulation;
+    }
 
-    public boolean simulate(Simulation simulation) {
-        this.simulation = simulation;
+    public Simulation get(UUID simulationUUID) {
+        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
+        if (simulation == null) {
+            throw new EntityNotExistingException(Simulation.class);
+        }
+        return simulation;
+    }
 
-        Map map = mapService.getMap(simulation.getUser(), simulation.getMapID());
+    public boolean start(UUID simulationUUID) {
+        Simulation simulation = get(simulationUUID);
+
+        Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         List<Road> roads = sendFeatures(map.getFeatures());
-        int integrity = simulator.roadManager.checkIntegrity();
-        LOGGER.debug("Road manager integrity = " + integrity);
-        simulator.vehicleManager.addToSpawnArea(roads.get(0));
-        boolean result = simulator.vehicleManager.addVehicle();
-        LOGGER.debug("addVechile => " + result);
-        //  long stepsCounts = (long) (600 / 0.1);
-        return simulator.launchSimulation(600, 0.1, 10);
+        simulator.vehicleManager.addToSpawnArea(roads.get(0)); //TODO: Set as simulation parameter
+        simulator.vehicleManager.addVehicle();
+        return simulator.launchSimulation(simulation.getDurationS(), 0.1, 10); //TODO: Set as simulation parameter
+    }
+
+    public List<Simulation> getAll(User user, int mapID) {
+        return simulationParametersRepository.getFromMapID(user, mapID);
+    }
+
+    public List<Simulation> getAll(User user) {
+        return simulationParametersRepository.getAll(user);
+    }
+
+    public boolean delete(UUID simulationUUID) {
+        Simulation simulation = new Simulation();
+        simulation.setUuid(simulationUUID);
+        int count = simulationParametersRepository.delete(simulation);
+        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
     public FeatureCollection getResult(UUID simulationUUID, long timestamp) {
-        //  Simulation simulation = // TODO: Get from UUID
-        Map map = mapService.getMap(simulation.getUser(), simulation.getMapID());
-        getResultAt(map.getFeatures(), timestamp);
-        return map.getFeatures();
+       Simulation simulation = get(simulationUUID) ;
+        if (simulation.isFinish()) {
+            Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
+            getResultAt(map.getFeatures(), timestamp);
+            return map.getFeatures();
+        }
+        throw new SimulationNotFinishedException();
     }
 
     private void getResultAt(FeatureCollection features, long timestamp) {
@@ -90,7 +122,7 @@ public class SimulatorService extends AbstractService {
         return result;
     }
 
-    public List<Road> sendFeatures(FeatureCollection features) {
+    private List<Road> sendFeatures(FeatureCollection features) {
         List<Road> roads = new ArrayList<>();
         for (Feature feature : features) {
             if (feature.getGeometry() instanceof LineString) {
@@ -99,17 +131,24 @@ public class SimulatorService extends AbstractService {
 
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulator.positionManager.addPosition(last.getLatitude(), last.getLongitude());
-                    Position B = simulator.positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
+                    Position A = simulator.positionManager.addPosition(last.getLongitude(), last.getLongitude());
+                    Position B = simulator.positionManager.addPosition(coordinates.getLongitude(), coordinates.getLongitude());
                     roads.add(simulator.roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
                     last = coordinates;
                 }
             }
-            //TODO: Prévoir les ronds points et les feux rouges
+            //TODO: Prévoir les ronds points et les feux rouges. En attente d'Antoine
         }
         simulator.roadManager.closeRoads();
         return roads;
     }
+
+
+
+
+
+
+
 
     @Deprecated
     public FeatureCollection getFakeSimulationResult() throws IOException {
