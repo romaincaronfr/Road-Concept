@@ -16,7 +16,8 @@ app.mapSimulationView = Backbone.View.extend({
     selectPointer: null,
     snap: null,
     mapDetailsCollectionSimulation:null,
-    stepMinute: 15, // On veut un step sur le slider de 15min
+    stepSeconds: 30, // On veut un step sur le slider de 60 s
+    timeSimulation : null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -116,53 +117,47 @@ app.mapSimulationView = Backbone.View.extend({
 
         //Fetch de la collection
         this.fetchCollection();
-        // TODO : remettre le modal d'avertissament à la fin
+        // TODO : remettre le modal d'avertissement à la fin
        // $('#modalAvertissementSimulation').modal('show');
 
         // Slider for time simulation
-        var handle = $( "#custom-handle-simulation" );
         $( "#sliderSimulation" ).slider({
             orientation: "horizontal",
             range: "min",
             min: 0,
-            max: 1440,
-            step: this.stepMinute,
-            value: 0,
-            create: function() {
-                handle.text( $( this ).slider( "value" ) );
-            },
+            max: 89999, //86400
+            step: this.stepSeconds,
+            value: 25200, // correspond à 7h
             slide: function( event, ui ) {
-                var time = self.convertMinsToHoursMins(ui.value);
-                handle.text(time);
+                var time = self.convertSecdsToHrsMinsSecds(ui.value);
+                console.log('---- slide ----');
+                console.log('value : '+ui.value);
+                console.log('time : '+time);
                 $('#timepicker').timepicker('setTime', time);
-                
             },
-            change : function(event, ui){
-                var time = self.convertMinsToHoursMins(ui.value);
-                handle.text(time);
-
+            change: function(event,ui){
+                console.log('---- change ----');
+                console.log('event :'+event);
+                //console.log('time : '+time);
             }
         });
 
         // Time picker
         $('#timepicker').timepicker({
-            minuteStep: this.stepMinute,
+            minuteStep: this.stepSeconds,
             template: false,
-            appendWidgetTo: 'body',
             showSeconds: true,
             showMeridian: false,
-            defaultTime: "10:30:00",
+            defaultTime: "7:00:00",
             modalBackDrop : true
         });
 
         $('#timepicker').timepicker().on('changeTime.timepicker', function(e) {
             console.log(e.time.hours+':'+e.time.minutes+':'+e.time.seconds);
-            var time = (e.time.hours*60) + e.time.minutes;
+            var time = (e.time.hours*3600) + (e.time.minutes*60)+ e.time.seconds;
+            console.log('ChangeTime time in seconds : '+time);
             $( "#sliderSimulation" ).slider( "option", "value", time );
         });
-
-        //$('#timepicker').timepicker('setTime', '12:45 AM');
-
 
         return this;
     },
@@ -516,12 +511,18 @@ app.mapSimulationView = Backbone.View.extend({
         });
     },
 
-    convertMinsToHoursMins: function (minutes) {
-        var h = Math.floor(minutes / 60);
-        var m = minutes % 60;
+    convertSecdsToHrsMinsSecds: function (seconds) {
+        // TODO : faire attention au step, le prender en compte et mettre la valeur supérieur si besoin
+        // TODO : prendre en compte les secondes
+        var h = Math.floor(seconds / 3600);
+        var m = Math.floor((seconds%3600)/60);
+        var s = (seconds%3600)%60;
         h = h < 10 ? '0' + h : h;
         m = m < 10 ? '0' + m : m;
-        var time = h + ':' + m;
+        s = s < 10 ? '0' + s : s;
+        var time = h + ':' + m + ':' + s;
+        console.log(time);
         return time;
+
     },
 });
