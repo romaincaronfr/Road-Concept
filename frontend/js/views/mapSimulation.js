@@ -16,7 +16,7 @@ app.mapSimulationView = Backbone.View.extend({
     selectPointer: null,
     snap: null,
     mapDetailsCollectionSimulation:null,
-    stepSeconds: 30, // On veut un step sur le slider de 60 s
+    stepSeconds: 60, // On veut un step sur le slider de 60 s
     timeSimulation : null,
 
     events: {
@@ -156,6 +156,12 @@ app.mapSimulationView = Backbone.View.extend({
             console.log(e.time.hours+':'+e.time.minutes+':'+e.time.seconds);
             var time = (e.time.hours*3600) + (e.time.minutes*60)+ e.time.seconds;
             console.log('ChangeTime time in seconds : '+time);
+            var verifStep = (time%self.stepSeconds);
+            if(verifStep != 0){
+                time -= verifStep;
+                time = self.convertSecdsToHrsMinsSecds(time);
+                $('#timepicker').timepicker('setTime', time);
+            }
             $( "#sliderSimulation" ).slider( "option", "value", time );
         });
 
