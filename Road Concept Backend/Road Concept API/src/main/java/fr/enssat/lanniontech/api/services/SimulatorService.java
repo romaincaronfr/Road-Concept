@@ -58,11 +58,11 @@ public class SimulatorService extends AbstractService {
         List<Road> roads = sendFeatures(map.getFeatures());
         simulator.vehicleManager.addToSpawnArea(roads.get(0)); //TODO: Set as simulation parameter
         simulator.vehicleManager.addVehicle();
-        return simulator.launchSimulation(simulation.getDurationS(), 0.1, 10); //TODO: Set as simulation parameter
+        return simulator.launchSimulation(simulation.getDurationS(), 0.1, 10);
     }
 
     public List<Simulation> getAll(User user, int mapID) {
-        return simulationParametersRepository.getFromMapID(user, mapID);
+        return simulationParametersRepository.getAllFromMap(user, mapID);
     }
 
     public List<Simulation> getAll(User user) {
@@ -77,7 +77,7 @@ public class SimulatorService extends AbstractService {
     }
 
     public FeatureCollection getResult(UUID simulationUUID, long timestamp) {
-       Simulation simulation = get(simulationUUID) ;
+        Simulation simulation = get(simulationUUID);
         if (simulation.isFinish()) {
             Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
             getResultAt(map.getFeatures(), timestamp);
@@ -142,6 +142,9 @@ public class SimulatorService extends AbstractService {
         simulator.roadManager.closeRoads();
         return roads;
     }
+
+
+
 
 
 

@@ -31,19 +31,22 @@ public class MapService extends AbstractService {
         return mapInfoRepository.getAll(user);
     }
 
-    public fr.enssat.lanniontech.api.entities.map.Map getMap(User user, int mapID) {
+    public fr.enssat.lanniontech.api.entities.map.Map getMap(int userID, int mapID) {
         MapInfo infos = mapInfoRepository.get(mapID);
 
         if (infos == null) {
             throw new EntityNotExistingException(MapInfo.class);
         }
-        checkAccessMap(user, infos);
+      //  checkAccessMap(user, infos); //FIXME
 
         FeatureCollection features = mapFeatureRepository.getAll(mapID);
         fr.enssat.lanniontech.api.entities.map.Map map = new fr.enssat.lanniontech.api.entities.map.Map();
         map.setInfos(infos);
         map.setFeatures(features);
         return map;
+    }
+    public fr.enssat.lanniontech.api.entities.map.Map getMap(User user, int mapID) {
+        return getMap(user.getId(),mapID);
     }
 
     public Feature getFeature(int mapID, UUID featureUUID) {

@@ -21,13 +21,8 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map) VALUES (?, ?, ?, ?)";
     private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map FROM simulation WHERE uuid = ?";
-    private static final String SELECT_ALL= "SELECT uuid, name, id_map FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAPID = "SELECT uuid, name, id_user FROM simulation WHERE id_map = ?";
-
-
-    // ===============
-    // SIMULATION INFO - SQL
-    // ===============
+    private static final String SELECT_ALL = "SELECT uuid, name, id_map FROM simulation WHERE id_user = ?";
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name FROM simulation WHERE id_map = ? AND id_user ?";
 
     // CREATE
     // ------
@@ -41,16 +36,16 @@ public class SimulationParametersRepository extends SimulationRepository {
 
                 try (ResultSet result = statement.executeQuery()) {
                     result.next(); // Has exactly one row
-                    Simulation simu = new Simulation();
-                    simu.setUuid(UUID.fromString(result.getString("uuid")));
-                    simu.setUser(user);
-                    simu.setName(name);
-                    simu.setMapID(mapID);
-                    return simu;
+                    Simulation simulation = new Simulation();
+                    simulation.setUuid(UUID.fromString(result.getString("uuid")));
+                    simulation.setCreatorID(user.getId());
+                    simulation.setName(name);
+                    simulation.setMapID(mapID);
+                    return simulation;
                 }
             }
         } catch (SQLException e) {
-            throw processBasicSQLException(e, Simulation.class); // ?
+            throw processBasicSQLException(e, Simulation.class);
         }
     }
 
@@ -66,19 +61,20 @@ public class SimulationParametersRepository extends SimulationRepository {
     // GET
     // ===
 
-    public List<Simulation> getAll() throws DatabaseOperationException {
+    public List<Simulation> getAll(User user) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
+                statement.setInt(1, user.getId());
+
                 try (ResultSet result = statement.executeQuery()) {
                     List<Simulation> simulations = new ArrayList<>();
 
                     while (result.next()) {
                         Simulation simulation = new Simulation();
                         simulation.setUuid(UUID.fromString(result.getString("uuid")));
-                        User user = new User();
-                        user.setId(result.getInt("id_user"));  //id_user
-                        simulation.setName(result.getString("name")); //name
-                        simulation.setMapID(result.getInt("id_map")); //id_map
+                        simulation.setCreatorID(result.getInt("id_user"));
+                        simulation.setName(result.getString("name"));
+                        simulation.setMapID(result.getInt("id_map"));
 
                         simulations.add(simulation);
                     }
@@ -90,47 +86,45 @@ public class SimulationParametersRepository extends SimulationRepository {
         }
     }
 
-    public Simulation getFromuuid(int uuid) throws DatabaseOperationException {
+    public Simulation getFromUUID(UUID uuid) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_UUID)) {
-                statement.setInt(1, uuid);
+                statement.setString(1, uuid.toString());
 
                 try (ResultSet result = statement.executeQuery()) {
                     if (result.next()) {
                         Simulation simulation = new Simulation();
-                        simulation.setUuid(UUID.fromString(result.getString("uuid")));   //uuid
-
-                        User user = new User();
-                        user.setId(result.getInt("user"));
-
-                        simulation.setUser(user);                  //id_user
-                        simulation.setName(result.getString("name"));                    //name
-                        simulation.setMapID(result.getInt("id_map"));                    //id_map
+                        simulation.setUuid(uuid);
+                        simulation.setCreatorID(result.getInt("id_user"));
+                        simulation.setName(result.getString("name"));
+                        simulation.setMapID(result.getInt("id_map"));
                         return simulation;
                     }
-                    return null; //no Row
+                    return null; // no row
                 }
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, Simulation.class);
         }
     }
-    public Simulation getFromId(int mapID) throws DatabaseOperationException {
+    public List<Simulation> getAllFromMap(User user, int mapID) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAPID)) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
+                statement.setInt(2, user.getId());
                 try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
-                        Simulation simulation = new Simulation();
+                    List<Simulation> simulations = new ArrayList<>();
 
-                        simulation.setMapID(mapID);   //id_map
-                        simulation.setUuid(UUID.fromString(result.getString("uuid"))); //uuid
-                        User user = new User();
-                        user.setId(result.getInt("user"));  //id_user
-                        simulation.setName(result.getString("name"));   //name
-                        return simulation;
+                    while (result.next()) {
+                        Simulation simulation = new Simulation();
+                        simulation.setUuid(UUID.fromString(result.getString("uuid")));
+                        simulation.setCreatorID(user.getId());
+                        simulation.setName(result.getString("name"));
+                        simulation.setMapID(mapID);
+
+                        simulations.add(simulation);
                     }
-                    return null; // No row
+                    return simulations;
                 }
             }
         } catch (SQLException e) {

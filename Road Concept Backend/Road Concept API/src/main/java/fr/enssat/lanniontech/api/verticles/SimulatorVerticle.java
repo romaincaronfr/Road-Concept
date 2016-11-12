@@ -64,14 +64,14 @@ public class SimulatorVerticle extends AbstractVerticle {
 
             Simulation simulation = new Simulation();
             simulation.setMapID(id);
-            simulation.setUser(currentUser);
+            simulation.setCreatorID(currentUser.getId());
 
-            boolean started = simulatorService.simulate(simulation);
-            if (started) { //TODO: Ouverture WebSocket ici pour renvoyer la progression au FrontEnd
+           // boolean started = simulatorService.simulate(simulation);
+         //   if (started) { //TODO: Ouverture WebSocket ici pour renvoyer la progression au FrontEnd
                 HttpResponseBuilder.buildOkResponse(routingContext, simulation);
-            } else {
+         //   } else {
                 throw new BadRequestException();
-            }
+       //     }
         } catch (BadRequestException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Simulation not started");
         } catch (Exception e) {
