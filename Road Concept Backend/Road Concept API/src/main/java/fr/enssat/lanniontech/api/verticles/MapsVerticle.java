@@ -161,7 +161,7 @@ public class MapsVerticle extends AbstractVerticle {
             String imageURL = body.getString("image_url");
             String description = body.getString("description");
 
-            MapInfo mapInfo = mapService.create(currentUser, name, false, imageURL, description);
+            MapInfo mapInfo = mapService.create(currentUser, name, imageURL, description);
             HttpResponseBuilder.buildOkResponse(routingContext, mapInfo);
         } catch (BadRequestException | DecodeException | ClassCastException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");

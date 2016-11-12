@@ -37,9 +37,14 @@ public class SimulatorService extends AbstractService {
     private Simulator simulator = new Simulator();
     private MapService mapService = new MapService();
 
-    public Simulation create() {
+    public Simulation create(User user, String name, int mapID, long durationS) {
         Simulation simulation = new Simulation();
-        //TODO
+        simulation.setCreatorID(user.getId());
+        simulation.setMapID(mapID);
+        simulation.setName(name);
+        simulation.setDurationS(durationS);
+
+        simulationParametersRepository.create(user.getId(), name, mapID, durationS);
         return simulation;
     }
 

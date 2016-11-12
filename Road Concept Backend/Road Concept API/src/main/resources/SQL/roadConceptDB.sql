@@ -4,37 +4,23 @@
 -- ** product: Road Concept                                                    **
 -- ** 	module: Road Concept API                                               **
 -- ** version: 0.1-SNAPSHOT                                                    **
--- ** 	date: 05/10/2016                                                       **
--- ** file: src/main/resources/roadConceptDB_dev.sql                       **
+-- ** 	date: 12/11/2016                                                       **
+-- ** file: src/main/resources/roadConceptDB.sql                           **
 -- ** author: Maëlig NANTEL						                                         **
 -- ******************************************************************************
-
--- ==============================================================================
--- PROCEDURES
--- ==============================================================================
-
-CREATE OR REPLACE FUNCTION check_id_change() RETURNS TRIGGER LANGUAGE plpgsql AS $$
-BEGIN
-	new.id = old.id;
-	RETURN new;
-END $$;
 
 -- ==============================================================================
 -- USERS
 -- ==============================================================================
 
 CREATE TABLE IF NOT EXISTS "final_user" (
-	"id" SERIAL PRIMARY KEY,
-	"email" varchar(89) NOT NULL UNIQUE CHECK ("email" ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
-	"password" varchar NOT NULL,
-	"first_name" varchar(20) NOT NULL,
-	"last_name" varchar(20) NOT NULL,
-	"type" INTEGER CHECK ("type" IN (1, 2))
+  "id"         SERIAL PRIMARY KEY,
+  "email"      VARCHAR(89) NOT NULL UNIQUE CHECK ("email" ~ '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'),
+  "password"   VARCHAR     NOT NULL,
+  "first_name" VARCHAR(20) NOT NULL,
+  "last_name"  VARCHAR(20) NOT NULL,
+  "type"       INTEGER CHECK ("type" IN (1, 2))
 );
-
-CREATE TRIGGER "final_user_update_trigger"
-BEFORE UPDATE ON "final_user"
-FOR EACH ROW EXECUTE PROCEDURE check_id_change();
 
 -- ==============================================================================
 -- MAPS INFO
@@ -42,17 +28,11 @@ FOR EACH ROW EXECUTE PROCEDURE check_id_change();
 
 CREATE TABLE IF NOT EXISTS "map_info" (
   "id"          SERIAL PRIMARY KEY,
-  "id_user"     integer     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "name"        varchar(31) NOT NULL,
-  "from_osm"    BOOLEAN     NOT NULL,
-  "image_url"   varchar(100),
-  "description" text
+  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL,
+  "image_url"   VARCHAR(100),
+  "description" TEXT
 );
-
-CREATE TRIGGER "map_info_update_trigger"
-BEFORE UPDATE ON "map_info"
-FOR EACH ROW EXECUTE PROCEDURE check_id_change();
-
 
 -- ==============================================================================
 -- SIMULATION PARAMETERS
@@ -61,6 +41,8 @@ FOR EACH ROW EXECUTE PROCEDURE check_id_change();
 CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"        VARCHAR(40) PRIMARY KEY,
   "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "id_map"      INTEGER     NOT NULL REFERENCES "map_info"(id) ON DELETE CASCADE,
   "name"        VARCHAR(31) NOT NULL,
-  "id_map"      INTEGER     NOT NULL
+  "duration_s"  INTEGER     NOT NULL,
+  "finish"      BOOLEAN     NOT NULL
 );

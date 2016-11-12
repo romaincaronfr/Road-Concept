@@ -12,7 +12,7 @@ RUN apt-get update
 # install oracle jdk
 RUN apt-get install oracle-java8-installer -y
 
-COPY ./roadConceptDB_dev.sql /var/
+COPY ./roadConceptDB.sql /var/
 COPY ./init.sh /var/
 COPY ./road-concept-api-0.1-SNAPSHOT-fat.jar /var/
 

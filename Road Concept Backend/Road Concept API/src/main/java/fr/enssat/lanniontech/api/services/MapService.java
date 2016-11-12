@@ -23,8 +23,8 @@ public class MapService extends AbstractService {
     private MapInfoRepository mapInfoRepository = new MapInfoRepository();
     private MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
 
-    public MapInfo create(User user, String name, boolean fromOSM, String imageURL, String description) {
-        return mapInfoRepository.create(user, name, fromOSM, imageURL, description);
+    public MapInfo create(User user, String name, String imageURL, String description) {
+        return mapInfoRepository.create(user, name, imageURL, description);
     }
 
     public List<MapInfo> getAllMapsInfo(User user) {

@@ -4,8 +4,8 @@
 -- ** product: Road Concept                                                    **
 -- ** 	module: Road Concept API                                               **
 -- ** version: 0.1-SNAPSHOT                                                    **
--- ** 	date: 05/10/2016                                                       **
--- ** file: src/main/resources/roadConceptDB_dev.sql                           **
+-- ** 	date: 12/11/2016                                                       **
+-- ** file: src/main/resources/roadConceptDB.sql                           **
 -- ** author: Maëlig NANTEL						                                         **
 -- ******************************************************************************
 
@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS "map_info" (
   "id"          SERIAL PRIMARY KEY,
   "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
   "name"        VARCHAR(31) NOT NULL,
-  "from_osm"    BOOLEAN     NOT NULL,
   "image_url"   VARCHAR(100),
   "description" TEXT
 );
@@ -42,5 +41,8 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"        VARCHAR(40) PRIMARY KEY,
   "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "name"        VARCHAR(31) NOT NULL
+  "id_map"      INTEGER     NOT NULL REFERENCES "map_info"(id) ON DELETE CASCADE,
+  "name"        VARCHAR(31) NOT NULL,
+  "duration_s"  INTEGER     NOT NULL,
+  "finish"      BOOLEAN     NOT NULL
 );

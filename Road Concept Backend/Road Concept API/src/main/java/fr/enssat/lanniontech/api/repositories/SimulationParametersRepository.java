@@ -19,7 +19,7 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
 
-    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map) VALUES (?, ?, ?, ?)";
+    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map, duration_s, finish) VALUES (?, ?, ?, ?)";
     private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, name, id_map FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name FROM simulation WHERE id_map = ? AND id_user ?";
@@ -27,20 +27,24 @@ public class SimulationParametersRepository extends SimulationRepository {
     // CREATE
     // ------
 
-    public Simulation create(int mapID, User user, String name, String uuid) throws DatabaseOperationException {
+    public Simulation create(int creatorID, String name, int mapID, long duration) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
-                statement.setString(1,uuid);
-                statement.setInt(2,user.getId());
+                Simulation simulation = new Simulation();
+
+                statement.setString(1, simulation.getUuid().toString());
+                statement.setInt(2, creatorID);
                 statement.setString(3,name);
+                statement.setInt(4, mapID);
+                statement.setLong(5, duration);
+                statement.setBoolean(6, false);
 
                 try (ResultSet result = statement.executeQuery()) {
-                    result.next(); // Has exactly one row
-                    Simulation simulation = new Simulation();
-                    simulation.setUuid(UUID.fromString(result.getString("uuid")));
-                    simulation.setCreatorID(user.getId());
-                    simulation.setName(name);
+                    simulation.setDurationS(duration);
                     simulation.setMapID(mapID);
+                    simulation.setName(name);
+                    simulation.setCreatorID(creatorID);
+                    simulation.setFinish(false);
                     return simulation;
                 }
             }

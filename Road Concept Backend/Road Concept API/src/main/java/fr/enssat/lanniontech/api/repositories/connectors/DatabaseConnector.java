@@ -91,7 +91,7 @@ public final class DatabaseConnector {
     private static void initializeDeveloppmentSchema(Connection connection) {
         try {
             SQLScriptRunner runner = new SQLScriptRunner(connection, false);
-            try (InputStream script = DatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/roadConceptDB_dev.sql")) {
+            try (InputStream script = DatabaseConnector.class.getClassLoader().getResourceAsStream("SQL/roadConceptDB.sql")) {
                 runner.runScript(new BufferedReader(new InputStreamReader(script)));
             }
         } catch (Exception e) {
