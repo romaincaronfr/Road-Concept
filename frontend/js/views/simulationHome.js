@@ -19,7 +19,7 @@ app.simulationHomeView = Backbone.View.extend({
     },
 
     render: function () {
-        this.$el.html(this.template);
+        this.$el.html(this.template(new Backbone.Model({"id":this.id})));
         var self = this;
         this.simulationParamsCollection.fetch({
             success: function(){

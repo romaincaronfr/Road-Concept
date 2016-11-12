@@ -36,7 +36,8 @@ app.Router = Backbone.Router.extend({
         "editmap/:id": "mapEdition",
         "simmap" : "mapSimulation",
         "users": "users",
-        "homeSimulation/:id": "homeSimulation"
+        "homeSimulation/:id": "homeSimulation",
+        "simulationCreation/:id": "simulationCreation"
     },
 
     initialize: function () {
@@ -50,6 +51,7 @@ app.Router = Backbone.Router.extend({
         this.editmapV = null;
         this.simmapView = null;
         this.homeSimuV = null;
+        this.simuCreatV = null;
     },
 
     start: function () {
@@ -156,6 +158,16 @@ app.Router = Backbone.Router.extend({
             console.log("homeSimulation non null");
             this.homeSimuV.changeID(id);
             this.homeSimuV.render();
+        }
+    },
+
+    simulationCreation: function(id){
+        this.checkAndInitNavBar();
+        if (!this.simuCreatV){
+            this.simuCreatV = new app.simulationCreationView({id:id});
+        } else {
+            this.simuCreatV.changeID(id);
+            this.simuCreatV.render();
         }
     },
 

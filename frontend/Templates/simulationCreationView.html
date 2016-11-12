@@ -1,0 +1,45 @@
+<div id="mapRow" class="" xmlns="http://www.w3.org/1999/html">
+    <div class="osmSidebar">
+        <div class="row">
+            <div class="col-md-2 col-md-offset-1">
+                <button class="btn btn-success btn-block" id="importButton" data-toggle="tooltip" data-placement="bottom" title="Importez les données d'une carte Open Street Map">Importer</button>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-success btn-block" href="#map/<%= id %>" id="goEditionButton" data-toggle="tooltip" data-placement="bottom" title="Visualisez votre carte">Visualisation</a>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-success btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Lancer une simulation sur cette carte">Simulation</a>
+            </div>
+        </div>
+    </div>
+    <div id="divPourSlier">
+        <div id="osmSlider">
+        </div>
+    </div>
+    <div id="osmInfo">
+    </div>
+    <div style="background-color: white" id="map"></div>
+    <div id="editBarMenu" class="col-md-12">
+        <div id="editButtonChooseTool" class=" btn-group-lg" role="group">
+            <div class="col-md-4 col-md-offset-0 ">
+                <button class="btn btn-default btn-block" name="chooseTool" value="LineString" data-toggle="tooltip" data-placement="top" title="Création d'une route : un double clic permet de terminer l'édition"><span class="glyphicon glyphicon-road"></span>&nbsp;  Route</button>
+            </div>
+            <div class="col-md-4 col-md-offset-0">
+                <button class="btn btn-default btn-block" name="chooseTool" value="Polygon" data-toggle="tooltip" data-placement="top" title="Création d'un rond-point : dessinez la forme de votre rond-point. L'édition se termine lorsque votre dernier point est sur votre premier point"><span class="glyphicon glyphicon-refresh"></span>&nbsp;  Rond-point</button>
+            </div>
+            <div class="col-md-4 col-md-offset-0">
+                <button class="btn btn-default btn-block" name="chooseTool" value="Point" data-toggle="tooltip" data-placement="top" title="Création d'un feu tricolore : un simple clic permet de créer votre feu"><img src="assets/img/traffic-light.svg">&nbsp;Feu tricolore</button>
+            </div>
+        </div>
+        <div id="editButtonCancel" class="col-md-12" hidden>
+            <div class="btn-group col-md-1">
+            </div>
+            <div class="btn-group col-md-10">
+                <button class="btn btn-block btn-default " id="cancel" data-toggle="tooltip" data-placement="top" title="Revenir au mode édition">Annuler</button>
+            </div>
+            <div id="helpSign" class="btn-group col-md-1">
+            </div>
+        </div>
+    </div>
+
+</div>
