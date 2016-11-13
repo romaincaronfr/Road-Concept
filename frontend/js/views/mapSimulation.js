@@ -290,11 +290,11 @@ app.mapSimulationView = Backbone.View.extend({
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
-                        size: [100, 100],
+                        size: [75, 187],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1 / resolution,
-                        src: 'assets/img/car-100.png',
+                        scale: 0.027 / resolution,
+                        src: 'assets/img/car.png',
                         rotation : angle
                     })
                 });
