@@ -82,4 +82,8 @@ public class Intersection {
         trajectories.addAll(this.trajectories.get(source).values());
         return trajectories;
     }
+
+    public Position getP() {
+        return P;
+    }
 }

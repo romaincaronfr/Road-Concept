@@ -69,4 +69,16 @@ public class Road {
     public UUID getId() {
         return id;
     }
+
+    public Position getA() {
+        return A;
+    }
+
+    public Position getB() {
+        return B;
+    }
+
+    public double getLength() {
+        return length;
+    }
 }

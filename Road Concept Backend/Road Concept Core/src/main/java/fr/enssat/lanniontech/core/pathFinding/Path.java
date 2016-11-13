@@ -24,4 +24,17 @@ public class Path {
         }
         return stepUuid;
     }
+
+    public int getSize(){
+        return path.size();
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        for (UUID id : path){
+            res = res.concat(id + ", ");
+        }
+        return res;
+    }
 }

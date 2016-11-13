@@ -2,15 +2,14 @@ package fr.enssat.lanniontech.core.pathFinding;
 
 
 import fr.enssat.lanniontech.core.managers.RoadManager;
+import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class PathFinder {
 
@@ -49,4 +48,73 @@ public class PathFinder {
 
         return myPath;
     }
+
+    public Path getPathTo(Trajectory source, UUID destination, boolean reverse){
+        Path myPath = new Path();
+
+        Intersection start = source.getNextIntersection();
+        Intersection goal = null;
+        if(reverse){
+            goal = roadManager.getIntersection(roadManager.getRoad(destination).getB());
+            if(goal == null){
+                goal = roadManager.getIntersection(roadManager.getRoad(destination).getA());
+            }
+        }else{
+            goal = roadManager.getIntersection(roadManager.getRoad(destination).getA());
+            if(goal == null){
+                goal = roadManager.getIntersection(roadManager.getRoad(destination).getB());
+            }
+        }
+
+        List<Node> openNodes = new LinkedList<>();
+        Map<Intersection,Node> closedNodes = new HashMap<>();
+        Node finalNode = null;
+
+        Node node = new Node(0, Position.length(start.getP(),goal.getP()),source.getRoadId(),null,start);
+        openNodes.add(node);
+
+        while(openNodes.size()>0 && finalNode==null){
+            node = openNodes.get(0);
+            if(node.intersection != goal) {
+                if (closedNodes.containsKey(node.intersection) && closedNodes.get(node.intersection).cost > node.cost) {
+                    openNodes.remove(node);
+                } else {
+                    for (Trajectory t : node.intersection.getTrajectoriesFrom(node.source)) {
+                        if (t.getNextIntersection() != node.intersection) {
+                            Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(),
+                                    Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(),
+                                    node, t.getNextIntersection());
+                            int pos = 0;
+                            while(pos<openNodes.size() && !newNode.betterThan(openNodes.get(pos))){
+                                pos++;
+                            }
+                            openNodes.add(pos,newNode);
+                        }
+                    }
+                    openNodes.remove(node);
+                    closedNodes.replace(node.intersection, node);
+                }
+            }else{
+                finalNode = node;
+            }
+        }
+        
+        if(finalNode == null){
+            LOG.error("destination unreachable");
+        }
+
+        reconstructPath(myPath,finalNode);
+        myPath.addToPath(destination);
+        LOG.debug(myPath.toString());
+
+        return myPath;
+    }
+
+    private void reconstructPath(Path myPath,Node node){
+        if(node.sourceNode != null){
+            reconstructPath(myPath,node.sourceNode);
+        }
+        myPath.addToPath(node.source);
+    }
+
 }
