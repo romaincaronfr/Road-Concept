@@ -4,20 +4,22 @@
 
 app.simulationCreationView = Backbone.View.extend({
     el: '#body',
+    tile: null,
+    value: null,
+    draw: null,
+    vectorSource: null,
+    vectorLayer: null,
+    snap: null,
+    mapDetailsCOllection: null,
+    step: 0,
 
     events: {
-        tile: null,
-        value: null,
-        draw: null,
-        vectorSource: null,
-        vectorLayer: null,
-        snap: null,
-        mapDetailsCOllection: null
+        'click #ready': 'addInteraction'
     },
 
     initialize: function (options) {
         this.id = options.id;
-        console.log('id:'+this.id);
+        console.log('id:' + this.id);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         console.log(this.mapDetailsCOllection);
         this.render();
@@ -83,19 +85,19 @@ app.simulationCreationView = Backbone.View.extend({
         this.snap = new ol.interaction.Snap({
             source: this.vectorSource
         });
-
         this.map.addInteraction(this.snap);
 
         this.fetchCollection();
+        $('#modalAvertissementSimulation').modal('show');
 
-        $( "#osmSlider" ).slider({
+        $("#osmSlider").slider({
             orientation: "vertical",
             range: "min",
             min: 0,
             max: 1,
             step: 0.1,
             value: 0.3,
-            slide: function( event, ui ) {
+            slide: function (event, ui) {
                 self.changeOppacity(ui.value);
             }
         });
@@ -223,5 +225,76 @@ app.simulationCreationView = Backbone.View.extend({
             default:
                 break;
         }
+    },
+
+    addInteraction: function (place) {
+        var self = this;
+        this.draw = new ol.interaction.Draw({
+            source: new ol.source.Vector(),
+            type: 'Point'
+        });
+
+        this.map.addInteraction(this.draw);
+        this.map.addInteraction(this.snap);
+
+        this.draw.on('drawend', function (event) {
+            if (self.step == 0)
+            {
+                console.log('Draw : end');
+                var feature = event.feature;
+                var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
+                    dataProjection: 'EPSG:3857',
+                    featureProjection: 'EPSG:3857'
+                });
+                JSONFeature = JSON.parse(JSONFeature);
+
+                var coord = feature.getGeometry().getCoordinates();
+                coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+                JSONFeature.geometry.coordinates = coord;
+                JSONFeature.properties = {type: 6, nbHabit: 30, hour: 10};
+
+
+                self.newModel = new app.models.mapDetailsModel(JSONFeature, {
+                    parse: true,
+                    collection: self.mapDetailsCOllection
+                });
+
+                self.renderFeatureCreation(self.newModel);
+
+                var geojsonModel = self.newModel.toGeoJSON();
+                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                    featureProjection: 'EPSG:3857'
+                });
+                self.vectorSource.addFeature(newfeature);
+
+                self.step++;
+            }
+
+            self.map.removeInteraction(this.draw);
+            self.map.removeInteraction(this.snap);
+        });
+    },
+
+    renderFeatureCreation: function (model) {
+        switch (model.attributes.type) {
+            case 1:
+            case 2:
+            case 3:
+                new app.mapPopUpCreateRoadsView({
+                    model: model
+                });
+                break;
+            case 4:
+                new app.mapPopUpCreateRondPointView({
+                    model: model
+                });
+                break;
+            case 5:
+                new app.mapPopUpCreateRedlightsView({
+                    model: model
+                });
+                break;
+        }
+
     }
 });

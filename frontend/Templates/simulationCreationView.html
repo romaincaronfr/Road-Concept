@@ -2,13 +2,7 @@
     <div class="osmSidebar">
         <div class="row">
             <div class="col-md-2 col-md-offset-1">
-                <button class="btn btn-success btn-block" id="importButton" data-toggle="tooltip" data-placement="bottom" title="Importez les données d'une carte Open Street Map">Importer</button>
-            </div>
-            <div class="col-md-2">
-                <a class="btn btn-success btn-block" href="#map/<%= id %>" id="goEditionButton" data-toggle="tooltip" data-placement="bottom" title="Visualisez votre carte">Visualisation</a>
-            </div>
-            <div class="col-md-2">
-                <a class="btn btn-success btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Lancer une simulation sur cette carte">Simulation</a>
+                <a class="btn btn-danger btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Revenir à la liste des simulations">Annuler</a>
             </div>
         </div>
     </div>
@@ -21,24 +15,46 @@
     <div style="background-color: white" id="map"></div>
     <div id="editBarMenu" class="col-md-12">
         <div id="editButtonChooseTool" class=" btn-group-lg" role="group">
-            <div class="col-md-4 col-md-offset-0 ">
-                <button class="btn btn-default btn-block" name="chooseTool" value="LineString" data-toggle="tooltip" data-placement="top" title="Création d'une route : un double clic permet de terminer l'édition"><span class="glyphicon glyphicon-road"></span>&nbsp;  Route</button>
+            <div class="col-md-1 col-md-offset-0 ">
+                <button class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Précédent"><span class="glyphicon glyphicon-share-alt"></span></button>
             </div>
-            <div class="col-md-4 col-md-offset-0">
-                <button class="btn btn-default btn-block" name="chooseTool" value="Polygon" data-toggle="tooltip" data-placement="top" title="Création d'un rond-point : dessinez la forme de votre rond-point. L'édition se termine lorsque votre dernier point est sur votre premier point"><span class="glyphicon glyphicon-refresh"></span>&nbsp;  Rond-point</button>
-            </div>
-            <div class="col-md-4 col-md-offset-0">
-                <button class="btn btn-default btn-block" name="chooseTool" value="Point" data-toggle="tooltip" data-placement="top" title="Création d'un feu tricolore : un simple clic permet de créer votre feu"><img src="assets/img/traffic-light.svg">&nbsp;Feu tricolore</button>
+            <div class="col-md-11 col-md-offset-0 ">
+                <div id="habitZone" class="text-center" hidden><p>Veuillez placer votre zone d'habitation</p><p>Un simple clic sur une route pour la créée</p></div>
+                <div id="habitZoneParam" class="text-center" hidden><p>Veuillez renseigner les paramètres de votre zone d'habitation</p><p>Tous les champs doivent être renseignés</p></div>
+                <div id="workZone" class="text-center" hidden><p>Veuillez placer votre zone de travail</p><p>Un simple clic sur une route pour la créée</p></div>
+                <div id="workZoneParam" class="text-center" hidden><p>Veuillez renseigner les paramètres de votre zone de travail</p><p>Tous les champs doivent être renseignés</p></div>
+                <button id="startSim" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>   Lancer</button>
             </div>
         </div>
-        <div id="editButtonCancel" class="col-md-12" hidden>
-            <div class="btn-group col-md-1">
+    </div>
+    <div id="modalAvertissementSimulation" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Création d'une nouvelle simulation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Bienvenue dans la page de création de votre nouvelle simulation!</p>
+                    <p>Il vous sera demandé dans un premier temps, de créer une zone d'habitation et y renseigner les paramètres suivant :
+                       <ul>
+                            <li>Nombre d'habitants de la zone</li>
+                            <li>Heure de départ</li>
+                       </ul>
+                    </p>
+                    <p>Vous devrez ensuite créer une zone de travail et y renseigner le paramètre suivant :
+                        <ul>
+                            <li>Heure de retour</li>
+                        </ul>
+                    </p>
+                    <p>Une fois ces étapes passées, il vous sera changer de nouveau les paramètres de vos deux zones et/ou de lancer la simulation.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="ready" type="button" class="btn btn-success" data-dismiss="modal">Je suis prêt !</button>
+                </div>
             </div>
-            <div class="btn-group col-md-10">
-                <button class="btn btn-block btn-default " id="cancel" data-toggle="tooltip" data-placement="top" title="Revenir au mode édition">Annuler</button>
-            </div>
-            <div id="helpSign" class="btn-group col-md-1">
-            </div>
+
         </div>
     </div>
 

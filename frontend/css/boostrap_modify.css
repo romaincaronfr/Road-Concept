@@ -275,7 +275,14 @@ th {
   font-size: 200%;
   padding-top: 20%;
   padding-left: 30%;
- }
+}
+#editButtonChooseTool .glyphicon-share-alt {
+  font-size: 150%;
+  transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+}
 .glyphicon-asterisk:before {
   content: "\002a";
 }
