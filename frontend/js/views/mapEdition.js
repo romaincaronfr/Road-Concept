@@ -46,7 +46,7 @@ app.mapEditionView = Backbone.View.extend({
     },
 
     render: function () {
-        //Supression du content
+        //Suppression du content
         this.mapDetailsCOllection.reset();
         $('#content').empty();
         if (this.vectorSource) {
