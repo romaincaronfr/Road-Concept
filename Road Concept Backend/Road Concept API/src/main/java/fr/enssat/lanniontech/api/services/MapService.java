@@ -1,33 +1,18 @@
 package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
-import fr.enssat.lanniontech.api.entities.geojson.Feature;
-import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
-import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
-import fr.enssat.lanniontech.api.entities.geojson.LineString;
-import fr.enssat.lanniontech.api.entities.geojson.Point;
+import fr.enssat.lanniontech.api.entities.geojson.*;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
+import fr.enssat.lanniontech.api.utilities.GlobalUtils;
 import fr.enssat.lanniontech.api.utilities.JSONHelper;
 import fr.enssat.lanniontech.api.utilities.MathsUtils;
-import fr.enssat.lanniontech.api.utilities.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
+import java.util.*;
 
 public class MapService extends AbstractService {
 
@@ -314,10 +299,11 @@ public class MapService extends AbstractService {
 
         LineString createdRoad = (LineString) feature.getGeometry();
 
-        Map<UUID, List<Tuple<Coordinates, Coordinates>>> tab = new HashMap<>();
+        Map<UUID, Feature> tab = new HashMap<>();
+        Map<UUID, List<Boolean>> tabBool = new HashMap<>();
 
         List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
-        Collections.fill(splitNewFeatureAt, Boolean.TRUE);
+        Collections.fill(splitNewFeatureAt, Boolean.FALSE);
 
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
 
@@ -325,60 +311,117 @@ public class MapService extends AbstractService {
             if (!potentialIntersections.get(i).isEmpty()) {
 
                 for (String uuidToCheck : potentialIntersections.get(i)) {
-                    Feature featureToCheck = getFeature(mapID, UUID.fromString(uuidToCheck));
-                    LineString coordinaToCheck = (LineString) featureToCheck.getGeometry();
+                    UUID uuid = UUID.fromString(uuidToCheck);
+                    if (!tab.containsKey(uuid)){
+                        Feature featureToCheck = getFeature(mapID, uuid);
+                        Feature duplicatedFeatureToCheck = GlobalUtils.cloner.deepClone(featureToCheck);
+                        tab.put(uuid,duplicatedFeatureToCheck);
+                        LineString lineString = (LineString) duplicatedFeatureToCheck.getGeometry();
+                        List<Boolean> newList = new ArrayList<>(Arrays.asList(new Boolean[lineString.getCoordinates().size()]));
+                        Collections.fill(newList, Boolean.FALSE);
+                        tabBool.put(uuid,newList);
+                    }
+                    Feature duplicatedFeatureToCheck = tab.get(uuid);
+
+                    LineString coordinaToCheck = (LineString) duplicatedFeatureToCheck.getGeometry();
 
                     for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 2; j++) {
                         Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j); // A = to check
                         Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j + 1);
 
-                        Coordinates firstPointRoadB; // B = qu'on créé
+                        Coordinates firstPointRoadB;
                         Coordinates lastPointRoadB;
-
-                        if (i == 0) {
-                            firstPointRoadB = createdRoad.getCoordinates().get(0);
-                            lastPointRoadB = createdRoad.getCoordinates().get(1);
-                        } else {
-                            firstPointRoadB = createdRoad.getCoordinates().get(i - 1);
-                            lastPointRoadB = createdRoad.getCoordinates().get(i);
+                        if (i == createdRoad.getCoordinates().size()-1){
+                            firstPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i-1).getLongitude()),MathsUtils.roundGPS(createdRoad.getCoordinates().get(i-1).getLatitude()));
+                            lastPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLongitude()),MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLatitude()));
+                        }else {
+                            firstPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLongitude()),MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLatitude()));
+                            lastPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i+1).getLongitude()),MathsUtils.roundGPS(createdRoad.getCoordinates().get(i+1).getLatitude()));
                         }
-
-                        Coordinates intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+                        boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
                         LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
-                        if (intersectionPoint == null) {
-                            if (i == createdRoad.getCoordinates().size()-1) {
-                                firstPointRoadB = createdRoad.getCoordinates().get(i-1);
-                                lastPointRoadB = createdRoad.getCoordinates().get(i);
-                            } else {
-                                firstPointRoadB = createdRoad.getCoordinates().get(i);
-                                lastPointRoadB = createdRoad.getCoordinates().get(i+1);
-                            }
-                            intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
-                            LOGGER.debug("@@@ Intersection detected : " + intersectionPoint);
-                        }
-                        if (intersectionPoint != null) {
+                        LOGGER.debug("@@@ j = : " + j);
+                        if (intersectionPoint) {
+                            LOGGER.debug("@@@ firstPointRoadA = "+firstPointRoadA+" lastPointRoadA = "+lastPointRoadA);
+                            LOGGER.debug("@@@ INTERSECTION TRUE");
                             intersectionsDetectedCount++;
                             splitNewFeatureAt.set(i, true);
-                            if (tab.containsKey(featureToCheck.getUuid())) {
-                                tab.get(featureToCheck.getUuid()).add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
-                            } else {
-                                List<Tuple<Coordinates, Coordinates>> list = new ArrayList<>();
-                                list.add(new Tuple<>(coordinaToCheck.getCoordinates().get(j), createdRoad.getCoordinates().get(i)));
-                                tab.put(featureToCheck.getUuid(), list);
-                            }
+                            coordinaToCheck.getCoordinates().add(j+1,createdRoad.getCoordinates().get(i));
+                            tabBool.get(uuid).add(j+1,true);
+                            break;
                         }
                     }
                 }
             }
         }
 
-        for (Entry<UUID, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
+        for (Map.Entry<UUID,Feature> entry : tab.entrySet()){
+            /*LineString original = (LineString) mapFeatureRepository.getFromUUID(mapID,entry.getKey()).getGeometry();
+            LineString modify = (LineString) entry.getValue().getGeometry();
+            LOGGER.debug("@@@ Size original : "+original.getCoordinates().size()+" modify = "+modify.getCoordinates().size());
+            LOGGER.debug("@@@ Size boolean original : "+tabBool.get(entry.getKey()).size());*/
+            List<Feature> newFeatures = new ArrayList<>();
+            LineString lineString = (LineString) entry.getValue().getGeometry();
+            int size = lineString.getCoordinates().size();
+            Feature currentFeature = entry.getValue();
+            int start = 0;
+            for (int i = 0; i<size; i++){
+                LOGGER.debug("@@@ i = "+i+" & start = "+start);
+                if (tabBool.get(entry.getKey()).get(i)){
+                    //LineString nmynew = (LineString) currentFeature.getGeometry();
+                    //LOGGER.debug("Coordonées à split = "+nmynew.getCoordinates().get(compteur));
+                    Feature splitFeatures = newSplit(currentFeature,start,i);
+                    newFeatures.add(splitFeatures);
+                    //LineString mynew0 = (LineString) splitFeatures.get(0).getGeometry();
+                    //LineString mynew1 = (LineString) splitFeatures.get(1).getGeometry();
+                    /*LOGGER.debug("Split feature [0] first point = "+mynew0.getCoordinates().get(0));
+                    LOGGER.debug("Split feature [0] last point = "+mynew0.getCoordinates().get(mynew0.getCoordinates().size()-1));
+                    LOGGER.debug("Split feature [1] first point = "+mynew1.getCoordinates().get(0));
+                    LOGGER.debug("Split feature [1] last point = "+mynew1.getCoordinates().get(mynew1.getCoordinates().size()-1));*/
+                    //tabBool.get(entry.getKey()).set(i,false);
+                    //i--;
+                    start = i;
+                }
+            }
+            LineString nmynew = (LineString) currentFeature.getGeometry();
+            Feature lastFeature = newSplit(currentFeature,start,nmynew.getCoordinates().size()-1);
+            newFeatures.add(lastFeature);
+            mapFeatureRepository.delete(mapID,entry.getKey());
+            for (Feature feature1 : newFeatures){
+                mapFeatureRepository.create(mapID,feature1);
+            }
+        }
+
+        List<Feature> newFeatures = new ArrayList<>();
+        LineString lineString = (LineString) feature.getGeometry();
+        int size = lineString.getCoordinates().size();
+        Feature currentFeature = feature;
+        int start = 0;
+        for (int i = 0; i<size; i++){
+            LOGGER.debug("@@@ i = "+i+" & start = "+start);
+            if (splitNewFeatureAt.get(i)){
+                Feature splitFeatures = newSplit(currentFeature,start,i);
+                newFeatures.add(splitFeatures);
+                start = i;
+            }
+        }
+        LineString nmynew = (LineString) currentFeature.getGeometry();
+        Feature lastFeature = newSplit(currentFeature,start,nmynew.getCoordinates().size()-1);
+        newFeatures.add(lastFeature);
+        for (Feature feature1 : newFeatures){
+            mapFeatureRepository.create(mapID,feature1);
+        }
+        LOGGER.debug("Nombre d'intersections détectées : " + intersectionsDetectedCount);
+        return null;
+
+         /*for (Entry<UUID, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
             List<Feature> myNewFeatures = new ArrayList<>();
             Feature myFirstFeature = getFeature(mapID,entry.getKey());
             myNewFeatures.add(myFirstFeature);
             for (Tuple<Coordinates, Coordinates> tuple : entry.getValue()) {
-                myBoucleToBreak:
-                for (int i = 0; i < myNewFeatures.size(); i++) {
+                //myBoucleToBreak:
+                int size = myNewFeatures.size();
+                for (int i = 0; i < size; i++) {
                     LineString myLineString = (LineString) myNewFeatures.get(i).getGeometry();
                     for (int j = 0; j < myLineString.getCoordinates().size(); j++) {
                         if (tuple.getLeft().equals(myLineString.getCoordinates().get(j))) {
@@ -387,7 +430,7 @@ public class MapService extends AbstractService {
                                 myNewFeatures.addAll(mySplitFeatures);
                                 myNewFeatures.remove(i);
                             }
-                            break myBoucleToBreak;
+                            //break myBoucleToBreak;
                         }
                     }
                 }
@@ -396,43 +439,55 @@ public class MapService extends AbstractService {
             for (Feature toAdd : myNewFeatures) {
                 mapFeatureRepository.create(mapID, toAdd);
             }
-        }
-        LOGGER.debug("Nombre d'intersections détectées : " + intersectionsDetectedCount);
-
-        feature.getProperties().put("id", feature.getUuid());
-        mapFeatureRepository.create(mapID, feature);
-        return null;
+        }*/
     }
 
-    private List<Feature> splitOldFeature(Feature one, int oneIntersectionPointIndex, Coordinates NewCoordinate) {
+    private LinkedList<Feature> split(Feature featureToSplit, int index){
+        Map<String,Object> properties = featureToSplit.getProperties();
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
-        newOneRoad1.setProperties(new HashMap<>(one.getProperties()));
-        newOneRoad2.setProperties(new HashMap<>(one.getProperties()));
+        newOneRoad1.setProperties(new HashMap<>(properties));
+        newOneRoad2.setProperties(new HashMap<>(properties));
         newOneRoad1.setGeometry(new LineString());
         newOneRoad2.setGeometry(new LineString());
-
-        LineString oneRoad = (LineString) one.getGeometry();
-
-        LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
-        oneRoadFirstPart.addAll(oneRoad.getCoordinates().subList(0, oneIntersectionPointIndex + 1));
-        oneRoadFirstPart.add(NewCoordinate);
-        LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
-        oneRoadLastPart.add(NewCoordinate);
-        oneRoadLastPart.addAll(oneRoad.getCoordinates().subList(oneIntersectionPointIndex + 1, oneRoad.getCoordinates().size()));
-
-        ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
-        ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
-
         newOneRoad1.getProperties().remove("id");
         newOneRoad2.getProperties().remove("id");
         newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
         newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
 
-        List<Feature> listToReturn = new ArrayList<>();
+
+        LineString lineString = (LineString) featureToSplit.getGeometry();
+        LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
+        oneRoadFirstPart.addAll(lineString.getCoordinates().subList(0, index + 1));
+        LOGGER.debug("@@@ First size = "+oneRoadFirstPart.size());
+        LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
+        oneRoadLastPart.addAll(lineString.getCoordinates().subList(index,lineString.getCoordinates().size()));
+        LOGGER.debug("@@@ Second size = "+oneRoadLastPart.size());
+
+        ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
+        ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
+
+        LinkedList<Feature> listToReturn = new LinkedList<>();
         listToReturn.add(newOneRoad1);
         listToReturn.add(newOneRoad2);
         return listToReturn;
+    }
+
+    private Feature newSplit (Feature featureToSplit, int start, int stop){
+        Map<String,Object> properties = featureToSplit.getProperties();
+        Feature newOneRoad1 = new Feature();
+        newOneRoad1.setProperties(new HashMap<>(properties));
+        newOneRoad1.setGeometry(new LineString());
+        newOneRoad1.getProperties().remove("id");
+        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
+
+
+        LineString lineString = (LineString) featureToSplit.getGeometry();
+        LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
+        oneRoadFirstPart.addAll(lineString.getCoordinates().subList(start, stop+1));
+        LOGGER.debug("@@@ First size = "+oneRoadFirstPart.size());
+        ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
+        return newOneRoad1;
     }
 }
 

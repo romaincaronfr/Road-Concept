@@ -12,7 +12,7 @@ public final class MathsUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(MathsUtils.class);
 
     public static double roundGPS(double value) {
-        return round(value, 7);
+        return round(value, 9);
     }
 
     public static double round(double value, int places) {
@@ -23,7 +23,7 @@ public final class MathsUtils {
         return bd.doubleValue();
     }
 
-    public static Coordinates intersect(Coordinates p0, Coordinates p1, Coordinates p2, Coordinates p3) {
+    public static boolean intersect(Coordinates p0, Coordinates p1, Coordinates p2, Coordinates p3) {
         double s1_x = p1.getLongitude() - p0.getLongitude();
         double s1_y = p1.getLatitude() - p0.getLatitude();
         double s2_x = p3.getLongitude() - p2.getLongitude();
@@ -38,8 +38,16 @@ public final class MathsUtils {
             double i_x = p0.getLongitude() + (t * s1_x);
             double i_y = p0.getLatitude() + (t * s1_y);
 
-            return new Coordinates(i_x, i_y);
+            return true;
         }
-        return null;
+        return false;
+        /*Point2D point0 = new Point2D.Double(p0.getLongitude(),p0.getLatitude());
+        Point2D point1 = new Point2D.Double(p1.getLongitude(),p1.getLatitude());
+        Point2D point2 = new Point2D.Double(p2.getLongitude(),p2.getLatitude());
+
+        LOGGER.debug("@@@ DISTANCE = "+new Line2D.Double(point0, point1).ptLineDist(point2));
+
+        //LOGGER.debug("@@@ Distance = "+new Line2D.Double(point0, point1).ptLineDist(point2));
+        return (new Line2D.Double(point0, point1).ptLineDist(point2) < Math.pow(10,-6));*/
     }
 }
