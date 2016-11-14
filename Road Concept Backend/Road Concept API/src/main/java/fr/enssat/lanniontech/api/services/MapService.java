@@ -86,6 +86,9 @@ public class MapService extends AbstractService {
         FeatureCollection features = JSONHelper.fromJSON(fileData, FeatureCollection.class);
         fromOSMAdaptation(features);
 
+        ExperimentalIntersections something = new ExperimentalIntersections(features);
+
+
         FeatureCollection toAdd = new FeatureCollection();
 //        FeatureCollection existingFeatures = getMap(user.getId(), mapID).getFeatures();
         for (Feature feature : features) {
