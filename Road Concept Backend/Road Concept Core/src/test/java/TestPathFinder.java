@@ -87,7 +87,7 @@ public class TestPathFinder {
 
         Assert.assertEquals(2,testPath.getSize());/**/
 
-        testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-1"),false);
+        testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-1"),true);
 
         Assert.assertEquals(3,testPath.getSize());
 

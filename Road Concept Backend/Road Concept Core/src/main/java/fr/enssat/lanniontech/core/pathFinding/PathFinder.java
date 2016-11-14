@@ -75,27 +75,28 @@ public class PathFinder {
 
         while(openNodes.size()>0 && finalNode==null){
             node = openNodes.get(0);
-            if(node.intersection != goal) {
-                if (closedNodes.containsKey(node.intersection) && closedNodes.get(node.intersection).cost > node.cost) {
-                    openNodes.remove(node);
-                } else {
-                    for (Trajectory t : node.intersection.getTrajectoriesFrom(node.source)) {
-                        if (t.getNextIntersection() != node.intersection) {
-                            Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(),
-                                    Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(),
-                                    node, t.getNextIntersection());
-                            int pos = 0;
-                            while(pos<openNodes.size() && !newNode.betterThan(openNodes.get(pos))){
-                                pos++;
-                            }
-                            openNodes.add(pos,newNode);
+            if (closedNodes.containsKey(node.intersection) && closedNodes.get(node.intersection).cost >= node.cost) {
+                openNodes.remove(node);
+            } else {
+                for (Trajectory t : node.intersection.getTrajectoriesFrom(node.source)) {
+                    if (t.getNextIntersection() != node.intersection) {
+                        Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(),
+                                Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(),
+                                node, t.getNextIntersection());
+                        int pos = 0;
+                        while(pos<openNodes.size() && !newNode.betterThan(openNodes.get(pos))){
+                            pos++;
                         }
+                        openNodes.add(pos,newNode);
                     }
-                    openNodes.remove(node);
-                    closedNodes.replace(node.intersection, node);
+
+
+                    if(t.getRoadId().equals(destination)  && node.intersection == goal){
+                        finalNode = node;
+                    }
                 }
-            }else{
-                finalNode = node;
+                openNodes.remove(node);
+                closedNodes.replace(node.intersection, node);
             }
         }
         
