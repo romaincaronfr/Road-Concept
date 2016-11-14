@@ -1,0 +1,544 @@
+{
+  "infos": {
+    "id": 9,
+    "name": "test",
+    "description": ""
+  },
+  "features": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "25eb2c02-bd42-40a0-b5a5-7dc5e2e06cd4",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.705482483,
+              48.81313768
+            ],
+            [
+              -3.710289001,
+              48.814437645
+            ],
+            [
+              -3.712949753,
+              48.81997625
+            ],
+            [
+              -3.710975647,
+              48.823705986
+            ],
+            [
+              -3.701620102,
+              48.827096414
+            ],
+            [
+              -3.695526123,
+              48.828339513
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "c71440b3-dde7-4969-b16d-0a4f09e72f7d",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.705482483,
+              48.81313768
+            ],
+            [
+              -3.70007515,
+              48.814974578
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "97dbf1d5-94a9-4757-96d2-7857acb5d61b",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.70007515,
+              48.814974578
+            ],
+            [
+              -3.698101044,
+              48.816924442
+            ],
+            [
+              -3.694238663,
+              48.823592968
+            ],
+            [
+              -3.695526123,
+              48.828339513
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "dc174e5e-e5dd-4a9f-8b97-54c957ce5635",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.705482483,
+              48.81313768
+            ],
+            [
+              -3.706555367,
+              48.810820267
+            ],
+            [
+              -3.705224991,
+              48.808389695
+            ],
+            [
+              -3.701877594,
+              48.807202628
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "473e28ea-13c3-4c3d-bff0-bdfbc4f7b230",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.701877594,
+              48.807202628
+            ],
+            [
+              -3.700590134,
+              48.809689783
+            ],
+            [
+              -3.698959351,
+              48.810763744
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "4aabb103-552c-4201-a738-caf4f49c39cc",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.701877594,
+              48.807202628
+            ],
+            [
+              -3.706254959,
+              48.802001815
+            ],
+            [
+              -3.709859848,
+              48.800362316
+            ],
+            [
+              -3.713293076,
+              48.800644992
+            ],
+            [
+              -3.716039658,
+              48.801662612
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "331c7bfd-97d6-4031-8699-40e6a78c79e8",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.701877594,
+              48.807202628
+            ],
+            [
+              -3.695783615,
+              48.80618512
+            ],
+            [
+              -3.688659668,
+              48.80550677
+            ],
+            [
+              -3.680505753,
+              48.805959004
+            ],
+            [
+              -3.672952652,
+              48.806750405
+            ],
+            [
+              -3.663682938,
+              48.807937482
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "b23ec3ad-beed-4c82-9df5-44048fb8a69b",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.70007515,
+              48.814974578
+            ],
+            [
+              -3.695268631,
+              48.814324606
+            ],
+            [
+              -3.690891266,
+              48.813702887
+            ],
+            [
+              -3.686943054,
+              48.813363764
+            ],
+            [
+              -3.682050705,
+              48.812742032
+            ],
+            [
+              -3.678617477,
+              48.814042007
+            ],
+            [
+              -3.676042557,
+              48.816020166
+            ],
+            [
+              -3.674583435,
+              48.817772185
+            ],
+            [
+              -3.67269516,
+              48.820654404
+            ],
+            [
+              -3.671064377,
+              48.822801833
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "53960bcd-0ead-4cac-83ef-1714c3b75c9d",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.695526123,
+              48.828339513
+            ],
+            [
+              -3.691492081,
+              48.828904548
+            ],
+            [
+              -3.688058853,
+              48.828339513
+            ],
+            [
+              -3.685312271,
+              48.827604958
+            ],
+            [
+              -3.682308197,
+              48.826983403
+            ],
+            [
+              -3.679218292,
+              48.826248828
+            ],
+            [
+              -3.675098419,
+              48.824836154
+            ],
+            [
+              -3.671064377,
+              48.822801833
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "f3db0fa1-6960-4faa-8c77-d1015736e862",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.663682938,
+              48.807937482
+            ],
+            [
+              -3.66402626,
+              48.81014198
+            ],
+            [
+              -3.66394043,
+              48.811950726
+            ],
+            [
+              -3.663339615,
+              48.813589846
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "20847e21-2fc7-4aba-87a4-5328d66fe166",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.663339615,
+              48.813589846
+            ],
+            [
+              -3.664734364,
+              48.813671094
+            ],
+            [
+              -3.669605255,
+              48.813024638
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "52468de8-8e28-48a6-843d-4146caa9db42",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.663339615,
+              48.813589846
+            ],
+            [
+              -3.661966324,
+              48.81658534
+            ],
+            [
+              -3.660078049,
+              48.819015516
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "786540f6-85c9-48c4-a0bf-565961feaffe",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.663682938,
+              48.807937482
+            ],
+            [
+              -3.657588959,
+              48.807711374
+            ],
+            [
+              -3.648576736,
+              48.808276642
+            ],
+            [
+              -3.645658493,
+              48.811894204
+            ],
+            [
+              -3.646688461,
+              48.816302754
+            ],
+            [
+              -3.653640747,
+              48.818054763
+            ],
+            [
+              -3.660078049,
+              48.819015516
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "fed24c1c-b2aa-42cd-a287-f3d46af75f95",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.660078049,
+              48.819015516
+            ],
+            [
+              -3.661108017,
+              48.821163014
+            ],
+            [
+              -3.665485382,
+              48.823253911
+            ],
+            [
+              -3.671064377,
+              48.822801833
+            ]
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "id": "6bef7786-8dad-445e-8c9c-62bb92043583",
+          "type": 1,
+          "name": "Fuck you",
+          "oneway": false,
+          "bridge": false,
+          "maxspeed": 90
+        },
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -3.671064377,
+              48.822801833
+            ],
+            [
+              -3.670377731,
+              48.826700876
+            ],
+            [
+              -3.665571213,
+              48.827830976
+            ],
+            [
+              -3.663597107,
+              48.831390627
+            ]
+          ]
+        }
+      }
+    ]
+  }
+}

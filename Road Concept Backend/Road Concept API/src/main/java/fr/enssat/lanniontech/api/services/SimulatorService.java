@@ -136,8 +136,8 @@ public class SimulatorService extends AbstractService {
                 Coordinates last = road.getCoordinates().get(0);
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulator.positionManager.addPosition(last.getLongitude(), last.getLongitude());
-                    Position B = simulator.positionManager.addPosition(coordinates.getLongitude(), coordinates.getLongitude());
+                    Position A = simulator.positionManager.addPosition(last.getLatitude(), last.getLongitude());
+                    Position B = simulator.positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
                     roads.add(simulator.roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
                     last = coordinates;
                 }

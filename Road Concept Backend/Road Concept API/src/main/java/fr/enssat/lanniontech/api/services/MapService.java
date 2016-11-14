@@ -89,6 +89,14 @@ public class MapService extends AbstractService {
         FeatureCollection toAdd = new FeatureCollection();
         for (Feature feature : features) {
             //TODO: Get toute la map et checker à partir de là
+//            feature.getProperties().clear();
+//            feature.getProperties().put("id", feature.getUuid()); //TODO: Remove
+//            feature.getProperties().put("type", FeatureType.SINLGE_ROAD );
+//            feature.getProperties().put("name", "Fuck you");
+//            feature.getProperties().put("oneway", false);
+//            feature.getProperties().put("bridge", false);
+//            feature.getProperties().put("maxspeed", 90);
+
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
                 toAdd.add(feature);
