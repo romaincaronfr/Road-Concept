@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -38,11 +39,12 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/maps/:mapID/simulations").blockingHandler(this::processGetAllSimulationsForMap);
         router.route(HttpMethod.GET, "/api/users/:userID/simulations").blockingHandler(this::processGetAllSimulationsForUser);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID").blockingHandler(this::processGetSimulation);
-        router.route(HttpMethod.DELETE, "/api/users/:userID/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
+        router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
         router.route(HttpMethod.GET, "/api/users/:userID/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
         router.route(HttpMethod.GET, "/api/simulation/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
     }
 
+    //TODO: Handle exceptions
     private void processGetAllSimulationsForUser(RoutingContext routingContext) {
         try {
             int userID = Integer.valueOf(routingContext.request().getParam("userID"));
@@ -53,20 +55,23 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
+    //TODO: Handle exceptions
     private void processGetSimulation(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
             Simulation simulation = simulatorService.get(simulationUUID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
+    //TODO: Handle exceptions
     private void processDeleteSimulation(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
-
             simulatorService.delete(simulationUUID);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
@@ -74,6 +79,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
+    //TODO: Handle exceptions
     private void processGetAllSimulationsForMap(RoutingContext routingContext) {
         try {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
@@ -85,6 +91,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
+    //TODO: Handle exceptions
     private void processGetVehiclePositionHistory(RoutingContext routingContext) {
         try {
             int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
@@ -107,6 +114,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
+    //TODO: Handle exceptions
     private void processCreateSimulation(RoutingContext routingContext) {
         try {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
@@ -127,6 +135,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
+    //TODO: Handle exceptions
     private void processGetResultAt(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));

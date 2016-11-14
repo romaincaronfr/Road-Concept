@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class Simulation implements SQLEntity{
+public class Simulation implements SQLEntity {
 
     private UUID uuid = UUID.randomUUID();
     private String name;
@@ -28,7 +28,9 @@ public class Simulation implements SQLEntity{
         return creatorID;
     }
 
-    public void setCreatorID(int creatorID) {this.creatorID = creatorID;}
+    public void setCreatorID(int creatorID) {
+        this.creatorID = creatorID;
+    }
 
     public int getMapID() {
         return mapID;

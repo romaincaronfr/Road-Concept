@@ -37,7 +37,7 @@ public class MapService extends AbstractService {
         if (infos == null) {
             throw new EntityNotExistingException(MapInfo.class);
         }
-      //  checkAccessMap(user, infos); //FIXME
+        //  checkAccessMap(user, infos); //FIXME
 
         FeatureCollection features = mapFeatureRepository.getAll(mapID);
         fr.enssat.lanniontech.api.entities.map.Map map = new fr.enssat.lanniontech.api.entities.map.Map();
@@ -45,8 +45,9 @@ public class MapService extends AbstractService {
         map.setFeatures(features);
         return map;
     }
+
     public fr.enssat.lanniontech.api.entities.map.Map getMap(User user, int mapID) {
-        return getMap(user.getId(),mapID);
+        return getMap(user.getId(), mapID);
     }
 
     public Feature getFeature(int mapID, UUID featureUUID) {

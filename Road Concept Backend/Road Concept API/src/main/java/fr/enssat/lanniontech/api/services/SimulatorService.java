@@ -148,15 +148,6 @@ public class SimulatorService extends AbstractService {
     }
 
 
-
-
-
-
-
-
-
-
-
     @Deprecated
     public FeatureCollection getFakeSimulationResult() throws IOException {
         InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");

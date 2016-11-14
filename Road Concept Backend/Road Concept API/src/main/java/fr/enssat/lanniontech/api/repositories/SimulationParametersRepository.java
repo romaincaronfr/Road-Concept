@@ -34,7 +34,7 @@ public class SimulationParametersRepository extends SimulationRepository {
 
                 statement.setString(1, simulation.getUuid().toString());
                 statement.setInt(2, creatorID);
-                statement.setString(3,name);
+                statement.setString(3, name);
                 statement.setInt(4, mapID);
                 statement.setInt(5, duration);
                 statement.setBoolean(6, false);
@@ -122,6 +122,7 @@ public class SimulationParametersRepository extends SimulationRepository {
             throw processBasicSQLException(e, Simulation.class);
         }
     }
+
     public List<Simulation> getAllFromMap(User user, int mapID) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
@@ -154,6 +155,6 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ======
 
     public int delete(Simulation simulation) throws DatabaseOperationException {
-        return delete("uuid", simulation);
+        return delete("simulation", simulation);
     }
 }
