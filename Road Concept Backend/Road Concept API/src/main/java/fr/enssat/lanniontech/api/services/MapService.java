@@ -77,7 +77,7 @@ public class MapService extends AbstractService {
     // OPEN STREET MAP IMPORTS
     // =======================
 
-    public int importFromOSM(int mapID, String fileData) throws Exception {
+    public int importFromOSM(User user, int mapID, String fileData) throws Exception {
         MapInfo infos = mapInfoRepository.get(mapID);
         if (infos == null) {
             throw new EntityNotExistingException();
@@ -87,15 +87,13 @@ public class MapService extends AbstractService {
         fromOSMAdaptation(features);
 
         FeatureCollection toAdd = new FeatureCollection();
+//        FeatureCollection existingFeatures = getMap(user.getId(), mapID).getFeatures();
         for (Feature feature : features) {
+//            for ()
             //TODO: Get toute la map et checker à partir de là
-//            feature.getProperties().clear();
-//            feature.getProperties().put("id", feature.getUuid()); //TODO: Remove
-//            feature.getProperties().put("type", FeatureType.SINLGE_ROAD );
-//            feature.getProperties().put("name", "Fuck you");
-//            feature.getProperties().put("oneway", false);
-//            feature.getProperties().put("bridge", false);
-//            feature.getProperties().put("maxspeed", 90);
+
+
+
 
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {

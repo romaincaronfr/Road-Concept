@@ -193,6 +193,7 @@ public class MapsVerticle extends AbstractVerticle {
     private void processImportFromOSM(RoutingContext routingContext) {
         try {
             Integer mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
+            User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
 
             Set<FileUpload> fileUploadSet = routingContext.fileUploads();
             Iterator<FileUpload> fileUploadIterator = fileUploadSet.iterator();
@@ -200,7 +201,7 @@ public class MapsVerticle extends AbstractVerticle {
 
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
 
-            int importedCount = mapService.importFromOSM(mapID, uploadedFile.toString());
+            int importedCount = mapService.importFromOSM(currentUser, mapID, uploadedFile.toString());
 
             vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
 
