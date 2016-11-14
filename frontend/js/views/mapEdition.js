@@ -142,6 +142,9 @@ app.mapEditionView = Backbone.View.extend({
             }
         });
 
+        //Tooltip bootstrap
+        $('[data-toggle="tooltip"]').tooltip();
+
         /**
          * Get the interaction in interactionZoomDoubleClick : zoom when doubleclick
          */
@@ -677,6 +680,27 @@ app.mapEditionView = Backbone.View.extend({
         this.map.removeInteraction(this.selectPointer);
         this.addInteraction(this.value);
         this.changeChooseToolToCancel();
+
+        //Affiche le tooltip correspondant à l'élément choisi
+        switch (this.value) {
+            case 'LineString':
+                $('#roadHelp').show();
+                $('#roundAboutHelp').hide();
+                $('#trafficLightsHelp').hide();
+                break;
+            case 'Polygon':
+                $('#roadHelp').hide();
+                $('#roundAboutHelp').show();
+                $('#trafficLightsHelp').hide();
+                break;
+            case 'Point':
+                $('#roadHelp').hide();
+                $('#roundAboutHelp').hide();
+                $('#trafficLightsHelp').show();
+                break;
+            default:
+                break;
+        }
     },
 
     cancelHasChooseTool: function () {
