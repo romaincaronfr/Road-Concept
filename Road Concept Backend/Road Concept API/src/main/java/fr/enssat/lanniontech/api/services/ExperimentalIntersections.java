@@ -7,7 +7,12 @@ import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class ExperimentalIntersections {
 
@@ -23,7 +28,7 @@ public class ExperimentalIntersections {
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         cleanExplosionPivot();
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        while(explosionPivot.size()>0){
+        while (explosionPivot.size() > 0) {
             explodeRoads();
         }
     }
@@ -37,7 +42,7 @@ public class ExperimentalIntersections {
                 for (Coordinates c : road.getCoordinates()) {
                     explosionPivot.putIfAbsent(c, new ArrayList<>());
                     explosionPivot.get(c).add(f);
-                    cycles ++;
+                    cycles++;
                 }
             }
         }
@@ -62,15 +67,14 @@ public class ExperimentalIntersections {
         }
     }
 
-    private void explodeRoads(){
-        Map<Feature,Feature[]> tranformMap = new HashMap<>();
+    private void explodeRoads() {
+        Map<Feature, Feature[]> tranformMap = new HashMap<>();
 
         Coordinates c = (Coordinates) explosionPivot.keySet().toArray()[0];
 
-        for(Feature f:explosionPivot.get(c)){
-            if(((LineString)f.getGeometry()).isFirstOrLast(c)){
-                tranformMap.put(f,split(f,
-                        ((LineString)f.getGeometry()).getCoordinates().indexOf(c)));
+        for (Feature f : explosionPivot.get(c)) {
+            if (!((LineString) f.getGeometry()).isFirstOrLast(c)) {
+                tranformMap.put(f, split(f, ((LineString) f.getGeometry()).getCoordinates().indexOf(c)));
                 myMap.getFeatures().remove(f);
                 myMap.getFeatures().add(tranformMap.get(f)[0]);
                 myMap.getFeatures().add(tranformMap.get(f)[1]);
@@ -78,13 +82,13 @@ public class ExperimentalIntersections {
         }
         explosionPivot.remove(c);
 
-        for (Coordinates C : explosionPivot.keySet()){
-            for(Feature f : tranformMap.keySet()){
-                if(explosionPivot.get(C).contains(f)){
+        for (Coordinates C : explosionPivot.keySet()) {
+            for (Feature f : tranformMap.keySet()) {
+                if (explosionPivot.get(C).contains(f)) {
                     explosionPivot.get(C).remove(f);
-                    if(((LineString)tranformMap.get(f)[0].getGeometry()).contains(C)){
+                    if (((LineString) tranformMap.get(f)[0].getGeometry()).contains(C)) {
                         explosionPivot.get(C).add(tranformMap.get(f)[0]);
-                    }else {
+                    } else {
                         explosionPivot.get(C).add(tranformMap.get(f)[1]);
                     }
                 }
@@ -93,8 +97,8 @@ public class ExperimentalIntersections {
 
     }
 
-    private Feature[] split(Feature featureToSplit, int index){
-        Map<String,Object> properties = featureToSplit.getProperties();
+    private Feature[] split(Feature featureToSplit, int index) {
+        Map<String, Object> properties = featureToSplit.getProperties();
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
         newOneRoad1.setProperties(new HashMap<>(properties));
@@ -110,10 +114,10 @@ public class ExperimentalIntersections {
         LineString lineString = (LineString) featureToSplit.getGeometry();
         LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
         oneRoadFirstPart.addAll(lineString.getCoordinates().subList(0, index + 1));
-        LOGGER.debug("@@@ First size = "+oneRoadFirstPart.size());
+        LOGGER.debug("@@@ First size = " + oneRoadFirstPart.size());
         LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
-        oneRoadLastPart.addAll(lineString.getCoordinates().subList(index,lineString.getCoordinates().size()));
-        LOGGER.debug("@@@ Second size = "+oneRoadLastPart.size());
+        oneRoadLastPart.addAll(lineString.getCoordinates().subList(index, lineString.getCoordinates().size()));
+        LOGGER.debug("@@@ Second size = " + oneRoadLastPart.size());
 
         ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
         ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
