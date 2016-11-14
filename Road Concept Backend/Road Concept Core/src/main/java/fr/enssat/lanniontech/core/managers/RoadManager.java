@@ -176,19 +176,23 @@ public class RoadManager {
         int problem = 0;
         if(lane.getInsertTrajectory().getLength()<=0 || Double.isNaN(lane.getInsertTrajectory().getLength())){
             problem++;
+            LOG.error("trajectory is negative or NaN");
         }
 
         if(lane.getInsertTrajectory().getDestinationType() == TrajectoryType.Undefined){
             problem++;
+            LOG.error("trajectory destination type is undefined");
         }
 
         if(lane.getInsertTrajectory().getDestinationsTrajectories().size()==0){
             problem++;
+            LOG.error("trajectory have no destination");
         }
 
         for (Trajectory trajectory : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
             if(trajectory == null){
                 problem ++;
+                LOG.error("trajectory have null destination");
             }
         }
         return problem;
