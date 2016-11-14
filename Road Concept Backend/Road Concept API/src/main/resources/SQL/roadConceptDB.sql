@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS "final_user" (
 CREATE TABLE IF NOT EXISTS "map_info" (
   "id"          SERIAL PRIMARY KEY,
   "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "name"        VARCHAR(31) NOT NULL,
+  "name"        VARCHAR(100) NOT NULL,
   "image_url"   VARCHAR(100),
   "description" TEXT
 );
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"          VARCHAR(40) PRIMARY KEY,
   "id_user"       INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
   "id_map"        INTEGER     NOT NULL REFERENCES "map_info"(id) ON DELETE CASCADE,
-  "name"          VARCHAR(31) NOT NULL,
+  "name"          VARCHAR(100) NOT NULL,
   "duration_s"    INTEGER     NOT NULL,
   "finish"        BOOLEAN     NOT NULL,
   "creation_date" VARCHAR(10)   NOT NULL
