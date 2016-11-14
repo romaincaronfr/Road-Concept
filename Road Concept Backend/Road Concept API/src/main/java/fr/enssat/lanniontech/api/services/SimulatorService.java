@@ -12,6 +12,7 @@ import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.exceptions.SimulationImcompleteException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.core.Simulator;
@@ -45,10 +46,12 @@ public class SimulatorService extends AbstractService {
         simulation.setDurationS(durationS);
 
         simulationParametersRepository.create(user.getId(), name, mapID, durationS);
+
+        start(simulation);
         return simulation;
     }
 
-    public Simulation get(UUID simulationUUID) throws EntityNotExistingException {
+    public Simulation get(UUID simulationUUID) {
         Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
         if (simulation == null) {
             throw new EntityNotExistingException(Simulation.class);
@@ -56,9 +59,7 @@ public class SimulatorService extends AbstractService {
         return simulation;
     }
 
-    public boolean start(UUID simulationUUID) throws EntityNotExistingException {
-        Simulation simulation = get(simulationUUID);
-
+    private boolean start(Simulation simulation) throws EntityNotExistingException {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         List<Road> roads = sendFeatures(map.getFeatures());
         simulator.vehicleManager.addToSpawnArea(roads.get(0)); //TODO: Set as simulation parameter
@@ -131,8 +132,8 @@ public class SimulatorService extends AbstractService {
         for (Feature feature : features) {
             if (feature.getGeometry() instanceof LineString) {
                 LineString road = (LineString) feature.getGeometry();
-                Coordinates last = road.getCoordinates().get(0);
 
+                Coordinates last = road.getCoordinates().get(0);
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
                     Position A = simulator.positionManager.addPosition(last.getLongitude(), last.getLongitude());
@@ -144,6 +145,9 @@ public class SimulatorService extends AbstractService {
             //TODO: Prévoir les ronds points et les feux rouges. En attente d'Antoine
         }
         simulator.roadManager.closeRoads();
+            if (simulator.roadManager.checkIntegrity() != 0) {
+               throw new RoadConceptUnexpectedException();
+           }
         return roads;
     }
 

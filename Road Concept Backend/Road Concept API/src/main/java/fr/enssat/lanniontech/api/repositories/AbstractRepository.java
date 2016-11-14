@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.UUID;
 
 import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
 
@@ -62,7 +63,11 @@ public abstract class AbstractRepository {
     protected final int delete(String tableName, SQLEntity entity) throws DatabaseOperationException {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
-                statement.setObject(1, entity.getIdentifierValue().toString());
+                if ( entity.getIdentifierValue() instanceof UUID) {
+                    statement.setObject(1, entity.getIdentifierValue().toString());
+                }else {
+                    statement.setObject(1, entity.getIdentifierValue());
+                }
                 return statement.executeUpdate();
             }
         } catch (SQLException e) {

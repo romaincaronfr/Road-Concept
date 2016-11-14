@@ -88,9 +88,10 @@ public class MapService extends AbstractService {
 
         FeatureCollection toAdd = new FeatureCollection();
         for (Feature feature : features) {
+            //TODO: Get toute la map et checker à partir de là
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
-                toAdd.getFeatures().add(feature);
+                toAdd.add(feature);
             }
         }
 
@@ -101,6 +102,13 @@ public class MapService extends AbstractService {
         //                }
         //            }
         //        }
+//        for (Feature one : toAdd) {
+//            for (Feature two : toAdd) {
+//                if (!(one == two)) {
+//                    detectIntersections(mapID, one, two, false);
+//                }
+//            }
+//        }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);

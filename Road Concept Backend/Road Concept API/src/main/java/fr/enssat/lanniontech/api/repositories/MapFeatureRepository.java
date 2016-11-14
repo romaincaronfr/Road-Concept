@@ -8,6 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
+import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
@@ -50,7 +51,14 @@ public class MapFeatureRepository extends MapRepository {
 
             List<Document> documents = new ArrayList<>();
             for (Feature feature : features) {
-                documents.add(Document.parse(JSONHelper.toJSON(feature)));
+                if (feature.getGeometry() instanceof LineString) {
+                    LineString lineString = (LineString) feature.getGeometry();
+                    if (lineString.getCoordinates().size() > 0) {
+                        documents.add(Document.parse(JSONHelper.toJSON(feature)));
+                    }
+                } else {
+                    documents.add(Document.parse(JSONHelper.toJSON(feature)));
+                }
             }
             collection.insertMany(documents);
         }

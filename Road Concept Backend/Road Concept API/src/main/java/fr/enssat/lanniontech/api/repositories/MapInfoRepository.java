@@ -18,7 +18,7 @@ public class MapInfoRepository extends MapRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(MapInfoRepository.class);
 
     private static final String INSERT = "INSERT INTO map_info(id_user, name, image_url, description) VALUES (?, ?, ?, ?) RETURNING id";
-    private static final String SELECT_ALL = "SELECT id, name, from_osm, image_url, description FROM map_info WHERE id_user = ?";
+    private static final String SELECT_ALL = "SELECT id, name, image_url, description FROM map_info WHERE id_user = ?";
     private static final String SELECT_FROM_ID = "SELECT id_user, name, image_url, description FROM map_info WHERE id = ?";
 
     // ===============
