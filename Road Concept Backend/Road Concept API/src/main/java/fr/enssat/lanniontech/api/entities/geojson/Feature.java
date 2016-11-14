@@ -22,6 +22,13 @@ public class Feature extends GeoJsonObject {
     @JsonProperty(value = "id", access = Access.WRITE_ONLY)
     private String openStreetMapID;
 
+    public boolean isRoad(){
+        int typeIntegerValue = Integer.valueOf((String) getProperties().get("type"));
+        FeatureType type = FeatureType.forValue(typeIntegerValue);
+
+        return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
+    }
+
     public Map<String, Object> getProperties() {
         return properties;
     }
