@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -22,9 +23,9 @@ public class Feature extends GeoJsonObject {
     @JsonProperty(value = "id", access = Access.WRITE_ONLY)
     private String openStreetMapID;
 
+    @JsonIgnore
     public boolean isRoad(){
-        int typeIntegerValue = Integer.valueOf((String) getProperties().get("type"));
-        FeatureType type = FeatureType.forValue(typeIntegerValue);
+        FeatureType type = (FeatureType) getProperties().get("type");
 
         return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
     }

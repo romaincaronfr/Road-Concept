@@ -19,9 +19,9 @@ public class ExperimentalIntersections {
     public ExperimentalIntersections(FeatureCollection map) {
         myMap = map;
         initExplosionPivot();
-        LOGGER.debug("explosionPivot size = " + explosionPivot);
+        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         cleanExplosionPivot();
-        LOGGER.debug("explosionPivot size = " + explosionPivot);
+        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
     }
 
     private void initExplosionPivot() {
@@ -42,7 +42,6 @@ public class ExperimentalIntersections {
         while (iterator.hasNext()){
             Coordinates c = iterator.next();
             if(explosionPivot.get(c).size()<2){
-                explosionPivot.remove(c);
                 iterator.remove();
             }else{
                 boolean remove = true;
@@ -50,7 +49,6 @@ public class ExperimentalIntersections {
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
                 if (remove) {
-                    explosionPivot.remove(c);
                     iterator.remove();
                 }
             }
