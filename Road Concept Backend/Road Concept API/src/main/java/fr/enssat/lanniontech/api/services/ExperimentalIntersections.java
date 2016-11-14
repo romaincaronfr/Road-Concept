@@ -22,13 +22,15 @@ public class ExperimentalIntersections {
 
     public ExperimentalIntersections(FeatureCollection map) {
         myMap = map;
-        initExplosionPivot();
+        int cycles = initExplosionPivot();
+        LOGGER.debug("cycle numbers = " + cycles);
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         cleanExplosionPivot();
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
     }
 
-    private void initExplosionPivot() {
+    private int initExplosionPivot() {
+        int cycles = 0;
         explosionPivot = new HashMap<>();
         for (Feature f : myMap.getFeatures()) {
             if (f.isRoad()) {
@@ -36,9 +38,11 @@ public class ExperimentalIntersections {
                 for (Coordinates c : road.getCoordinates()) {
                     explosionPivot.putIfAbsent(c, new ArrayList<>());
                     explosionPivot.get(c).add(f);
+                    cycles ++;
                 }
             }
         }
+        return cycles;
     }
 
     private void cleanExplosionPivot() {
