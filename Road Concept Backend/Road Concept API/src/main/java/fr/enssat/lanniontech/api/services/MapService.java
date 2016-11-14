@@ -86,17 +86,25 @@ public class MapService extends AbstractService {
         FeatureCollection features = JSONHelper.fromJSON(fileData, FeatureCollection.class);
         fromOSMAdaptation(features);
 
+        long startTime = System.nanoTime();
         ExperimentalIntersections something = new ExperimentalIntersections(features);
-
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 
         FeatureCollection toAdd = new FeatureCollection();
-//        FeatureCollection existingFeatures = getMap(user.getId(), mapID).getFeatures();
+        //FeatureCollection existingFeatures = mapFeatureRepository.getAll(mapID);
         for (Feature feature : features) {
-//            for ()
-            //TODO: Get toute la map et checker à partir de là
-
-
-
+            //            if (existingFeatures.getFeatures().isEmpty()) {
+            //                toAdd.add(feature);
+            //            } else {
+            //                for (Feature existingFeature : existingFeatures) {
+            //                    if (feature.getOpenStreetMapID().equals(existingFeature.getOpenStreetMapID())) {
+            //                        break;
+            //                    } else {
+            //                        toAdd.add(feature);
+            //                    }
+            //                }
+            //            }
 
             Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
             if (retrieved == null) {
@@ -122,12 +130,14 @@ public class MapService extends AbstractService {
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
         }
+        LOGGER.debug("@@@ TIME SPENT ON EXPERIMENTAL STUFF : " + duration / 1000000 + "milliseconds");
         LOGGER.debug("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
         return toAdd.getFeatures().size();
 
     }
 
     //FIXME: refactor + extraire en constante les colonnes
+
     public void fromOSMAdaptation(FeatureCollection features) {
         for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
