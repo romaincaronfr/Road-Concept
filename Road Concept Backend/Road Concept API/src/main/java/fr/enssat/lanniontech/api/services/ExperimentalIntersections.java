@@ -17,9 +17,9 @@ public class ExperimentalIntersections {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExperimentalIntersections.class);
 
     private FeatureCollection myMap;
-    private Map<Coordinates,List<Feature>> explosionPivot;
+    private Map<Coordinates, List<Feature>> explosionPivot;
 
-    public ExperimentalIntersections(FeatureCollection map){
+    public ExperimentalIntersections(FeatureCollection map) {
         myMap = map;
         initExplosionPivot();
         LOGGER.debug("explosionPivot size = " + explosionPivot);
@@ -27,29 +27,29 @@ public class ExperimentalIntersections {
         LOGGER.debug("explosionPivot size = " + explosionPivot);
     }
 
-    private void initExplosionPivot(){
+    private void initExplosionPivot() {
         explosionPivot = new HashMap<>();
-        for (Feature f :myMap.getFeatures()){
-            if(f.getGeometry() instanceof LineString){
-                LineString road = (LineString)f.getGeometry();
-                for (Coordinates c :road.getCoordinates()){
-                    explosionPivot.putIfAbsent(c,new ArrayList<>());
+        for (Feature f : myMap.getFeatures()) {
+            if (f.getGeometry() instanceof LineString) {
+                LineString road = (LineString) f.getGeometry();
+                for (Coordinates c : road.getCoordinates()) {
+                    explosionPivot.putIfAbsent(c, new ArrayList<>());
                     explosionPivot.get(c).add(f);
                 }
             }
         }
     }
 
-    private void cleanExplosionPivot(){
-        for (Coordinates c:explosionPivot.keySet()){
-            if(explosionPivot.get(c).size()<2){
+    private void cleanExplosionPivot() {
+        for (Coordinates c : explosionPivot.keySet()) {
+            if (explosionPivot.get(c).size() < 2) {
                 explosionPivot.remove(c);
-            }else{
+            } else {
                 boolean remove = true;
-                for (Feature f :explosionPivot.get(c)){
-                    remove &= ((LineString)f.getGeometry()).isFirstOrLast(c);
+                for (Feature f : explosionPivot.get(c)) {
+                    remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
-                if(remove){
+                if (remove) {
                     explosionPivot.remove(c);
                 }
             }
