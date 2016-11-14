@@ -14,8 +14,6 @@ public class TestPathFinder {
     public static Simulator tearDown(){
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 1;
-
         Position C = Sim.positionManager.addPosition(40, 0);
         Position D = Sim.positionManager.addPosition(40.1, 0);
         Position E = Sim.positionManager.addPosition(40.2, 0);
@@ -78,18 +76,18 @@ public class TestPathFinder {
         Trajectory startTrajectory = simulator.roadManager.getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
 
         Path testPath = null;
-        /*
+
         testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-5"),false);
 
         Assert.assertEquals(2,testPath.getSize());
 
         testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-4"),true);
 
-        Assert.assertEquals(2,testPath.getSize());/**/
+        Assert.assertEquals(2,testPath.getSize());
 
         testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-1"),true);
 
-        Assert.assertEquals(3,testPath.getSize());
+        Assert.assertEquals(4,testPath.getSize());
 
     }
 }
