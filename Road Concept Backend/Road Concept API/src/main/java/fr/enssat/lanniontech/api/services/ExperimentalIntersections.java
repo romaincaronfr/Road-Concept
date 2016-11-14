@@ -7,7 +7,11 @@ import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class ExperimentalIntersections {
 
@@ -26,24 +30,24 @@ public class ExperimentalIntersections {
 
     private void initExplosionPivot() {
         explosionPivot = new HashMap<>();
-        for (Feature f :myMap.getFeatures()){
-            if(f.isRoad()){
-                LineString road = (LineString)f.getGeometry();
-                for (Coordinates c :road.getCoordinates()){
-                    explosionPivot.putIfAbsent(c,new ArrayList<>());
+        for (Feature f : myMap.getFeatures()) {
+            if (f.isRoad()) {
+                LineString road = (LineString) f.getGeometry();
+                for (Coordinates c : road.getCoordinates()) {
+                    explosionPivot.putIfAbsent(c, new ArrayList<>());
                     explosionPivot.get(c).add(f);
                 }
             }
         }
     }
 
-    private void cleanExplosionPivot(){
+    private void cleanExplosionPivot() {
         Iterator<Coordinates> iterator = explosionPivot.keySet().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Coordinates c = iterator.next();
-            if(explosionPivot.get(c).size()<2){
+            if (explosionPivot.get(c).size() < 2) {
                 iterator.remove();
-            }else{
+            } else {
                 boolean remove = true;
                 for (Feature f : explosionPivot.get(c)) {
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
