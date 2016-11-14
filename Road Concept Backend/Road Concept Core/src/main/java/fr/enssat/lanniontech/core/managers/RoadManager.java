@@ -125,6 +125,7 @@ public class RoadManager {
             List<AdvancedTrajectory> trajectories = i.getTrajectories();
             if (trajectories.size() == 0){
                 intersectionProblems++;
+                LOG.error("Intersection have no trajectories");
             }
             for (AdvancedTrajectory trajectory : trajectories){
                 if(trajectory.getLength()<0){
@@ -167,7 +168,9 @@ public class RoadManager {
         }
         LOG.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
 
-        trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
+        if(intersectionProblems == 0 && lanesProblems == 0 && deadEndProblems == 0 ){
+            trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
+        }
 
         return intersectionProblems+lanesProblems+deadEndProblems+trajectoryProblems;
     }
