@@ -2,6 +2,8 @@ package fr.enssat.lanniontech.api.entities.simulation;
 
 import fr.enssat.lanniontech.api.entities.SQLEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class Simulation implements SQLEntity{
@@ -10,7 +12,7 @@ public class Simulation implements SQLEntity{
     private String name;
     private int creatorID; // Creator of the simulation
     private int mapID;
-
+    private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int durationS;
     private boolean finish;
 
@@ -58,6 +60,14 @@ public class Simulation implements SQLEntity{
 
     public void setFinish(boolean finish) {
         this.finish = finish;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override

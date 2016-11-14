@@ -117,8 +117,8 @@ public class SimulatorVerticle extends AbstractVerticle {
                 throw new BadRequestException();
             }
 
-            String name = body.getString("email");
-            int durationS = Integer.valueOf(body.getString("password"));
+            String name = body.getString("name");
+            int durationS = body.getInteger("duration_s");
 
             Simulation simulation = simulatorService.create(currentUser, name, mapID, durationS);
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);

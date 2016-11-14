@@ -19,10 +19,10 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
 
-    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map, duration_s, finish) VALUES (?, ?, ?, ?)";
-    private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map FROM simulation WHERE uuid = ?";
-    private static final String SELECT_ALL = "SELECT uuid, name, id_map FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAP = "SELECT uuid, name FROM simulation WHERE id_map = ? AND id_user ?";
+    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map, duration_s, finish, creation_date) VALUES (?, ?, ?, ?,?,?,?)";
+    private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map, creation_date, finish, duration_s FROM simulation WHERE uuid = ?";
+    private static final String SELECT_ALL = "SELECT uuid, name, id_map, creation_date, finish, duration_s FROM simulation WHERE id_user = ?";
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name, duration_s, finish, creation_date FROM simulation WHERE id_map = ? AND id_user ?";
 
     // CREATE
     // ------
@@ -38,14 +38,18 @@ public class SimulationParametersRepository extends SimulationRepository {
                 statement.setInt(4, mapID);
                 statement.setInt(5, duration);
                 statement.setBoolean(6, false);
+                statement.setString(7, simulation.getCreationDate());
 
-                try (ResultSet result = statement.executeQuery()) {
+                try {
+                    statement.execute();
                     simulation.setDurationS(duration);
                     simulation.setMapID(mapID);
                     simulation.setName(name);
                     simulation.setCreatorID(creatorID);
                     simulation.setFinish(false);
                     return simulation;
+                } finally {
+                    statement.close();
                 }
             }
         } catch (SQLException e) {
@@ -79,6 +83,9 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreatorID(userID);
                         simulation.setName(result.getString("name"));
                         simulation.setMapID(result.getInt("id_map"));
+                        simulation.setCreationDate(result.getString("creation_date"));
+                        simulation.setFinish(result.getBoolean("finish"));
+                        simulation.setDurationS(result.getInt("duration_s"));
 
                         simulations.add(simulation);
                     }
@@ -102,6 +109,10 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreatorID(result.getInt("id_user"));
                         simulation.setName(result.getString("name"));
                         simulation.setMapID(result.getInt("id_map"));
+                        simulation.setCreationDate(result.getString("creation_date"));
+                        simulation.setFinish(result.getBoolean("finish"));
+                        simulation.setDurationS(result.getInt("duration_s"));
+
                         return simulation;
                     }
                     return null; // no row
@@ -125,6 +136,9 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreatorID(user.getId());
                         simulation.setName(result.getString("name"));
                         simulation.setMapID(mapID);
+                        simulation.setCreationDate(result.getString("creation_date"));
+                        simulation.setFinish(result.getBoolean("finish"));
+                        simulation.setDurationS(result.getInt("duration_s"));
 
                         simulations.add(simulation);
                     }
