@@ -7,11 +7,7 @@ import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ExperimentalIntersections {
 
@@ -27,6 +23,9 @@ public class ExperimentalIntersections {
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         cleanExplosionPivot();
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
+        while(explosionPivot.size()>0){
+            explodeRoads();
+        }
     }
 
     private int initExplosionPivot() {
@@ -61,5 +60,64 @@ public class ExperimentalIntersections {
                 }
             }
         }
+    }
+
+    private void explodeRoads(){
+        Map<Feature,Feature[]> tranformMap = new HashMap<>();
+
+        Coordinates c = (Coordinates) explosionPivot.keySet().toArray()[0];
+
+        for(Feature f:explosionPivot.get(c)){
+            if(((LineString)f.getGeometry()).isFirstOrLast(c)){
+                tranformMap.put(f,split(f,
+                        ((LineString)f.getGeometry()).getCoordinates().indexOf(c)));
+                myMap.getFeatures().remove(f);
+                myMap.getFeatures().add(tranformMap.get(f)[0]);
+                myMap.getFeatures().add(tranformMap.get(f)[1]);
+            }
+        }
+        explosionPivot.remove(c);
+
+        for (Coordinates C : explosionPivot.keySet()){
+            for(Feature f : tranformMap.keySet()){
+                if(explosionPivot.get(C).contains(f)){
+                    explosionPivot.get(C).remove(f);
+                    if(((LineString)tranformMap.get(f)[0].getGeometry()).contains(C)){
+                        explosionPivot.get(C).add(tranformMap.get(f)[0]);
+                    }else {
+                        explosionPivot.get(C).add(tranformMap.get(f)[1]);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private Feature[] split(Feature featureToSplit, int index){
+        Map<String,Object> properties = featureToSplit.getProperties();
+        Feature newOneRoad1 = new Feature();
+        Feature newOneRoad2 = new Feature();
+        newOneRoad1.setProperties(new HashMap<>(properties));
+        newOneRoad2.setProperties(new HashMap<>(properties));
+        newOneRoad1.setGeometry(new LineString());
+        newOneRoad2.setGeometry(new LineString());
+        newOneRoad1.getProperties().remove("id");
+        newOneRoad2.getProperties().remove("id");
+        newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
+        newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
+
+
+        LineString lineString = (LineString) featureToSplit.getGeometry();
+        LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
+        oneRoadFirstPart.addAll(lineString.getCoordinates().subList(0, index + 1));
+        LOGGER.debug("@@@ First size = "+oneRoadFirstPart.size());
+        LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
+        oneRoadLastPart.addAll(lineString.getCoordinates().subList(index,lineString.getCoordinates().size()));
+        LOGGER.debug("@@@ Second size = "+oneRoadLastPart.size());
+
+        ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
+        ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);
+
+        return new Feature[]{newOneRoad1, newOneRoad2};
     }
 }
