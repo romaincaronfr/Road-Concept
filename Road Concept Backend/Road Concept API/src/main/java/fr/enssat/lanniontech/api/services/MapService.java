@@ -1,12 +1,7 @@
 package fr.enssat.lanniontech.api.services;
 
 import fr.enssat.lanniontech.api.entities.User;
-import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
-import fr.enssat.lanniontech.api.entities.geojson.Feature;
-import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
-import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
-import fr.enssat.lanniontech.api.entities.geojson.LineString;
-import fr.enssat.lanniontech.api.entities.geojson.Point;
+import fr.enssat.lanniontech.api.entities.geojson.*;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
@@ -17,16 +12,7 @@ import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class MapService extends AbstractService {
 
@@ -393,11 +379,22 @@ public class MapService extends AbstractService {
             //LOGGER.debug("@@@ " + foo);
         }
 
-        for (Map.Entry<UUID, Feature> entry : tab.entrySet()) {
-            /*LineString original = (LineString) mapFeatureRepository.getFromUUID(mapID,entry.getKey()).getGeometry();
+        FeatureCollection featureCollection = new FeatureCollection();
+        featureCollection.getFeatures().add(feature);
+        for (Map.Entry<UUID, Feature> entry : tab.entrySet()){
+            featureCollection.getFeatures().add(entry.getValue());
+            mapFeatureRepository.delete(mapID, entry.getKey());
+        }
+        ExperimentalIntersections experimentalIntersections = new ExperimentalIntersections(featureCollection);
+        mapFeatureRepository.createAll(mapID,featureCollection);
+
+
+
+        /*for (Map.Entry<UUID, Feature> entry : tab.entrySet()) {
+            *//*LineString original = (LineString) mapFeatureRepository.getFromUUID(mapID,entry.getKey()).getGeometry();
             LineString modify = (LineString) entry.getValue().getGeometry();
             LOGGER.debug("@@@ Size original : "+original.getCoordinates().size()+" modify = "+modify.getCoordinates().size());
-            LOGGER.debug("@@@ Size boolean original : "+tabBool.get(entry.getKey()).size());*/
+            LOGGER.debug("@@@ Size boolean original : "+tabBool.get(entry.getKey()).size());*//*
             List<Feature> newFeatures = new ArrayList<>();
             LineString lineString = (LineString) entry.getValue().getGeometry();
             int size = lineString.getCoordinates().size();
@@ -412,10 +409,10 @@ public class MapService extends AbstractService {
                     newFeatures.add(splitFeatures);
                     //LineString mynew0 = (LineString) splitFeatures.get(0).getGeometry();
                     //LineString mynew1 = (LineString) splitFeatures.get(1).getGeometry();
-                    /*LOGGER.debug("Split feature [0] first point = "+mynew0.getCoordinates().get(0));
+                    *//*LOGGER.debug("Split feature [0] first point = "+mynew0.getCoordinates().get(0));
                     LOGGER.debug("Split feature [0] last point = "+mynew0.getCoordinates().get(mynew0.getCoordinates().size()-1));
                     LOGGER.debug("Split feature [1] first point = "+mynew1.getCoordinates().get(0));
-                    LOGGER.debug("Split feature [1] last point = "+mynew1.getCoordinates().get(mynew1.getCoordinates().size()-1));*/
+                    LOGGER.debug("Split feature [1] last point = "+mynew1.getCoordinates().get(mynew1.getCoordinates().size()-1));*//*
                     //tabBool.get(entry.getKey()).set(i,false);
                     //i--;
                     start = i;
@@ -451,7 +448,7 @@ public class MapService extends AbstractService {
         }
         LOGGER.debug("Nombre d'intersections détectées : " + intersectionsDetectedCount);
         return null;
-
+*/
          /*for (Entry<UUID, List<Tuple<Coordinates, Coordinates>>> entry : tab.entrySet()) {
             List<Feature> myNewFeatures = new ArrayList<>();
             Feature myFirstFeature = getFeature(mapID,entry.getKey());
@@ -478,9 +475,10 @@ public class MapService extends AbstractService {
                 mapFeatureRepository.create(mapID, toAdd);
             }
         }*/
+         return null;
     }
 
-    private LinkedList<Feature> split(Feature featureToSplit, int index) {
+    /*private LinkedList<Feature> split(Feature featureToSplit, int index) {
         Map<String, Object> properties = featureToSplit.getProperties();
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
@@ -526,5 +524,5 @@ public class MapService extends AbstractService {
         LOGGER.debug("@@@ First size = " + oneRoadFirstPart.size());
         ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
         return newOneRoad1;
-    }
+    }*/
 }
