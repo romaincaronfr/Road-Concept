@@ -25,13 +25,8 @@ public class Feature extends GeoJsonObject {
 
     @JsonIgnore
     public boolean isRoad() {
-        FeatureType type = null;
-        try {
-            type = (FeatureType) getProperties().get("type");
-        } catch (Exception e) {
-            type = FeatureType.forValue((Integer) getProperties().get("type"));
-        }
-        assert type != null : "Type cannot be null";
+        FeatureType type = (FeatureType) getProperties().get("type");
+
         return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
     }
 
