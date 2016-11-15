@@ -33,7 +33,7 @@ public class SimulatorService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
-    SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
+    private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
 
     private Simulator simulator = new Simulator();
     private MapService mapService = new MapService();
