@@ -14,7 +14,8 @@ app.simulationCreationView = Backbone.View.extend({
     step: 0,
 
     events: {
-        'click #ready': 'addInteraction'
+        'click #ready': 'addInteraction',
+        'click #previous' : 'previous'
     },
 
     initialize: function (options) {
@@ -238,37 +239,54 @@ app.simulationCreationView = Backbone.View.extend({
         this.map.addInteraction(this.snap);
 
         this.draw.on('drawend', function (event) {
-            if (self.step == 0)
-            {
-                console.log('Draw : end');
-                var feature = event.feature;
-                var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
-                    dataProjection: 'EPSG:3857',
-                    featureProjection: 'EPSG:3857'
-                });
-                JSONFeature = JSON.parse(JSONFeature);
+            console.log('step courant : '+self.step);
 
-                var coord = feature.getGeometry().getCoordinates();
-                coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
-                JSONFeature.geometry.coordinates = coord;
+            console.log('Draw : end');
+            var feature = event.feature;
+            var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
+                dataProjection: 'EPSG:3857',
+                featureProjection: 'EPSG:3857'
+            });
+            JSONFeature = JSON.parse(JSONFeature);
+
+            var coord = feature.getGeometry().getCoordinates();
+            coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+            JSONFeature.geometry.coordinates = coord;
+
+            if(self.step == 0){ // Premier step : lieu d'habitation
                 JSONFeature.properties = {type: 6, nbHabit: 30, hour: 10};
-
-
-                self.newModel = new app.models.mapDetailsModel(JSONFeature, {
-                    parse: true,
-                    collection: self.mapDetailsCOllection
-                });
-
-                self.renderFeatureCreation(self.newModel);
-
-                var geojsonModel = self.newModel.toGeoJSON();
-                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
-                    featureProjection: 'EPSG:3857'
-                });
-                self.vectorSource.addFeature(newfeature);
+                // on doit ouvrir un modal et recup nbhabit et hour
+                // On doit afficher la suite si modal OK
+                $('#habitZone').hide();
+                $('#workZone').show();
+                $('#divPrevious').show();
+                self.step++;
+            } else if(self.step == 1){
+                JSONFeature.properties = {type: 6, nbHabit: 30, hour: 10};
+                // modal : heure de retour
+                $('#workZone').hide();
+                $('#startSim').show();
 
                 self.step++;
+            } else {
+                console.log('Start Simulation');
+
             }
+
+            self.newModel = new app.models.mapDetailsModel(JSONFeature, {
+                parse: true,
+                collection: self.mapDetailsCOllection
+            });
+
+            self.renderFeatureCreation(self.newModel);
+
+            var geojsonModel = self.newModel.toGeoJSON();
+            var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                featureProjection: 'EPSG:3857'
+            });
+            self.vectorSource.addFeature(newfeature);
+
+            console.log('step suivant : '+self.step);
 
             self.map.removeInteraction(this.draw);
             self.map.removeInteraction(this.snap);
@@ -296,5 +314,28 @@ app.simulationCreationView = Backbone.View.extend({
                 break;
         }
 
+    },
+    previous : function (){
+        console.log('cancel, step:'+this.step);
+        if(this.step >0){
+            this.step --;
+        }
+
+        if(this.step == 0){
+            $('#workZone').hide();
+            $('#startSim').hide();
+            $('#divPrevious').hide();
+            $('#habitZone').show();
+        } else if (this.step == 1){
+            $('#habitZone').hide();
+            $('#startSim').hide();
+            $('#workZone').show();
+        } else if (this.step == 2){
+            $('#workZone').hide();
+            $('#habitZone').hide();
+            $('#startSim').show();
+        } else {
+            console.log('step > 2 ou <0');
+        }
     }
 });
