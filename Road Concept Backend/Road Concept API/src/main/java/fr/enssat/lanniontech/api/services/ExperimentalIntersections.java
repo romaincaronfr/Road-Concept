@@ -20,19 +20,20 @@ public class ExperimentalIntersections {
 
     private FeatureCollection myMap;
     private Map<Coordinates, List<Feature>> explosionPivot;
+    private Map<Feature,Coordinates> loops;
 
     public ExperimentalIntersections(FeatureCollection map) {
         myMap = map;
         int cycles = initExplosionPivot();
         LOGGER.debug("cycle numbers = " + cycles);
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        List<Feature> loops = cleanExplosionPivot();
+        loops = cleanExplosionPivot();
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         while (explosionPivot.size() > 0) {
             explodeRoads();
         }
-        for (Feature f : loops) {
+        for(Feature f : loops.keySet()){
             explodeLoop(f);
         }
     }
@@ -53,24 +54,22 @@ public class ExperimentalIntersections {
         return cycles;
     }
 
-    private List<Feature> cleanExplosionPivot() {
+    private Map<Feature,Coordinates> cleanExplosionPivot() {
         Iterator<Coordinates> iterator = explosionPivot.keySet().iterator();
-        List<Feature> loops = new ArrayList<>();
+        Map<Feature,Coordinates> loops = new HashMap<>();
         while (iterator.hasNext()) {
             Coordinates c = iterator.next();
             if (explosionPivot.get(c).size() < 2) {
                 iterator.remove();
             } else {
-                Map<Feature, Boolean> loopDetector = new HashMap<>();
+                Map<Feature,Boolean> loopDetector =new HashMap<>();
                 boolean remove = true;
                 for (Feature f : explosionPivot.get(c)) {
-                    if (loopDetector.containsKey(f)) {
-                        loopDetector.replace(f, true);
-                        if (!loops.contains(f)) {
-                            loops.add(f);
-                        }
-                    } else {
-                        loopDetector.put(f, false);
+                    if(loopDetector.containsKey(f)){
+                        loopDetector.replace(f,true);
+                        loops.putIfAbsent(f,c);
+                    }else {
+                        loopDetector.put(f,false);
                     }
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
@@ -82,7 +81,7 @@ public class ExperimentalIntersections {
         return loops;
     }
 
-    private void explodeLoop(Feature f) {
+    private void explodeLoop(Feature f){
         //todo find how to split corectly loops
         myMap.getFeatures().remove(f);
         for (Coordinates C : explosionPivot.keySet()) {
@@ -119,6 +118,20 @@ public class ExperimentalIntersections {
                 }
             }
         }
+
+        for (Feature f : tranformMap.keySet()) {
+            if(loops.containsKey(f)){
+                Coordinates C = loops.get(f);
+                loops.remove(f);
+
+                if (((LineString) tranformMap.get(f)[0].getGeometry()).contains(C)) {
+                    loops.put(tranformMap.get(f)[0],C);
+                } else {
+                    loops.put(tranformMap.get(f)[1],C);
+                }
+            }
+        }
+
 
     }
 
