@@ -26,10 +26,14 @@ public class ExperimentalIntersections {
         int cycles = initExplosionPivot();
         LOGGER.debug("cycle numbers = " + cycles);
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        cleanExplosionPivot();
+        List<Feature> loops = cleanExplosionPivot();
+        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         while (explosionPivot.size() > 0) {
             explodeRoads();
+        }
+        for(Feature f : loops){
+            explodeLoop(f);
         }
     }
 
@@ -49,20 +53,41 @@ public class ExperimentalIntersections {
         return cycles;
     }
 
-    private void cleanExplosionPivot() {
+    private List<Feature> cleanExplosionPivot() {
         Iterator<Coordinates> iterator = explosionPivot.keySet().iterator();
+        List<Feature> loops = new ArrayList<>();
         while (iterator.hasNext()) {
             Coordinates c = iterator.next();
             if (explosionPivot.get(c).size() < 2) {
                 iterator.remove();
             } else {
+                Map<Feature,Boolean> loopDetector =new HashMap<>();
                 boolean remove = true;
                 for (Feature f : explosionPivot.get(c)) {
+                    if(loopDetector.containsKey(f)){
+                        loopDetector.replace(f,true);
+                        if(!loops.contains(f)){
+                            loops.add(f);
+                        }
+                    }else {
+                        loopDetector.put(f,false);
+                    }
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
                 if (remove) {
                     iterator.remove();
                 }
+            }
+        }
+        return loops;
+    }
+
+    private void explodeLoop(Feature f){
+        //todo find how to split corectly loops
+        myMap.getFeatures().remove(f);
+        for (Coordinates C : explosionPivot.keySet()) {
+            if (explosionPivot.get(C).contains(f)) {
+                explosionPivot.get(C).remove(f);
             }
         }
     }
