@@ -76,7 +76,7 @@ public class Simulation implements SQLEntity {
     }
 
     public Simulator getSimulator() throws SimulatorUnavailableException {
-        if (! finish) {
+        if (!finish) {
             return simulator;
         }
         throw new SimulatorUnavailableException("Simulation finished");

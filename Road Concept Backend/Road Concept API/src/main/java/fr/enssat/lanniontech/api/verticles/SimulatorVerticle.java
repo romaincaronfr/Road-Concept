@@ -40,8 +40,8 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/users/:userID/simulations").blockingHandler(this::processGetAllSimulationsForUser);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID").blockingHandler(this::processGetSimulation);
         router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
-//        router.route(HttpMethod.GET, "/api/users/:userID/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
-//        router.route(HttpMethod.GET, "/api/simulation/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
+        //        router.route(HttpMethod.GET, "/api/users/:userID/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
+        //        router.route(HttpMethod.GET, "/api/simulation/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
     }
 
     //TODO: Handle exceptions
@@ -92,17 +92,17 @@ public class SimulatorVerticle extends AbstractVerticle {
     }
 
     //TODO: Handle exceptions
-//    private void processGetVehiclePositionHistory(RoutingContext routingContext) {
-//        try {
-//            int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
-//            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
-//
-//            FeatureCollection positionsHistory = simulatorService.getVehiculePositionsHistory(simulationUUID, vehicleID);
-//            HttpResponseBuilder.buildOkResponse(routingContext, positionsHistory);
-//        } catch (Exception e) {
-//            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
-//        }
-//    }
+    //    private void processGetVehiclePositionHistory(RoutingContext routingContext) {
+    //        try {
+    //            int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
+    //            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
+    //
+    //            FeatureCollection positionsHistory = simulatorService.getVehiculePositionsHistory(simulationUUID, vehicleID);
+    //            HttpResponseBuilder.buildOkResponse(routingContext, positionsHistory);
+    //        } catch (Exception e) {
+    //            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+    //        }
+    //    }
 
     @Deprecated
     private void processFakeSimulation(RoutingContext routingContext) {
@@ -136,14 +136,14 @@ public class SimulatorVerticle extends AbstractVerticle {
     }
 
     //TODO: Handle exceptions
-//    private void processGetResultAt(RoutingContext routingContext) {
-//        try {
-//            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
-//            FeatureCollection features = simulatorService.getResult(simulationUUID, 0); //TODO: timestamp à récupérer de la requête
-//            HttpResponseBuilder.buildOkResponse(routingContext, features);
-//        } catch (Exception e) {
-//            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
-//        }
-//    }
+    //    private void processGetResultAt(RoutingContext routingContext) {
+    //        try {
+    //            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
+    //            FeatureCollection features = simulatorService.getResult(simulationUUID, 0); //TODO: timestamp à récupérer de la requête
+    //            HttpResponseBuilder.buildOkResponse(routingContext, features);
+    //        } catch (Exception e) {
+    //            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+    //        }
+    //    }
 
 }
