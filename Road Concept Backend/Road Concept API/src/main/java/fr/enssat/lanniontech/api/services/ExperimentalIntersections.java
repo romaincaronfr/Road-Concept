@@ -32,7 +32,7 @@ public class ExperimentalIntersections {
         while (explosionPivot.size() > 0) {
             explodeRoads();
         }
-        for(Feature f : loops){
+        for (Feature f : loops) {
             explodeLoop(f);
         }
     }
@@ -61,16 +61,16 @@ public class ExperimentalIntersections {
             if (explosionPivot.get(c).size() < 2) {
                 iterator.remove();
             } else {
-                Map<Feature,Boolean> loopDetector =new HashMap<>();
+                Map<Feature, Boolean> loopDetector = new HashMap<>();
                 boolean remove = true;
                 for (Feature f : explosionPivot.get(c)) {
-                    if(loopDetector.containsKey(f)){
-                        loopDetector.replace(f,true);
-                        if(!loops.contains(f)){
+                    if (loopDetector.containsKey(f)) {
+                        loopDetector.replace(f, true);
+                        if (!loops.contains(f)) {
                             loops.add(f);
                         }
-                    }else {
-                        loopDetector.put(f,false);
+                    } else {
+                        loopDetector.put(f, false);
                     }
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
@@ -82,7 +82,7 @@ public class ExperimentalIntersections {
         return loops;
     }
 
-    private void explodeLoop(Feature f){
+    private void explodeLoop(Feature f) {
         //todo find how to split corectly loops
         myMap.getFeatures().remove(f);
         for (Coordinates C : explosionPivot.keySet()) {
