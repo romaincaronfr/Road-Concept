@@ -1,6 +1,8 @@
 package fr.enssat.lanniontech.api.entities.simulation;
 
 import fr.enssat.lanniontech.api.entities.SQLEntity;
+import fr.enssat.lanniontech.api.exceptions.SimulatorUnavailableException;
+import fr.enssat.lanniontech.core.Simulator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +17,7 @@ public class Simulation implements SQLEntity {
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int durationS;
     private boolean finish;
+    private final Simulator simulator = new Simulator();
 
     public UUID getUuid() {
         return uuid;
@@ -70,6 +73,13 @@ public class Simulation implements SQLEntity {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public Simulator getSimulator() throws SimulatorUnavailableException {
+        if (! finish) {
+            return simulator;
+        }
+        throw new SimulatorUnavailableException("Simulation finished");
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Feature extends GeoJsonObject {
     private String openStreetMapID;
 
     @JsonIgnore
-    public boolean isRoad(){
+    public boolean isRoad() {
         FeatureType type = (FeatureType) getProperties().get("type");
 
         return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;

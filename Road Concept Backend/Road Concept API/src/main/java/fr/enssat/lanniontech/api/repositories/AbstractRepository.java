@@ -63,9 +63,9 @@ public abstract class AbstractRepository {
     protected final int delete(String tableName, SQLEntity entity) throws DatabaseOperationException {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
-                if ( entity.getIdentifierValue() instanceof UUID) {
+                if (entity.getIdentifierValue() instanceof UUID) {
                     statement.setObject(1, entity.getIdentifierValue().toString());
-                }else {
+                } else {
                     statement.setObject(1, entity.getIdentifierValue());
                 }
                 return statement.executeUpdate();

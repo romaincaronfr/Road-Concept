@@ -29,7 +29,7 @@ public class AdvancedTrajectory extends Trajectory {
         this.source = source;
         this.destination = destination;
 
-        securityDistance = 15;
+        securityDistance = 4;
 
         Pfs = new ArrayList<>();
         lengths = new ArrayList<>();
@@ -86,6 +86,7 @@ public class AdvancedTrajectory extends Trajectory {
 
     //Trajectory class implementation
 
+    @Override
     public Trajectory getNext() {
         return destination;
     }
@@ -95,6 +96,7 @@ public class AdvancedTrajectory extends Trajectory {
         return getNext();
     }
 
+    @Override
     public double getSpeedOfFirst() {
         if (vehiclesSides.size() == 0) {
             return destination.getSpeedOfFirst();

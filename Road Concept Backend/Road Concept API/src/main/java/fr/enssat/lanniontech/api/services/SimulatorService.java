@@ -13,11 +13,8 @@ import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
-import fr.enssat.lanniontech.api.exceptions.SimulationImcompleteException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
-import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +32,6 @@ public class SimulatorService extends AbstractService {
 
     private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
 
-    private Simulator simulator = new Simulator();
     private MapService mapService = new MapService();
 
     public Simulation create(User user, String name, int mapID, int durationS) {
@@ -48,6 +44,7 @@ public class SimulatorService extends AbstractService {
         simulationParametersRepository.create(user.getId(), name, mapID, durationS);
 
         start(simulation);
+        //TODO: Mettre simulation.simulator à null une fois la simulation terminée et les résultats sdtockés en base (conso mémoire)
         return simulation;
     }
 
@@ -61,10 +58,10 @@ public class SimulatorService extends AbstractService {
 
     private boolean start(Simulation simulation) throws EntityNotExistingException {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
-        List<Road> roads = sendFeatures(map.getFeatures());
-        simulator.vehicleManager.addToSpawnArea(roads.get(0)); //TODO: Set as simulation parameter
-        simulator.vehicleManager.addVehicle();
-        return simulator.launchSimulation(simulation.getDurationS(), 0.1, 10);
+        List<Road> roads = sendFeatures(simulation, map.getFeatures());
+        simulation.getSimulator().vehicleManager.addToSpawnArea(roads.get(0)); //TODO: Set as simulation parameter
+        simulation.getSimulator().vehicleManager.addVehicle();
+        return simulation.getSimulator().launchSimulation(simulation.getDurationS(), 0.1, 10);
     }
 
     public List<Simulation> getAll(User user, int mapID) {
@@ -82,72 +79,73 @@ public class SimulatorService extends AbstractService {
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public FeatureCollection getResult(UUID simulationUUID, int timestamp) throws SimulationImcompleteException {
-        Simulation simulation = get(simulationUUID);
-        if (simulation.isFinish()) {
-            Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
-            getResultAt(map.getFeatures(), timestamp);
-            return map.getFeatures();
-        }
-        throw new SimulationImcompleteException();
-    }
+//    public FeatureCollection getResult(UUID simulationUUID, int timestamp) throws SimulationImcompleteException {
+//        Simulation simulation = get(simulationUUID);
+//        if (simulation.isFinish()) {
+//            Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
+//            getResultAt(map.getFeatures(), timestamp);
+//            return map.getFeatures();
+//        }
+//        throw new SimulationImcompleteException();
+//    }
 
-    private void getResultAt(FeatureCollection features, int timestamp) {
-        for (Feature feature : features) {
-            Double status = simulator.historyManager.getRoadStatus(feature.getUuid(), timestamp);
-            feature.getProperties().put("congestion", status.intValue());
-        }
+//    private void getResultAt(FeatureCollection features, int timestamp) {
+//        for (Feature feature : features) {
+//            Double status = simulation.getSimulator().historyManager.getRoadStatus(feature.getUuid(), timestamp);
+//            feature.getProperties().put("congestion", status.intValue());
+//        }
+//
+//        List<SpaceTimePosition> vehicles = simulation.getSimulator().historyManager.getAllVehicleAt(timestamp);
+//        LOGGER.debug("Nombre de véhicules = " + vehicles.size());
+//        for (SpaceTimePosition vehicle : vehicles) {
+//            LOGGER.debug("Space Time Position = " + vehicle);
+//            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
+//            feature.setGeometry(new Point(new Coordinates(vehicle.getLon(), vehicle.getLat())));
+//            feature.getProperties().put("type", FeatureType.VEHICLE);
+//            feature.getProperties().put("vehicle_id", vehicle.getId());
+//            feature.getProperties().put("angle", vehicle.getAngle());
+//            features.getFeatures().add(feature);
+//        }
+//    }
 
-        List<SpaceTimePosition> vehicles = simulator.historyManager.getAllVehicleAt(timestamp);
-        LOGGER.debug("Nombre de véhicules = " + vehicles.size());
-        for (SpaceTimePosition vehicle : vehicles) {
-            LOGGER.debug("Space Time Position = " + vehicle);
-            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
-            feature.setGeometry(new Point(new Coordinates(vehicle.getLon(), vehicle.getLat())));
-            feature.getProperties().put("type", FeatureType.VEHICLE);
-            feature.getProperties().put("vehicle_id", vehicle.getId());
-            feature.getProperties().put("angle", vehicle.getAngle());
-            features.getFeatures().add(feature);
-        }
-    }
+//    public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
+//        List<SpaceTimePosition> history = simulation.getSimulator().historyManager.getVehiclePosition(vehicleID);
+//        FeatureCollection result = new FeatureCollection();
+//
+//        for (SpaceTimePosition position : history) {
+//            Feature feature = new Feature();
+//            feature.getProperties().put("type", FeatureType.VEHICLE);
+//            feature.getProperties().put("vehicle_id", position.getId());
+//            feature.getProperties().put("angle", position.getAngle());
+//            feature.setGeometry(new Point(new Coordinates(position.getLon(), position.getLat())));
+//
+//            result.getFeatures().add(feature);
+//        }
+//        return result;
+//    }
 
-    public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
-        List<SpaceTimePosition> history = simulator.historyManager.getVehiclePosition(vehicleID);
-        FeatureCollection result = new FeatureCollection();
-
-        for (SpaceTimePosition position : history) {
-            Feature feature = new Feature();
-            feature.getProperties().put("type", FeatureType.VEHICLE);
-            feature.getProperties().put("vehicle_id", position.getId());
-            feature.getProperties().put("angle", position.getAngle());
-            feature.setGeometry(new Point(new Coordinates(position.getLon(), position.getLat())));
-
-            result.getFeatures().add(feature);
-        }
-        return result;
-    }
-
-    private List<Road> sendFeatures(FeatureCollection features) {
+    private List<Road> sendFeatures(Simulation simulation, FeatureCollection features) {
         List<Road> roads = new ArrayList<>();
         for (Feature feature : features) {
             if (feature.getGeometry() instanceof LineString) {
                 LineString road = (LineString) feature.getGeometry();
-
-                Coordinates last = road.getCoordinates().get(0);
-                for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
-                    Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulator.positionManager.addPosition(last.getLatitude(), last.getLongitude());
-                    Position B = simulator.positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
-                    roads.add(simulator.roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
-                    last = coordinates;
+                if (! feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
+                    Coordinates last = road.getCoordinates().get(0);
+                    for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
+                        Coordinates coordinates = road.getCoordinates().get(i);
+                        Position A = simulation.getSimulator().positionManager.addPosition(last.getLatitude(), last.getLongitude());
+                        Position B = simulation.getSimulator().positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
+                        roads.add(simulation.getSimulator().roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
+                        last = coordinates;
+                    }
                 }
             }
             //TODO: Prévoir les ronds points et les feux rouges. En attente d'Antoine
         }
-        simulator.roadManager.closeRoads();
-            if (simulator.roadManager.checkIntegrity() != 0) {
-               throw new RoadConceptUnexpectedException();
-           }
+        simulation.getSimulator().roadManager.closeRoads();
+        if (simulation.getSimulator().roadManager.checkIntegrity() != 0) {
+            throw new RoadConceptUnexpectedException();
+        }
         return roads;
     }
 
