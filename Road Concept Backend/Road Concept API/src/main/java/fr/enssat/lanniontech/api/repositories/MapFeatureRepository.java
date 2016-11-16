@@ -117,13 +117,13 @@ public class MapFeatureRepository extends MapRepository {
                 FeatureCollection features = new FeatureCollection();
                 for (Document item : collection.find()) {
                     Feature result = JSONHelper.fromJSON(item.toJson(), Feature.class);
-                    String uuid = (String) result.getProperties().get("id");
-                    result.setUuid(UUID.fromString(uuid));
+                    result.setUuid(UUID.fromString((String) result.getProperties().get("id")));
 
                     features.getFeatures().add(result);
                 }
                 return features;
             } catch (Exception e) {
+                LOGGER.debug(ExceptionUtils.getStackTrace(e));
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
             }
         }

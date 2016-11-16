@@ -61,8 +61,8 @@ public class MapsVerticle extends AbstractVerticle {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
             Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
 
-            Feature created = mapService.addFeature(mapID, feature);
-            HttpResponseBuilder.buildCreatedResponse(routingContext, created);
+            mapService.addFeature(mapID, feature);
+            HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (InconsistentException e) {

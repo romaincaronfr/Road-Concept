@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.api.services;
+package fr.enssat.lanniontech.api.utilities;
 
 import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
@@ -14,34 +14,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ExperimentalIntersections {
+public class IntersectionsSplitter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExperimentalIntersections.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntersectionsSplitter.class);
 
-    private FeatureCollection myMap;
-    private Map<Coordinates, List<Feature>> explosionPivot;
-    private Map<Feature,Coordinates> loops;
+    public static FeatureCollection process(FeatureCollection map) {
+        Map<Coordinates, List<Feature>> explosionPivot = new HashMap<>();
+        Map<Feature, Coordinates> loops;
 
-    public ExperimentalIntersections(FeatureCollection map) {
-        myMap = map;
-        int cycles = initExplosionPivot();
+        int cycles = initExplosionPivot(explosionPivot, map);
         LOGGER.debug("cycle numbers = " + cycles);
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        loops = cleanExplosionPivot();
+        loops = cleanExplosionPivot(explosionPivot);
         LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
-        while (explosionPivot.size() > 0) {
-            explodeRoads();
+        while (!explosionPivot.isEmpty()) {
+            explodeRoads(explosionPivot, map, loops);
         }
-        for(Feature f : loops.keySet()){
-            explodeLoop(f);
+        for (Feature feature : loops.keySet()) {
+            explodeLoop(explosionPivot, feature, map);
         }
+        return map;
     }
 
-    private int initExplosionPivot() {
+    private static int initExplosionPivot(Map<Coordinates, List<Feature>> explosionPivot, FeatureCollection map) {
         int cycles = 0;
-        explosionPivot = new HashMap<>();
-        for (Feature f : myMap.getFeatures()) {
+        for (Feature f : map.getFeatures()) {
             if (f.isRoad()) {
                 LineString road = (LineString) f.getGeometry();
                 for (Coordinates c : road.getCoordinates()) {
@@ -54,22 +51,22 @@ public class ExperimentalIntersections {
         return cycles;
     }
 
-    private Map<Feature,Coordinates> cleanExplosionPivot() {
+    private static Map<Feature, Coordinates> cleanExplosionPivot(Map<Coordinates, List<Feature>> explosionPivot) {
         Iterator<Coordinates> iterator = explosionPivot.keySet().iterator();
-        Map<Feature,Coordinates> loops = new HashMap<>();
+        Map<Feature, Coordinates> loops = new HashMap<>();
         while (iterator.hasNext()) {
             Coordinates c = iterator.next();
             if (explosionPivot.get(c).size() < 2) {
                 iterator.remove();
             } else {
-                Map<Feature,Boolean> loopDetector =new HashMap<>();
+                Map<Feature, Boolean> loopDetector = new HashMap<>();
                 boolean remove = true;
                 for (Feature f : explosionPivot.get(c)) {
-                    if(loopDetector.containsKey(f)){
-                        loopDetector.replace(f,true);
-                        loops.putIfAbsent(f,c);
-                    }else {
-                        loopDetector.put(f,false);
+                    if (loopDetector.containsKey(f)) {
+                        loopDetector.replace(f, true);
+                        loops.putIfAbsent(f, c);
+                    } else {
+                        loopDetector.put(f, false);
                     }
                     remove &= ((LineString) f.getGeometry()).isFirstOrLast(c);
                 }
@@ -81,27 +78,26 @@ public class ExperimentalIntersections {
         return loops;
     }
 
-    private void explodeLoop(Feature f){
+    private static void explodeLoop(Map<Coordinates, List<Feature>> explosionPivot, Feature feature, FeatureCollection map) {
         //todo find how to split corectly loops
-        myMap.getFeatures().remove(f);
-        for (Coordinates C : explosionPivot.keySet()) {
-            if (explosionPivot.get(C).contains(f)) {
-                explosionPivot.get(C).remove(f);
+        map.getFeatures().remove(feature);
+        for (Coordinates coordinates : explosionPivot.keySet()) {
+            if (explosionPivot.get(coordinates).contains(feature)) {
+                explosionPivot.get(coordinates).remove(feature);
             }
         }
     }
 
-    private void explodeRoads() {
+    private static void explodeRoads(Map<Coordinates, List<Feature>> explosionPivot, FeatureCollection map, Map<Feature, Coordinates> loops) {
         Map<Feature, Feature[]> tranformMap = new HashMap<>();
 
         Coordinates c = (Coordinates) explosionPivot.keySet().toArray()[0];
-
         for (Feature f : explosionPivot.get(c)) {
             if (!((LineString) f.getGeometry()).isFirstOrLast(c)) {
                 tranformMap.put(f, split(f, ((LineString) f.getGeometry()).getCoordinates().indexOf(c)));
-                myMap.getFeatures().remove(f);
-                myMap.getFeatures().add(tranformMap.get(f)[0]);
-                myMap.getFeatures().add(tranformMap.get(f)[1]);
+                map.getFeatures().remove(f);
+                map.getFeatures().add(tranformMap.get(f)[0]);
+                map.getFeatures().add(tranformMap.get(f)[1]);
             }
         }
         explosionPivot.remove(c);
@@ -119,35 +115,31 @@ public class ExperimentalIntersections {
             }
         }
 
-        for (Feature f : tranformMap.keySet()) {
-            if(loops.containsKey(f)){
-                Coordinates C = loops.get(f);
-                loops.remove(f);
+        for (Feature feature : tranformMap.keySet()) {
+            if (loops.containsKey(feature)) {
+                Coordinates C = loops.get(feature);
+                loops.remove(feature);
 
-                if (((LineString) tranformMap.get(f)[0].getGeometry()).contains(C)) {
-                    loops.put(tranformMap.get(f)[0],C);
+                if (((LineString) tranformMap.get(feature)[0].getGeometry()).contains(C)) {
+                    loops.put(tranformMap.get(feature)[0], C);
                 } else {
-                    loops.put(tranformMap.get(f)[1],C);
+                    loops.put(tranformMap.get(feature)[1], C);
                 }
             }
         }
-
-
     }
 
-    private Feature[] split(Feature featureToSplit, int index) {
-        Map<String, Object> properties = featureToSplit.getProperties();
+    private static Feature[] split(Feature featureToSplit, int index) {
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
-        newOneRoad1.setProperties(new HashMap<>(properties));
-        newOneRoad2.setProperties(new HashMap<>(properties));
+        newOneRoad1.setProperties(new HashMap<>(featureToSplit.getProperties()));
+        newOneRoad2.setProperties(new HashMap<>(featureToSplit.getProperties()));
         newOneRoad1.setGeometry(new LineString());
         newOneRoad2.setGeometry(new LineString());
         newOneRoad1.getProperties().remove("id");
         newOneRoad2.getProperties().remove("id");
         newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());
         newOneRoad2.getProperties().put("id", newOneRoad2.getUuid());
-
 
         LineString lineString = (LineString) featureToSplit.getGeometry();
         LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
