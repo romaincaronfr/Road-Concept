@@ -23,7 +23,7 @@ public final class MathsUtils {
         return bd.doubleValue();
     }
 
-    public static boolean intersect(Coordinates p0, Coordinates p1, Coordinates p2, Coordinates p3) {
+    public static boolean intersect(Coordinates p0, Coordinates p1, Coordinates p2) {
         /*double s1_x = p1.getLongitude() - p0.getLongitude();
         double s1_y = p1.getLatitude() - p0.getLatitude();
         double s2_x = p3.getLongitude() - p2.getLongitude();
@@ -46,14 +46,26 @@ public final class MathsUtils {
         double aY = p0.getLatitude();
         double bX = p1.getLongitude();
         double bY = p1.getLatitude();
-        double cX = p3.getLongitude();
-        double cY = p3.getLatitude();
+        double cX = p2.getLongitude();
+        double cY = p2.getLatitude();
 
-        double distanceAB = Math.abs(Math.sqrt(Math.pow((aX-bX),2)+Math.pow((aY-bY),2)));
-        double distanceAC = Math.abs(Math.sqrt(Math.pow((aX-cX),2)+Math.pow((aY-cY),2)));
-        double distanceCB = Math.abs(Math.sqrt(Math.pow((cX-bX),2)+Math.pow((cY-bY),2)));
+        double distanceAB = Math.sqrt(Math.pow((aX-bX),2)+Math.pow((aY-bY),2));
+        double distanceAC = Math.sqrt(Math.pow((aX-cX),2)+Math.pow((aY-cY),2));
+        double distanceCB = Math.sqrt(Math.pow((cX-bX),2)+Math.pow((cY-bY),2));
 
-        return distanceAB == distanceAC+distanceCB;
+        LOGGER.debug("@@@ Distance AB = "+distanceAB);
+        LOGGER.debug("@@@ Distance AC = "+distanceAC);
+        LOGGER.debug("@@@ Distance CB = "+distanceCB);
+        LOGGER.debug("@@@ Distance AC+CB = "+(distanceCB+distanceAC));
+        LOGGER.debug("@@@ Distance result  = "+(distanceAB == distanceAC+distanceCB));
+
+        double distancePoint = distanceAC+distanceCB;
+
+        if (distancePoint > distanceAB-0.0003 && distancePoint < distanceAB+0.0003){
+            return true;
+        }
+
+        return false;
         /*Point2D point0 = new Point2D.Double(p0.getLongitude(),p0.getLatitude());
         Point2D point1 = new Point2D.Double(p1.getLongitude(),p1.getLatitude());
         Point2D point2 = new Point2D.Double(p2.getLongitude(),p2.getLatitude());

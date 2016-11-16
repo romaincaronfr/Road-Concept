@@ -375,20 +375,13 @@ public class MapService extends AbstractService {
 
                     LineString coordinaToCheck = (LineString) duplicatedFeatureToCheck.getGeometry();
 
-                    for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 2; j++) {
+                    for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 1; j++) {
                         Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j); // A = to check
                         Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j + 1);
 
                         Coordinates firstPointRoadB;
-                        Coordinates lastPointRoadB;
-                        if (i == createdRoad.getCoordinates().size() - 1) {
-                            firstPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i - 1).getLongitude()), MathsUtils.roundGPS(createdRoad.getCoordinates().get(i - 1).getLatitude()));
-                            lastPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLongitude()), MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLatitude()));
-                        } else {
-                            firstPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLongitude()), MathsUtils.roundGPS(createdRoad.getCoordinates().get(i).getLatitude()));
-                            lastPointRoadB = new Coordinates(MathsUtils.roundGPS(createdRoad.getCoordinates().get(i + 1).getLongitude()), MathsUtils.roundGPS(createdRoad.getCoordinates().get(i + 1).getLatitude()));
-                        }
-                        boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB, lastPointRoadB);
+                        firstPointRoadB = new Coordinates(createdRoad.getCoordinates().get(i).getLongitude(), createdRoad.getCoordinates().get(i).getLatitude());
+                        boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB);
                         LOGGER.debug("@@@ j = : " + j);
                         if (intersectionPoint) {
                             LOGGER.debug("@@@ Intersection detected ! firstPointRoadA = " + firstPointRoadA + " lastPointRoadA = " + lastPointRoadA);
