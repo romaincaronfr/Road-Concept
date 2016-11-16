@@ -49,7 +49,7 @@ public class VehicleManager {
         }
 
         Lane startingLane = gen.nextBoolean() ? spawnArea.get(startingRoad).getLaneAB() : spawnArea.get(startingRoad).getLaneBA();
-        double startingPos = 10 + gen.nextInt((int) ((startingLane.getLength() - 15) * 10)) / 10.0;
+        double startingPos = 4;
         int k = 0;
         System.out.println(startingLane.getLength());
         System.out.println(startingPos);

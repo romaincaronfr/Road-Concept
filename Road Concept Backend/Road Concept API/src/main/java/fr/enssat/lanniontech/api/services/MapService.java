@@ -99,7 +99,21 @@ public class MapService extends AbstractService {
         }
 
         FeatureCollection features = JSONHelper.fromJSON(fileData, FeatureCollection.class);
+        int nullID = 0;
+        for (Feature getted : features.getFeatures()) {
+            if (getted.getOpenStreetMapID().equals("null") || getted.getOpenStreetMapID() == null) {
+                nullID++;
+            }
+        }
+        LOGGER.debug("BEFORE OSM ADAPTATION NULL COUNT = " + nullID);
+        nullID = 0;
         fromOSMAdaptation(features);
+        for (Feature getted : features.getFeatures()) {
+            if (getted.getOpenStreetMapID().equals("null") || getted.getOpenStreetMapID() == null) {
+                nullID++;
+            }
+        }
+        LOGGER.debug("AFTER OSM ADAPTATION NULL COUNT = " + nullID);
 
         long startTime = System.nanoTime();
         features = IntersectionsSplitter.process(features);
@@ -107,26 +121,35 @@ public class MapService extends AbstractService {
         long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 
         FeatureCollection toAdd = new FeatureCollection();
-        //FeatureCollection existingFeatures = mapFeatureRepository.getAll(mapID);
+        FeatureCollection existingFeatures = mapFeatureRepository.getAll(mapID);
         for (Feature feature : features) {
-            //            if (existingFeatures.getFeatures().isEmpty()) {
-            //                toAdd.add(feature);
-            //            } else {
-            //                for (Feature existingFeature : existingFeatures) {
-            //                    if (feature.getOpenStreetMapID().equals(existingFeature.getOpenStreetMapID())) {
-            //                        break;
-            //                    } else {
-            //                        toAdd.add(feature);
-            //                    }
-            //                }
-            //            }
-
-            Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
-            if (retrieved == null) {
+            if (existingFeatures.getFeatures().isEmpty()) {
+                LOGGER.debug("Adding feature with osm id = " + feature.getOpenStreetMapID());
                 toAdd.getFeatures().add(feature);
+            } else {
+                for (Feature existingFeature : existingFeatures) {
+                    if (feature.getOpenStreetMapID().equals(existingFeature.getOpenStreetMapID())) {
+                        break;
+                    } else {
+                        toAdd.getFeatures().add(feature);
+                    }
+                }
+            }
+
+            //            Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
+            //            if (retrieved == null) {
+            //                toAdd.getFeatures().add(feature);
+            //            }
+        }
+
+        nullID = 0;
+        for (Feature getted : toAdd.getFeatures()) {
+            if (getted.getOpenStreetMapID() == null) {
+                nullID++;
             }
         }
 
+        LOGGER.debug("TO ADD OSM ID NULL COUNT = " + nullID);
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
         }

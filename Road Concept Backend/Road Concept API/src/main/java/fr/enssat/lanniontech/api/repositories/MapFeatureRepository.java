@@ -49,11 +49,16 @@ public class MapFeatureRepository extends MapRepository {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
 
+
+            for (Feature added : features.getFeatures()) {
+                LOGGER.debug("Going to insert = " + added.getOpenStreetMapID());
+            }
+
             List<Document> documents = new ArrayList<>();
             for (Feature feature : features) {
                 if (feature.getGeometry() instanceof LineString) {
                     LineString lineString = (LineString) feature.getGeometry();
-                    if (lineString.getCoordinates().size() > 0) {
+                    if (!lineString.getCoordinates().isEmpty()) {
                         documents.add(Document.parse(JSONHelper.toJSON(feature)));
                     }
                 } else {
@@ -146,7 +151,7 @@ public class MapFeatureRepository extends MapRepository {
                 BasicDBObject query = new BasicDBObject();
                 query.put("id", openStreetMapID);
                 FindIterable<Document> queryResult = collection.find(query);
-                Document item = queryResult.iterator().next();
+                Document item = queryResult.iterator().next(); //FIXME Resource
 
                 Feature result = JSONHelper.fromJSON(item.toJson(), Feature.class);
                 String uuid = (String) result.getProperties().get("id");

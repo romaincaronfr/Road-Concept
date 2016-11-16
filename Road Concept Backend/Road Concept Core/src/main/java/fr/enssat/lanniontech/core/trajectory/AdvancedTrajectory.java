@@ -29,7 +29,7 @@ public class AdvancedTrajectory extends Trajectory {
         this.source = source;
         this.destination = destination;
 
-        securityDistance = 4;
+        securityDistance = 2;
 
         Pfs = new ArrayList<>();
         lengths = new ArrayList<>();

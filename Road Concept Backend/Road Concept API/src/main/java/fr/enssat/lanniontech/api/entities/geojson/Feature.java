@@ -33,7 +33,7 @@ public class Feature extends GeoJsonObject {
         }
         return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
     }
-    
+
     public Map<String, Object> getProperties() {
         return properties;
     }
@@ -58,10 +58,12 @@ public class Feature extends GeoJsonObject {
         this.uuid = uuid;
     }
 
+    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
     public String getOpenStreetMapID() {
         return openStreetMapID;
     }
 
+    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
     public void setOpenStreetMapID(String openStreetMapID) {
         this.openStreetMapID = openStreetMapID;
     }

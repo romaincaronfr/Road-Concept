@@ -12,6 +12,7 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,6 +132,8 @@ public class SimulatorVerticle extends AbstractVerticle {
             Simulation simulation = simulatorService.create(currentUser, name, mapID, durationS);
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
         } catch (Exception e) {
+            LOGGER.debug(ExceptionUtils.getStackTrace(e));
+
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }

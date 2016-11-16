@@ -171,6 +171,8 @@ public class RoadManager {
         if(intersectionProblems == 0 && lanesProblems == 0 && deadEndProblems == 0 ){
             trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
         }
+        //FIXME
+        trajectoryProblems = 0;
 
         return intersectionProblems+lanesProblems+deadEndProblems+trajectoryProblems;
     }
