@@ -573,8 +573,9 @@ app.mapEditionView = Backbone.View.extend({
 
                 self.intersections[self.index] = features;
                 self.index++;
-                console.log(resolution);
-                console.log(features);
+                //console.log(resolution);
+                //console.log(features);
+                console.log("nb intersections : " + self.intersections.length);
                 console.log(self.intersections);
             });
 
@@ -582,7 +583,7 @@ app.mapEditionView = Backbone.View.extend({
             this.map.addInteraction(this.snap);
 
 
-            this.draw.on('drawstart', function (evt) {
+            this.draw.on('drawstart', function () {
                 console.log('drawStart');
 
                 self.interactionZoomDoubleClick.setActive(false);
