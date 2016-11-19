@@ -1,0 +1,33 @@
+<form class="form-horizontal" style="margin: 4px;">
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend>Configuration des paramètres du lieu d'habitation</legend>
+
+        <!-- Nombre d'habitants-->
+        <div class="form-group">
+            <label for="numberOfResident" class="control-label col-sm-2">Nombre d'habitants</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="numberOfResident" placeholder="ex : 150" required="" value="<%= numberresident %>">
+                <p class="help-block">en km/h</p>
+            </div>
+        </div>
+        <!-- Heure de départ-->
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Envoi -->
+        <div class="form-group">
+            <div class="text-right col-sm-12">
+                <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModel" aria-label="">Enregistrer</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
