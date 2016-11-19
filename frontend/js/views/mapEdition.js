@@ -635,7 +635,7 @@ app.mapEditionView = Backbone.View.extend({
                 JSONFeature.properties.intersections = self.intersections;
                 JSONFeature.properties.name = "Unnamed unit road";
                 JSONFeature.properties.id = "1";
-                console.log(JSONFeature.properties);
+                //console.log(JSONFeature.properties);
                 console.log(JSONFeature);
                 self.newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
