@@ -37,6 +37,9 @@ public class RoadManager {
         return addRoadSection(A, B, R);
     }
 
+    /**
+     * create and assemble the road section to its Road
+     */
     public RoadSection addRoadSection(Position A, Position B, Road myRoad) {
         RoadSection RS1 = new RoadSection(A, B, myRoad);
 
@@ -47,6 +50,9 @@ public class RoadManager {
         return RS1;
     }
 
+    /**
+     * Create and add a RoadSection from the specified positions to the specified Road
+     */
     public Road addRoadSectionToRoad(Position A, Position B, UUID id) {
         Road R = roads.get(id);
         if (R == null) {
@@ -58,7 +64,7 @@ public class RoadManager {
     }
 
     /**
-     * assemble the lanes of the 
+     * assemble the new RoadSection to the Road on the Position
      */
     private void assembleRoadSections(RoadSection Rs1, Position P, Road myRoad) {
         if (RoadEdges.containsKey(P)) {

@@ -1,34 +1,40 @@
 package fr.enssat.lanniontech.core.roadElements.intersections;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
 import java.util.*;
 
 public class Intersection {
 
     private Position P;
-    private Map<UUID, RoadSection> roadSections;
+    private Map<Trajectory, UUID> incomingTrajectories;
+    private Map<Trajectory, UUID> outcomingTrajectories;
     private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
     //structure is <source ,<destination, AdvancedTrajectory>>
 
     public Intersection(Position P) {
         this.P = P;
-        roadSections = new HashMap<>();
+        incomingTrajectories = new HashMap<>();
+        outcomingTrajectories = new HashMap<>();
         trajectories = new HashMap<>();
     }
 
-    private void addTrajectories(UUID id) {
-
+    private void assembleIntersection(UUID id) {
+        //TODO compute intersections positions and set them in the trajectories
     }
 
     public boolean addRoadSection(RoadSection Rs) {
         if (Rs.getA() != P && Rs.getB() != P) {
             return false;
         }
-        roadSections.put(Rs.getMyRoad().getId(), Rs);
-        addTrajectories(Rs.getMyRoad().getId());
+        Lane incomingLane = Rs.getLeftLane(P);
+        Lane outcomingLane = Rs.getRightLane(P);
+        incomingTrajectories.put(incomingLane.getInsertTrajectory(), Rs.getMyRoad().getId());
+        outcomingTrajectories.put(outcomingLane.getInsertTrajectory(), Rs.getMyRoad().getId());
         return true;
     }
 
@@ -38,23 +44,6 @@ public class Intersection {
             s += trajectories.get(uuid).size();
         }
         return s;
-    }
-
-    public int getRoadSectionsSize() {
-        return roadSections.size();
-    }
-
-    public boolean removeRoadSection(UUID id) {
-        if (roadSections.containsKey(id)) {
-            for (UUID uuid : trajectories.keySet()) {
-                trajectories.get(uuid).remove(id);
-            }
-            trajectories.remove(id);
-            roadSections.remove(id);
-        } else {
-            return false;
-        }
-        return true;
     }
 
     public List<SimpleTrajectory> getTrajectories() {
