@@ -14,7 +14,6 @@ app.simulationCreationView = Backbone.View.extend({
     step: 0,
 
     events: {
-        'click #ready': 'addInteraction',
         'click #previous' : 'previous'
     },
 
@@ -103,6 +102,7 @@ app.simulationCreationView = Backbone.View.extend({
             }
         });
 
+        this.addInteraction();
         //Tooltip bootstrap
         $('[data-toggle="tooltip"]').tooltip();
 
