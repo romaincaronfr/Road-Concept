@@ -35,8 +35,6 @@ public class Lane {
      */
     public void setNextLane(Lane nextLane) {
         this.nextLane = nextLane;
-        trajectories.get(0).addDestination(nextLane.getInsertTrajectory());
-        //todo handle lane with multiple trajectories
     }
 
     public SimpleTrajectory getInsertTrajectory() {

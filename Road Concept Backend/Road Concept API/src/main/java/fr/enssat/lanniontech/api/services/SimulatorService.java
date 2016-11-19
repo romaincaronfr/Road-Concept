@@ -130,7 +130,7 @@ public class SimulatorService extends AbstractService {
         for (Feature feature : features) {
             if (feature.getGeometry() instanceof LineString) {
                 LineString road = (LineString) feature.getGeometry();
-                if (!feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
+                if (feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
                     Coordinates last = road.getCoordinates().get(0);
                     for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                         Coordinates coordinates = road.getCoordinates().get(i);

@@ -22,11 +22,6 @@ public class EndRoadTrajectory extends Trajectory {
         Position B = destination.getGPS(destination.getStart());
         pf = new PosFunction(A,B);
         length = Position.length(A,B);
-
-        source.addDestination(this);
-        destination.addSource(this);
-
-
     }
 
     //------------inherited methods----------//

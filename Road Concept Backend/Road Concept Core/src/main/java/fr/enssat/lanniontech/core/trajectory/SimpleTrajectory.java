@@ -13,10 +13,10 @@ public class SimpleTrajectory extends Trajectory {
 
     public static Logger LOG = LoggerFactory.getLogger(SimpleTrajectory.class);
 
-    private Map<UUID,Trajectory> sourcesTrajectories;
-    private TrajectoryType sourceType;
-    private Map<UUID,Trajectory> destinationsTrajectories;
-    private TrajectoryType destinationType;
+    private SortedMap<Double,Trajectory> sourcesTrajectories;
+    private TrajectoryEndType sourceType;
+    private SortedMap<Double,Trajectory> destinationsTrajectories;
+    private TrajectoryEndType destinationType;
     private PosFunction pF;
     private double width;
     private double start;
@@ -25,11 +25,11 @@ public class SimpleTrajectory extends Trajectory {
 
     public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId) {
         super(roadId);
-        sourcesTrajectories = new HashMap<>();
-        destinationsTrajectories = new HashMap<>();
-        sourceType = TrajectoryType.Undefined;
-        destinationType = TrajectoryType.Undefined;
-        this.setpF(pF);
+        sourcesTrajectories = new TreeMap<>();
+        destinationsTrajectories = new TreeMap<>();
+        sourceType = TrajectoryEndType.UNDEFINED;
+        destinationType = TrajectoryEndType.UNDEFINED;
+        this.pF = pF;
         this.start=start;
         this.stop=stop;
         inverted = start > stop;
@@ -40,69 +40,31 @@ public class SimpleTrajectory extends Trajectory {
             length = stop - start;
             this.width = width;
         }
-
+        sourcesTrajectories.put(start,null);
+        destinationsTrajectories.put(stop,null);
     }
 
     /**
      * this method add a destination trajectory
      */
-    public void addDestination(SimpleTrajectory t) {
-        if (getDestinationType() == TrajectoryType.Undefined) {
-            if (getpF().cross(t.getpF())) {
-                double Ps[] = getpF().getInterPos(t.getpF(), getWidth(), t.getWidth());
-
-                setStop(Ps[0]);
-                t.setStart(Ps[1]);
-
-                destinationsTrajectories.put(t.getRoadId(),t);
-                t.getSourcesTrajectories().put(getRoadId(),this);
-
-                t.setSourceType(TrajectoryType.SimpleTrajectory);
-                setSourceType(TrajectoryType.SimpleTrajectory);
-            } else if (t.getGPS(getStop()).equals(getGPS(getStart()))) {
-                getDestinationsTrajectories().put(t.getRoadId(),t);
-                t.getSourcesTrajectories().put(getRoadId(),this);
-            }
-            destinationType = TrajectoryType.SimpleTrajectory;
-        }
+    public void addSource(double position, SimpleTrajectory t) {
+        setSourceType(TrajectoryEndType.SIMPLE);
+        sourcesTrajectories.put(position,t);
     }
 
-    public void addDestination(AdvancedTrajectory t) {
-        if (destinationType == TrajectoryType.Undefined) {
-            if (inverted) {
-                setStop(stop + t.getSecurityDistance());
-            } else {
-                setStop(stop - t.getSecurityDistance());
-            }
-            destinationType = TrajectoryType.AdvancedTrajectory;
-            destinationsTrajectories.put(t.getRoadId(),t);
-        }else if(destinationType == TrajectoryType.AdvancedTrajectory){
-            destinationsTrajectories.put(t.getRoadId(),t);
-        }
+    public void addDestination(double position, SimpleTrajectory t) {
+        setSourceType(TrajectoryEndType.SIMPLE);
+        sourcesTrajectories.put(position,t);
     }
 
-    public void addSource(AdvancedTrajectory t) {
-        if (sourceType == TrajectoryType.Undefined) {
-            if (isInverted()) {
-                setStart(start - t.getSecurityDistance());
-            } else {
-                setStart(start + t.getSecurityDistance());
-            }
-            sourceType = TrajectoryType.AdvancedTrajectory;
-            sourcesTrajectories.put(t.getRoadId(),t);
-        }else if(sourceType == TrajectoryType.AdvancedTrajectory){
-            sourcesTrajectories.put(t.getRoadId(),t);
-        }
+    public void addSource(double position,EndRoadTrajectory t){
+        setSourceType(TrajectoryEndType.DEAD_END);
+        sourcesTrajectories.put(position,t);
     }
 
-    public void addSource(EndRoadTrajectory t){
-        setSourceType(TrajectoryType.EndRoadTrajectory);
-        sourcesTrajectories.put(t.getRoadId(),t);
-    }
-
-    public void addDestination(EndRoadTrajectory t){
-        setDestinationType(TrajectoryType.EndRoadTrajectory);
-        destinationsTrajectories.put(t.getRoadId(),t);
+    public void addDestination(double position, EndRoadTrajectory t){
+        setDestinationType(TrajectoryEndType.DEAD_END);
+        destinationsTrajectories.put(position,t);
     }
 
     public double getStart() {
@@ -129,10 +91,6 @@ public class SimpleTrajectory extends Trajectory {
         } else {
             length = stop - start;
         }
-    }
-
-    public PosFunction getFunction() {
-        return getpF();
     }
 
     public double getWidth() {
@@ -228,44 +186,32 @@ public class SimpleTrajectory extends Trajectory {
         return P;
     }
 
-    public Map<UUID,Trajectory> getSourcesTrajectories() {
+    public Map<Double,Trajectory> getSourcesTrajectories() {
         return sourcesTrajectories;
     }
 
-    public TrajectoryType getSourceType() {
+    public TrajectoryEndType getSourceType() {
         return sourceType;
     }
 
-    public void setSourceType(TrajectoryType sourceType) {
+    public void setSourceType(TrajectoryEndType sourceType) {
         this.sourceType = sourceType;
     }
 
-    public Map<UUID,Trajectory> getDestinationsTrajectories() {
+    public Map<Double,Trajectory> getDestinationsTrajectories() {
         return destinationsTrajectories;
     }
 
-    public TrajectoryType getDestinationType() {
+    public TrajectoryEndType getDestinationType() {
         return destinationType;
     }
 
-    public void setDestinationType(TrajectoryType destinationType) {
+    public void setDestinationType(TrajectoryEndType destinationType) {
         this.destinationType = destinationType;
     }
 
     public PosFunction getpF() {
         return pF;
-    }
-
-    public void setpF(PosFunction pF) {
-        this.pF = pF;
-    }
-
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public void setInverted(boolean inverted) {
-        this.inverted = inverted;
     }
 
     public void explore(Map<Trajectory,Boolean> trajectoryMap){
@@ -279,8 +225,8 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public Intersection getNextIntersection() {
-        if(destinationType == TrajectoryType.AdvancedTrajectory){
-            return ((AdvancedTrajectory) getNext()).getMyIntersection();
+        if(destinationType == TrajectoryEndType.INTERSECTION){
+            return null;
         }else {
             return getNext().getNextIntersection();
         }

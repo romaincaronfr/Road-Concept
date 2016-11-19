@@ -47,29 +47,6 @@ public class RoadManager {
         return RS1;
     }
 
-    private void assembleRoadSections(RoadSection Rs1, Position P, Road myRoad) {
-        if (RoadEdges.containsKey(P)) {
-            if (RoadEdges.get(P).size() == 1 && RoadEdges.get(P).get(0).getMyRoad() == myRoad) {
-                RoadSection Rs2 = RoadEdges.get(P).get(0);
-                fuseRoadsSection(Rs1, Rs2, P);
-                RoadEdges.remove(P);
-            } else {
-                RoadEdges.get(P).add(Rs1);
-                if (!intersectionMap.containsKey(P)) {
-                    intersectionMap.put(P, new Intersection(P));
-                    for (RoadSection Rs : RoadEdges.get(P)) {
-                        intersectionMap.get(P).addRoadSection(Rs);
-                    }
-                } else {
-                    intersectionMap.get(P).addRoadSection(Rs1);
-                }
-            }
-        } else {
-            RoadEdges.put(P, new ArrayList<>());
-            RoadEdges.get(P).add(Rs1);
-        }
-    }
-
     public Road addRoadSectionToRoad(Position A, Position B, UUID id) {
         Road R = roads.get(id);
         if (R == null) {
@@ -80,29 +57,54 @@ public class RoadManager {
         return R;
     }
 
-    public Road getRoad(UUID id) {
-        return roads.get(id);
+    /**
+     * assemble the lanes of the 
+     */
+    private void assembleRoadSections(RoadSection Rs1, Position P, Road myRoad) {
+        if (RoadEdges.containsKey(P)) {
+            if (RoadEdges.get(P).size() == 1 && RoadEdges.get(P).get(0).getMyRoad() == myRoad) {
+                RoadSection Rs2 = RoadEdges.get(P).get(0);
+                fuseRoadsSection(Rs1, Rs2, P);
+                RoadEdges.remove(P);
+            }
+        } else {
+            RoadEdges.put(P, new ArrayList<>());
+            RoadEdges.get(P).add(Rs1);
+        }
     }
 
-    public Intersection getIntersection(Position P) {
-        return intersectionMap.get(P);
-    }
-
+    /**
+     * assemble the lanes of the both roadsections RS1 & RS2 on the position P
+     */
     private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
     }
 
+    //TRAJECTORIES ASSEMBLY
     public void closeRoads(){
         for (Position P : RoadEdges.keySet() ){
-            if(RoadEdges.get(P).size()==1){
-                SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
-                SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
-                deadEnds.add(new EndRoadTrajectory(source,destination,source.getRoadId()));
+            if(RoadEdges.get(P).size()==1) {
+                closeEdge(P);
+            }else {
+                createIntersection(P);
             }
         }
     }
 
+    private void createIntersection(Position P){
+
+    }
+
+    private void closeEdge(Position P){
+        SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
+        SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
+        deadEnds.add(new EndRoadTrajectory(source,destination,source.getRoadId()));
+
+        //TODO add deadend to destination and source trajectories
+    }
+
+    //INTEGRITY CHECKING
     public int checkIntegrity(){
         int lanesProblems = 0;
         int intersectionProblems = 0;
@@ -121,47 +123,20 @@ public class RoadManager {
         }
         LOG.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
-        for (Intersection i : intersectionMap.values()){
-            List<AdvancedTrajectory> trajectories = i.getTrajectories();
-            if (trajectories.size() == 0){
-                intersectionProblems++;
-                LOG.error("Intersection have no trajectories");
-            }
-            for (AdvancedTrajectory trajectory : trajectories){
-                if(trajectory.getLength()<0){
-                    intersectionProblems++;
-                    LOG.error("AdvancedTrajectory length negative");
-                }
-
-                if(trajectory.getSource()==null){
-                    intersectionProblems++;
-                    LOG.error("AdvancedTrajectory source is null");
-                }
-
-                if(trajectory.getDestination()==null){
-                    intersectionProblems++;
-                    LOG.error("AdvancedTrajectory destination is null");
-                }
-
-                trajectoryToCheck.put(trajectory,false);
-            }
-        }
-        LOG.debug("integrity check result for Intersections(" + intersectionMap.size() + "): " + intersectionProblems);
-
         for (EndRoadTrajectory trajectory : deadEnds){
             if(trajectory.getLength()<0){
                 deadEndProblems++;
-                LOG.error("EndRoadTrajectory length negative");
+                LOG.error("DEAD_END length negative");
             }
 
             if(trajectory.getSource()==null){
                 deadEndProblems++;
-                LOG.error("EndRoadTrajectory source is null");
+                LOG.error("DEAD_END source is null");
             }
 
             if(trajectory.getDestination()==null){
                 deadEndProblems++;
-                LOG.error("EndRoadTrajectory destination is null");
+                LOG.error("DEAD_END destination is null");
             }
 
             trajectoryToCheck.put(trajectory,false);
@@ -184,7 +159,7 @@ public class RoadManager {
             LOG.error("trajectory is negative or NaN");
         }
 
-        if(lane.getInsertTrajectory().getDestinationType() == TrajectoryType.Undefined){
+        if(lane.getInsertTrajectory().getDestinationType() == TrajectoryEndType.UNDEFINED){
             problem++;
             LOG.error("trajectory destination type is undefined");
         }
@@ -222,6 +197,16 @@ public class RoadManager {
         LOG.debug(" trajectories not reached: " + notExploredTrajetories);
 
         return notExploredTrajetories;
+    }
+
+    //GETTERS
+
+    public Road getRoad(UUID id) {
+        return roads.get(id);
+    }
+
+    public Intersection getIntersection(Position P) {
+        return intersectionMap.get(P);
     }
 
 }

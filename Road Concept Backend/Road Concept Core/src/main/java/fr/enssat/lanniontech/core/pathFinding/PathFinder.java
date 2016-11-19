@@ -4,7 +4,7 @@ package fr.enssat.lanniontech.core.pathFinding;
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
-import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class PathFinder {
         LOG.debug("starting road : " + step);
         myPath.addToPath(step);
         Intersection nextInter = source.getNextIntersection();
-        List<AdvancedTrajectory> possibleNext;
+        List<SimpleTrajectory> possibleNext;
 
         for (int i = 0; i < length; i++) {
             possibleNext = nextInter.getTrajectoriesFrom(step);

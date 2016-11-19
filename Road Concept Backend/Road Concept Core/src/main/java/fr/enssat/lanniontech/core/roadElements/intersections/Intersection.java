@@ -2,7 +2,7 @@ package fr.enssat.lanniontech.core.roadElements.intersections;
 
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
-import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
 import java.util.*;
 
@@ -10,7 +10,7 @@ public class Intersection {
 
     private Position P;
     private Map<UUID, RoadSection> roadSections;
-    private Map<UUID, Map<UUID, AdvancedTrajectory>> trajectories;
+    private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
     //structure is <source ,<destination, AdvancedTrajectory>>
 
     public Intersection(Position P) {
@@ -20,19 +20,7 @@ public class Intersection {
     }
 
     private void addTrajectories(UUID id) {
-        //find the missing trajectories
-        Map<UUID, AdvancedTrajectory> myTrajectories = new HashMap<>();
 
-        for (UUID uuid : roadSections.keySet()) {
-            if (id != uuid) {
-                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory(),id,this);
-                trajectories.get(uuid).put(id, T);
-
-                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory(),uuid,this);
-                myTrajectories.put(uuid, T);
-            }
-        }
-        trajectories.put(id, myTrajectories);
     }
 
     public boolean addRoadSection(RoadSection Rs) {
@@ -69,16 +57,16 @@ public class Intersection {
         return true;
     }
 
-    public List<AdvancedTrajectory> getTrajectories() {
-        List<AdvancedTrajectory> trajectories = new ArrayList<>();
-        for (Map<UUID,AdvancedTrajectory> map : this.trajectories.values()){
+    public List<SimpleTrajectory> getTrajectories() {
+        List<SimpleTrajectory> trajectories = new ArrayList<>();
+        for (Map<UUID,SimpleTrajectory> map : this.trajectories.values()){
             trajectories.addAll(map.values());
         }
         return trajectories;
     }
 
-    public List<AdvancedTrajectory> getTrajectoriesFrom(UUID source) {
-        List<AdvancedTrajectory> trajectories = new ArrayList<>();
+    public List<SimpleTrajectory> getTrajectoriesFrom(UUID source) {
+        List<SimpleTrajectory> trajectories = new ArrayList<>();
         trajectories.addAll(this.trajectories.get(source).values());
         return trajectories;
     }
