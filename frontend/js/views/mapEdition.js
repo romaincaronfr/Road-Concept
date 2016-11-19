@@ -19,6 +19,7 @@ app.mapEditionView = Backbone.View.extend({
     index:null,
     intersections: null,
     newModel: null,
+    eventClick:null,
 
     events: {
         //'click .close_map_info': 'clickCloseInfo',
@@ -535,7 +536,7 @@ app.mapEditionView = Backbone.View.extend({
             this.intersections = [];
             console.log(this.intersections);
             var self = this;
-            var eventClick = this.map.on('click', function (event) {
+            this.eventClick = this.map.on('click', function (event) {
                 var pixel = event.pixel;
                 var features = {};
                 var marge=0;
@@ -670,17 +671,18 @@ app.mapEditionView = Backbone.View.extend({
                 setTimeout(function () {
                     self.interactionZoomDoubleClick.setActive(true);
                 }, 251);
-                self.map.unByKey(eventClick);
+                self.map.unByKey(self.eventClick);
             });
         }
     },
 
     hasChooseTool: function (e) {
+        $('#editButtonChooseTool').hide();
+        $('#editButtonCancel').show();
         this.value = $(e.currentTarget).attr('value');
         console.log('Tool chosen : ' + this.value);
         this.map.removeInteraction(this.selectPointer);
         this.addInteraction(this.value);
-        this.changeChooseToolToCancel();
 
         //Affiche le tooltip correspondant à l'élément choisi
         switch (this.value) {
@@ -709,6 +711,8 @@ app.mapEditionView = Backbone.View.extend({
         $('#editButtonChooseTool').show();
         this.value = 'None';
         console.log('Draw : Stop');
+        this.newModel = null;
+        this.map.unByKey(this.eventClick);
         this.map.removeInteraction(this.draw);
         this.map.addInteraction(this.selectPointer);
     },
@@ -717,7 +721,6 @@ app.mapEditionView = Backbone.View.extend({
         $('#editButtonCancel').hide();
         $('#editButtonChooseTool').show();
         $('#editBarMenu').hide();
-        this.value = 'None';
         console.log('Draw : Stop');
         this.map.removeInteraction(this.draw);
         this.map.removeInteraction(this.selectPointerMove);
@@ -726,15 +729,11 @@ app.mapEditionView = Backbone.View.extend({
     cancelUnderCreation: function () {
         $('#osmInfo').empty();
         $('#editBarMenu').show();
+        this.value = 'None';
         this.newModel = null;
         this.vectorSource.removeFeature(this.vectorSource.getFeatureById("1"));
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
-    },
-
-    changeChooseToolToCancel: function () {
-        $('#editButtonChooseTool').hide();
-        $('#editButtonCancel').show();
     },
 
     fetchCollection: function () {
