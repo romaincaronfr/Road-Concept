@@ -4,37 +4,71 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
-import fr.enssat.lanniontech.core.trajectory.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
 import java.util.*;
 
 public class Intersection {
 
     private Position P;
-    private Map<Trajectory, UUID> incomingTrajectories;
-    private Map<Trajectory, UUID> outcomingTrajectories;
+    private List<SimpleTrajectory> incomingTrajectories;
+    private List<SimpleTrajectory> outgoingTrajectories;
     private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
-    //structure is <source ,<destination, AdvancedTrajectory>>
+    //structure is <source ,<destination, destinationTrajectory>>
 
     public Intersection(Position P) {
         this.P = P;
-        incomingTrajectories = new HashMap<>();
-        outcomingTrajectories = new HashMap<>();
+        incomingTrajectories = new ArrayList<>();
+        outgoingTrajectories = new ArrayList<>();
         trajectories = new HashMap<>();
     }
 
-    private void assembleIntersection(UUID id) {
-        //TODO compute intersections positions and set them in the trajectories
+    /**
+     * assemble all the incoming trajectories to the outgoing trajectories when their roadId are different
+     */
+    public void assembleIntersection() {
+        for(SimpleTrajectory source : incomingTrajectories){
+            //create the entry in the trajectories table
+            Map<UUID,SimpleTrajectory> myTrajectories = new HashMap<>();
+            for (SimpleTrajectory destination: outgoingTrajectories){
+                if(source.getRoadId()!=destination.getRoadId()){
+                    myTrajectories.put(destination.getRoadId(),destination);
+
+                    //compute the positions of intersections
+                    double[] interPos = null;
+                    if (source.getpF().cross(destination.getpF())) {
+                        interPos = source.getpF().getInterPos(destination.getpF(),
+                                source.getWidth(), destination.getWidth());
+                    }else {
+                        interPos = new double[]{source.getStop(),destination.getStart()};
+                    }
+
+                    TrajectoryJunction junction = new TrajectoryJunction(source,destination,
+                                                                        interPos[0],interPos[1]);
+
+                    source.addDestination(junction);
+                    source.setDestIntersection(this);
+                    destination.addSource(junction);
+                    destination.setSourceIntersection(this);
+                }
+            }
+            trajectories.put(source.getRoadId(),myTrajectories);
+        }
     }
 
+    /**
+     * add the passed Roadsection to the intersection
+     * @param Rs
+     * @return
+     */
     public boolean addRoadSection(RoadSection Rs) {
         if (Rs.getA() != P && Rs.getB() != P) {
             return false;
         }
         Lane incomingLane = Rs.getLeftLane(P);
-        Lane outcomingLane = Rs.getRightLane(P);
-        incomingTrajectories.put(incomingLane.getInsertTrajectory(), Rs.getMyRoad().getId());
-        outcomingTrajectories.put(outcomingLane.getInsertTrajectory(), Rs.getMyRoad().getId());
+        Lane outgoingLane = Rs.getRightLane(P);
+        incomingTrajectories.add(incomingLane.getInsertTrajectory());
+        outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
         return true;
     }
 

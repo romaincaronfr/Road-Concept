@@ -88,6 +88,10 @@ public class RoadManager {
     }
 
     //TRAJECTORIES ASSEMBLY
+
+    /**
+     * check all the roadEdges and crete the rigth end Type (DeadEnd or Intersection)
+     */
     public void closeRoads(){
         for (Position P : RoadEdges.keySet() ){
             if(RoadEdges.get(P).size()==1) {
@@ -99,15 +103,25 @@ public class RoadManager {
     }
 
     private void createIntersection(Position P){
-
+        Intersection I = new Intersection(P);
+        for (RoadSection Rs : RoadEdges.get(P)){
+            I.addRoadSection(Rs);
+        }
+        I.assembleIntersection();
     }
 
     private void closeEdge(Position P){
         SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
         SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
-        deadEnds.add(new EndRoadTrajectory(source,destination,source.getRoadId()));
+        EndRoadTrajectory deadEnd = new EndRoadTrajectory(source,destination,source.getRoadId());
 
-        //TODO add deadend to destination and source trajectories
+        TrajectoryJunction junction = new TrajectoryJunction(source,deadEnd,
+                source.getStop(),0);
+        source.addDestination(junction);
+
+        junction = new TrajectoryJunction(deadEnd,destination,
+                deadEnd.getLength(),destination.getStart());
+        destination.addSource(junction);
     }
 
     //INTEGRITY CHECKING
@@ -175,8 +189,8 @@ public class RoadManager {
             LOG.error("trajectory have no destination");
         }
 
-        for (Trajectory trajectory : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
-            if(trajectory == null){
+        for (TrajectoryJunction junction : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
+            if(junction == null){
                 problem ++;
                 LOG.error("trajectory have null destination");
             }

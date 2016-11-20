@@ -50,7 +50,7 @@ public class TestRoadManager {
 
     }
 
-    @Test
+/*    @Test
     public void addRoads() {
         RoadManager RM = new RoadManager();
         Position I = new Position(0, 0);
@@ -84,9 +84,9 @@ public class TestRoadManager {
         Assert.assertEquals(Inter.getTrajectoriesSize(),
                 Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
 
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testJoint(){
         RoadManager RM = new RoadManager();
         Position I1 = new Position(0, -1);
@@ -107,5 +107,5 @@ public class TestRoadManager {
         Assert.assertEquals(Inter1.getRoadSectionsSize() * (Inter1.getRoadSectionsSize() - 1),
                 Inter1.getTrajectoriesSize());
 
-    }
+    }*/
 }

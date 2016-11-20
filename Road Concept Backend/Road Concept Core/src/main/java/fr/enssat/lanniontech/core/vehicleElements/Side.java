@@ -47,7 +47,7 @@ public class Side {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
             myTrajectory.getOut(this);
-            myTrajectory = myTrajectory.getNext();
+            myTrajectory = myTrajectory.getNext().getDestination();
             try{
                 myTrajectory.getIn(this);
             } catch ( NullPointerException e ){
@@ -63,7 +63,7 @@ public class Side {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
             myTrajectory.getOut(this);
-            myTrajectory = myTrajectory.getNext(nextRoad);
+            myTrajectory = myTrajectory.getNext(nextRoad).getDestination();
             if (myTrajectory.getRoadId()!=myRoad){
                 myRoad = myTrajectory.getRoadId();
                 if(nextRoad != myRoad){

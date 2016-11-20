@@ -86,12 +86,12 @@ public abstract class Trajectory {
     /**
      * return the next default trajectory
      */
-    public abstract Trajectory getNext();
+    public abstract TrajectoryJunction getNext();
 
     /**
      *  return the next trajectory to the road
      */
-    public abstract Trajectory getNext(UUID destination);
+    public abstract TrajectoryJunction getNext(UUID destination);
 
     /**
      * return the speed of the vehicle ahead
