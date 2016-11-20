@@ -6,9 +6,9 @@
 
         <!-- Nombre d'habitants-->
         <div class="form-group">
-            <label for="numberOfResident" class="control-label col-sm-2">Nombre d'habitants</label>
+            <label class="control-label col-sm-2">Nombre d'habitants</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" id="numberOfResident" placeholder="ex : 150" required="" value="<%= numberresident %>">
+                <input type="number" id="nbHabit" class="form-control" placeholder="ex : 150">
                 <p class="help-block">en km/h</p>
             </div>
         </div>
@@ -16,10 +16,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Heure de départ</label>
             <div class="input-group date" id="datetimepicker1">
-                <input type="time" class="form-control" />
-                <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+                <input type="time" id="startHour" class="form-control" />
             </div>
         </div>
 
@@ -33,7 +30,7 @@
         <!-- Annuler -->
         <div class="form-group">
             <div class="text-right col-sm-12">
-                <button type="button" id="removeHabitationZone_<%= id %>" name="" class="btn btn-danger btn-block removeModel" aria-label="">Annuler</button>
+                <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModel" aria-label="">Annuler</button>
             </div>
         </div>
 

@@ -12,9 +12,13 @@ app.simulationCreationView = Backbone.View.extend({
     snap: null,
     mapDetailsCOllection: null,
     step: 0,
+    workZoneModel: null,
+    habitationZoneModel: null,
 
     events: {
-        'click #previous' : 'previous'
+        'click #previous' : 'previous',
+        'click .validModel': 'validModel',
+        'click .removeModel': 'cancelUnderCreation'
     },
 
     initialize: function (options) {
@@ -85,10 +89,10 @@ app.simulationCreationView = Backbone.View.extend({
         this.snap = new ol.interaction.Snap({
             source: this.vectorSource
         });
-        this.map.addInteraction(this.snap);
 
         this.fetchCollection();
         $('#modalAvertissementSimulation').modal('show');
+        $('#startSim').hide();
 
         $("#osmSlider").slider({
             orientation: "vertical",
@@ -228,7 +232,7 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    addInteraction: function (place) {
+    addInteraction: function () {
         var self = this;
         this.draw = new ol.interaction.Draw({
             source: new ol.source.Vector(),
@@ -239,8 +243,6 @@ app.simulationCreationView = Backbone.View.extend({
         this.map.addInteraction(this.snap);
 
         this.draw.on('drawend', function (event) {
-            console.log('step courant : '+self.step);
-
             console.log('Draw : end');
             var feature = event.feature;
             var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
@@ -253,24 +255,24 @@ app.simulationCreationView = Backbone.View.extend({
             coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
             JSONFeature.geometry.coordinates = coord;
 
-            if(self.step == 0){ // Premier step : lieu d'habitation
-                JSONFeature.properties = {type: 6, nbHabit: 30, hour: 10};
+            if(self.step == 0){ // Premiere étape : lieu d'habitation
+                JSONFeature.properties = {type: 6, id:1, name: "Unnamed Habitation Zone", nbHabit: 30, startHour: 10};
                 // on doit ouvrir un modal et recup nbhabit et hour
                 // On doit afficher la suite si modal OK
                 $('#habitZone').hide();
-                $('#workZone').show();
+                $('#habitZoneParam').show();
                 $('#divPrevious').show();
-                self.step++;
-            } else if(self.step == 1){
-                JSONFeature.properties = {type: 6, nbHabit: 30, hour: 10};
+            } else if(self.step == 2){ // Deuxième étape : lieu de travail
+                JSONFeature.properties = {type: 7, id:1, name: "Unnamed Work Zone", returnHour: 10};
                 // modal : heure de retour
                 $('#workZone').hide();
-                $('#startSim').show();
-
-                self.step++;
+                $('#workZoneParam').show();
             } else {
                 console.log('Start Simulation');
+            }
 
+            if (self.step < 4) {
+                self.step++;
             }
 
             self.newModel = new app.models.mapDetailsModel(JSONFeature, {
@@ -286,56 +288,119 @@ app.simulationCreationView = Backbone.View.extend({
             });
             self.vectorSource.addFeature(newfeature);
 
-            console.log('step suivant : '+self.step);
+            console.log('step : ' + self.step);
 
-            self.map.removeInteraction(this.draw);
-            self.map.removeInteraction(this.snap);
+            self.map.removeInteraction(self.draw);
+            self.map.removeInteraction(self.snap);
         });
     },
 
     renderFeatureCreation: function (model) {
         switch (model.attributes.type) {
-            case 1:
-            case 2:
-            case 3:
-                new app.mapPopUpCreateRoadsView({
+            case 6:
+                new app.mapPopUpCreateHabitationZoneView({
                     model: model
                 });
                 break;
-            case 4:
-                new app.mapPopUpCreateRondPointView({
-                    model: model
-                });
-                break;
-            case 5:
-                new app.mapPopUpCreateRedlightsView({
+            case 7:
+                new app.mapPopUpCreateWorkZoneView({
                     model: model
                 });
                 break;
         }
 
     },
-    previous : function (){
-        console.log('cancel, step:'+this.step);
-        if(this.step >0){
-            this.step --;
+
+    validModel: function () {
+        switch (this.step) {
+            case 1:
+                $('#habitZoneParam').hide();
+                $('#workZone').show();
+                break;
+            case 3:
+                $('#workZoneParam').hide();
+                $('#startSim').show();
+                break;
         }
 
-        if(this.step == 0){
-            $('#workZone').hide();
-            $('#startSim').hide();
-            $('#divPrevious').hide();
-            $('#habitZone').show();
-        } else if (this.step == 1){
-            $('#habitZone').hide();
-            $('#startSim').hide();
-            $('#workZone').show();
-        } else if (this.step == 2){
-            $('#workZone').hide();
-            $('#habitZone').hide();
-            $('#startSim').show();
-        } else {
-            console.log('step > 2 ou <0');
+        var model = this.newModel;
+        model.unset("id");
+        if (model.attributes.type == 6) {
+            model.set({
+                nbHabit: parseInt($('#nbHabit').val()),
+                startHour: $('#startHour').val(),
+            });
+            this.habitationZoneModel = model;
+        } else if (model.attributes.type == 7) {
+            model.set({
+                returnHour: parseInt($('#returnHour').val())
+            });
+            this.workZoneModel = model;
         }
+
+        //a faire pour les 2 models quand lancement de simulation
+        var self = this;
+        model.save(null, {
+            success: function () {
+                self.mapDetailsCOllection.add(model);
+                self.cancelUnderCreation();
+            }
+        });
+
+        if (this.step < 4) {
+            this.step++;
+        }
+        this.addInteraction();
+        console.log('step : ' + this.step);
+        console.log(model.attributes);
+    },
+
+    cancelUnderCreation: function () {
+        $('#osmInfo').empty();
+        this.newModel = null;
+        this.vectorSource.removeFeature(this.vectorSource.getFeatureById("1"));
+    },
+
+    previous : function (){
+        switch (this.step) {
+            case 1:
+                $('#osmInfo').empty();
+                $('#habitZoneParam').hide();
+                $('#divPrevious').hide();
+                $('#habitZone').show();
+                this.addInteraction();
+                this.habitationZoneModel = null;
+                break;
+            case 2:
+                $('#workZone').hide();
+                $('#divPrevious').hide();
+                $('#habitZone').show();
+                this.habitationZoneModel = null;
+                break;
+            case 3:
+                $('#osmInfo').empty();
+                $('#workZoneParam').hide();
+                $('#workZone').show();
+                this.addInteraction();
+                this.workZoneModel = null;
+                break;
+            case 4:
+                $('#startSim').hide();
+                $('#workZone').show();
+                this.workZoneModel = null;
+                break;
+            default:
+                console.log('step > 3 ou < 0');
+                break;
+        }
+
+        if(this.step > 0){
+            if (this.step % 2 == 0) {
+                this.step = this.step - 2;
+            } else {
+                this.step--;
+            }
+        }
+        console.log('cancel, step:'+this.step);
     }
 });
