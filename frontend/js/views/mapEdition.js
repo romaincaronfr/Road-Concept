@@ -179,7 +179,9 @@ app.mapEditionView = Backbone.View.extend({
     onRemoveElement: function (element) {
         console.log("remove");
         $('#osmInfo').empty();
-        this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
+        if (this.vectorSource.getFeatureById(element.attributes.id) || this.vectorSource.getFeatureById(element.attributes.id) != null) {
+            this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
+        }
         this.selectPointer.getFeatures().clear();
     },
 
@@ -850,8 +852,16 @@ app.mapEditionView = Backbone.View.extend({
         var self = this;
         model.save(null, {
             success: function () {
-                self.mapDetailsCOllection.add(model);
+                //self.mapDetailsCOllection.add(model);
                 self.cancelUnderCreation();
+                self.vectorSource.clear();
+                self.mapDetailsCOllection.reset();
+                new app.waitMapEditionView();
+                self.mapDetailsCOllection.fetch({
+                    success : function(){
+                        $('#osmInfo').empty();
+                    }
+                });
 
                 /*self.vectorSource.removeFeature(self.vectorSource.getFeatureById(model.attributes.id));
                 var geojsonModel = model.toGeoJSON();

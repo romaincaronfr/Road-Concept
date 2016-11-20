@@ -9,12 +9,18 @@ app.models.mapDetailsModel = Backbone.Model.extend({
     },
 
     parse: function(response){
-        var newResponse = {};
-        newResponse.geometry = new Backbone.Model(response.geometry);
-        _.keys(response.properties).forEach(function(key){
-            newResponse[key] = response.properties[key];
-        });
-        return newResponse;
+        console.log(response);
+        if (response) {
+            var newResponse = {};
+            newResponse.geometry = new Backbone.Model(response.geometry);
+            _.keys(response.properties).forEach(function (key) {
+                newResponse[key] = response.properties[key];
+            });
+            return newResponse;
+        }
+        else {
+            return new Array();
+        }
     },
 
     toGeoJSON: function(){
