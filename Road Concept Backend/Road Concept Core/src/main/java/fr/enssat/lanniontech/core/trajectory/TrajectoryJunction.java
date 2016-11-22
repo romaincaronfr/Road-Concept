@@ -29,4 +29,17 @@ public class TrajectoryJunction {
     public double getDestinationPos() {
         return destinationPos;
     }
+
+    public static TrajectoryJunction computeJunction(SimpleTrajectory source, SimpleTrajectory destination){
+        TrajectoryJunction junction;
+
+        if(source.getpF().cross(destination.getpF())){
+            double Ps[] = source.getpF().getInterPos(destination.getpF(),
+                    source.getWidth(),destination.getWidth());
+            junction = new TrajectoryJunction(source,destination,Ps[0],Ps[1]);
+        }else{
+            junction = new TrajectoryJunction(source,destination,source.getStop(),destination.getStart());
+        }
+        return junction;
+    }
 }

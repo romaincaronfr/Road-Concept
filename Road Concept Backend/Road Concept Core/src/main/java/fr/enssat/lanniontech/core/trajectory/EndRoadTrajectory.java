@@ -80,6 +80,14 @@ public class EndRoadTrajectory extends Trajectory {
         return destination;
     }
 
+    public void setDestination(TrajectoryJunction destination) {
+        this.destination = destination;
+    }
+
+    public void setSource(TrajectoryJunction source) {
+        this.source = source;
+    }
+
     public void explore(Map<Trajectory,Boolean> trajectoryMap){
         if(!trajectoryMap.get(this)){
             trajectoryMap.replace(this,true);

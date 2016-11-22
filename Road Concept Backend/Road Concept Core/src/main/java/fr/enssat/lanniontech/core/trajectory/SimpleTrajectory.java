@@ -13,9 +13,9 @@ public class SimpleTrajectory extends Trajectory {
 
     public static Logger LOG = LoggerFactory.getLogger(SimpleTrajectory.class);
 
-    private SortedMap<UUID,TrajectoryJunction> sourcesTrajectories;
+    private Map<UUID,TrajectoryJunction> sourcesTrajectories;
     private TrajectoryEndType sourceType;
-    private SortedMap<UUID,TrajectoryJunction> destinationsTrajectories;
+    private Map<UUID,TrajectoryJunction> destinationsTrajectories;
     private TrajectoryJunction defaultIn;
     private TrajectoryJunction defaultOut;
     private TrajectoryEndType destinationType;
@@ -30,8 +30,8 @@ public class SimpleTrajectory extends Trajectory {
 
     public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId) {
         super(roadId);
-        sourcesTrajectories = new TreeMap<>();
-        destinationsTrajectories = new TreeMap<>();
+        sourcesTrajectories = new HashMap<>();
+        destinationsTrajectories = new HashMap<>();
         sourceType = TrajectoryEndType.UNDEFINED;
         destinationType = TrajectoryEndType.UNDEFINED;
         this.pF = pF;

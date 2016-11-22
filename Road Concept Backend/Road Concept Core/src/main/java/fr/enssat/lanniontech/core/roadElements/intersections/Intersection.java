@@ -34,17 +34,7 @@ public class Intersection {
                 if(source.getRoadId()!=destination.getRoadId()){
                     myTrajectories.put(destination.getRoadId(),destination);
 
-                    //compute the positions of intersections
-                    double[] interPos = null;
-                    if (source.getpF().cross(destination.getpF())) {
-                        interPos = source.getpF().getInterPos(destination.getpF(),
-                                source.getWidth(), destination.getWidth());
-                    }else {
-                        interPos = new double[]{source.getStop(),destination.getStart()};
-                    }
-
-                    TrajectoryJunction junction = new TrajectoryJunction(source,destination,
-                                                                        interPos[0],interPos[1]);
+                    TrajectoryJunction junction = TrajectoryJunction.computeJunction(source,destination);
 
                     source.addDestination(junction);
                     source.setDestIntersection(this);

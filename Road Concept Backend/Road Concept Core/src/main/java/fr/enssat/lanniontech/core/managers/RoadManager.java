@@ -83,14 +83,16 @@ public class RoadManager {
      * assemble the lanes of the both roadsections RS1 & RS2 on the position P
      */
     private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
-        RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
+        RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
+        assembleLanes(RS1.getLeftLane(P),RS2.getRightLane(P));
+        assembleLanes(RS2.getLeftLane(P),RS1.getRightLane(P));
     }
 
     //TRAJECTORIES ASSEMBLY
 
     /**
-     * check all the roadEdges and crete the rigth end Type (DeadEnd or Intersection)
+     * check all the roadEdges and crete the right end Type (DeadEnd or Intersection)
      */
     public void closeRoads(){
         for (Position P : RoadEdges.keySet() ){
@@ -118,10 +120,30 @@ public class RoadManager {
         TrajectoryJunction junction = new TrajectoryJunction(source,deadEnd,
                 source.getStop(),0);
         source.addDestination(junction);
+        deadEnd.setSource(junction);
 
         junction = new TrajectoryJunction(deadEnd,destination,
                 deadEnd.getLength(),destination.getStart());
         destination.addSource(junction);
+        deadEnd.setDestination(junction);
+
+        source.setDestinationType(TrajectoryEndType.DEAD_END);
+        destination.setSourceType(TrajectoryEndType.DEAD_END);
+    }
+
+    /**
+     * assemble the trajectories from L1 to L2
+     */
+    private void assembleLanes(Lane L1,Lane L2){
+        SimpleTrajectory source = L1.getInsertTrajectory();
+        SimpleTrajectory destination = L2.getInsertTrajectory();
+        TrajectoryJunction junction = TrajectoryJunction.computeJunction(source,destination);
+
+        source.addDestination(junction);
+        destination.addSource(junction);
+
+        source.setDestinationType(TrajectoryEndType.SIMPLE);
+        destination.setSourceType(TrajectoryEndType.SIMPLE);
     }
 
     //INTEGRITY CHECKING
