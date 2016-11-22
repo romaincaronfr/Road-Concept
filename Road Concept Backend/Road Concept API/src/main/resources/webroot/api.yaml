@@ -25,6 +25,12 @@ parameters:
     required: true
     type: string
     format: uuid
+  simulationUUID:
+    name: simulationUUID
+    in: path
+    required: true
+    type: string
+    format: uuid
 
 paths:
   /login:
@@ -363,6 +369,106 @@ paths:
         500:
           $ref: '#/responses/500'
 
+  /api/maps/{mapID}/simulations:
+    parameters:
+      - $ref: '#/parameters/mapID'
+    post:
+      description: Créer et lancer une nouvelle simulation
+      tags:
+        - Simulations
+      parameters:
+        - name: simulationData
+          in: body
+          description: Informations sur la simulation à créer
+          required: true
+          schema:
+            $ref: '#/definitions/SimulationCreate'
+      responses:
+        200:
+          description: Simulation crée et lancée (éxécution potentiellement toujours en cours)
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+    get:
+      description: Récupérer la liste des simulations associées à une map
+      tags:
+        - Simulations
+      responses:
+        200:
+          description: Liste de simulations (éxécuter pour voir le retour)
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/users/{userID}/simulations:
+    parameters:
+      - name: userID
+        in: path
+        required: true
+        type: integer
+        format: int32
+    get:
+      description: Récupérer la liste des simulations associées à un utilisateur
+      tags:
+        - Simulations
+      responses:
+        200:
+          description: Liste de simulations (éxécuter pour voir le retour)
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/simulations/{simulationUUID}:
+    parameters:
+      - $ref: '#/parameters/simulationUUID'
+    get:
+      description: Récupère les détails d'une simulation
+      tags:
+        - Simulations
+      responses:
+        200:
+          description: Une simulation (éxécuter pour voir le retour)
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+    delete:
+      description: Supprimer une simulation
+      tags:
+        - Simulations
+      responses:
+        204:
+          description: Simulation supprimée
+        404:
+          $ref: '#/responses/404'
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
 responses:
   '400':
     description: Mauvaise requête. Vérifier les paramètres et les formats.
@@ -473,6 +579,17 @@ definitions:
         description: URL d'une image représentant la carte. Peut être null
       description:
         description: Description de la carte
+
+  SimulationCreate:
+    properties:
+      name:
+        type: string
+        description: Nom de la simulation
+      duration_s:
+        type: integer
+        format: int32
+        description: Durée en seconde de la simulation. Démarre à 0 (00h00)
+
 
   Map:
     properties:

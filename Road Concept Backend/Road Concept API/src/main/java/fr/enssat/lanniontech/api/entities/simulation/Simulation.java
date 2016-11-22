@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.api.entities.simulation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.enssat.lanniontech.api.entities.SQLEntity;
 import fr.enssat.lanniontech.api.exceptions.SimulatorUnavailableException;
 import fr.enssat.lanniontech.core.Simulator;
@@ -17,6 +18,7 @@ public class Simulation implements SQLEntity {
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int durationS;
     private boolean finish;
+    @JsonIgnore
     private final Simulator simulator = new Simulator();
 
     public UUID getUuid() {
@@ -75,6 +77,7 @@ public class Simulation implements SQLEntity {
         this.creationDate = creationDate;
     }
 
+    @JsonIgnore
     public Simulator getSimulator() throws SimulatorUnavailableException {
         if (!finish) {
             return simulator;

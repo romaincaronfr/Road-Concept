@@ -22,7 +22,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map, duration_s, finish, creation_date) VALUES (?, ?, ?, ?,?,?,?)";
     private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map, creation_date, finish, duration_s FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, name, id_map, creation_date, finish, duration_s FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAP = "SELECT uuid, name, duration_s, finish, creation_date FROM simulation WHERE id_map = ? AND id_user = ?"; //TODO: add id_user
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name, duration_s, finish, creation_date FROM simulation WHERE id_map = ? AND id_user = ?";
 
     // CREATE
     // ------
@@ -127,7 +127,6 @@ public class SimulationParametersRepository extends SimulationRepository {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
-                LOGGER.debug("@@@ statement = " + statement);
                 statement.setInt(2, user.getId());
                 try (ResultSet result = statement.executeQuery()) {
                     List<Simulation> simulations = new ArrayList<>();
@@ -151,6 +150,7 @@ public class SimulationParametersRepository extends SimulationRepository {
             throw processBasicSQLException(e, Simulation.class);
         }
     }
+
     // ======
     // DELETE
     // ======

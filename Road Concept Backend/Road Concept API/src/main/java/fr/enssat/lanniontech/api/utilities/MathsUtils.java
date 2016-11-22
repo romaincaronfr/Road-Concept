@@ -24,24 +24,6 @@ public final class MathsUtils {
     }
 
     public static boolean intersect(Coordinates p0, Coordinates p1, Coordinates p2) {
-        /*double s1_x = p1.getLongitude() - p0.getLongitude();
-        double s1_y = p1.getLatitude() - p0.getLatitude();
-        double s2_x = p3.getLongitude() - p2.getLongitude();
-        double s2_y = p3.getLatitude() - p2.getLatitude();
-
-        double s = (-s1_y * (p0.getLongitude() - p2.getLongitude()) + s1_x * (p0.getLatitude() - p2.getLatitude())) / (-s2_x * s1_y + s1_x * s2_y);
-        double t = (s2_x * (p0.getLatitude() - p2.getLatitude()) - s2_y * (p0.getLongitude() - p2.getLongitude())) / (-s2_x * s1_y + s1_x * s2_y);
-
-        //if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-        LOGGER.debug("s = " + s + " | t = " + t);
-        if (s >= -0.1 && s <= 0.9 && t >= -0.1 && t <= 1.1) {
-            double i_x = p0.getLongitude() + (t * s1_x);
-            double i_y = p0.getLatitude() + (t * s1_y);
-
-            return true;
-        }
-        return false;*/
-
         double aX = p0.getLongitude();
         double aY = p0.getLatitude();
         double bX = p1.getLongitude();
@@ -52,27 +34,8 @@ public final class MathsUtils {
         double distanceAB = Math.sqrt(Math.pow((aX-bX),2)+Math.pow((aY-bY),2));
         double distanceAC = Math.sqrt(Math.pow((aX-cX),2)+Math.pow((aY-cY),2));
         double distanceCB = Math.sqrt(Math.pow((cX-bX),2)+Math.pow((cY-bY),2));
-
-        LOGGER.debug("@@@ Distance AB = "+distanceAB);
-        LOGGER.debug("@@@ Distance AC = "+distanceAC);
-        LOGGER.debug("@@@ Distance CB = "+distanceCB);
-        LOGGER.debug("@@@ Distance AC+CB = "+(distanceCB+distanceAC));
-        LOGGER.debug("@@@ Distance result  = "+(distanceAB == distanceAC+distanceCB));
-
         double distancePoint = distanceAC+distanceCB;
 
-        if (distancePoint > distanceAB-0.0003 && distancePoint < distanceAB+0.0003){
-            return true;
-        }
-
-        return false;
-        /*Point2D point0 = new Point2D.Double(p0.getLongitude(),p0.getLatitude());
-        Point2D point1 = new Point2D.Double(p1.getLongitude(),p1.getLatitude());
-        Point2D point2 = new Point2D.Double(p2.getLongitude(),p2.getLatitude());
-
-        LOGGER.debug("@@@ DISTANCE = "+new Line2D.Double(point0, point1).ptLineDist(point2));
-
-        //LOGGER.debug("@@@ Distance = "+new Line2D.Double(point0, point1).ptLineDist(point2));
-        return (new Line2D.Double(point0, point1).ptLineDist(point2) < Math.pow(10,-6));*/
+        return distancePoint > distanceAB - 0.0003 && distancePoint < distanceAB + 0.0003;
     }
 }
