@@ -13,11 +13,14 @@ public class Simulation implements SQLEntity {
 
     private UUID uuid = UUID.randomUUID();
     private String name;
-    private int creatorID; // Creator of the simulation
+    private int creatorID;
     private int mapID;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int durationS;
     private boolean finish;
+    private UUID livingFeatureUUID;
+    private UUID workingFeatureUUID;
+
     @JsonIgnore
     private final Simulator simulator = new Simulator();
 
@@ -75,6 +78,22 @@ public class Simulation implements SQLEntity {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public UUID getLivingFeatureUUID() {
+        return livingFeatureUUID;
+    }
+
+    public void setLivingFeatureUUID(UUID livingFeatureUUID) {
+        this.livingFeatureUUID = livingFeatureUUID;
+    }
+
+    public UUID getWorkingFeatureUUID() {
+        return workingFeatureUUID;
+    }
+
+    public void setWorkingFeatureUUID(UUID workingFeatureUUID) {
+        this.workingFeatureUUID = workingFeatureUUID;
     }
 
     @JsonIgnore

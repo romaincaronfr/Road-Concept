@@ -59,6 +59,7 @@ public class SimulatorService extends AbstractService {
     private boolean start(Simulation simulation) throws EntityNotExistingException {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         List<Road> roads = sendFeatures(simulation, map.getFeatures());
+        // TODO: Définir point de départ et d'arriver
         simulation.getSimulator().vehicleManager.addToSpawnArea(roads.get(3)); //TODO: Set as simulation parameter
         simulation.getSimulator().vehicleManager.addVehicle();
         return simulation.getSimulator().launchSimulation(simulation.getDurationS(), 0.1, 10);

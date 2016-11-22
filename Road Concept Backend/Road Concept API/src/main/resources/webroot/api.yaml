@@ -591,6 +591,14 @@ definitions:
         type: integer
         format: int32
         description: Durée en seconde de la simulation. Démarre à 0 (00h00)
+      livingRoad:
+        type: string
+        format: uuid
+        description: UUID de la route correspondant au lieu d'habitation
+      workingRoad:
+        description: UUID de la route correspondant au lieu de travail
+        type: string
+        format: uuid
 
   Simulation:
     properties:
@@ -619,6 +627,12 @@ definitions:
       finish:
         type: boolean
         description: Vrai si la simulation a finis son éxécution (résultats disponibles), faux sinon.
+      livingRoad:
+        type: string
+        format: uuid
+      workingRoad:
+        type: string
+        format: uuid
 
   Map:
     properties:
