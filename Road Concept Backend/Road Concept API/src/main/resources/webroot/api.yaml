@@ -384,8 +384,10 @@ paths:
           schema:
             $ref: '#/definitions/SimulationCreate'
       responses:
-        200:
-          description: Simulation crée et lancée (éxécution potentiellement toujours en cours)
+        201:
+          description: La simulation a été créee et lancée. Elle est probablement encore en cours d'éxécution.
+          schema:
+              $ref: '#/definitions/User'
         404:
           $ref: '#/responses/404'
         401:
@@ -424,9 +426,11 @@ paths:
         - Simulations
       responses:
         200:
-          description: Liste de simulations (éxécuter pour voir le retour)
-        404:
-          $ref: '#/responses/404'
+          description: Liste de simulations
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Simulation'
         401:
           $ref: '#/responses/401'
         403:
@@ -443,9 +447,9 @@ paths:
         - Simulations
       responses:
         200:
-          description: Une simulation (éxécuter pour voir le retour)
-        404:
-          $ref: '#/responses/404'
+          description: la simulation
+          schema:
+              $ref: '#/definitions/User'
         401:
           $ref: '#/responses/401'
         403:
@@ -460,8 +464,6 @@ paths:
       responses:
         204:
           description: Simulation supprimée
-        404:
-          $ref: '#/responses/404'
         401:
           $ref: '#/responses/401'
         403:
@@ -590,6 +592,33 @@ definitions:
         format: int32
         description: Durée en seconde de la simulation. Démarre à 0 (00h00)
 
+  Simulation:
+    properties:
+      name:
+        type: string
+        description: nom de la simulation
+      uuid:
+        type: string
+        format: uuid
+        description: Identifiant de la simulation
+      creatorID:
+        type: integer
+        format: int32
+        description: identifiant de l'utilisateur ayant créé la simulation
+      mapID:
+        type: integer
+        format: int32
+        description: identifiant de la map associée à la simulation
+      creationDate:
+        type: string
+        description: Date de création de la simulation au format JJ-MM-AAA
+      duration_s:
+        type: integer
+        format: int32
+        description: Durée en seconde de la simulation. Démarre à 0 (00h00)
+      finish:
+        type: boolean
+        description: Vrai si la simulation a finis son éxécution (résultats disponibles), faux sinon.
 
   Map:
     properties:
