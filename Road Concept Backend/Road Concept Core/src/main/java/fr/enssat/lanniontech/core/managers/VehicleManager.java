@@ -63,19 +63,21 @@ public class VehicleManager {
 
         Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
         Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size,
-                speed, 0, historyManager, myPath);
+                speed, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);
+        V.logPosition(0);
         return true;
     }
 
-    public void newStep(double precision, boolean log) {
+    public void newStep(double precision, boolean log, long timestamp) {
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updateAcceleration();
         }
 
         for (Vehicle activeVehicle : activeVehicles) {
-            activeVehicle.updatePos(precision, log);
+            activeVehicle.updatePos(precision);
+            activeVehicle.logPosition(timestamp);
         }
 
         int i = 0;

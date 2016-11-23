@@ -62,13 +62,15 @@ public class Simulator implements Runnable {
             long step = (long) (length / precision);
             WriteLock wl = l.writeLock();
             int j = 1;
+            long timestamp = 0;
             for (long i = 0; i < step; i++) {
 
                 if (j == samplingRate) {
-                    vehicleManager.newStep(precision, true);
+                    timestamp += samplingRate/precision;
+                    vehicleManager.newStep(precision, true, timestamp);
                     j = 1;
                 } else {
-                    vehicleManager.newStep(precision, false);
+                    vehicleManager.newStep(precision, false, timestamp);
                     j++;
                 }
 
