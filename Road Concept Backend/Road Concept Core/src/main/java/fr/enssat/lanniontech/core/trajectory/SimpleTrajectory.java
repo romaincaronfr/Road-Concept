@@ -7,15 +7,17 @@ import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class SimpleTrajectory extends Trajectory {
 
     public static Logger LOG = LoggerFactory.getLogger(SimpleTrajectory.class);
 
-    private Map<UUID,TrajectoryJunction> sourcesTrajectories;
+    private Map<UUID, TrajectoryJunction> sourcesTrajectories;
     private TrajectoryEndType sourceType;
-    private Map<UUID,TrajectoryJunction> destinationsTrajectories;
+    private Map<UUID, TrajectoryJunction> destinationsTrajectories;
     private TrajectoryJunction defaultIn;
     private TrajectoryJunction defaultOut;
     private TrajectoryEndType destinationType;
@@ -35,8 +37,8 @@ public class SimpleTrajectory extends Trajectory {
         sourceType = TrajectoryEndType.UNDEFINED;
         destinationType = TrajectoryEndType.UNDEFINED;
         this.pF = pF;
-        this.start=start;
-        this.stop=stop;
+        this.start = start;
+        this.stop = stop;
         inverted = start > stop;
         if (inverted) {
             length = start - stop;
@@ -45,20 +47,22 @@ public class SimpleTrajectory extends Trajectory {
             length = stop - start;
             this.width = width;
         }
-        sourcesTrajectories.put(null,new TrajectoryJunction(null,this,0,start));
-        destinationsTrajectories.put(null,new TrajectoryJunction(this,null,stop,0));
+        sourcesTrajectories.put(null, new TrajectoryJunction(null, this, 0, start));
+        destinationsTrajectories.put(null, new TrajectoryJunction(this, null, stop, 0));
     }
 
     /**
      * this method add a destination trajectory
      */
     public void addSource(TrajectoryJunction t) {
-        sourcesTrajectories.put(t.getSource().getRoadId(),t);
+        sourcesTrajectories.remove(null);
+        sourcesTrajectories.put(t.getSource().getRoadId(), t);
         defaultIn = t;
     }
 
     public void addDestination(TrajectoryJunction t) {
-        sourcesTrajectories.put(t.getDestination().getRoadId(),t);
+        destinationsTrajectories.remove(null);
+        destinationsTrajectories.put(t.getDestination().getRoadId(), t);
         defaultOut = t;
     }
 
@@ -93,7 +97,7 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public TrajectoryJunction getNext(UUID destination) {
-        return destinationsTrajectories.getOrDefault(destination,defaultOut);
+        return destinationsTrajectories.getOrDefault(destination, defaultOut);
     }
 
     @Override
@@ -161,7 +165,7 @@ public class SimpleTrajectory extends Trajectory {
         return P;
     }
 
-    public Map<UUID,TrajectoryJunction> getSourcesTrajectories() {
+    public Map<UUID, TrajectoryJunction> getSourcesTrajectories() {
         return sourcesTrajectories;
     }
 
@@ -173,7 +177,7 @@ public class SimpleTrajectory extends Trajectory {
         this.sourceType = sourceType;
     }
 
-    public Map<UUID,TrajectoryJunction> getDestinationsTrajectories() {
+    public Map<UUID, TrajectoryJunction> getDestinationsTrajectories() {
         return destinationsTrajectories;
     }
 
@@ -189,10 +193,10 @@ public class SimpleTrajectory extends Trajectory {
         return pF;
     }
 
-    public void explore(Map<Trajectory,Boolean> trajectoryMap){
-        if(!trajectoryMap.get(this)){
-            trajectoryMap.replace(this,true);
-            for (TrajectoryJunction trajectory : destinationsTrajectories.values()){
+    public void explore(Map<Trajectory, Boolean> trajectoryMap) {
+        if (!trajectoryMap.get(this)) {
+            trajectoryMap.replace(this, true);
+            for (TrajectoryJunction trajectory : destinationsTrajectories.values()) {
                 trajectory.getDestination().explore(trajectoryMap);
             }
         }
@@ -210,9 +214,9 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public Intersection getNextIntersection() {
-        if(destinationType == TrajectoryEndType.INTERSECTION){
+        if (destinationType == TrajectoryEndType.INTERSECTION) {
             return destIntersection;
-        }else {
+        } else {
             return getNext().getDestination().getNextIntersection();
         }
     }

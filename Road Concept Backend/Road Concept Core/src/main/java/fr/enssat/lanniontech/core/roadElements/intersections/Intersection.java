@@ -27,14 +27,14 @@ public class Intersection {
      * assemble all the incoming trajectories to the outgoing trajectories when their roadId are different
      */
     public void assembleIntersection() {
-        for(SimpleTrajectory source : incomingTrajectories){
+        for (SimpleTrajectory source : incomingTrajectories) {
             //create the entry in the trajectories table
-            Map<UUID,SimpleTrajectory> myTrajectories = new HashMap<>();
-            for (SimpleTrajectory destination: outgoingTrajectories){
-                if(source.getRoadId()!=destination.getRoadId()){
-                    myTrajectories.put(destination.getRoadId(),destination);
+            Map<UUID, SimpleTrajectory> myTrajectories = new HashMap<>();
+            for (SimpleTrajectory destination : outgoingTrajectories) {
+                if (source.getRoadId() != destination.getRoadId()) {
+                    myTrajectories.put(destination.getRoadId(), destination);
 
-                    TrajectoryJunction junction = TrajectoryJunction.computeJunction(source,destination);
+                    TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
 
                     source.addDestination(junction);
                     source.setDestIntersection(this);
@@ -42,12 +42,13 @@ public class Intersection {
                     destination.setSourceIntersection(this);
                 }
             }
-            trajectories.put(source.getRoadId(),myTrajectories);
+            trajectories.put(source.getRoadId(), myTrajectories);
         }
     }
 
     /**
      * add the passed Roadsection to the intersection
+     *
      * @param Rs
      * @return
      */
@@ -72,7 +73,7 @@ public class Intersection {
 
     public List<SimpleTrajectory> getTrajectories() {
         List<SimpleTrajectory> trajectories = new ArrayList<>();
-        for (Map<UUID,SimpleTrajectory> map : this.trajectories.values()){
+        for (Map<UUID, SimpleTrajectory> map : this.trajectories.values()) {
             trajectories.addAll(map.values());
         }
         return trajectories;

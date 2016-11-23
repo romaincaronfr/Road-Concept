@@ -4,7 +4,6 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public abstract class Trajectory {
     /**
      * return true if the range between start and stop is free
      */
-    public boolean rangeIsFree(double start, double end){
+    public boolean rangeIsFree(double start, double end) {
         int i = 0;
         double pos;
         while (i < vehiclesSides.size()) {
@@ -71,12 +70,11 @@ public abstract class Trajectory {
     /**
      * return the id of the trajectory road
      */
-    public UUID getRoadId(){
+    public UUID getRoadId() {
         return roadId;
     }
 
     /**
-     *
      * return the length of the trajectory
      */
     public double getLength() {
@@ -89,7 +87,7 @@ public abstract class Trajectory {
     public abstract TrajectoryJunction getNext();
 
     /**
-     *  return the next trajectory to the road
+     * return the next trajectory to the road
      */
     public abstract TrajectoryJunction getNext(UUID destination);
 

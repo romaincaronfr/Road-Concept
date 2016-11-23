@@ -30,14 +30,11 @@ public class Vehicle {
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
-     *  @param ID
-     *         identifier for the vehicle
-     * @param start
-     *         lane where the vehicle is placed
-     * @param startPos
- *         position in the lane of the new vehicle
-     * @param length
-*         length of the vehicle
+     *
+     * @param ID             identifier for the vehicle
+     * @param start          lane where the vehicle is placed
+     * @param startPos       position in the lane of the new vehicle
+     * @param length         length of the vehicle
      * @param speed
      * @param historyManager
      */
@@ -84,7 +81,7 @@ public class Vehicle {
     public void updatePos(double time, boolean log) {
         double dDone = Va * time;
         this.distanceDone += dDone;
-        if(Double.isNaN(dDone)){
+        if (Double.isNaN(dDone)) {
             System.err.println("overflow");
         }
         backSide.moveOnPath(dDone);
@@ -108,7 +105,7 @@ public class Vehicle {
         return myPath.getStep(i);
     }
 
-    public boolean isArrived(){
-        return backSide.getNextRoad()==null;
+    public boolean isArrived() {
+        return backSide.getNextRoad() == null;
     }
 }

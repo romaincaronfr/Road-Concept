@@ -7,32 +7,32 @@ import java.util.UUID;
 public class Path {
     private List<UUID> path;
 
-    public Path(){
+    public Path() {
         path = new ArrayList<>();
     }
 
-    public void addToPath(UUID dest){
+    public void addToPath(UUID dest) {
         path.add(dest);
     }
 
-    public UUID getStep(int step){
+    public UUID getStep(int step) {
         UUID stepUuid = null;
         try {
             stepUuid = path.get(step);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return stepUuid;
     }
 
-    public int getSize(){
+    public int getSize() {
         return path.size();
     }
 
     @Override
     public String toString() {
         String res = "";
-        for (UUID id : path){
+        for (UUID id : path) {
             res = res.concat(id + ", ");
         }
         return res;

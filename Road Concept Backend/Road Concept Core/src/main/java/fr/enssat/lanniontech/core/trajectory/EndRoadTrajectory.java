@@ -13,13 +13,13 @@ public class EndRoadTrajectory extends Trajectory {
     private TrajectoryJunction source;
     private PosFunction pf;
 
-    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination,UUID roadId) {
+    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination, UUID roadId) {
         super(roadId);
 
         Position A = source.getGPS(source.getStop());
         Position B = destination.getGPS(destination.getStart());
-        pf = new PosFunction(A,B);
-        length = Position.length(A,B);
+        pf = new PosFunction(A, B);
+        length = Position.length(A, B);
     }
 
     //------------inherited methods----------//
@@ -88,10 +88,10 @@ public class EndRoadTrajectory extends Trajectory {
         this.source = source;
     }
 
-    public void explore(Map<Trajectory,Boolean> trajectoryMap){
-        if(!trajectoryMap.get(this)){
-            trajectoryMap.replace(this,true);
-            this.getDestination().getDestination().explore(trajectoryMap);
+    public void explore(Map<Trajectory, Boolean> trajectoryMap) {
+        if (!trajectoryMap.get(this)) {
+            trajectoryMap.replace(this, true);
+            this.destination.getDestination().explore(trajectoryMap);
         }
     }
 

@@ -72,6 +72,8 @@ public class RoadManager {
                 RoadSection Rs2 = RoadEdges.get(P).get(0);
                 fuseRoadsSection(Rs1, Rs2, P);
                 RoadEdges.remove(P);
+            }else{
+                RoadEdges.get(P).add(Rs1);
             }
         } else {
             RoadEdges.put(P, new ArrayList<>());
@@ -85,8 +87,8 @@ public class RoadManager {
     private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
-        assembleLanes(RS1.getLeftLane(P),RS2.getRightLane(P));
-        assembleLanes(RS2.getLeftLane(P),RS1.getRightLane(P));
+        assembleLanes(RS1.getLeftLane(P), RS2.getRightLane(P));
+        assembleLanes(RS2.getLeftLane(P), RS1.getRightLane(P));
     }
 
     //TRAJECTORIES ASSEMBLY
@@ -94,50 +96,53 @@ public class RoadManager {
     /**
      * check all the roadEdges and crete the right end Type (DeadEnd or Intersection)
      */
-    public void closeRoads(){
-        for (Position P : RoadEdges.keySet() ){
-            if(RoadEdges.get(P).size()==1) {
+    public void closeRoads() {
+        for (Position P : RoadEdges.keySet()) {
+            if (RoadEdges.get(P).size() == 1) {
                 closeEdge(P);
-            }else {
+            } else {
                 createIntersection(P);
             }
         }
     }
 
-    private void createIntersection(Position P){
+    private void createIntersection(Position P) {
         Intersection I = new Intersection(P);
-        for (RoadSection Rs : RoadEdges.get(P)){
+        for (RoadSection Rs : RoadEdges.get(P)) {
             I.addRoadSection(Rs);
         }
         I.assembleIntersection();
+        intersectionMap.put(P,I);
     }
 
-    private void closeEdge(Position P){
+    private void closeEdge(Position P) {
         SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
-        SimpleTrajectory destination =RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
-        EndRoadTrajectory deadEnd = new EndRoadTrajectory(source,destination,source.getRoadId());
+        SimpleTrajectory destination = RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
+        EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
 
-        TrajectoryJunction junction = new TrajectoryJunction(source,deadEnd,
-                source.getStop(),0);
+        TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd,
+                source.getStop(), 0);
         source.addDestination(junction);
         deadEnd.setSource(junction);
 
-        junction = new TrajectoryJunction(deadEnd,destination,
-                deadEnd.getLength(),destination.getStart());
+        junction = new TrajectoryJunction(deadEnd, destination,
+                deadEnd.getLength(), destination.getStart());
         destination.addSource(junction);
         deadEnd.setDestination(junction);
 
         source.setDestinationType(TrajectoryEndType.DEAD_END);
         destination.setSourceType(TrajectoryEndType.DEAD_END);
+
+        deadEnds.add(deadEnd);
     }
 
     /**
      * assemble the trajectories from L1 to L2
      */
-    private void assembleLanes(Lane L1,Lane L2){
+    private void assembleLanes(Lane L1, Lane L2) {
         SimpleTrajectory source = L1.getInsertTrajectory();
         SimpleTrajectory destination = L2.getInsertTrajectory();
-        TrajectoryJunction junction = TrajectoryJunction.computeJunction(source,destination);
+        TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
 
         source.addDestination(junction);
         destination.addSource(junction);
@@ -147,12 +152,12 @@ public class RoadManager {
     }
 
     //INTEGRITY CHECKING
-    public int checkIntegrity(){
+    public int checkIntegrity() {
         int lanesProblems = 0;
         int intersectionProblems = 0;
         int deadEndProblems = 0;
         int trajectoryProblems = 0;
-        Map<Trajectory,Boolean> trajectoryToCheck = new HashMap<>();
+        Map<Trajectory, Boolean> trajectoryToCheck = new HashMap<>();
 
         //check integrity for simple trajectories
 
@@ -160,79 +165,79 @@ public class RoadManager {
             lanesProblems += checkLane(r.getLaneAB());
             lanesProblems += checkLane(r.getLaneBA());
 
-            trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(),false);
-            trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(),false);
+            trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(), false);
+            trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(), false);
         }
         LOG.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
-        for (EndRoadTrajectory trajectory : deadEnds){
-            if(trajectory.getLength()<0){
+        for (EndRoadTrajectory trajectory : deadEnds) {
+            if (trajectory.getLength() < 0) {
                 deadEndProblems++;
                 LOG.error("DEAD_END length negative");
             }
 
-            if(trajectory.getSource()==null){
+            if (trajectory.getSource() == null) {
                 deadEndProblems++;
                 LOG.error("DEAD_END source is null");
             }
 
-            if(trajectory.getDestination()==null){
+            if (trajectory.getDestination() == null) {
                 deadEndProblems++;
                 LOG.error("DEAD_END destination is null");
             }
 
-            trajectoryToCheck.put(trajectory,false);
+            trajectoryToCheck.put(trajectory, false);
         }
         LOG.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
 
-        if(intersectionProblems == 0 && lanesProblems == 0 && deadEndProblems == 0 ){
+        if (intersectionProblems == 0 && lanesProblems == 0 && deadEndProblems == 0) {
             trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
         }
         //FIXME
         trajectoryProblems = 0;
 
-        return intersectionProblems+lanesProblems+deadEndProblems+trajectoryProblems;
+        return intersectionProblems + lanesProblems + deadEndProblems + trajectoryProblems;
     }
 
-    private int checkLane(Lane lane){
+    private int checkLane(Lane lane) {
         int problem = 0;
-        if(lane.getInsertTrajectory().getLength()<=0 || Double.isNaN(lane.getInsertTrajectory().getLength())){
+        if (lane.getInsertTrajectory().getLength() <= 0 || Double.isNaN(lane.getInsertTrajectory().getLength())) {
             problem++;
             LOG.error("trajectory is negative or NaN");
         }
 
-        if(lane.getInsertTrajectory().getDestinationType() == TrajectoryEndType.UNDEFINED){
+        if (lane.getInsertTrajectory().getDestinationType() == TrajectoryEndType.UNDEFINED) {
             problem++;
             LOG.error("trajectory destination type is undefined");
         }
 
-        if(lane.getInsertTrajectory().getDestinationsTrajectories().size()==0){
+        if (lane.getInsertTrajectory().getDestinationsTrajectories().size() == 0) {
             problem++;
             LOG.error("trajectory have no destination");
         }
 
         for (TrajectoryJunction junction : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
-            if(junction == null){
-                problem ++;
+            if (junction == null) {
+                problem++;
                 LOG.error("trajectory have null destination");
             }
         }
         return problem;
     }
 
-    private int checkTrajectoryAccess(Map<Trajectory,Boolean> trajectoryMap){
+    private int checkTrajectoryAccess(Map<Trajectory, Boolean> trajectoryMap) {
         int notExploredTrajetories = 0;
         LOG.debug("Total trajectories: " + trajectoryMap.size());
         Trajectory start = (Trajectory) trajectoryMap.keySet().toArray()[0];
         try {
             start.explore(trajectoryMap);
-        }catch (StackOverflowError e){
+        } catch (StackOverflowError e) {
             return 1;
         }
 
 
-        for(boolean explored : trajectoryMap.values()){
-            if (!explored){
+        for (boolean explored : trajectoryMap.values()) {
+            if (!explored) {
                 notExploredTrajetories++;
             }
         }
