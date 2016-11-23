@@ -19,34 +19,44 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
 
-    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, name, id_map, duration_s, finish, creation_date) VALUES (?, ?, ?, ?,?,?,?)";
-    private static final String SELECT_FROM_UUID = "SELECT id_user, name, id_map, creation_date, finish, duration_s FROM simulation WHERE uuid = ?";
-    private static final String SELECT_ALL = "SELECT uuid, name, id_map, creation_date, finish, duration_s FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAP = "SELECT uuid, name, duration_s, finish, creation_date FROM simulation WHERE id_map = ? AND id_user = ?";
+    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, arrival_s, car_percentage FROM simulation WHERE uuid = ?";
+    private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage FROM simulation WHERE id_user = ?";
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage FROM simulation WHERE id_map = ? AND id_user = ?";
 
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int duration) throws DatabaseOperationException {
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage) throws DatabaseOperationException {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
 
                 statement.setString(1, simulation.getUuid().toString());
                 statement.setInt(2, creatorID);
-                statement.setString(3, name);
-                statement.setInt(4, mapID);
-                statement.setInt(5, duration);
+                statement.setInt(3, mapID);
+                statement.setString(4, name);
+                statement.setInt(5, samplingRate);
                 statement.setBoolean(6, false);
                 statement.setString(7, simulation.getCreationDate());
+                statement.setString(8, livingFeatureUUID.toString());
+                statement.setString(9, workingFeatureUUID.toString());
+                statement.setInt(10, departureLivingS);
+                statement.setInt(11, departureWorkingS);
+                statement.setInt(12, carPercentage);
 
                 try {
                     statement.execute();
-                    simulation.setDurationS(duration);
+                    simulation.setSamplingRate(samplingRate);
                     simulation.setMapID(mapID);
                     simulation.setName(name);
                     simulation.setCreatorID(creatorID);
                     simulation.setFinish(false);
+                    simulation.setDepartureS(departureLivingS);
+                    simulation.setArrivalS(departureWorkingS);
+                    simulation.setCarPercentage(carPercentage);
+                    simulation.setLivingFeatureUUID(livingFeatureUUID);
+                    simulation.setWorkingFeatureUUID(workingFeatureUUID);
                     return simulation;
                 } finally {
                     statement.close();
@@ -55,14 +65,6 @@ public class SimulationParametersRepository extends SimulationRepository {
         } catch (SQLException e) {
             throw processBasicSQLException(e, Simulation.class);
         }
-    }
-
-    // ======
-    // UPDATE
-    // ======
-
-    public void updateName(Simulation simulation, String newValue) throws DatabaseOperationException {
-        updateStringField("simulation", "name", simulation, newValue);
     }
 
     // ===
@@ -85,7 +87,12 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(result.getInt("id_map"));
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setDurationS(result.getInt("duration_s"));
+                        simulation.setSamplingRate(result.getInt("sampling_rate"));
+                        simulation.setDepartureS(result.getInt("departure_s"));
+                        simulation.setArrivalS(result.getInt("arrival_s"));
+                        simulation.setCarPercentage(result.getInt("car_percentage"));
+                        simulation.setLivingFeatureUUID(UUID.fromString(result.getString("living_feature")));
+                        simulation.setWorkingFeatureUUID(UUID.fromString(result.getString("working_feature")));
 
                         simulations.add(simulation);
                     }
@@ -111,7 +118,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(result.getInt("id_map"));
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setDurationS(result.getInt("duration_s"));
+                        simulation.setSamplingRate(result.getInt("sampling_rate"));
 
                         return simulation;
                     }
@@ -139,7 +146,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(mapID);
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setDurationS(result.getInt("duration_s"));
+                        simulation.setSamplingRate(result.getInt("sampling_rate"));
 
                         simulations.add(simulation);
                     }

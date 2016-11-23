@@ -11,18 +11,20 @@ import java.util.UUID;
 
 public class Simulation implements SQLEntity {
 
+    @JsonIgnore
+    private final Simulator simulator = new Simulator(); // not stored
     private UUID uuid = UUID.randomUUID();
     private String name;
     private int creatorID;
     private int mapID;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-    private int durationS;
+    private int samplingRate;
     private boolean finish;
     private UUID livingFeatureUUID;
     private UUID workingFeatureUUID;
-
-    @JsonIgnore
-    private final Simulator simulator = new Simulator();
+    private int departureS;
+    private int arrivalS;
+    private int carPercentage;
 
     public UUID getUuid() {
         return uuid;
@@ -56,12 +58,12 @@ public class Simulation implements SQLEntity {
         this.name = name;
     }
 
-    public int getDurationS() {
-        return durationS;
+    public int getSamplingRate() {
+        return samplingRate;
     }
 
-    public void setDurationS(int durationS) {
-        this.durationS = durationS;
+    public void setSamplingRate(int samplingRate) {
+        this.samplingRate = samplingRate;
     }
 
     public boolean isFinish() {
@@ -96,7 +98,30 @@ public class Simulation implements SQLEntity {
         this.workingFeatureUUID = workingFeatureUUID;
     }
 
-    @JsonIgnore
+    public int getDepartureS() {
+        return departureS;
+    }
+
+    public void setDepartureS(int departureS) {
+        this.departureS = departureS;
+    }
+
+    public int getArrivalS() {
+        return arrivalS;
+    }
+
+    public void setArrivalS(int arrivalS) {
+        this.arrivalS = arrivalS;
+    }
+
+    public int getCarPercentage() {
+        return carPercentage;
+    }
+
+    public void setCarPercentage(int carPercentage) {
+        this.carPercentage = carPercentage;
+    }
+
     public Simulator getSimulator() throws SimulatorUnavailableException {
         if (!finish) {
             return simulator;

@@ -34,25 +34,11 @@ public class SimulatorService extends AbstractService {
 
     private MapService mapService = new MapService();
 
-    public Simulation create(User user, String name, int mapID, int durationS) {
-        Simulation simulation = new Simulation();
-        simulation.setCreatorID(user.getId());
-        simulation.setMapID(mapID);
-        simulation.setName(name);
-        simulation.setDurationS(durationS);
-
-        simulationParametersRepository.create(user.getId(), name, mapID, durationS);
+    public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage) {
+        Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage);
 
         start(simulation);
         //TODO: Mettre simulation.simulator à null une fois la simulation terminée et les résultats sdtockés en base (conso mémoire)
-        return simulation;
-    }
-
-    public Simulation get(UUID simulationUUID) {
-        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
-        if (simulation == null) {
-            throw new EntityNotExistingException(Simulation.class);
-        }
         return simulation;
     }
 
@@ -62,68 +48,8 @@ public class SimulatorService extends AbstractService {
         // TODO: Définir point de départ et d'arriver
         simulation.getSimulator().vehicleManager.addToSpawnArea(roads.get(3)); //TODO: Set as simulation parameter
         simulation.getSimulator().vehicleManager.addVehicle();
-        return simulation.getSimulator().launchSimulation(simulation.getDurationS(), 0.1, 10);
+        return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate());
     }
-
-    public List<Simulation> getAll(User user, int mapID) {
-        return simulationParametersRepository.getAllFromMap(user, mapID);
-    }
-
-    public List<Simulation> getAll(int userID) {
-        return simulationParametersRepository.getAll(userID);
-    }
-
-    public boolean delete(UUID simulationUUID) {
-        Simulation simulation = new Simulation();
-        simulation.setUuid(simulationUUID);
-        int count = simulationParametersRepository.delete(simulation);
-        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
-    }
-
-    //    public FeatureCollection getResult(UUID simulationUUID, int timestamp) throws SimulationImcompleteException {
-    //        Simulation simulation = get(simulationUUID);
-    //        if (simulation.isFinish()) {
-    //            Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
-    //            getResultAt(map.getFeatures(), timestamp);
-    //            return map.getFeatures();
-    //        }
-    //        throw new SimulationImcompleteException();
-    //    }
-
-    //    private void getResultAt(FeatureCollection features, int timestamp) {
-    //        for (Feature feature : features) {
-    //            Double status = simulation.getSimulator().historyManager.getRoadStatus(feature.getUuid(), timestamp);
-    //            feature.getProperties().put("congestion", status.intValue());
-    //        }
-    //
-    //        List<SpaceTimePosition> vehicles = simulation.getSimulator().historyManager.getAllVehicleAt(timestamp);
-    //        LOGGER.debug("Nombre de véhicules = " + vehicles.size());
-    //        for (SpaceTimePosition vehicle : vehicles) {
-    //            LOGGER.debug("Space Time Position = " + vehicle);
-    //            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
-    //            feature.setGeometry(new Point(new Coordinates(vehicle.getLon(), vehicle.getLat())));
-    //            feature.getProperties().put("type", FeatureType.VEHICLE);
-    //            feature.getProperties().put("vehicle_id", vehicle.getId());
-    //            feature.getProperties().put("angle", vehicle.getAngle());
-    //            features.getFeatures().add(feature);
-    //        }
-    //    }
-
-    //    public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
-    //        List<SpaceTimePosition> history = simulation.getSimulator().historyManager.getVehiclePosition(vehicleID);
-    //        FeatureCollection result = new FeatureCollection();
-    //
-    //        for (SpaceTimePosition position : history) {
-    //            Feature feature = new Feature();
-    //            feature.getProperties().put("type", FeatureType.VEHICLE);
-    //            feature.getProperties().put("vehicle_id", position.getId());
-    //            feature.getProperties().put("angle", position.getAngle());
-    //            feature.setGeometry(new Point(new Coordinates(position.getLon(), position.getLat())));
-    //
-    //            result.getFeatures().add(feature);
-    //        }
-    //        return result;
-    //    }
 
     private List<Road> sendFeatures(Simulation simulation, FeatureCollection features) {
         List<Road> roads = new ArrayList<>();
@@ -150,6 +76,73 @@ public class SimulatorService extends AbstractService {
         return roads;
     }
 
+    public Simulation get(UUID simulationUUID) {
+        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
+        if (simulation == null) {
+            throw new EntityNotExistingException(Simulation.class);
+        }
+        return simulation;
+    }
+
+    public List<Simulation> getAll(User user, int mapID) {
+        return simulationParametersRepository.getAllFromMap(user, mapID);
+    }
+
+    public List<Simulation> getAll(int userID) {
+        return simulationParametersRepository.getAll(userID);
+    }
+
+    //    public FeatureCollection getResult(UUID simulationUUID, int timestamp) throws SimulationImcompleteException {
+    //        Simulation simulation = get(simulationUUID);
+    //        if (simulation.isFinish()) {
+    //            Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
+    //            getResultAt(map.getFeatures(), timestamp);
+    //            return map.getFeatures();
+    //        }
+    //        throw new SimulationImcompleteException();
+    //    }
+
+    //    private void getResultAt(FeatureCollection features, int timestamp) {
+    //        for (Feature feature : features) {
+    //            Double status = simulation.getSimulator().historyManager.getRoadStatus(feature.getUuid(), timestamp);
+    //            feature.getProperties().put("congestion", status.intValue());
+    //        }
+    //
+    //        List<SpaceTimePosition> vehicles = simulation.getSimulator().historyManager.getAllVehicleAt(timestamp);
+    //        LOGGER.debug("Nombre de véhicules = " + vehicles.size());
+    //        for (SpaceTimePosition vehicle : vehicles) {
+    //            LOGGER.debug("Space Time Position = " + vehicle);
+    //            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
+    //            feature.setGeometry(new Point(new Coordinates(vehicle.getLon(), vehicle.getLat())));
+    //            feature.getProperties().put("type", FeatureType.CAR);
+    //            feature.getProperties().put("vehicle_id", vehicle.getId());
+    //            feature.getProperties().put("angle", vehicle.getAngle());
+    //            features.getFeatures().add(feature);
+    //        }
+    //    }
+
+    //    public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
+    //        List<SpaceTimePosition> history = simulation.getSimulator().historyManager.getVehiclePosition(vehicleID);
+    //        FeatureCollection result = new FeatureCollection();
+    //
+    //        for (SpaceTimePosition position : history) {
+    //            Feature feature = new Feature();
+    //            feature.getProperties().put("type", FeatureType.CAR);
+    //            feature.getProperties().put("vehicle_id", position.getId());
+    //            feature.getProperties().put("angle", position.getAngle());
+    //            feature.setGeometry(new Point(new Coordinates(position.getLon(), position.getLat())));
+    //
+    //            result.getFeatures().add(feature);
+    //        }
+    //        return result;
+    //    }
+
+    public boolean delete(UUID simulationUUID) {
+        Simulation simulation = new Simulation();
+        simulation.setUuid(simulationUUID);
+        int count = simulationParametersRepository.delete(simulation);
+        return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
+    }
 
     @Deprecated
     public FeatureCollection getFakeSimulationResult() throws IOException {
@@ -170,7 +163,7 @@ public class SimulatorService extends AbstractService {
 
                 Feature vehicle = new Feature();
                 vehicle.setUuid(UUID.randomUUID());
-                vehicle.getProperties().put("type", FeatureType.VEHICLE);
+                vehicle.getProperties().put("type", FeatureType.CAR);
                 vehicle.getProperties().put("angle", 7 * random.nextDouble());
                 vehicle.getProperties().put("id", vehicle.getUuid());
 

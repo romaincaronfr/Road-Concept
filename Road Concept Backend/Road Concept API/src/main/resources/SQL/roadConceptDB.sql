@@ -4,8 +4,8 @@
 -- ** product: Road Concept                                                    **
 -- ** 	module: Road Concept API                                               **
 -- ** version: 0.1-SNAPSHOT                                                    **
--- ** 	creationDate: 12/11/2016                                                       **
--- ** file: src/main/resources/roadConceptDB.sql                           **
+-- ** 	creationDate: 23/11/2016                                               **
+-- ** file: src/main/resources/roadConceptDB.sql                               **
 -- ** author: Maëlig NANTEL						                                         **
 -- ******************************************************************************
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS "final_user" (
 
 CREATE TABLE IF NOT EXISTS "map_info" (
   "id"          SERIAL PRIMARY KEY,
-  "id_user"     INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "id_user"     INTEGER      NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
   "name"        VARCHAR(100) NOT NULL,
   "image_url"   VARCHAR(100),
   "description" TEXT
@@ -39,11 +39,39 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 -- ==============================================================================
 
 CREATE TABLE IF NOT EXISTS "simulation" (
-  "uuid"          VARCHAR(40) PRIMARY KEY,
-  "id_user"       INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "id_map"        INTEGER     NOT NULL REFERENCES "map_info"(id) ON DELETE CASCADE,
-  "name"          VARCHAR(100) NOT NULL,
-  "duration_s"    INTEGER     NOT NULL,
-  "finish"        BOOLEAN     NOT NULL,
-  "creation_date" VARCHAR(10)   NOT NULL
+  "uuid"                VARCHAR(40) PRIMARY KEY,
+  "id_user"             INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "id_map"              INTEGER     NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
+  "name"                VARCHAR(100),
+  "sampling"            INTEGER     NOT NULL,
+  "finish"              BOOLEAN     NOT NULL,
+  "creation_date"       VARCHAR(10) NOT NULL,
+  "living_feature"      VARCHAR(40) NOT NULL,
+  "working_feature"     VARCHAR(40) NOT NULL,
+  "departure_living_s"  INTEGER     NOT NULL,
+  "departure_working_s" INTEGER     NOT NULL,
+  "car_percentage"      INTEGER     NOT NULL
+);
+
+-- ==============================================================================
+-- SIMULATION RESULTS
+-- ==============================================================================
+
+CREATE TABLE IF NOT EXISTS "simulation_vehicle" (
+  "simulation_uuid" VARCHAR(40) NOT NULL,
+  "vehicle_id"      INTEGER     NOT NULL,
+  "id_map"          INTEGER     NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
+  "timestamp_s"     INTEGER     NOT NULL,
+  "longitude"       INTEGER     NOT NULL,
+  "latitude"        INTEGER     NOT NULL,
+  "type"            INTEGER CHECK ("type" IN (6, 7)),
+  PRIMARY KEY (simulation_uuid, vehicle_id, timestamp_s)
+);
+
+CREATE TABLE "simulation_congestion" (
+  "feature_uuid"          VARCHAR(40) NOT NULL,
+  "congestion_percentage" INTEGER     NOT NULL,
+  "simulation_uuid"       VARCHAR(40) NOT NULL,
+  "timestamp_s"           INTEGER     NOT NULL,
+  PRIMARY KEY (feature_uuid, simulation_uuid, timestamp_s)
 );

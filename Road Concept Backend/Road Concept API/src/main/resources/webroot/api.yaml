@@ -587,52 +587,73 @@ definitions:
       name:
         type: string
         description: Nom de la simulation
-      duration_s:
+      sampling_rate:
         type: integer
         format: int32
-        description: Durée en seconde de la simulation. Démarre à 0 (00h00)
-      livingRoad:
+        description: Taux d'échantillonage de la simulation
+      departure_living_s:
+        type: integer
+        format: int32
+        description: Heure de départ de la zone d'habitation (en secondes depuis minuit de la zone de travail)
+      departure_working_s:
+        type: integer
+        format: int32
+        description: Heure de départ de la zone de travail (en secondes depuis minuit de la zone de travail)
+      living_feature:
         type: string
         format: uuid
         description: UUID de la route correspondant au lieu d'habitation
-      workingRoad:
+      working_feature:
         description: UUID de la route correspondant au lieu de travail
         type: string
         format: uuid
+      car_percentage:
+        type: integer
+        format: int32
+        description: Répartition en % des voitures. Le reste des véhicules seront des camions.
 
   Simulation:
     properties:
-      name:
-        type: string
-        description: nom de la simulation
       uuid:
         type: string
         format: uuid
-        description: Identifiant de la simulation
+      name:
+        type: string
+        description: Nom de la simulation
       creatorID:
         type: integer
         format: int32
-        description: identifiant de l'utilisateur ayant créé la simulation
       mapID:
         type: integer
         format: int32
-        description: identifiant de la map associée à la simulation
       creationDate:
         type: string
-        description: Date de création de la simulation au format JJ-MM-AAA
-      duration_s:
-        type: integer
-        format: int32
-        description: Durée en seconde de la simulation. Démarre à 0 (00h00)
       finish:
         type: boolean
-        description: Vrai si la simulation a finis son éxécution (résultats disponibles), faux sinon.
-      livingRoad:
+      sampling_rate:
+        type: integer
+        format: int32
+        description: Taux d'échantillonage de la simulation
+      departure_living_s:
+        type: integer
+        format: int32
+        description: Heure de départ de la zone d'habitation (en secondes depuis minuit de la zone de travail)
+      departure_working_s:
+        type: integer
+        format: int32
+        description: Heure de départ de la zone de travail (en secondes depuis minuit de la zone de travail)
+      living_feature:
         type: string
         format: uuid
-      workingRoad:
+        description: UUID de la route correspondant au lieu d'habitation
+      working_feature:
+        description: UUID de la route correspondant au lieu de travail
         type: string
         format: uuid
+      car_percentage:
+        type: integer
+        format: int32
+        description: Répartition en % des voitures. Le reste des véhicules seront des camions.
 
   Map:
     properties:
