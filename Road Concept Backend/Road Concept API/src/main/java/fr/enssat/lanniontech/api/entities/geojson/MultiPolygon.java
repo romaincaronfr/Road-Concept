@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.entities.geojson;
 
 import java.util.List;
 
+@Deprecated
 public class MultiPolygon extends Geometry<List<List<Coordinates>>> {
 
     public MultiPolygon() {

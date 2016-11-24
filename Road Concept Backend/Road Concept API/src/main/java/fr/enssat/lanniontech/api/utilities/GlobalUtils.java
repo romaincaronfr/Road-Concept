@@ -4,6 +4,6 @@ import com.rits.cloning.Cloner;
 
 public class GlobalUtils {
 
-    public static final Cloner cloner = new Cloner();
+    public static final Cloner CLONER = new Cloner();
 
 }

@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class JSONHelper {
+public class JSONUtils {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JSONHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSONUtils.class);
 
     private static ObjectMapper MAPPER = new ObjectMapper();
 

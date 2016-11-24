@@ -22,11 +22,8 @@ public class IntersectionsSplitter {
         Map<Coordinates, List<Feature>> explosionPivot = new HashMap<>();
         Map<Feature, Coordinates> loops;
 
-        int cycles = initExplosionPivot(explosionPivot, map);
-        LOGGER.debug("cycle numbers = " + cycles);
-        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
+        initExplosionPivot(explosionPivot, map);
         loops = cleanExplosionPivot(explosionPivot);
-        LOGGER.debug("explosionPivot size = " + explosionPivot.size());
         while (!explosionPivot.isEmpty()) {
             explodeRoads(explosionPivot, map, loops);
         }
@@ -79,7 +76,7 @@ public class IntersectionsSplitter {
     }
 
     private static void explodeLoop(Map<Coordinates, List<Feature>> explosionPivot, Feature feature, FeatureCollection map) {
-        //todo find how to split corectly loops
+        //TODO: find how to split corectly loops
         map.getFeatures().remove(feature);
         for (Coordinates coordinates : explosionPivot.keySet()) {
             if (explosionPivot.get(coordinates).contains(feature)) {
@@ -144,10 +141,8 @@ public class IntersectionsSplitter {
         LineString lineString = (LineString) featureToSplit.getGeometry();
         LinkedList<Coordinates> oneRoadFirstPart = new LinkedList<>();
         oneRoadFirstPart.addAll(lineString.getCoordinates().subList(0, index + 1));
-        LOGGER.debug("@@@ First size = " + oneRoadFirstPart.size());
         LinkedList<Coordinates> oneRoadLastPart = new LinkedList<>();
         oneRoadLastPart.addAll(lineString.getCoordinates().subList(index, lineString.getCoordinates().size()));
-        LOGGER.debug("@@@ Second size = " + oneRoadLastPart.size());
 
         ((LineString) newOneRoad1.getGeometry()).setCoordinates(oneRoadFirstPart);
         ((LineString) newOneRoad2.getGeometry()).setCoordinates(oneRoadLastPart);

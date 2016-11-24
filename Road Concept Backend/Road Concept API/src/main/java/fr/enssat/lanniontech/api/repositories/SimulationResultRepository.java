@@ -7,4 +7,12 @@ public class SimulationResultRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationResultRepository.class);
 
+    // ==========
+    // CONGESTION
+    // ==========
+
+    // ========
+    // VEHICLES
+    // ========
+
 }

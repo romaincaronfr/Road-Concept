@@ -13,7 +13,7 @@ import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.utilities.GlobalUtils;
 import fr.enssat.lanniontech.api.utilities.IntersectionsSplitter;
-import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import fr.enssat.lanniontech.api.utilities.JSONUtils;
 import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +98,7 @@ public class MapService extends AbstractService {
             throw new EntityNotExistingException();
         }
 
-        FeatureCollection features = JSONHelper.fromJSON(fileData, FeatureCollection.class);
+        FeatureCollection features = JSONUtils.fromJSON(fileData, FeatureCollection.class);
         int nullID = 0;
         for (Feature getted : features.getFeatures()) {
             if (getted.getOpenStreetMapID().equals("null") || getted.getOpenStreetMapID() == null) {
@@ -364,7 +364,7 @@ public class MapService extends AbstractService {
                     UUID uuid = UUID.fromString(uuidToCheck);
                     if (!tab.containsKey(uuid)) {
                         Feature featureToCheck = getFeature(mapID, uuid);
-                        Feature duplicatedFeatureToCheck = GlobalUtils.cloner.deepClone(featureToCheck);
+                        Feature duplicatedFeatureToCheck = GlobalUtils.CLONER.deepClone(featureToCheck);
                         tab.put(uuid, duplicatedFeatureToCheck);
                         LineString lineString = (LineString) duplicatedFeatureToCheck.getGeometry();
                         List<Boolean> newList = new ArrayList<>(Arrays.asList(new Boolean[lineString.getCoordinates().size()]));

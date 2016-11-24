@@ -10,7 +10,7 @@ import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
 import fr.enssat.lanniontech.api.services.MapService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
-import fr.enssat.lanniontech.api.utilities.JSONHelper;
+import fr.enssat.lanniontech.api.utilities.JSONUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
@@ -59,7 +59,7 @@ public class MapsVerticle extends AbstractVerticle {
     private void processCreateFeature(RoutingContext routingContext) {
         try {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
-            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
+            Feature feature = JSONUtils.fromJSON(routingContext.getBodyAsString(), Feature.class);
 
             mapService.addFeature(mapID, feature);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
@@ -96,7 +96,7 @@ public class MapsVerticle extends AbstractVerticle {
         try {
             int mapID = Integer.valueOf(routingContext.request().getParam("mapID")); // may throw
             UUID featureUUID = UUID.fromString(routingContext.request().getParam("featureUUID"));
-            Feature feature = JSONHelper.fromJSON(routingContext.getBodyAsString(), Feature.class);
+            Feature feature = JSONUtils.fromJSON(routingContext.getBodyAsString(), Feature.class);
             feature.setUuid(featureUUID); //FIXME: It's just an ugly temporary fix...
 
             Feature updated = mapService.updateFeature(mapID, feature);
