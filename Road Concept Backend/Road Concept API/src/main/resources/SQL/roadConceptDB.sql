@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS "simulation" (
 -- ==============================================================================
 
 CREATE TABLE IF NOT EXISTS "simulation_vehicle" (
-  "simulation_uuid" VARCHAR(40) NOT NULL,
+  "simulation_uuid" VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
   "vehicle_id"      INTEGER     NOT NULL,
   "id_map"          INTEGER     NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
   "timestamp_s"     INTEGER     NOT NULL,
@@ -68,10 +68,10 @@ CREATE TABLE IF NOT EXISTS "simulation_vehicle" (
   PRIMARY KEY (simulation_uuid, vehicle_id, timestamp_s)
 );
 
-CREATE TABLE "simulation_congestion" (
+CREATE TABLE IF NOT EXISTS "simulation_congestion" (
   "feature_uuid"          VARCHAR(40) NOT NULL,
   "congestion_percentage" INTEGER     NOT NULL,
-  "simulation_uuid"       VARCHAR(40) NOT NULL,
+  "simulation_uuid"       VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
   "timestamp_s"           INTEGER     NOT NULL,
   PRIMARY KEY (feature_uuid, simulation_uuid, timestamp_s)
 );
