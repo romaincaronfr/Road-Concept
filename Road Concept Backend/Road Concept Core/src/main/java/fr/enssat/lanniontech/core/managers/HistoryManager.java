@@ -54,17 +54,17 @@ public class HistoryManager {
         return vehiclesIn;
     }
 
-    public List<SpaceTimePosition> getAllVehicleAt(long timestamp){
+    public List<SpaceTimePosition> getAllVehicleAt(long timestamp) {
         List<SpaceTimePosition> vehiclesIn = new ArrayList<>();
-        for(TreeMap<Double,Integer> values : vehicleIdFromPosition.get(timestamp).values() ){
-            for (int id : values.values()){
+        for (TreeMap<Double, Integer> values : vehicleIdFromPosition.get(timestamp).values()) {
+            for (int id : values.values()) {
                 vehiclesIn.add(vehiclePositionsFromId.get(id).get(timestamp));
             }
         }
         return vehiclesIn;
     }
 
-    public double getRoadStatus(UUID id,long timestamp){
+    public double getRoadStatus(UUID id, long timestamp) {
         //todo add road metrics to history
         return 0;
     }

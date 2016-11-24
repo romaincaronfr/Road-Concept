@@ -19,7 +19,7 @@ public class Node {
         this.intersection = intersection;
     }
 
-    public boolean betterThan(Node node){
-        return (heuristic+cost)<=(node.heuristic+node.cost);
+    public boolean betterThan(Node node) {
+        return (heuristic + cost) <= (node.heuristic + node.cost);
     }
 }

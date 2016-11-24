@@ -15,10 +15,10 @@ public class Lane {
         this.length = Math.abs(length);
         width = 3.5;
         trajectories = new ArrayList<>();
-        if (length>0) {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2,myRoadSection.getMyRoad().getId()));
+        if (length > 0) {
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2, myRoadSection.getMyRoad().getId()));
         } else {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2,myRoadSection.getMyRoad().getId()));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2, myRoadSection.getMyRoad().getId()));
         }
     }
 
@@ -35,8 +35,6 @@ public class Lane {
      */
     public void setNextLane(Lane nextLane) {
         this.nextLane = nextLane;
-        trajectories.get(0).addDestination(nextLane.getInsertTrajectory());
-        //todo handle lane with multiple trajectories
     }
 
     public SimpleTrajectory getInsertTrajectory() {

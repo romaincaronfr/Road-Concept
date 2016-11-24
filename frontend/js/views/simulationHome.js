@@ -14,12 +14,18 @@ app.simulationHomeView = Backbone.View.extend({
     initialize: function (options) {
         this.id = options.id;
         //TODO quand le backend sera prêt, afficher les simulations déjà existantes.
-        //this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
+        this.simulationParamsCollection = new app.collections.simulationParamsCollection({id: this.id});
         this.render();
     },
 
     render: function () {
         this.$el.html(this.template);
+        var self = this;
+        this.simulationParamsCollection.fetch({
+            success: function(){
+                console.log(self.simulationParamsCollection);
+            }
+        });
         return this;
 
     },
@@ -27,6 +33,6 @@ app.simulationHomeView = Backbone.View.extend({
     changeID: function (id) {
         console.log("change id = "+id);
         this.id = id;
-        //this.mapDetailsCOllection.id = id;
+        this.simulationParamsCollection.id = id;
     }
 });

@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -27,14 +28,19 @@ public class testEndRoadTrajectory {
 
         EndRoadTrajectory BB = new EndRoadTrajectory(AB,BA, UUID.randomUUID());
 
-        Assert.assertEquals(BB,AB.getNext());
-        Assert.assertEquals(BA,BB.getNext());
+        TrajectoryJunction junction = new TrajectoryJunction(AB,BB,
+                AB.getStop(),0);
+        AB.addDestination(junction);
+        BB.setSource(junction);
+
+        junction = new TrajectoryJunction(BB,BA,
+                BB.getLength(),BA.getStart());
+        BA.addSource(junction);
+        BB.setDestination(junction);
+
+        Assert.assertEquals(BB,AB.getNext().getDestination());
+        Assert.assertEquals(BA,BB.getNext().getDestination());
 
         Assert.assertNull(BA.getNext());
-
-        EndRoadTrajectory AA = new EndRoadTrajectory(BA,AB,UUID.randomUUID());
-
-        Assert.assertEquals(AA,BA.getNext());
-        Assert.assertEquals(AB,AA.getNext());
     }
 }

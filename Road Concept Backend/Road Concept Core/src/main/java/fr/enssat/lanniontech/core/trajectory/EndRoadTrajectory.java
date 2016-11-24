@@ -9,41 +9,34 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EndRoadTrajectory extends Trajectory {
-    SimpleTrajectory destination;
-    private SimpleTrajectory source;
+    private TrajectoryJunction destination;
+    private TrajectoryJunction source;
     private PosFunction pf;
 
-    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination,UUID roadId) {
+    public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination, UUID roadId) {
         super(roadId);
-        this.source = source;
-        this.destination = destination;
 
         Position A = source.getGPS(source.getStop());
         Position B = destination.getGPS(destination.getStart());
-        pf = new PosFunction(A,B);
-        length = Position.length(A,B);
-
-        source.addDestination(this);
-        destination.addSource(this);
-
-
+        pf = new PosFunction(A, B);
+        length = Position.length(A, B);
     }
 
     //------------inherited methods----------//
 
 
-    public Trajectory getNext() {
+    public TrajectoryJunction getNext() {
         return destination;
     }
 
     @Override
-    public Trajectory getNext(UUID destination) {
+    public TrajectoryJunction getNext(UUID destination) {
         return getNext();
     }
 
     public double getSpeedOfFirst() {
         if (vehiclesSides.size() == 0) {
-            return destination.getSpeedOfFirst();
+            return destination.getDestination().getSpeedOfFirst();
         } else {
             return vehiclesSides.get(0).getMyVehicle().getSpeed();
         }
@@ -52,7 +45,7 @@ public class EndRoadTrajectory extends Trajectory {
     public double getNextCarSpeed(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            return destination.getSpeedOfFirst();
+            return destination.getDestination().getSpeedOfFirst();
         } else {
             return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
@@ -60,7 +53,7 @@ public class EndRoadTrajectory extends Trajectory {
 
     public double getDistanceToFirst() {
         if (vehiclesSides.size() == 0) {
-            return length + destination.getDistanceToFirst();
+            return length + destination.getDestination().getDistanceToFirst();
         } else {
             return vehiclesSides.get(0).getPos();
         }
@@ -69,7 +62,7 @@ public class EndRoadTrajectory extends Trajectory {
     public double getDistanceToNext(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            return length - side.getPos() + destination.getDistanceToFirst();
+            return length - side.getPos() + destination.getDestination().getDistanceToFirst();
         } else {
             return vehiclesSides.get(pos + 1).getPos() - side.getPos();
         }
@@ -79,23 +72,31 @@ public class EndRoadTrajectory extends Trajectory {
         return pf.get(pos);
     }
 
-    public SimpleTrajectory getSource() {
+    public TrajectoryJunction getSource() {
         return source;
     }
 
-    public SimpleTrajectory getDestination() {
+    public TrajectoryJunction getDestination() {
         return destination;
     }
 
-    public void explore(Map<Trajectory,Boolean> trajectoryMap){
-        if(!trajectoryMap.get(this)){
-            trajectoryMap.replace(this,true);
-            this.getDestination().explore(trajectoryMap);
+    public void setDestination(TrajectoryJunction destination) {
+        this.destination = destination;
+    }
+
+    public void setSource(TrajectoryJunction source) {
+        this.source = source;
+    }
+
+    public void explore(Map<Trajectory, Boolean> trajectoryMap) {
+        if (!trajectoryMap.get(this)) {
+            trajectoryMap.replace(this, true);
+            this.destination.getDestination().explore(trajectoryMap);
         }
     }
 
     @Override
     public Intersection getNextIntersection() {
-        return destination.getNextIntersection();
+        return destination.getDestination().getNextIntersection();
     }
 }

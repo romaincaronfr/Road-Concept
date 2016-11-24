@@ -19,7 +19,7 @@ public class VehicleManager {
     private HistoryManager historyManager;
     private PathFinder pathFinder;
 
-    public VehicleManager(HistoryManager history,RoadManager roadManager) {
+    public VehicleManager(HistoryManager history, RoadManager roadManager) {
         historyManager = history;
         vehicles = new ArrayList<>();
         activeVehicles = new ArrayList<>();
@@ -44,7 +44,7 @@ public class VehicleManager {
 
 
         int startingRoad = 0;
-        if(spawnArea.size()>1){
+        if (spawnArea.size() > 1) {
             startingRoad = gen.nextInt(spawnArea.size() - 1);
         }
 
@@ -61,28 +61,30 @@ public class VehicleManager {
             k++;
         }
 
-        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(),10);
+        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
         Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size,
-                speed, 0, historyManager,myPath);
+                speed, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);
+        V.logPosition(0);
         return true;
     }
 
-    public void newStep(double precision, boolean log) {
+    public void newStep(double precision, boolean log, long timestamp) {
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updateAcceleration();
         }
 
         for (Vehicle activeVehicle : activeVehicles) {
-            activeVehicle.updatePos(precision, log);
+            activeVehicle.updatePos(precision);
+            activeVehicle.logPosition(timestamp);
         }
 
         int i = 0;
-        while (i<activeVehicles.size()){
-            if(activeVehicles.get(i).isArrived()){
+        while (i < activeVehicles.size()) {
+            if (activeVehicles.get(i).isArrived()) {
                 activeVehicles.remove(i);
-            }else {
+            } else {
                 i++;
             }
         }

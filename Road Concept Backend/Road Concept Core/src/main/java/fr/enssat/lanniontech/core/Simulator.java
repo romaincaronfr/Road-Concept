@@ -1,8 +1,8 @@
 package fr.enssat.lanniontech.core;
 
+import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.managers.PositionManager;
 import fr.enssat.lanniontech.core.managers.RoadManager;
-import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +35,7 @@ public class Simulator implements Runnable {
         roadManager = new RoadManager();
         positionManager = new PositionManager();
         historyManager = new HistoryManager();
-        vehicleManager = new VehicleManager(historyManager,roadManager);
+        vehicleManager = new VehicleManager(historyManager, roadManager);
 
         progress = 0;
 
@@ -62,13 +62,15 @@ public class Simulator implements Runnable {
             long step = (long) (length / precision);
             WriteLock wl = l.writeLock();
             int j = 1;
+            long timestamp = 0;
             for (long i = 0; i < step; i++) {
 
                 if (j == samplingRate) {
-                    vehicleManager.newStep(precision, true);
+                    timestamp += samplingRate/precision;
+                    vehicleManager.newStep(precision, true, timestamp);
                     j = 1;
                 } else {
-                    vehicleManager.newStep(precision, false);
+                    vehicleManager.newStep(precision, false, timestamp);
                     j++;
                 }
 
@@ -79,9 +81,9 @@ public class Simulator implements Runnable {
                     wl.unlock();
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             progress = 1;
             stopTime = System.currentTimeMillis();
         }

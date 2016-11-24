@@ -32,31 +32,7 @@ public class TestIntersection {
         Road R4 = RM.addRoadSectionToRoad(D, I, uuid3);
         Road R5 = RM.addRoadSectionToRoad(E, I, uuid4);
 
-        Intersection Inter = new Intersection(I);
 
-        Assert.assertTrue(Inter.addRoadSection(R1.get(0)));
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Assert.assertTrue(Inter.addRoadSection(R2.get(0)));
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Assert.assertTrue(Inter.addRoadSection(R3.get(0)));
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Assert.assertTrue(Inter.addRoadSection(R4.get(0)));
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Assert.assertTrue(Inter.addRoadSection(R5.get(0)));
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Assert.assertTrue(Inter.removeRoadSection(uuid1));
-        Assert.assertFalse(Inter.removeRoadSection(UUID.randomUUID()));
-        Assert.assertEquals(Inter.getTrajectoriesSize(), 12);
     }
 
 }

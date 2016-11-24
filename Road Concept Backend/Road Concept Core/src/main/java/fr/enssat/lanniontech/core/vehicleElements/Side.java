@@ -29,7 +29,7 @@ public class Side {
         pathStep = 1;
         myRoad = null;
         nextRoad = null;
-        if(myVehicle!=null){
+        if (myVehicle != null) {
             myRoad = myVehicle.getPathStep(0);
             nextRoad = myVehicle.getPathStep(pathStep);
         }
@@ -47,10 +47,10 @@ public class Side {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
             myTrajectory.getOut(this);
-            myTrajectory = myTrajectory.getNext();
-            try{
+            myTrajectory = myTrajectory.getNext().getDestination();
+            try {
                 myTrajectory.getIn(this);
-            } catch ( NullPointerException e ){
+            } catch (NullPointerException e) {
                 System.err.println(myTrajectory);
                 throw e;
             }
@@ -63,19 +63,19 @@ public class Side {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
             myTrajectory.getOut(this);
-            myTrajectory = myTrajectory.getNext(nextRoad);
-            if (myTrajectory.getRoadId()!=myRoad){
+            myTrajectory = myTrajectory.getNext(nextRoad).getDestination();
+            if (myTrajectory.getRoadId() != myRoad) {
                 myRoad = myTrajectory.getRoadId();
-                if(nextRoad != myRoad){
+                if (nextRoad != myRoad) {
                     LOG.error(nextRoad + " != " + myRoad);
                 }
                 nextRoad = myVehicle.getPathStep(++pathStep);
-                LOG.debug("trajectory changed, now on road : "+myRoad);
-                LOG.debug("is on step : "+pathStep);
+                LOG.debug("trajectory changed, now on road : " + myRoad);
+                LOG.debug("is on step : " + pathStep);
             }
-            try{
+            try {
                 myTrajectory.getIn(this);
-            } catch ( NullPointerException e ){
+            } catch (NullPointerException e) {
                 System.err.println(myTrajectory);
                 throw e;
             }

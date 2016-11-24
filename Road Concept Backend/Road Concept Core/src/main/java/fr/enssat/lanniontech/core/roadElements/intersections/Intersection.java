@@ -1,46 +1,65 @@
 package fr.enssat.lanniontech.core.roadElements.intersections;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
-import fr.enssat.lanniontech.core.trajectory.AdvancedTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
 import java.util.*;
 
 public class Intersection {
 
     private Position P;
-    private Map<UUID, RoadSection> roadSections;
-    private Map<UUID, Map<UUID, AdvancedTrajectory>> trajectories;
-    //structure is <source ,<destination, AdvancedTrajectory>>
+    private List<SimpleTrajectory> incomingTrajectories;
+    private List<SimpleTrajectory> outgoingTrajectories;
+    private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
+    //structure is <source ,<destination, destinationTrajectory>>
 
     public Intersection(Position P) {
         this.P = P;
-        roadSections = new HashMap<>();
+        incomingTrajectories = new ArrayList<>();
+        outgoingTrajectories = new ArrayList<>();
         trajectories = new HashMap<>();
     }
 
-    private void addTrajectories(UUID id) {
-        //find the missing trajectories
-        Map<UUID, AdvancedTrajectory> myTrajectories = new HashMap<>();
+    /**
+     * assemble all the incoming trajectories to the outgoing trajectories when their roadId are different
+     */
+    public void assembleIntersection() {
+        for (SimpleTrajectory source : incomingTrajectories) {
+            //create the entry in the trajectories table
+            Map<UUID, SimpleTrajectory> myTrajectories = new HashMap<>();
+            for (SimpleTrajectory destination : outgoingTrajectories) {
+                if (source.getRoadId() != destination.getRoadId()) {
+                    myTrajectories.put(destination.getRoadId(), destination);
 
-        for (UUID uuid : roadSections.keySet()) {
-            if (id != uuid) {
-                AdvancedTrajectory T = new AdvancedTrajectory(roadSections.get(uuid).getLeftLane(P).getInsertTrajectory(), roadSections.get(id).getRightLane(P).getInsertTrajectory(),id,this);
-                trajectories.get(uuid).put(id, T);
+                    TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
 
-                T = new AdvancedTrajectory(roadSections.get(id).getLeftLane(P).getInsertTrajectory(), roadSections.get(uuid).getRightLane(P).getInsertTrajectory(),uuid,this);
-                myTrajectories.put(uuid, T);
+                    source.addDestination(junction);
+                    source.setDestIntersection(this);
+                    destination.addSource(junction);
+                    destination.setSourceIntersection(this);
+                }
             }
+            trajectories.put(source.getRoadId(), myTrajectories);
         }
-        trajectories.put(id, myTrajectories);
     }
 
+    /**
+     * add the passed Roadsection to the intersection
+     *
+     * @param Rs
+     * @return
+     */
     public boolean addRoadSection(RoadSection Rs) {
         if (Rs.getA() != P && Rs.getB() != P) {
             return false;
         }
-        roadSections.put(Rs.getMyRoad().getId(), Rs);
-        addTrajectories(Rs.getMyRoad().getId());
+        Lane incomingLane = Rs.getLeftLane(P);
+        Lane outgoingLane = Rs.getRightLane(P);
+        incomingTrajectories.add(incomingLane.getInsertTrajectory());
+        outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
         return true;
     }
 
@@ -52,33 +71,16 @@ public class Intersection {
         return s;
     }
 
-    public int getRoadSectionsSize() {
-        return roadSections.size();
-    }
-
-    public boolean removeRoadSection(UUID id) {
-        if (roadSections.containsKey(id)) {
-            for (UUID uuid : trajectories.keySet()) {
-                trajectories.get(uuid).remove(id);
-            }
-            trajectories.remove(id);
-            roadSections.remove(id);
-        } else {
-            return false;
-        }
-        return true;
-    }
-
-    public List<AdvancedTrajectory> getTrajectories() {
-        List<AdvancedTrajectory> trajectories = new ArrayList<>();
-        for (Map<UUID,AdvancedTrajectory> map : this.trajectories.values()){
+    public List<SimpleTrajectory> getTrajectories() {
+        List<SimpleTrajectory> trajectories = new ArrayList<>();
+        for (Map<UUID, SimpleTrajectory> map : this.trajectories.values()) {
             trajectories.addAll(map.values());
         }
         return trajectories;
     }
 
-    public List<AdvancedTrajectory> getTrajectoriesFrom(UUID source) {
-        List<AdvancedTrajectory> trajectories = new ArrayList<>();
+    public List<SimpleTrajectory> getTrajectoriesFrom(UUID source) {
+        List<SimpleTrajectory> trajectories = new ArrayList<>();
         trajectories.addAll(this.trajectories.get(source).values());
         return trajectories;
     }
