@@ -11,7 +11,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 1;
+        int vehicleNumber = 100;
 
         Position C = Sim.positionManager.addPosition(40, 0);
         Position D = Sim.positionManager.addPosition(40.1, 0);
