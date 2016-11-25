@@ -50,7 +50,7 @@ public class VehicleManager {
         System.out.println(startingLane.getLength());
         System.out.println(startingPos);
         while (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 15, startingPos + 5)) {
-            startingPos = 10 + gen.nextInt((int) ((startingLane.getLength() - 15) * 10)) / 10.0;
+            startingPos = gen.nextInt((int) ((startingLane.getLength()) * 10)) / 10.0;
             if (k > 10) {
                 return false;
             }

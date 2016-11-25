@@ -38,6 +38,7 @@ public class SimulatorService extends AbstractService {
         Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
 
         start(simulation);
+        //TODO: Lancer un nouveau Runnable qui vas enregistrer au fur et à mesure les résultats
         //TODO: Mettre simulation.simulator à null une fois la simulation terminée et les résultats sdtockés en base (conso mémoire)
         return simulation;
     }
@@ -48,9 +49,13 @@ public class SimulatorService extends AbstractService {
         // TODO: Définir point de départ et d'arriver
 
         simulation.getSimulator().vehicleManager.addToSpawnArea(getCorrespondingRoad(roads, simulation.getLivingFeatureUUID()));
+        int count = 0;
         for (int i = 0; i < simulation.getVehicleCount(); i++) {
-            simulation.getSimulator().vehicleManager.addVehicle();
+            if (simulation.getSimulator().vehicleManager.addVehicle()) {
+                count++;
+            }
         }
+        LOGGER.debug("VEHCILE COUNT = " + count);
 
         return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate());
     }
