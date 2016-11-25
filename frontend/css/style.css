@@ -157,4 +157,13 @@ body {
     width: 80%;
 }
 
-
+#editBarMenu {
+    position: absolute;
+    width: 80%;
+    bottom: 0;
+    left : 10%;
+    height: 8%;
+    border-radius: 10px 10px 0px 0px;
+    background-color: #4f5d6b;
+    z-index: 999;
+}
