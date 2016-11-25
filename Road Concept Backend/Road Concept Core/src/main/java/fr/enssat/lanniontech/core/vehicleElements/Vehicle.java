@@ -19,10 +19,10 @@ public class Vehicle {
 
     private double Va = Tools.kphToMph(90);      //speed in m/s
     private double A;           //acceleration
-    private double a = 2;       //max acceleration
-    private double b = 1;       //deceleration
-    private double T = 1;       //gap time between two car
-    private double lambda = 4;
+    private double a;           //max acceleration
+    private double b;           //deceleration
+    private double T;           //gap time between two car
+    private double lambda = 4;  //function coefficient
     private double v0;          //desired speed
     private double s0 = 2;      //minimum distance between two cars
 
@@ -33,14 +33,12 @@ public class Vehicle {
      * @param start          lane where the vehicle is placed
      * @param startPos       position in the lane of the new vehicle
      * @param length         length of the vehicle
-     * @param speed
      * @param historyManager
      */
-    public Vehicle(int ID, Lane start, double startPos, double length, double speed, HistoryManager historyManager, Path myPath) {
+    private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath) {
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
-        this.v0 = speed;
         this.myPath = myPath;
         this.frontSide = new Side(length + startPos, this, start);
         this.backSide = new Side(startPos, this, start);
@@ -55,6 +53,7 @@ public class Vehicle {
         //double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
         //A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
         A = 0;
+        //TODO reactivate
     }
 
     /**
@@ -103,5 +102,23 @@ public class Vehicle {
 
     public boolean isArrived() {
         return backSide.getNextRoad() == null;
+    }
+
+    public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
+        double length = 3.5;
+        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath);
+        V.a = 3;
+        V.b = 1.5;
+        V.T = 4;
+        return V;
+    }
+
+    public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
+        double length = 15;
+        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath);
+        V.a = 2;
+        V.b = 1;
+        V.T = 10;
+        return V;
     }
 }

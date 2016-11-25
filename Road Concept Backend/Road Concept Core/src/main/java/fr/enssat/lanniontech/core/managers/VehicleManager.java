@@ -39,10 +39,6 @@ public class VehicleManager {
     }
 
     public boolean addVehicle() {
-        int size = 2 + gen.nextInt(12);
-        int speed = gen.nextInt(30) + 10;
-
-
         int startingRoad = 0;
         if (spawnArea.size() > 1) {
             startingRoad = gen.nextInt(spawnArea.size() - 1);
@@ -61,9 +57,8 @@ public class VehicleManager {
             k++;
         }
 
-        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
-        Vehicle V = new Vehicle(vehicles.size(), startingLane, startingPos, size,
-                speed, historyManager, myPath);
+        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 100);
+        Vehicle V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);
         V.logPosition(0);
@@ -77,7 +72,9 @@ public class VehicleManager {
 
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updatePos(precision);
-            activeVehicle.logPosition(timestamp);
+            if(log){
+                activeVehicle.logPosition(timestamp);
+            }
         }
 
         int i = 0;
