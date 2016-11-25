@@ -34,8 +34,8 @@ public class SimulatorService extends AbstractService {
 
     private MapService mapService = new MapService();
 
-    public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage) {
-        Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage);
+    public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
+        Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
 
         start(simulation);
         //TODO: Mettre simulation.simulator à null une fois la simulation terminée et les résultats sdtockés en base (conso mémoire)
@@ -46,9 +46,23 @@ public class SimulatorService extends AbstractService {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         List<Road> roads = sendFeatures(simulation, map.getFeatures());
         // TODO: Définir point de départ et d'arriver
-        simulation.getSimulator().vehicleManager.addToSpawnArea(roads.get(3)); //TODO: Set as simulation parameter
-        simulation.getSimulator().vehicleManager.addVehicle();
+
+        simulation.getSimulator().vehicleManager.addToSpawnArea(getCorrespondingRoad(roads, simulation.getLivingFeatureUUID()));
+        for (int i = 0; i < simulation.getVehicleCount(); i++) {
+            simulation.getSimulator().vehicleManager.addVehicle();
+        }
+
         return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate());
+    }
+
+    private Road getCorrespondingRoad(List<Road> roads, UUID featureUUID) {
+        for (Road road : roads) {
+            if (road.getId().equals(featureUUID)) {
+                return road;
+            }
+        }
+        assert false : "Feature must be associated to an existing raod";
+        return null;
     }
 
     private List<Road> sendFeatures(Simulation simulation, FeatureCollection features) {
@@ -141,6 +155,7 @@ public class SimulatorService extends AbstractService {
         Simulation simulation = new Simulation();
         simulation.setUuid(simulationUUID);
         int count = simulationParametersRepository.delete(simulation);
+        //TODO: Delete les features qui ont été dupliquées et mise dans la mongo
         return count == 1; // // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 

@@ -133,8 +133,10 @@ public class SimulatorVerticle extends AbstractVerticle {
             UUID livingFeatureUUID = UUID.fromString(body.getString("living_feature"));
             UUID workingFeatureUUID = UUID.fromString(body.getString("working_feature"));
             int carPercentage = body.getInteger("car_percentage");
+            int vehicleCount = body.getInteger("vehicle_count");
 
-            Simulation simulation = simulatorService.create(currentUser, name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage);
+
+            Simulation simulation = simulatorService.create(currentUser, name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
         } catch (Exception e) {
             LOGGER.debug(ExceptionUtils.getStackTrace(e));

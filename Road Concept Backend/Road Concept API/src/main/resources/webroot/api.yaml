@@ -611,6 +611,10 @@ definitions:
         type: integer
         format: int32
         description: Répartition en % des voitures. Le reste des véhicules seront des camions.
+      vehicle_count:
+        type: integer
+        format: int32
+        description: Nombre total de véhicule sur la simulation
 
   Simulation:
     properties:
@@ -654,6 +658,10 @@ definitions:
         type: integer
         format: int32
         description: Répartition en % des voitures. Le reste des véhicules seront des camions.
+      vehicle_count:
+        type: integer
+        format: int32
+        description: Nombre total de véhicule sur la simulation
 
   Map:
     properties:

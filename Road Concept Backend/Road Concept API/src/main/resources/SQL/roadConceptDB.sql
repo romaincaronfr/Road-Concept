@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS "simulation" (
   "working_feature"     VARCHAR(40) NOT NULL,
   "departure_living_s"  INTEGER     NOT NULL,
   "departure_working_s" INTEGER     NOT NULL,
-  "car_percentage"      INTEGER     NOT NULL
+  "car_percentage"      INTEGER     NOT NULL,
+  "vehicle_count"       INTEGER     NOT NULL
 );
 
 -- ==============================================================================

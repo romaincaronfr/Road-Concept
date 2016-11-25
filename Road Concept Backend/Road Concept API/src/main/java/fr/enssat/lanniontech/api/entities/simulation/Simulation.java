@@ -22,9 +22,10 @@ public class Simulation implements SQLEntity {
     private boolean finish;
     private UUID livingFeatureUUID;
     private UUID workingFeatureUUID;
-    private int departureS;
-    private int arrivalS;
+    private int departureLivingS;
+    private int departureWorkingS;
     private int carPercentage;
+    private int vehicleCount;
 
     public UUID getUuid() {
         return uuid;
@@ -98,20 +99,20 @@ public class Simulation implements SQLEntity {
         this.workingFeatureUUID = workingFeatureUUID;
     }
 
-    public int getDepartureS() {
-        return departureS;
+    public int getDepartureLivingS() {
+        return departureLivingS;
     }
 
-    public void setDepartureS(int departureS) {
-        this.departureS = departureS;
+    public void setDepartureLivingS(int departureLivingS) {
+        this.departureLivingS = departureLivingS;
     }
 
-    public int getArrivalS() {
-        return arrivalS;
+    public int getDepartureWorkingS() {
+        return departureWorkingS;
     }
 
-    public void setArrivalS(int arrivalS) {
-        this.arrivalS = arrivalS;
+    public void setDepartureWorkingS(int departureWorkingS) {
+        this.departureWorkingS = departureWorkingS;
     }
 
     public int getCarPercentage() {
@@ -127,6 +128,14 @@ public class Simulation implements SQLEntity {
             return simulator;
         }
         throw new SimulatorUnavailableException("Simulation finished");
+    }
+
+    public int getVehicleCount() {
+        return vehicleCount;
+    }
+
+    public void setVehicleCount(int vehicleCount) {
+        this.vehicleCount = vehicleCount;
     }
 
     @Override
