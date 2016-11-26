@@ -17,15 +17,7 @@ public class Vehicle {
     private HistoryManager historyManager;
     private Path myPath;
     private VehicleType type;
-
-    private double Va = Tools.kphToMph(90);      //speed in m/s
-    private double A;           //acceleration
-    private double a;           //max acceleration
-    private double b;           //deceleration
-    private double T;           //gap time between two car
-    private double lambda = 4;  //function coefficient
-    private double v0;          //desired speed
-    private double s0 = 2;      //minimum distance between two cars
+    private VehicleAI AI;
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
@@ -36,7 +28,8 @@ public class Vehicle {
      * @param length         length of the vehicle
      * @param historyManager
      */
-    private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath) {
+    private Vehicle(int ID, Lane start, double startPos, double length,
+                    HistoryManager historyManager, Path myPath, VehicleAI AI) {
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
@@ -44,17 +37,14 @@ public class Vehicle {
         this.frontSide = new Side(length + startPos, this, start);
         this.backSide = new Side(startPos, this, start);
         this.historyManager = historyManager;
+        this.AI = AI;
     }
 
     /**
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        //double Sa = this.distanceToNextCar();
-        //double Sprime = s0 + Va * T + (Va * (Va - nextCarSpeed())) / (2 * Math.sqrt(a * b));
-        //A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / Sa, 2));
-        A = 0;
-        //TODO reactivate
+        AI.updateAcceleration(distanceToNextCar(),nextCarSpeed(),roadMaxSpeed());
     }
 
     /**
@@ -71,18 +61,22 @@ public class Vehicle {
         return frontSide.getNextCarSpeed();
     }
 
+    private double roadMaxSpeed(){
+        return Tools.kphToMph(90);
+        //todo get the max speed of the current road
+    }
+
     /**
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
      */
     public void updatePos(double time) {
-        double dDone = Va * time;
+        double dDone = AI.getDistanceDone(time);
         this.distanceDone += dDone;
         if (Double.isNaN(dDone)) {
             System.err.println("overflow");
         }
         backSide.moveOnPath(dDone);
         frontSide.moveOnPath(dDone);
-        Va += A * time;
     }
 
     public void logPosition(int time){
@@ -90,7 +84,7 @@ public class Vehicle {
     }
 
     public double getSpeed() {
-        return Va;
+        return AI.getSpeed();
     }
 
     public SpaceTimePosition getGPSPosition(int time) {
@@ -107,20 +101,16 @@ public class Vehicle {
 
     public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
         double length = 3.5;
-        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath);
-        V.a = 3;
-        V.b = 1.5;
-        V.T = 4;
+        VehicleAI AI = new VehicleAI(3,1.5,4);
+        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath,AI);
         V.type = VehicleType.CAR;
         return V;
     }
 
     public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
         double length = 15;
-        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath);
-        V.a = 2;
-        V.b = 1;
-        V.T = 10;
+        VehicleAI AI = new VehicleAI(2,1,10);
+        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath,AI);
         V.type = VehicleType.TRUCK;
         return V;
     }
