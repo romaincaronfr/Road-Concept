@@ -69,11 +69,11 @@ public class Simulator implements Runnable {
             long step = (long) (length / precision);
             WriteLock wl = l.writeLock();
             int j = 1;
-            long timestamp = 0;
+            int timestamp = 0;
             for (long i = 0; i < step; i++) {
 
                 if (j == samplingRate) {
-                    timestamp += samplingRate/precision;
+                    timestamp += (int)(samplingRate/precision);
                     vehicleManager.newStep(precision, true, timestamp);
                     roadManager.saveSates(historyManager,timestamp);
                     historyManager.commitChanges(simId);

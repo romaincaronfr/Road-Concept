@@ -84,7 +84,7 @@ public class Vehicle {
         Va += A * time;
     }
 
-    public void logPosition(long time){
+    public void logPosition(int time){
         historyManager.AddPosition(getGPSPosition(time));
     }
 
@@ -92,7 +92,7 @@ public class Vehicle {
         return Va;
     }
 
-    public SpaceTimePosition getGPSPosition(long time) {
+    public SpaceTimePosition getGPSPosition(int time) {
         return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID);
     }
 

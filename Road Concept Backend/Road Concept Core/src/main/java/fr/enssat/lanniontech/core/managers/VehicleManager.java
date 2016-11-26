@@ -65,7 +65,7 @@ public class VehicleManager {
         return true;
     }
 
-    public void newStep(double precision, boolean log, long timestamp) {
+    public void newStep(double precision, boolean log, int timestamp) {
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updateAcceleration();
         }

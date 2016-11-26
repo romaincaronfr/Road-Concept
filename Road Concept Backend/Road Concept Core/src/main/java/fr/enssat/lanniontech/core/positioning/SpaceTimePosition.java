@@ -2,12 +2,12 @@ package fr.enssat.lanniontech.core.positioning;
 
 public class SpaceTimePosition extends Position {
 
-    long time;
+    int time;
     double angle;
     int vehicleId;
 
     //todo reset to private
-    public SpaceTimePosition(double lon, double lat, long time, double angle, int vehicleId) {
+    public SpaceTimePosition(double lon, double lat, int time, double angle, int vehicleId) {
         super(lon, lat);
 
         this.vehicleId = vehicleId;
@@ -17,7 +17,7 @@ public class SpaceTimePosition extends Position {
         //System.out.println("id : "+ this.vehicleId + " " + super.toString());
     }
 
-    public static SpaceTimePosition getMean(Position A, Position B, long time, int vehicleId) {
+    public static SpaceTimePosition getMean(Position A, Position B, int time, int vehicleId) {
         //System.out.println("avt: "+A);
         //System.out.println("arr: "+B);
 
