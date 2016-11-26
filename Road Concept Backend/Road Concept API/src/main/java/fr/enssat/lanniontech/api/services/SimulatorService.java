@@ -32,7 +32,7 @@ import java.util.Observer;
 import java.util.Random;
 import java.util.UUID;
 
-public class SimulatorService extends AbstractService implements Observer{
+public class SimulatorService extends AbstractService implements Observer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
@@ -71,10 +71,10 @@ public class SimulatorService extends AbstractService implements Observer{
 
     private boolean start(Simulation simulation) throws EntityNotExistingException {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
-        List<Road> roads = sendFeatures(simulation, map.getFeatures());
+        sendFeatures(simulation, map.getFeatures());
         // TODO: Définir point de départ et d'arriver
 
-        simulation.getSimulator().vehicleManager.addToSpawnArea(getCorrespondingRoad(roads, simulation.getLivingFeatureUUID()));
+        simulation.getSimulator().vehicleManager.addToSpawnArea(simulation.getSimulator().roadManager.getRoad(simulation.getLivingFeatureUUID()));
         int count = 0;
         for (int i = 0; i < simulation.getVehicleCount(); i++) {
             if (simulation.getSimulator().vehicleManager.addVehicle()) {
@@ -86,31 +86,21 @@ public class SimulatorService extends AbstractService implements Observer{
         return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate());
     }
 
-    private Road getCorrespondingRoad(List<Road> roads, UUID featureUUID) {
-        for (Road road : roads) {
-            if (road.getId().equals(featureUUID)) {
-                return road;
-            }
-        }
-        assert false : "Feature must be associated to an existing raod";
-        return null;
-    }
-
     private List<Road> sendFeatures(Simulation simulation, FeatureCollection features) {
         List<Road> roads = new ArrayList<>();
         for (Feature feature : features) {
-            if (feature.getGeometry() instanceof LineString) {
+            if (feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
                 LineString road = (LineString) feature.getGeometry();
-                if (!feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
-                    Coordinates last = road.getCoordinates().get(0);
-                    for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
-                        Coordinates coordinates = road.getCoordinates().get(i);
-                        Position A = simulation.getSimulator().positionManager.addPosition(last.getLatitude(), last.getLongitude());
-                        Position B = simulation.getSimulator().positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
-                        roads.add(simulation.getSimulator().roadManager.addRoadSectionToRoad(A, B, feature.getUuid()));
-                        last = coordinates;
-                    }
+                Coordinates last = road.getCoordinates().get(0);
+                Road road1 = null;
+                for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
+                    Coordinates coordinates = road.getCoordinates().get(i);
+                    Position A = simulation.getSimulator().positionManager.addPosition(last.getLatitude(), last.getLongitude());
+                    Position B = simulation.getSimulator().positionManager.addPosition(coordinates.getLatitude(), coordinates.getLongitude());
+                    road1 = simulation.getSimulator().roadManager.addRoadSectionToRoad(A, B, feature.getUuid());
+                    last = coordinates;
                 }
+                roads.add(road1);
             }
             //TODO: Prévoir les ronds points et les feux rouges. En attente d'Antoine
         }
