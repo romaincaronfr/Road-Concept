@@ -26,7 +26,7 @@ public class SimulationRepository extends AbstractRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationRepository.class);
 
     public void duplicateFeatures(Simulation simulation) {
-     //   cloneCollection(MapFeatureRepository.computeCollectionName(simulation.getMapID()), computeDuplicatedCollectionName(simulation.getUuid()));
+        //   cloneCollection(MapFeatureRepository.computeCollectionName(simulation.getMapID()), computeDuplicatedCollectionName(simulation.getUuid()));
 
         MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
         FeatureCollection features = mapFeatureRepository.getAll(simulation.getMapID());
@@ -53,8 +53,6 @@ public class SimulationRepository extends AbstractRepository {
             collection.insertMany(documents);
         }
     }
-
-
 
 
     public FeatureCollection getFeatures(UUID simulationUUID) {

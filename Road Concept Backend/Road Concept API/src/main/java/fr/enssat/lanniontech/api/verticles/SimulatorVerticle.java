@@ -151,8 +151,8 @@ public class SimulatorVerticle extends AbstractVerticle {
             FeatureCollection features = simulatorService.getResultAt(simulationUUID, timestamp);
             HttpResponseBuilder.buildOkResponse(routingContext, features);
         } catch (EntityNotExistingException e) {
-            HttpResponseBuilder.buildNotFoundException(routingContext,e);
-        }catch (BadRequestException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
+        } catch (BadRequestException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "The timestamp value is not coherent with the sampling rate.");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
