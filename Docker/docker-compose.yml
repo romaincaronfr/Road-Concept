@@ -22,4 +22,8 @@ services:
       - ./mongodb/data:/data/db:rw
     ports:
       - "27017:27017"
+  frontend:
+    build: ./nginx
+    ports:
+      - "80:80"
 
