@@ -4,7 +4,7 @@ import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 
 import java.util.*;
 
-public class HistoryManager {
+public class HistoryManager extends Observable{
     private Map<Integer, LinkedHashMap<Long, SpaceTimePosition>> vehiclePositionsFromId;
     //structure: <VehicleId,<timestamp,Position>>
     private Map<Long, TreeMap<Double, TreeMap<Double, Integer>>> vehicleIdFromPosition;
@@ -67,6 +67,11 @@ public class HistoryManager {
     public double getRoadStatus(UUID id, long timestamp) {
         //todo add road metrics to history
         return 0;
+    }
+
+    public void commitChanges(){
+        setChanged();
+        notifyObservers();
     }
 
 }
