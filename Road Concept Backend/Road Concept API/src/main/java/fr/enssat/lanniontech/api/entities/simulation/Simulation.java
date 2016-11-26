@@ -12,7 +12,8 @@ import java.util.UUID;
 public class Simulation implements SQLEntity {
 
     @JsonIgnore
-    private final Simulator simulator = new Simulator(); // not stored
+    private Simulator simulator;
+
     private UUID uuid = UUID.randomUUID();
     private String name;
     private int creatorID;
@@ -128,6 +129,10 @@ public class Simulation implements SQLEntity {
             return simulator;
         }
         throw new SimulatorUnavailableException("Simulation finished");
+    }
+
+    public void setSimulator(Simulator simulator) {
+        this.simulator = simulator;
     }
 
     public int getVehicleCount() {

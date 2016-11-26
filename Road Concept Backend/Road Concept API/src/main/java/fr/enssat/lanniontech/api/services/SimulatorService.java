@@ -14,8 +14,12 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
+import fr.enssat.lanniontech.core.Simulator;
+import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Road;
+import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +27,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.UUID;
 
-public class SimulatorService extends AbstractService {
+public class SimulatorService extends AbstractService implements Observer{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
@@ -36,11 +42,31 @@ public class SimulatorService extends AbstractService {
 
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
+        simulation.setSimulator(new Simulator(simulation.getUuid()));
 
+        simulation.getSimulator().historyManager.addObserver(this);
         start(simulation);
+
         //TODO: Lancer un nouveau Runnable qui vas enregistrer au fur et à mesure les résultats
         //TODO: Mettre simulation.simulator à null une fois la simulation terminée et les résultats sdtockés en base (conso mémoire)
         return simulation;
+    }
+
+    @Override
+    public void update(Observable observable, Object argument) {
+        UUID simulationUUID = UUID.fromString(argument.toString());
+        HistoryManager historyManager = (HistoryManager) observable;
+
+        List<SpaceTimePosition> positions = historyManager.getPositionSample();
+        for (SpaceTimePosition position : positions) {
+            //TODO
+        }
+
+        List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
+        for (RoadMetrics metric : roadMetrics) {
+            //TODO
+        }
+        historyManager.removeSample();
     }
 
     private boolean start(Simulation simulation) throws EntityNotExistingException {
@@ -197,5 +223,4 @@ public class SimulatorService extends AbstractService {
         }
         return features;
     }
-
 }
