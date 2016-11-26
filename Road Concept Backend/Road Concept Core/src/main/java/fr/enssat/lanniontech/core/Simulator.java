@@ -32,9 +32,9 @@ public class Simulator implements Runnable {
     public Simulator() {
         l = new ReentrantReadWriteLock();
 
-        roadManager = new RoadManager();
         positionManager = new PositionManager();
         historyManager = new HistoryManager();
+        roadManager = new RoadManager();
         vehicleManager = new VehicleManager(historyManager, roadManager);
 
         progress = 0;
@@ -68,14 +68,16 @@ public class Simulator implements Runnable {
                 if (j == samplingRate) {
                     timestamp += samplingRate/precision;
                     vehicleManager.newStep(precision, true, timestamp);
+                    roadManager.saveSates(historyManager);
+                    historyManager.commitChanges();
                     j = 1;
                 } else {
                     vehicleManager.newStep(precision, false, timestamp);
                     j++;
                 }
 
-                wl.lock();
                 try {
+                    wl.lock();
                     progress = (double) i / step;
                 } finally {
                     wl.unlock();

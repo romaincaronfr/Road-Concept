@@ -256,4 +256,9 @@ public class RoadManager {
         return intersectionMap.get(P);
     }
 
+    public void saveSates(HistoryManager historyManager) {
+        for(Road road : roads.values()){
+            historyManager.AddRoadMetric(road.getMetrics());
+        }
+    }
 }

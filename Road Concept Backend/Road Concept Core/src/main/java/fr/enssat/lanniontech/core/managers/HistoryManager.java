@@ -1,75 +1,79 @@
 package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
+import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
 
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class HistoryManager extends Observable{
-    private Map<Integer, LinkedHashMap<Long, SpaceTimePosition>> vehiclePositionsFromId;
     //structure: <VehicleId,<timestamp,Position>>
-    private Map<Long, TreeMap<Double, TreeMap<Double, Integer>>> vehicleIdFromPosition;
-    //structure: <timestamp,<Longitude,<Latitude,VehicleId>>>
+    private List<List<SpaceTimePosition>> positionHistoryFiFo;
+    private List<List<RoadMetrics>> roadMetricsHistoryFiFo;
+    private List<SpaceTimePosition> currentPositionSample;
+    private List<RoadMetrics> currentRoadMetricsSample;
+    private ReentrantReadWriteLock lock;
 
 
     public HistoryManager() {
-        vehiclePositionsFromId = new HashMap<>();
-        vehicleIdFromPosition = new LinkedHashMap<>();
+        lock = new ReentrantReadWriteLock();
+        positionHistoryFiFo = new ArrayList<>();
+        roadMetricsHistoryFiFo = new ArrayList<>();
+        currentPositionSample = new ArrayList<>();
+        currentRoadMetricsSample = new ArrayList<>();
     }
 
     public void AddPosition(SpaceTimePosition P) {
-        if (!vehiclePositionsFromId.containsKey(P.getId())) {
-            vehiclePositionsFromId.put(P.getId(), new LinkedHashMap<>());
+        currentPositionSample.add(P);
+    }
+
+    public void AddRoadMetric(RoadMetrics R){
+        currentRoadMetricsSample.add(R);
+    }
+
+    public List<RoadMetrics> getRoadMetricsSample(){
+        List<RoadMetrics> sample = null;
+        try {
+            lock.readLock().lock();
+            sample = roadMetricsHistoryFiFo.get(0);
+        }finally {
+            lock.readLock().unlock();
         }
-        vehiclePositionsFromId.get(P.getId()).put(P.getTime(), P);
-
-        vehicleIdFromPosition.putIfAbsent(P.getTime(), new TreeMap<>());
-        vehicleIdFromPosition.get(P.getTime()).putIfAbsent(P.getLon(), new TreeMap<>());
-        vehicleIdFromPosition.get(P.getTime()).get(P.getLon()).putIfAbsent(P.getLat(), P.getId());
-
+        return sample;
     }
 
-    public List<SpaceTimePosition> getVehiclePosition(int vehicleId) {
-        List<SpaceTimePosition> res = new ArrayList<>();
-
-        res.addAll(vehiclePositionsFromId.get(vehicleId).values());
-
-        return res;
-    }
-
-    public List<SpaceTimePosition> getVehiclesIn(double minLongitude, double maxLongitude, double minLatitude, double maxLatitude, long timestamp) {
-        List<SpaceTimePosition> vehiclesIn = new ArrayList<>();
-        for (double longitude : vehicleIdFromPosition.get(timestamp).keySet()) {
-            if (longitude > maxLongitude) {
-                break;
-            } else if (longitude > minLongitude) {
-                for (double latitude : vehicleIdFromPosition.get(timestamp).get(longitude).keySet()) {
-                    if (latitude > maxLatitude) {
-                        break;
-                    } else if (latitude > minLatitude) {
-                        vehiclesIn.add(vehiclePositionsFromId.get(vehicleIdFromPosition.get(timestamp).get(longitude).get(latitude)).get(timestamp));
-                    }
-                }
-            }
+    public List<SpaceTimePosition> getPositionSample(){
+        List<SpaceTimePosition> sample = null;
+        try {
+            lock.readLock().lock();
+            sample = positionHistoryFiFo.get(0);
+        }finally {
+            lock.readLock().unlock();
         }
-        return vehiclesIn;
+        return sample;
     }
 
-    public List<SpaceTimePosition> getAllVehicleAt(long timestamp) {
-        List<SpaceTimePosition> vehiclesIn = new ArrayList<>();
-        for (TreeMap<Double, Integer> values : vehicleIdFromPosition.get(timestamp).values()) {
-            for (int id : values.values()) {
-                vehiclesIn.add(vehiclePositionsFromId.get(id).get(timestamp));
-            }
+    public void removeSample(){
+        try {
+            lock.writeLock().lock();
+            positionHistoryFiFo.remove(0);
+            roadMetricsHistoryFiFo.remove(0);
+        }finally {
+            lock.writeLock().unlock();
         }
-        return vehiclesIn;
-    }
-
-    public double getRoadStatus(UUID id, long timestamp) {
-        //todo add road metrics to history
-        return 0;
     }
 
     public void commitChanges(){
+        try {
+            lock.writeLock().lock();
+            positionHistoryFiFo.add(currentPositionSample);
+            roadMetricsHistoryFiFo.add(currentRoadMetricsSample);
+        }finally {
+            lock.writeLock().unlock();
+        }
+        currentRoadMetricsSample = new ArrayList<>();
+        currentPositionSample = new ArrayList<>();
         setChanged();
         notifyObservers();
     }

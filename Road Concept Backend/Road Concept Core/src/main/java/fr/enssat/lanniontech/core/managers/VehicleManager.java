@@ -76,9 +76,6 @@ public class VehicleManager {
                 activeVehicle.logPosition(timestamp);
             }
         }
-        if(log){
-            historyManager.commitChanges();
-        }
 
         int i = 0;
         while (i < activeVehicles.size()) {

@@ -81,4 +81,8 @@ public class Road {
     public double getLength() {
         return length;
     }
+
+    public RoadMetrics getMetrics() {
+        return new RoadMetrics(id,0);
+    }
 }
