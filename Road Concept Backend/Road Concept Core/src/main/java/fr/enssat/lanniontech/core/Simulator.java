@@ -75,7 +75,7 @@ public class Simulator implements Runnable {
                 if (j == samplingRate) {
                     timestamp += samplingRate/precision;
                     vehicleManager.newStep(precision, true, timestamp);
-                    roadManager.saveSates(historyManager);
+                    roadManager.saveSates(historyManager,timestamp);
                     historyManager.commitChanges(simId);
                     j = 1;
                 } else {

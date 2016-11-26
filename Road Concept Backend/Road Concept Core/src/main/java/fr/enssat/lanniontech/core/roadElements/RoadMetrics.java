@@ -3,14 +3,14 @@ package fr.enssat.lanniontech.core.roadElements;
 import java.util.UUID;
 
 public class RoadMetrics {
-    private UUID roadId;
-    private int congestion;
-    private long timestamp;
+    private final UUID roadId;
+    private final long timestamp;
+    private final int congestion;
 
-    public RoadMetrics(UUID roadId,int congestion, long timestamp) {
+    public RoadMetrics(UUID roadId, long timestamp, int congestion) {
         this.roadId = roadId;
-        this.congestion = congestion;
         this.timestamp = timestamp;
+        this.congestion = congestion;
     }
 
     public UUID getRoadId() {
@@ -21,19 +21,7 @@ public class RoadMetrics {
         return congestion;
     }
 
-    public void setRoadId(UUID roadId) {
-        this.roadId = roadId;
-    }
-
-    public void setCongestion(int congestion) {
-        this.congestion = congestion;
-    }
-
     public long getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
     }
 }

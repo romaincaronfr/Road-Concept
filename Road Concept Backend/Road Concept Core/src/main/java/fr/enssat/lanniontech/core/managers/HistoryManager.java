@@ -74,8 +74,8 @@ public class HistoryManager extends Observable{
         }finally {
             lock.writeLock().unlock();
         }
-        currentRoadMetricsSample.clear();
-        currentPositionSample.clear();
+        currentRoadMetricsSample = new ArrayList<>();
+        currentPositionSample = new ArrayList<>();
         setChanged();
         notifyObservers(simId);
     }

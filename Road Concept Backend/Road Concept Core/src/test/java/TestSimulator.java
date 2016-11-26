@@ -53,10 +53,13 @@ public class TestSimulator {
 
         Sim.vehicleManager.addToSpawnArea(R);
 
+        int k = 0;
         for (int i = 0; i < vehicleNumber; i++) {
-            Sim.vehicleManager.addVehicle();
+            if(Sim.vehicleManager.addVehicle()){
+                k++;
+            }
         }
-        System.out.println(Sim.vehicleManager.getVehiclesNumber());
+        System.out.println(k);
 
 
         try {

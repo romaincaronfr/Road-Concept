@@ -82,7 +82,7 @@ public class Road {
         return length;
     }
 
-    public RoadMetrics getMetrics() {
-        return new RoadMetrics(id,0,0); // TODO Antoine: Ajout du timestamp
+    public RoadMetrics getMetrics(long timestamp) {
+        return new RoadMetrics(id,timestamp,0); // TODO Antoine: Ajout du timestamp
     }
 }
