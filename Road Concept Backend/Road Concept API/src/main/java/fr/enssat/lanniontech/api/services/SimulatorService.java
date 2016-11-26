@@ -14,6 +14,7 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
+import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.Position;
@@ -37,6 +38,7 @@ public class SimulatorService extends AbstractService implements Observer {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
     private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
+    private SimulationResultRepository simulationResultRepository = new SimulationResultRepository();
 
     private MapService mapService = new MapService();
 
@@ -58,13 +60,16 @@ public class SimulatorService extends AbstractService implements Observer {
         HistoryManager historyManager = (HistoryManager) observable;
 
         List<SpaceTimePosition> positions = historyManager.getPositionSample();
-        for (SpaceTimePosition position : positions) {
-            //TODO
+        for (SpaceTimePosition vehicle : positions) {
+            simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), vehicle.getAngle());
+            //TODO: Type car/truck
         }
 
         List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
         for (RoadMetrics metric : roadMetrics) {
-            //TODO
+          //  simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getTime(), metric.getCongestion());
+            simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion());
+            //TODO: timestamp
         }
         historyManager.removeSample();
     }

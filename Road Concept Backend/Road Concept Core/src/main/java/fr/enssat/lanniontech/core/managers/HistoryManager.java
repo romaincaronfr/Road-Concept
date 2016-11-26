@@ -3,8 +3,10 @@ package fr.enssat.lanniontech.core.managers;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
 
-import java.util.*;
-import java.util.concurrent.locks.Lock;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class HistoryManager extends Observable{
@@ -72,8 +74,8 @@ public class HistoryManager extends Observable{
         }finally {
             lock.writeLock().unlock();
         }
-        currentRoadMetricsSample = new ArrayList<>();
-        currentPositionSample = new ArrayList<>();
+        currentRoadMetricsSample.clear();
+        currentPositionSample.clear();
         setChanged();
         notifyObservers(simId);
     }
