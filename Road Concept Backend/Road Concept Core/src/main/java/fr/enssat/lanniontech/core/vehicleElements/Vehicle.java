@@ -16,6 +16,7 @@ public class Vehicle {
     private int ID;
     private HistoryManager historyManager;
     private Path myPath;
+    private VehicleType type;
 
     private double Va = Tools.kphToMph(90);      //speed in m/s
     private double A;           //acceleration
@@ -93,7 +94,7 @@ public class Vehicle {
     }
 
     public SpaceTimePosition getGPSPosition(int time) {
-        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID);
+        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID,type);
     }
 
     public UUID getPathStep(int i) {
@@ -110,6 +111,7 @@ public class Vehicle {
         V.a = 3;
         V.b = 1.5;
         V.T = 4;
+        V.type = VehicleType.CAR;
         return V;
     }
 
@@ -119,6 +121,7 @@ public class Vehicle {
         V.a = 2;
         V.b = 1;
         V.T = 10;
+        V.type = VehicleType.TRUCK;
         return V;
     }
 }
