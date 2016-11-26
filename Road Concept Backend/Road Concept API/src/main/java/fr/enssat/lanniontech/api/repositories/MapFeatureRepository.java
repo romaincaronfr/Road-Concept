@@ -40,7 +40,7 @@ public class MapFeatureRepository extends MapRepository {
         return feature;
     }
 
-    private String computeCollectionName(int mapID) {
+    public static String computeCollectionName(int mapID) {
         return MONGODB_MAP_COLLECTION_PREFIX + mapID;
     }
 

@@ -28,7 +28,7 @@ public class SpaceTimePosition extends Position {
         return new SpaceTimePosition(lon, lat, time, 0, vehicleId,type);
     }
 
-    public long getTime() {
+    public int getTime() {
         return time;
     }
 

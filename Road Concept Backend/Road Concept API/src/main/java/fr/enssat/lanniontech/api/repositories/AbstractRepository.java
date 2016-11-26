@@ -51,7 +51,7 @@ public abstract class AbstractRepository {
     }
 
     private String computeUpdateSQLQuery(String tableName, String columnName, String identifierName) {
-        StringBuilder sql = new StringBuilder();
+        StringBuilder sql = new StringBuilder(); // Use a StringBuilder to improve concatenation performances
         sql.append("UPDATE ").append(tableName).append(" SET ").append(columnName).append(" = ? WHERE ").append(identifierName).append(" = ?");
         return sql.toString();
     }
