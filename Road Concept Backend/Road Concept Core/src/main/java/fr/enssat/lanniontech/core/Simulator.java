@@ -7,6 +7,7 @@ import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
@@ -28,8 +29,14 @@ public class Simulator implements Runnable {
     private long startTime;
     private long stopTime;
     private int samplingRate;
+    private UUID simId;
 
-    public Simulator() {
+    public Simulator(){
+        this(UUID.randomUUID());
+    }
+
+    public Simulator(UUID simId) {
+        this.simId = simId;
         l = new ReentrantReadWriteLock();
 
         positionManager = new PositionManager();
@@ -69,7 +76,7 @@ public class Simulator implements Runnable {
                     timestamp += samplingRate/precision;
                     vehicleManager.newStep(precision, true, timestamp);
                     roadManager.saveSates(historyManager);
-                    historyManager.commitChanges();
+                    historyManager.commitChanges(simId);
                     j = 1;
                 } else {
                     vehicleManager.newStep(precision, false, timestamp);

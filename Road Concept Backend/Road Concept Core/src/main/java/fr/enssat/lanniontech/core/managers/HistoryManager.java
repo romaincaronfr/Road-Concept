@@ -64,7 +64,7 @@ public class HistoryManager extends Observable{
         }
     }
 
-    public void commitChanges(){
+    public void commitChanges(UUID simId){
         try {
             lock.writeLock().lock();
             positionHistoryFiFo.add(currentPositionSample);
@@ -75,7 +75,7 @@ public class HistoryManager extends Observable{
         currentRoadMetricsSample = new ArrayList<>();
         currentPositionSample = new ArrayList<>();
         setChanged();
-        notifyObservers();
+        notifyObservers(simId);
     }
 
 }
