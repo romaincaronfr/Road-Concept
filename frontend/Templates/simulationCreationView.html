@@ -2,7 +2,7 @@
     <div class="osmSidebar">
         <div class="row">
             <div class="col-md-2 col-md-offset-1">
-                <a class="btn btn-danger btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Revenir à la liste des simulations">Annuler</a>
+                <a id="cancelCreationSimu" class="btn btn-danger btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Revenir à la liste des simulations">Annuler</a>
             </div>
         </div>
     </div>
@@ -21,9 +21,9 @@
                 </div>
             </div>
             <div class="col-md-11 col-md-offset-0 ">
-                <div id="habitZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée">Veuillez placer votre zone d'habitation</div>
+                <div id="habitZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée">Veuillez sélectionner une route correspondant à votre zone d'habitation</div>
                 <div id="habitZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone d'habitation</div>
-                <div id="workZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée" hidden>Veuillez placer votre zone de travail</div>
+                <div id="workZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée" hidden>Veuillez sélectionner une route correspondant à votre zone de travail</div>
                 <div id="workZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone de travail</div>
                 <button id="startSim" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>   Lancer</button>
             </div>

@@ -12,13 +12,20 @@ app.simulationCreationView = Backbone.View.extend({
     snap: null,
     mapDetailsCOllection: null,
     step: 0,
-    workZoneModel: null,
-    habitationZoneModel: null,
+    nameSim: null,
+    sampling_rate: null,
+    startHour: null,
+    returnHour: null,
+    living_feature: null,
+    working_feature: null,
+    car_percentage: null,
+    vehicle_count: null,
 
     events: {
         'click #previous' : 'previous',
         'click .validModel': 'validModel',
-        'click .removeModel': 'cancelUnderCreation'
+        'click .removeModel': 'cancelUnderCreation',
+        'click #cancelCreationSimu': 'cancelCreationSimu'
     },
 
     initialize: function (options) {
@@ -86,6 +93,27 @@ app.simulationCreationView = Backbone.View.extend({
         });
         this.map.addLayer(this.vectorLayer);
 
+        this.selectPointer = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            style: function (feature, resolution) {
+                return self.generateSelectStyle(feature, resolution);
+            }
+        });
+        this.selectPointer.on('select', function (e) {
+            if (e.deselected.length > 0) {
+                self.clickCloseInfo();
+            }
+            if (e.selected.length > 0) {
+                self.renderFeatureCreation(e.selected[0]);
+            }
+        });
+        this.selectPointerMove = new ol.interaction.Select({
+            layers: [this.vectorLayer],
+            condition: ol.events.condition.pointerMove,
+            style: function (feature, resolution) {
+                return self.generateSelectMoveStyle(feature, resolution);
+            }
+        });
         this.snap = new ol.interaction.Snap({
             source: this.vectorSource
         });
@@ -106,11 +134,18 @@ app.simulationCreationView = Backbone.View.extend({
             }
         });
 
-        this.addInteraction();
+        //this.addInteraction();
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
         //Tooltip bootstrap
         $('[data-toggle="tooltip"]').tooltip();
 
         return this;
+    },
+
+    clickCloseInfo: function () {
+        $('#osmInfo').empty();
     },
 
     changeID: function (id) {
@@ -232,15 +267,210 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
+    generateSelectStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var geometry = feature.getGeometry();
+        var startCoord = geometry.getFirstCoordinate();
+        var endCoord = geometry.getLastCoordinate();
+        var oneway = 1;
+        var circle = new ol.style.Circle({
+            stroke: new ol.style.Stroke({
+                color: [50, 50, 50, 1]
+            }),
+            fill: new ol.style.Fill({
+                color: [200, 200, 200, 0.8]
+            }),
+            radius: 10
+        });
+        var firstPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(startCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'A',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        var lastPoint = new ol.style.Style({
+            geometry: new ol.geom.Point(endCoord),
+            image: circle,
+            text: new ol.style.Text({
+                textAlign: "center",
+                textBaseline: "middle",
+                font: 'Normal 12px Arial',
+                text: 'B',
+                fill: circle.getStroke(),
+                offsetX: 0,
+                offsetY: 0,
+                rotation: 0
+            })
+        });
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            console.log("oneway true");
+            oneway = 0.5;
+        }
+        switch (type) {
+            case 1:
+                //SINGLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((7 + 2) / resolution) * oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((14 + 2) / resolution) * oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var styles = [
+                    // linestring
+                    new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: [26, 155, 252, 1],
+                            width: ((21 + 1) / resolution) * oneway
+                        })
+                    }),
+                    //First point
+                    firstPoint,
+                    //Last point
+                    lastPoint
+                ];
+                return styles;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [250, 178, 102, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (3.5 + 2) / resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                console.log(resolution);
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: (0.1 + 0.2) / resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                console.log("default");
+                break;
+        }
+    },
+
+    generateSelectMoveStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            oneway = 0.5;
+        }
+        switch (type) {
+            case 1:
+                //SINGLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (7 / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 2:
+                //DOUBLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (14 / resolution) * oneway
+                    })
+                });
+                return style;
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: (21 / resolution) * oneway
+                    }),
+
+                });
+                return style;
+                break;
+            case 4:
+                var style = new ol.style.Style({
+                    fill: new ol.style.Fill({
+                        color: [26, 155, 252, 1]
+                    }),
+                    stroke: new ol.style.Stroke({
+                        color: [26, 155, 252, 1],
+                        width: 3.5 / resolution
+                    })
+                });
+                return style;
+                break;
+            case 5:
+                //RED_LIGHT
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [44, 100],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: (0.1 + 0.2) / resolution,
+                        src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            default:
+                break;
+        }
+    },
+
     addInteraction: function () {
         var self = this;
-        this.draw = new ol.interaction.Draw({
-            source: new ol.source.Vector(),
-            type: 'Point'
-        });
-
-        this.map.addInteraction(this.draw);
-        this.map.addInteraction(this.snap);
+        /*
 
         this.draw.on('drawend', function (event) {
             console.log('Draw : end');
@@ -292,23 +522,39 @@ app.simulationCreationView = Backbone.View.extend({
 
             self.map.removeInteraction(self.draw);
             self.map.removeInteraction(self.snap);
-        });
+        });*/
     },
 
-    renderFeatureCreation: function (model) {
-        switch (model.attributes.type) {
-            case 6:
+    renderFeatureCreation: function (feature) {
+        var featureid = feature.getProperties().id;
+        var model = this.mapDetailsCOllection.get(featureid);
+        switch (this.step) {
+            case 0:
+                $('#habitZone').hide();
+                $('#habitZoneParam').show();
+                $('#divPrevious').show();
+                this.living_feature = featureid;
                 new app.mapPopUpCreateHabitationZoneView({
                     model: model
                 });
                 break;
-            case 7:
+            case 2:
+                $('#workZone').hide();
+                $('#workZoneParam').show();
+                this.working_feature = featureid;
                 new app.mapPopUpCreateWorkZoneView({
                     model: model
                 });
                 break;
         }
 
+        if (this.step < 4) {
+            this.step++;
+        }
+        console.log('step : ' + this.step);
+
+        this.map.removeInteraction(this.selectPointerMove);
+        this.map.removeInteraction(this.selectPointer);
     },
 
     validModel: function () {
@@ -316,49 +562,70 @@ app.simulationCreationView = Backbone.View.extend({
             case 1:
                 $('#habitZoneParam').hide();
                 $('#workZone').show();
+                this.startHour = $('#startHour').val();
+                this.vehicle_count = parseInt($('#nbHabit').val());
+                this.car_percentage = $('#carRepart').val();
+                console.log("startHour : " + this.startHour);
+                console.log("vehicle_count : " + this.vehicle_count);
+                console.log("car_percentage : " + this.car_percentage);
                 break;
             case 3:
                 $('#workZoneParam').hide();
                 $('#startSim').show();
+                this.returnHour = parseInt($('#returnHour').val());
+                console.log("returnHour : " + this.returnHour);
                 break;
         }
 
+        /*
         var model = this.newModel;
         model.unset("id");
-        if (model.attributes.type == 6) {
+        if (this.step == 1) {
             model.set({
                 nbHabit: parseInt($('#nbHabit').val()),
                 startHour: $('#startHour').val(),
             });
-            this.habitationZoneModel = model;
+
         } else if (model.attributes.type == 7) {
             model.set({
                 returnHour: parseInt($('#returnHour').val())
             });
-            this.workZoneModel = model;
         }
+        */
 
         //a faire pour les 2 models quand lancement de simulation
-        var self = this;
+        /*var self = this;
         model.save(null, {
             success: function () {
                 self.mapDetailsCOllection.add(model);
                 self.cancelUnderCreation();
             }
-        });
+        });*/
+        $('#osmInfo').empty();
 
         if (this.step < 4) {
             this.step++;
         }
-        this.addInteraction();
+        //this.addInteraction();
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
         console.log('step : ' + this.step);
-        console.log(model.attributes);
+        //console.log(model.attributes);
     },
 
     cancelUnderCreation: function () {
         $('#osmInfo').empty();
-        this.newModel = null;
-        this.vectorSource.removeFeature(this.vectorSource.getFeatureById("1"));
+        this.value = 'None';
+        this.step--;
+        console.log('step : ' + this.step);
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
+    },
+
+    cancelCreationSimu: function () {
+        this.step = 0;
     },
 
     previous : function (){
@@ -368,26 +635,40 @@ app.simulationCreationView = Backbone.View.extend({
                 $('#habitZoneParam').hide();
                 $('#divPrevious').hide();
                 $('#habitZone').show();
-                this.addInteraction();
-                this.habitationZoneModel = null;
+                this.living_feature = null;
+                this.map.addInteraction(this.selectPointerMove);
+                this.map.addInteraction(this.selectPointer);
+                this.map.addInteraction(this.snap);
                 break;
             case 2:
                 $('#workZone').hide();
                 $('#divPrevious').hide();
                 $('#habitZone').show();
-                this.habitationZoneModel = null;
+                this.living_feature = null;
+                this.startHour = null;
+                this.car_percentage = null;
+                this.vehicle_count = null;
+                this.map.addInteraction(this.selectPointerMove);
+                this.map.addInteraction(this.selectPointer);
+                this.map.addInteraction(this.snap);
                 break;
             case 3:
                 $('#osmInfo').empty();
                 $('#workZoneParam').hide();
                 $('#workZone').show();
-                this.addInteraction();
-                this.workZoneModel = null;
+                this.working_feature = null;
+                this.map.addInteraction(this.selectPointerMove);
+                this.map.addInteraction(this.selectPointer);
+                this.map.addInteraction(this.snap);
                 break;
             case 4:
                 $('#startSim').hide();
                 $('#workZone').show();
-                this.workZoneModel = null;
+                this.working_feature = null;
+                this.returnHour = null;
+                this.map.addInteraction(this.selectPointerMove);
+                this.map.addInteraction(this.selectPointer);
+                this.map.addInteraction(this.snap);
                 break;
             default:
                 console.log('step > 3 ou < 0');
@@ -404,3 +685,4 @@ app.simulationCreationView = Backbone.View.extend({
         console.log('cancel, step:'+this.step);
     }
 });
+

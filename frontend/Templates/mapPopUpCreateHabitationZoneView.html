@@ -4,6 +4,13 @@
         <!-- Form Name -->
         <legend>Configuration des paramètres du lieu d'habitation</legend>
 
+        <!-- Heure de départ-->
+        <div class="form-group">
+            <label class="control-label col-sm-2">Heure de départ</label>
+            <div class="input-group date" id="datetimepicker1">
+                <input type="time" id="startHour" class="form-control" />
+            </div>
+        </div>
         <!-- Nombre d'habitants-->
         <div class="form-group">
             <label class="control-label col-sm-2">Nombre d'habitants</label>
@@ -12,11 +19,12 @@
                 <p class="help-block">en km/h</p>
             </div>
         </div>
-        <!-- Heure de départ-->
+        <!--Pourcentage de voitures-->
         <div class="form-group">
-            <label class="control-label col-sm-2">Heure de départ</label>
-            <div class="input-group date" id="datetimepicker1">
-                <input type="time" id="startHour" class="form-control" />
+            <label class="control-label col-sm-2">Répartition des voitures</label>
+            <div class="col-sm-10">
+                <input type="range" id="carRepart" class="form-control">
+                <p class="help-block">en %</p>
             </div>
         </div>
 
