@@ -66,14 +66,14 @@ public class Simulator implements Runnable {
     @Override
     public void run() {
         try {
-            long step = (long) (length / precision);
+            long stepCycles = (long) (length / precision);
             WriteLock wl = l.writeLock();
             int j = 1;
             int timestamp = 0;
-            for (long i = 0; i < step; i++) {
+            for (long i = 0; i < stepCycles; i++) {
 
                 if (j == samplingRate) {
-                    timestamp += (int)(samplingRate/precision);
+                    timestamp += (int)(samplingRate*precision);
                     vehicleManager.newStep(precision, true, timestamp);
                     roadManager.saveSates(historyManager,timestamp);
                     historyManager.commitChanges(simId);
@@ -85,7 +85,7 @@ public class Simulator implements Runnable {
 
                 try {
                     wl.lock();
-                    progress = (double) i / step;
+                    progress = (double) i / stepCycles;
                 } finally {
                     wl.unlock();
                 }
