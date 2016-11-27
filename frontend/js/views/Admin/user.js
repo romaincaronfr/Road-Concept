@@ -6,8 +6,6 @@
 app.userView = Backbone.View.extend({
 
     el: '#content',
-    users: null,
-
 
     events: {
         'click #submitUser': 'clickOnSubmitUser'
@@ -15,22 +13,7 @@ app.userView = Backbone.View.extend({
 
     initialize: function () {
         this.render();
-        var self = this;
 
-        $.ajax({
-            url: Backbone.Collection.prototype.absURL + "/api/users",
-            type: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            contentType: "application/json"
-        })
-            .done(function (data, textStatus, jqXHR) {
-                self.users = data;
-            })
-            .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('fail');
-            });
     },
 
     render: function () {
@@ -57,7 +40,6 @@ app.userView = Backbone.View.extend({
 
                 if (this.validationEmail(newEmail) == true) {
 
-                    if (this.emailContainOnceInDatabase(newEmail) == true || initEmail == newEmail) {
                         app.router.navBarV.model.save({
                             'lastName': newNom,
                             'firstName': newPrenom,
@@ -65,15 +47,11 @@ app.userView = Backbone.View.extend({
                         }, {
                             success: function (model, response) {
                                 app.router.navBarV.render();
+                                $('#info-text-modal').html("Votre compte a bien été mis à jour.");
+                                $('#modalInfo').modal('show');
                             },
                             wait: true // Add this
                         });
-                        $('#info-text-modal').html("Votre compte a bien été mis à jour.");
-                        $('#modalInfo').modal('show');
-                    } else {
-                        $('#info-text-modal').html("L'email que vous avez renseigné est déjà utilisé. Merci de bien vouloir le changer.");
-                        $('#modalInfo').modal('show');
-                    }
                 } else {
                     $('#info-text-modal').html("Votre adresse email n'est pas au bon format.");
                     $('#modalInfo').modal('show');
@@ -91,16 +69,5 @@ app.userView = Backbone.View.extend({
         }
         return (false)
     },
-
-    emailContainOnceInDatabase: function (newEmail) {
-        var once = true;
-        for (var i = 0; i < this.users.length; i++) {
-            console.log(this.users[i].email);
-            if (this.users[i].email == newEmail) {
-                once = false;
-            }
-        }
-        return once;
-    }
 
 });
