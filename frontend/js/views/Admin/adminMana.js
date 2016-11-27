@@ -19,30 +19,59 @@ app.adminManaView = Backbone.View.extend({
         return this;
     },
 
-    clickOnAjoutUser: function () {
+    clickOnAjoutUser: function (){
+
         var usermail = $('#emailInput').val();
         var userLname = $('#nameInput').val();
         var usertype = parseInt($('#userinput').val());
         var userPassword = $('#passwordInput').val()
         var userFname = $('#prenomInput').val();
 
-        user = new app.models.userModel({
-            email: usermail,
-            lastName: userLname,
-            firstName: userFname,
-            password: userPassword,
-            type: usertype
-        });
-        console.log(user);
-        user.save(null,{
-            success: function(){
-                $('#alertAddUser').removeClass('hidden');
-                $('#emailInput').val('');
-                $('#nameInput').val('');
-                $('#userinput').val('');
-                $('#passwordInput').val('');
-                $('#prenomInput').val('');
+        if(!usermail || !userLname || !usertype || !userPassword || !userFname ){
+            console.log('Il manque qqchose');
+            $('#adminManaViewDanger').html('Certains de vos champs est/sont vide. Merci de le(s) remplir.');
+            $('#adminManaViewDanger').removeClass('hidden');
+            $('#adminManaViewSuccess').addClass('hidden');
+
+        } else {
+
+            if(this.validationEmail(usermail) == false){
+                console.log('email mauvais format');
+                $('#adminManaViewDanger').html('Votre email n\'est pas au bon format. Merci de le modifier.');
+                $('#adminManaViewDanger').removeClass('hidden');
+                $('#adminManaViewSuccess').addClass('hidden');
+            } else {
+                console.log("ça devrait être OK");
+                user = new app.models.userModel({
+                    email: usermail,
+                    lastName: userLname,
+                    firstName: userFname,
+                    password: userPassword,
+                    type: usertype
+                });
+                console.log('user'+user);
+                user.save(null,{
+                    success: function(){
+                        $('#adminManaViewSuccess').html('L\'utilisateur a bien été ajouté.');
+                        $('#adminManaViewSuccess').removeClass('hidden');
+                        $('#adminManaViewDanger').addClass('hidden');
+                        $('#emailInput').val('');
+                        $('#nameInput').val('');
+                        $('#userinput').val('');
+                        $('#passwordInput').val('');
+                        $('#prenomInput').val('');
+                    }
+                });
             }
-        });
+        }
+
+
+    },
+
+    validationEmail: function (newEmail) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(newEmail)) {
+            return (true)
+        }
+        return (false)
     },
 });

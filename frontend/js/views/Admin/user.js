@@ -30,7 +30,7 @@ app.userView = Backbone.View.extend({
         var newNom = $('#nameInput').val();
         var newPrenom = $('#prenomInput').val();
 
-        if (newEmail == "" || newNom == "" || newPrenom == "") {
+        if (!newEmail  || !newNom  || !newPrenom) {
 
             $('#info-text-modal').html("Certains de vos champs n'ont pas été indiqué. Merci de le(s) remplir.");
             $('#modalInfo').modal('show');
