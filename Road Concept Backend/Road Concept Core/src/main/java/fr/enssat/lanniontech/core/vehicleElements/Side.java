@@ -62,6 +62,7 @@ public class Side {
     public void moveOnPath(double distance) {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
+            this.pos = pos;
             myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext(nextRoad).getDestination();
             if (myTrajectory.getRoadId() != myRoad) {
@@ -79,8 +80,9 @@ public class Side {
                 System.err.println(myTrajectory);
                 throw e;
             }
+        }else{
+            this.pos = pos;
         }
-        this.pos = pos;
     }
 
     public double getDistanceToNextCar(double freeDistance) {

@@ -5,10 +5,13 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
 public class Vehicle {
+    public static Logger LOG = LoggerFactory.getLogger(Vehicle.class);
     private final double length;
     private double distanceDone;// in m
     private Side frontSide;
@@ -63,9 +66,6 @@ public class Vehicle {
     public void updatePos(double time) {
         double dDone = AI.getDistanceDone(time);
         this.distanceDone += dDone;
-        if (Double.isNaN(dDone)) {
-            System.err.println("overflow");
-        }
         backSide.moveOnPath(dDone);
         frontSide.moveOnPath(dDone);
     }

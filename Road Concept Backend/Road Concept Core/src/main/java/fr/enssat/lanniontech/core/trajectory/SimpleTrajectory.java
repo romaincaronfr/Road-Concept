@@ -142,9 +142,6 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public double getDistanceToNext(Side side, double freeDistance) {
-        if(freeDistance < 0){
-            return freeDistance;
-        }
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
             double distance = length - side.getPos();
