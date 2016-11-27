@@ -25,6 +25,7 @@ app.adminManaView = Backbone.View.extend({
         var usertype = parseInt($('#userinput').val());
         var userPassword = $('#passwordInput').val()
         var userFname = $('#prenomInput').val();
+
         user = new app.models.userModel({
             email: usermail,
             lastName: userLname,
