@@ -9,7 +9,6 @@ app.models.mapDetailsModel = Backbone.Model.extend({
     },
 
     parse: function(response){
-        console.log(response);
         if (response) {
             var newResponse = {};
             newResponse.geometry = new Backbone.Model(response.geometry);

@@ -9,18 +9,19 @@ app.mapSimulationView = Backbone.View.extend({
     el: '#body',
     map: null,
     tile: null,
-    value : null,
+    value: null,
     vectorSource: null,
     vectorLayer: null,
     selectPointerMove: null,
     selectPointer: null,
     snap: null,
-    mapDetailsCollectionSimulation:null,
+    mapDetailsCollectionSimulation: null,
     stepSeconds: 60, // On veut un step sur le slider de 60 s
-    timeSimulation : null,
+    timeSimulation: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
+        'click #nextSimuSnapshot': 'goNextSnapshot'
     },
 
     initialize: function (option) {
@@ -30,15 +31,18 @@ app.mapSimulationView = Backbone.View.extend({
         this.departureLivingS = option.departureLivingS;
         console.log(this.samplingRate);
         console.log(this.departureLivingS);
-        this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation({id:this.id,timestamp:this.departureLivingS});
+        this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation({
+            id: this.id,
+            timestamp: this.departureLivingS
+        });
         var self = this;
-        this.mapDetailsCollectionSimulation.on('sync', self.onSync, self);
-        this.mapDetailsCollectionSimulation.on('add', self.onAddElement, self);
-        this.mapDetailsCollectionSimulation.on('remove', self.onRemoveElement, self);
+        //this.mapDetailsCollectionSimulation.on('sync', self.onSync, self);
+        //this.mapDetailsCollectionSimulation.on('add', self.onAddElement, self);
+        //this.mapDetailsCollectionSimulation.on('remove', self.onRemoveElement, self);
         this.render();
     },
 
-    changeID: function (id,samplingRate,departureLivingS) {
+    changeID: function (id, samplingRate, departureLivingS) {
         this.id = id;
         this.stepSeconds = parseFloat(samplingRate);
         this.departureLivingS = departureLivingS;
@@ -51,7 +55,7 @@ app.mapSimulationView = Backbone.View.extend({
         //Supression du content
         this.mapDetailsCollectionSimulation.reset();
         $('#content').empty();
-        if (this.vectorSource){
+        if (this.vectorSource) {
             this.vectorSource.clear();
         }
 
@@ -61,7 +65,7 @@ app.mapSimulationView = Backbone.View.extend({
         }
 
         //Ajout de la template au body
-       //this.$el.append(this.template(new Backbone.Model({"id": this.mapDetailsCollectionSimulation.id})));
+        //this.$el.append(this.template(new Backbone.Model({"id": this.mapDetailsCollectionSimulation.id})));
         this.$el.append(this.template());
 
         //Fond de carte OSM
@@ -133,45 +137,68 @@ app.mapSimulationView = Backbone.View.extend({
         //Fetch de la collection
         this.fetchCollection();
         // TODO : remettre le modal d'avertissement à la fin
-       // $('#modalAvertissementSimulation').modal('show');
+        // $('#modalAvertissementSimulation').modal('show');
 
-        $( "#osmSlider" ).slider({
+        $("#osmSlider").slider({
             orientation: "vertical",
             range: "min",
             min: 0,
             max: 1,
             step: 0.1,
             value: 0.3,
-            slide: function( event, ui ) {
+            slide: function (event, ui) {
                 self.changeOppacity(ui.value);
             }
         });
 
         // Slider for time simulation
-        $( "#sliderSimulation" ).slider({
+        $("#sliderSimulation").slider({
             orientation: "horizontal",
             range: "min",
             min: 0,
             max: 89999, //86400
             step: this.stepSeconds,
             value: parseFloat(this.departureLivingS), // correspond à 7h
-            slide: function( event, ui ) {
+            slide: function (event, ui) {
                 var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 console.log('---- slide ----');
-                console.log('value : '+ui.value);
-                console.log('time : '+time);
+                console.log('value : ' + ui.value);
+                console.log('time : ' + time);
                 $('#timepicker').timepicker('setTime', time);
             },
-            change: function(event,ui){
+            change: function (event, ui) {
                 console.log('---- change ----');
-                console.log('event :'+event);
-                $( "#sliderSimulation" ).slider({
+                console.log('event :' + event);
+                $("#sliderSimulation").slider({
                     disabled: true
                 });
                 $('#timepicker').prop('disabled', true);
+                $('#timepicker').prop('nextSimuSnapshot', true);
                 console.log(ui.value);
+                //var time = self.convertSecdsToHrsMinsSecds(ui.value);
+                //$('#timepicker').timepicker('setTime', time);
                 self.mapDetailsCollectionSimulation.timestamp = ui.value;
-                self.mapDetailsCollectionSimulation.fetch();
+                self.mapDetailsCollectionSimulation.fetch({
+                    success: function () {
+                        console.log("success fetch");
+                        self.vectorSource.clear();
+                        if (self.mapDetailsCollectionSimulation.length > 0) {
+                            for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
+                                var element = self.mapDetailsCollectionSimulation.models[i];
+                                var geojsonModel = element.toGeoJSON();
+                                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                                    featureProjection: 'EPSG:3857'
+                                });
+                                self.vectorSource.addFeature(newfeature);
+                            }
+                        }
+                        $("#sliderSimulation").slider({
+                            disabled: false
+                        });
+                        $('#timepicker').prop('disabled', false);
+                        $('#timepicker').prop('nextSimuSnapshot', false);
+                    }
+                });
                 //console.log('time : '+time);
             }
         });
@@ -183,31 +210,38 @@ app.mapSimulationView = Backbone.View.extend({
             showSeconds: true,
             showMeridian: false,
             defaultTime: this.convertSecdsToHrsMinsSecds(this.departureLivingS),
-            modalBackDrop : true
+            modalBackDrop: true
         });
 
-        $('#timepicker').timepicker().on('changeTime.timepicker', function(e) {
-            console.log(e.time.hours+':'+e.time.minutes+':'+e.time.seconds);
-            var time = (e.time.hours*3600) + (e.time.minutes*60)+ e.time.seconds;
-            console.log('ChangeTime time in seconds : '+time);
-            var verifStep = (time%self.stepSeconds);
-            if(verifStep != 0){
+        $('#timepicker').timepicker().on('changeTime.timepicker', function (e) {
+            console.log(e.time.hours + ':' + e.time.minutes + ':' + e.time.seconds);
+            var time = (e.time.hours * 3600) + (e.time.minutes * 60) + e.time.seconds;
+            console.log('ChangeTime time in seconds : ' + time);
+            var verifStep = (time % self.stepSeconds);
+            if (verifStep != 0) {
                 time -= verifStep;
                 time = self.convertSecdsToHrsMinsSecds(time);
                 $('#timepicker').timepicker('setTime', time);
             }
-            $( "#sliderSimulation" ).slider( "option", "value", time );
+            $("#sliderSimulation").slider("option", "value", time);
         });
+        $('[data-toggle="tooltip"]').tooltip();
 
         return this;
+    },
+
+    goNextSnapshot: function(){
+        var value = $( "#sliderSimulation" ).slider( "option", "value" );
+        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value+this.stepSeconds));
+        //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
     changeOppacity: function (value) {
         this.tile.setOpacity(value);
     },
 
-    onSync: function(){
-        $( "#sliderSimulation" ).slider({
+    onSync: function () {
+        $("#sliderSimulation").slider({
             disabled: false
         });
         $('#timepicker').prop('disabled', false);
@@ -219,14 +253,23 @@ app.mapSimulationView = Backbone.View.extend({
         var self = this;
         //this.mapDetailsCOllection.off("add");
         this.mapDetailsCollectionSimulation.fetch({
-            success: function(){
-                if (self.mapDetailsCollectionSimulation.length > 0){
-                self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());}
+            success: function () {
+                if (self.mapDetailsCollectionSimulation.length > 0) {
+                    for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
+                        var element = self.mapDetailsCollectionSimulation.models[i];
+                        var geojsonModel = element.toGeoJSON();
+                        var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
+                            featureProjection: 'EPSG:3857'
+                        });
+                        self.vectorSource.addFeature(newfeature);
+                    }
+                    self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
+                }
             }
         });
     },
 
-    onAddElement: function(element){
+    onAddElement: function (element) {
         console.log('on add');
         var geojsonModel = element.toGeoJSON();
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
@@ -243,7 +286,7 @@ app.mapSimulationView = Backbone.View.extend({
         }
     },
 
-    clickOnOSM: function(){
+    clickOnOSM: function () {
         this.tile.setOpacity($('#osmOppacity').val());
     },
 
@@ -253,12 +296,12 @@ app.mapSimulationView = Backbone.View.extend({
         var congestion = feature.getProperties().congestion;
         var color;
 
-        if(congestion < 30){
-            color = [46,204,113,1];
-        } else if(congestion >= 30 && congestion < 80){
-            color = [211,84,0,1];
-        } else if(congestion >= 80){
-            color = [192,57,43,1];
+        if (congestion < 30) {
+            color = [46, 204, 113, 1];
+        } else if (congestion >= 30 && congestion < 80) {
+            color = [211, 84, 0, 1];
+        } else if (congestion >= 80) {
+            color = [192, 57, 43, 1];
         }
 
         // TODO : récupérer les valeurs d'afluence des routes et afficher la couelur en fonction de ça
@@ -334,10 +377,10 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [75, 187],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.027 / resolution,
-                        //scale: 0.5,
+                        //scale: 0.027 / resolution,
+                        scale: 0.5,
                         src: 'assets/img/car.png',
-                        rotation : angle
+                        rotation: angle
                     })
                 });
                 return style;
@@ -347,7 +390,7 @@ app.mapSimulationView = Backbone.View.extend({
         }
     },
 
-    generateSelectStyle: function(feature,resolution){
+    generateSelectStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
         var geometry = feature.getGeometry();
         var startCoord = geometry.getFirstCoordinate();
@@ -355,10 +398,10 @@ app.mapSimulationView = Backbone.View.extend({
         var oneway = 1;
         var circle = new ol.style.Circle({
             stroke: new ol.style.Stroke({
-                color: [50, 50, 50,1]
+                color: [50, 50, 50, 1]
             }),
             fill: new ol.style.Fill({
-                color: [200, 200, 200,0.8]
+                color: [200, 200, 200, 0.8]
             }),
             radius: 10
         });
@@ -390,10 +433,10 @@ app.mapSimulationView = Backbone.View.extend({
                 rotation: 0
             })
         });
-        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
         }
-        switch (type){
+        switch (type) {
             case 1:
                 //SINGLE ROAD
                 var styles = [
@@ -401,7 +444,7 @@ app.mapSimulationView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((7+2)/resolution)*oneway
+                            width: ((7 + 2) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -418,7 +461,7 @@ app.mapSimulationView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((14+2)/resolution)*oneway
+                            width: ((14 + 2) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -435,7 +478,7 @@ app.mapSimulationView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((21+1)/resolution)*oneway
+                            width: ((21 + 1) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -448,11 +491,11 @@ app.mapSimulationView = Backbone.View.extend({
             case 4:
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color: [250,178,102,1]
+                        color: [250, 178, 102, 1]
                     }),
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: (3.5+2)/resolution
+                        width: (3.5 + 2) / resolution
                     })
                 });
                 return style;
@@ -466,7 +509,7 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: (0.1 + 0.2)/resolution,
+                        scale: (0.1 + 0.2) / resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });
@@ -547,11 +590,11 @@ app.mapSimulationView = Backbone.View.extend({
         }
     },
 
-    clickCloseInfo: function(){
+    clickCloseInfo: function () {
         $('#osmInfo').empty();
     },
 
-    renderFeatureInformations: function(feature){
+    renderFeatureInformations: function (feature) {
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCollectionSimulation.get(featureid);
         new app.mapPopUpInfoVisuView({
@@ -563,8 +606,8 @@ app.mapSimulationView = Backbone.View.extend({
         // TODO : faire attention au step, le prender en compte et mettre la valeur supérieur si besoin
         // TODO : prendre en compte les secondes
         var h = Math.floor(seconds / 3600);
-        var m = Math.floor((seconds%3600)/60);
-        var s = (seconds%3600)%60;
+        var m = Math.floor((seconds % 3600) / 60);
+        var s = (seconds % 3600) % 60;
         h = h < 10 ? '0' + h : h;
         m = m < 10 ? '0' + m : m;
         s = s < 10 ? '0' + s : s;
