@@ -6,26 +6,29 @@
 
         <!-- Heure de départ-->
         <div class="form-group">
-            <label class="control-label col-sm-2">Heure de départ*</label>
+            <label class="control-label col-sm-2">Heure de départ</label>
             <div class="input-group date" id="datetimepicker1">
-                <input type="time" id="startHour" class="form-control" />
+                <input type="time" value="08:00" id="startHour" class="form-control" />
             </div>
         </div>
         <!-- Nombre d'habitants-->
         <div class="form-group">
             <label class="control-label col-sm-2">Nombre d'habitants*</label>
             <div class="col-sm-10">
-                <input type="number" id="nbHabit" class="form-control" placeholder="ex : 150">
-                <p class="help-block">en km/h</p>
+                <input type="number" min="0" id="nbHabit" class="form-control" placeholder="ex : 150">
             </div>
         </div>
         <!--Pourcentage de voitures-->
         <div class="form-group">
-            <label class="control-label col-sm-2">Répartition des voitures</label>
+            <label class="control-label col-sm-2">Répartition</label>
             <div class="col-sm-10">
                 <input type="range" id="carRepart" class="form-control">
-                <p class="help-block" id="percentVal">50%</p>
+                <p class="help-block" id="percentVal">50% de voitures - 50% de camions</p>
             </div>
+        </div>
+
+        <div class="alert alert-danger" id="alertEmptyHabitation" hidden>
+            <strong>Tous les champs ne sont pas remplis !</strong>
         </div>
 
         <div class="form-group">

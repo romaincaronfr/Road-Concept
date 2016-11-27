@@ -26,7 +26,9 @@ app.simulationCreationView = Backbone.View.extend({
         'click .validModel': 'validModel',
         'click .removeModel': 'cancelUnderCreation',
         'click #cancelCreationSimu': 'cancelCreationSimu',
-        'change #carRepart': 'showPercent'
+        'change #carRepart': 'showPercent',
+        'click #startSim': 'startSimu',
+        'click #launch': 'launchSim'
     },
 
     initialize: function (options) {
@@ -156,7 +158,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     showPercent: function () {
         var val = $('#carRepart').val();
-        $('#percentVal').text(val + "%");
+        $('#percentVal').text(val + "% de voitures - " + (100-val) + "% de camions");
     },
 
     onAddElement: function (element) {
@@ -507,49 +509,73 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     validModel: function () {
+        var valid = false;
+
         switch (this.step) {
             case 1:
                 var hour = $('#startHour').val();
                 var nbCar = $('#nbHabit').val();
                 var percent = $('#carRepart').val();
 
-                if (hour == "" || nbCar == "") {
-                    console.log("nope");
+                if (nbCar == "") {
+                    $('#alertEmptyHabitation').show();
                 } else {
+                    $('#alertEmptyHabitation').hide();
                     $('#habitZoneParam').hide();
                     $('#workZone').show();
                     this.startHour = hour;
                     this.vehicle_count = nbCar;
                     this.car_percentage = percent;
-                    $('#osmInfo').empty();
-                    if (this.step < 4) {
-                        this.step++;
-                    }
-                    this.map.addInteraction(this.selectPointerMove);
-                    this.map.addInteraction(this.selectPointer);
-                    this.map.addInteraction(this.snap);
-                    console.log('step : ' + this.step);
+                    valid = true;
                 }
                 break;
             case 3:
-                $('#workZoneParam').hide();
-                $('#startSim').show();
-                this.returnHour = parseInt($('#returnHour').val());
-                console.log("returnHour : " + this.returnHour);
+                var hour = $('#returnHour').val();
+
+                if (this.getTotalSecond(hour) < (this.getTotalSecond(this.startHour) + 3600)) {
+                    $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour)+1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
+                    $('#alertEmptyWork').show();
+                } else {
+                    $('#alertEmptyWork').hide();
+                    $('#workZoneParam').hide();
+                    $('#startSim').show();
+                    this.returnHour = $('#returnHour').val();
+                    valid = true;
+                }
                 break;
         }
 
-        /*$('#osmInfo').empty();
-
-        if (this.step < 4) {
-            this.step++;
+        if (valid) {
+            $('#osmInfo').empty();
+            if (this.step < 4) {
+                this.step++;
+            }
+            this.map.addInteraction(this.selectPointerMove);
+            this.map.addInteraction(this.selectPointer);
+            this.map.addInteraction(this.snap);
+            console.log('step : ' + this.step);
         }
-        //this.addInteraction();
-        this.map.addInteraction(this.selectPointerMove);
-        this.map.addInteraction(this.selectPointer);
-        this.map.addInteraction(this.snap);
-        console.log('step : ' + this.step);*/
-        //console.log(model.attributes);
+    },
+
+    getHour: function (hour) {
+        return parseInt(hour, 10);
+    },
+
+    getMinutes: function (hour) {
+        return parseInt(hour.charAt(3) + hour.charAt(4), 10);
+    },
+
+    getTotalSecond: function (hour) {
+        return ((this.getHour(hour)*60*60) + (this.getMinutes(hour)*60));
+    },
+
+    formatDigit: function (digit) {
+        digit = digit.toString();
+        if (digit.length == 1) {
+            return "0" + digit.toString();
+        } else {
+            return digit;
+        }
     },
 
     cancelUnderCreation: function () {
@@ -566,7 +592,15 @@ app.simulationCreationView = Backbone.View.extend({
         this.step = 0;
     },
 
-    previous : function (){
+    startSimu: function () {
+        //Afficher popup formulaire avec nom et précision
+    },
+
+    launchSim: function () {
+        //Envoyer les infos au serveur (nom, précision, heures, etc.) et afficher barre chargement
+    },
+
+    previous: function (){
         switch (this.step) {
             case 1:
                 $('#osmInfo').empty();

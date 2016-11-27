@@ -6,14 +6,14 @@
 
         <!-- Heure de retour-->
         <div class="form-group">
-            <label class="control-label col-sm-2">Heure de retour*</label>
+            <label class="control-label col-sm-2">Heure de retour</label>
             <div class="input-group date" id="datetimepicker1">
-                <input type="time" id="returnHour" class="form-control" />
+                <input type="time" value="18:00" id="returnHour" class="form-control" />
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="control-label col-sm-12">* Champs obligatoires</label>
+        <div class="alert alert-danger" id="alertEmptyWork" hidden>
+            <strong>Tous les champs ne sont pas remplis !</strong>
         </div>
 
         <!-- Envoi -->
