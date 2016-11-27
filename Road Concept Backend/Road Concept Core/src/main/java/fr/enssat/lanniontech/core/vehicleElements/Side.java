@@ -83,8 +83,8 @@ public class Side {
         this.pos = pos;
     }
 
-    public double getDistanceToNextCar() {
-        return myTrajectory.getDistanceToNext(this);
+    public double getDistanceToNextCar(double freeDistance) {
+        return myTrajectory.getDistanceToNext(this,freeDistance);
     }
 
     public double getNextCarSpeed() {

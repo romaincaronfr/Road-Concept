@@ -104,12 +104,13 @@ public abstract class Trajectory {
     /**
      * return the distance of the vehicle ahead
      */
-    public abstract double getDistanceToNext(Side side);
+    public abstract double getDistanceToNext(Side side, double freeDistance);
 
     /**
      * return the distance to the first vehicle
+     * @param freeDistance
      */
-    public abstract double getDistanceToFirst();
+    public abstract double getDistanceToFirst(double freeDistance);
 
     /**
      * return the GPS position on the current trajectory

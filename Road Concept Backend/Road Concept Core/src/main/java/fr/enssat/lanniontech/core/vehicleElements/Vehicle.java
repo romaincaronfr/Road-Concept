@@ -44,21 +44,12 @@ public class Vehicle {
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        AI.updateAcceleration(distanceToNextCar(),nextCarSpeed(),roadMaxSpeed());
-    }
-
-    /**
-     * this method will return the distance to the next car
-     */
-    private double distanceToNextCar() {
-        return frontSide.getDistanceToNextCar();
-    }
-
-    /**
-     * this method will return the speed of the car toward
-     */
-    private double nextCarSpeed() {
-        return frontSide.getNextCarSpeed();
+        double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
+        double nextCarSpeed = 0;
+        if(nextCarDist < AI.getFreeDistance()){
+            nextCarSpeed = frontSide.getNextCarSpeed();
+        }
+        AI.updateAcceleration(nextCarDist,nextCarSpeed,roadMaxSpeed());
     }
 
     private double roadMaxSpeed(){

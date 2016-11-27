@@ -51,18 +51,27 @@ public class EndRoadTrajectory extends Trajectory {
         }
     }
 
-    public double getDistanceToFirst() {
+    public double getDistanceToFirst(double freeDistance) {
         if (vehiclesSides.size() == 0) {
-            return length + destination.getDestination().getDistanceToFirst();
+            if(freeDistance - length > 0) {
+                return length + destination.getDestination().getDistanceToFirst(freeDistance - length);
+            }else {
+                return length;
+            }
         } else {
             return vehiclesSides.get(0).getPos();
         }
     }
 
-    public double getDistanceToNext(Side side) {
+    public double getDistanceToNext(Side side, double freeDistance) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            return length - side.getPos() + destination.getDestination().getDistanceToFirst();
+            double distance = length - side.getPos();
+            if(freeDistance - distance > 0) {
+                return length - side.getPos() + destination.getDestination().getDistanceToFirst(freeDistance - distance);
+            }else{
+                return distance;
+            }
         } else {
             return vehiclesSides.get(pos + 1).getPos() - side.getPos();
         }

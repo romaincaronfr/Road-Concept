@@ -128,12 +128,12 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     @Override
-    public double getDistanceToFirst() {
+    public double getDistanceToFirst(double freeDistance) {
         if (vehiclesSides.size() == 0) {
-            if (getDestinationsTrajectories().size() == 0) {
+            if(freeDistance - length > 0) {
+                return length + getNext().getDestination().getDistanceToFirst(freeDistance);
+            }else{
                 return length;
-            } else {
-                return length + getNext().getDestination().getDistanceToFirst();
             }
         } else {
             return vehiclesSides.get(0).getPos();
@@ -141,13 +141,17 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     @Override
-    public double getDistanceToNext(Side side) {
+    public double getDistanceToNext(Side side, double freeDistance) {
+        if(freeDistance < 0){
+            return freeDistance;
+        }
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            if (getDestinationsTrajectories().size() == 1) {
-                return length - side.getPos();
-            } else {
-                return length - side.getPos() + getNext().getDestination().getDistanceToFirst();
+            double distance = length - side.getPos();
+            if(freeDistance - distance > 0){
+                return distance + getNext().getDestination().getDistanceToFirst(freeDistance - distance);
+            }else{
+                return distance;
             }
         } else {
             return vehiclesSides.get(pos + 1).getPos() - side.getPos();
@@ -193,6 +197,7 @@ public class SimpleTrajectory extends Trajectory {
         return pF;
     }
 
+    @Override
     public void explore(Map<Trajectory, Boolean> trajectoryMap) {
         if (!trajectoryMap.get(this)) {
             trajectoryMap.replace(this, true);
