@@ -25,7 +25,8 @@ app.simulationCreationView = Backbone.View.extend({
         'click #previous' : 'previous',
         'click .validModel': 'validModel',
         'click .removeModel': 'cancelUnderCreation',
-        'click #cancelCreationSimu': 'cancelCreationSimu'
+        'click #cancelCreationSimu': 'cancelCreationSimu',
+        'change #carRepart': 'showPercent'
     },
 
     initialize: function (options) {
@@ -151,6 +152,11 @@ app.simulationCreationView = Backbone.View.extend({
     changeID: function (id) {
         this.id = id;
         this.mapDetailsCOllection.id = id;
+    },
+
+    showPercent: function () {
+        var val = $('#carRepart').val();
+        $('#percentVal').text(val + "%");
     },
 
     onAddElement: function (element) {
@@ -468,63 +474,6 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    addInteraction: function () {
-        var self = this;
-        /*
-
-        this.draw.on('drawend', function (event) {
-            console.log('Draw : end');
-            var feature = event.feature;
-            var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
-                dataProjection: 'EPSG:3857',
-                featureProjection: 'EPSG:3857'
-            });
-            JSONFeature = JSON.parse(JSONFeature);
-
-            var coord = feature.getGeometry().getCoordinates();
-            coord = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
-            JSONFeature.geometry.coordinates = coord;
-
-            if(self.step == 0){ // Premiere étape : lieu d'habitation
-                JSONFeature.properties = {type: 6, id:1, name: "Unnamed Habitation Zone", nbHabit: 30, startHour: 10};
-                // on doit ouvrir un modal et recup nbhabit et hour
-                // On doit afficher la suite si modal OK
-                $('#habitZone').hide();
-                $('#habitZoneParam').show();
-                $('#divPrevious').show();
-            } else if(self.step == 2){ // Deuxième étape : lieu de travail
-                JSONFeature.properties = {type: 7, id:1, name: "Unnamed Work Zone", returnHour: 10};
-                // modal : heure de retour
-                $('#workZone').hide();
-                $('#workZoneParam').show();
-            } else {
-                console.log('Start Simulation');
-            }
-
-            if (self.step < 4) {
-                self.step++;
-            }
-
-            self.newModel = new app.models.mapDetailsModel(JSONFeature, {
-                parse: true,
-                collection: self.mapDetailsCOllection
-            });
-
-            self.renderFeatureCreation(self.newModel);
-
-            var geojsonModel = self.newModel.toGeoJSON();
-            var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
-                featureProjection: 'EPSG:3857'
-            });
-            self.vectorSource.addFeature(newfeature);
-
-            console.log('step : ' + self.step);
-
-            self.map.removeInteraction(self.draw);
-            self.map.removeInteraction(self.snap);
-        });*/
-    },
-
     renderFeatureCreation: function (feature) {
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
@@ -560,14 +509,27 @@ app.simulationCreationView = Backbone.View.extend({
     validModel: function () {
         switch (this.step) {
             case 1:
-                $('#habitZoneParam').hide();
-                $('#workZone').show();
-                this.startHour = $('#startHour').val();
-                this.vehicle_count = parseInt($('#nbHabit').val());
-                this.car_percentage = $('#carRepart').val();
-                console.log("startHour : " + this.startHour);
-                console.log("vehicle_count : " + this.vehicle_count);
-                console.log("car_percentage : " + this.car_percentage);
+                var hour = $('#startHour').val();
+                var nbCar = $('#nbHabit').val();
+                var percent = $('#carRepart').val();
+
+                if (hour == "" || nbCar == "") {
+                    console.log("nope");
+                } else {
+                    $('#habitZoneParam').hide();
+                    $('#workZone').show();
+                    this.startHour = hour;
+                    this.vehicle_count = nbCar;
+                    this.car_percentage = percent;
+                    $('#osmInfo').empty();
+                    if (this.step < 4) {
+                        this.step++;
+                    }
+                    this.map.addInteraction(this.selectPointerMove);
+                    this.map.addInteraction(this.selectPointer);
+                    this.map.addInteraction(this.snap);
+                    console.log('step : ' + this.step);
+                }
                 break;
             case 3:
                 $('#workZoneParam').hide();
@@ -577,31 +539,7 @@ app.simulationCreationView = Backbone.View.extend({
                 break;
         }
 
-        /*
-        var model = this.newModel;
-        model.unset("id");
-        if (this.step == 1) {
-            model.set({
-                nbHabit: parseInt($('#nbHabit').val()),
-                startHour: $('#startHour').val(),
-            });
-
-        } else if (model.attributes.type == 7) {
-            model.set({
-                returnHour: parseInt($('#returnHour').val())
-            });
-        }
-        */
-
-        //a faire pour les 2 models quand lancement de simulation
-        /*var self = this;
-        model.save(null, {
-            success: function () {
-                self.mapDetailsCOllection.add(model);
-                self.cancelUnderCreation();
-            }
-        });*/
-        $('#osmInfo').empty();
+        /*$('#osmInfo').empty();
 
         if (this.step < 4) {
             this.step++;
@@ -610,7 +548,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
         this.map.addInteraction(this.snap);
-        console.log('step : ' + this.step);
+        console.log('step : ' + this.step);*/
         //console.log(model.attributes);
     },
 
