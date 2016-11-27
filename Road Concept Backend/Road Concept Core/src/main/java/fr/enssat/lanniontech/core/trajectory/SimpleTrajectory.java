@@ -161,10 +161,10 @@ public class SimpleTrajectory extends Trajectory {
     @Override
     public Position getGPS(double pos) {
         Position P;
-        if (isInverted()) {
-            P = getpF().get(getStart() - pos, getWidth());
+        if (inverted) {
+            P = pF.get(start - pos, width);
         } else {
-            P = getpF().get(getStart() + pos, getWidth());
+            P = pF.get(start + pos, width);
         }
         return P;
     }

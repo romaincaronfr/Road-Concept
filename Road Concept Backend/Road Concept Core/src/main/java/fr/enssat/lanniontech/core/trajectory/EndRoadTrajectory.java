@@ -17,7 +17,7 @@ public class EndRoadTrajectory extends Trajectory {
         super(roadId);
 
         Position A = source.getGPS(source.getStop());
-        Position B = destination.getGPS(destination.getStart());
+        Position B = destination.getGPS(0);
         pf = new PosFunction(A, B);
         length = Position.length(A, B);
     }
