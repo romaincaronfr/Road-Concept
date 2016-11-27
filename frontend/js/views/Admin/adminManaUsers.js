@@ -26,7 +26,6 @@ app.adminManaUsersView = Backbone.View.extend({
             contentType: "application/json"
         })
             .done(function (data, textStatus, jqXHR) {
-                console.log(data.id);
                 self.myuserId = data.id;
                 self.render();
             })
@@ -60,7 +59,6 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     clickOnRemove: function (event) {
-        console.log('click on remove');
         var id = event.currentTarget.id;
         id = id.replace('remove_User_', '');
 
@@ -72,15 +70,12 @@ app.adminManaUsersView = Backbone.View.extend({
 
 
     clickOnModifyUser: function (event) {
-        console.log("admin mana user clickOnModify bnewmodalUSer");
         var id = event.currentTarget.id;
         id = id.replace('affichage_modal_', '');
         var modalview = new app.adminModalUserView(this.userCollection.get(id));
-        console.log("admin mana user clickOnModify anewmodalUSer");
     },
 
     clickOnValidModifyUser: function (event) {
-        console.log('click on modify');
         var firstname = $('#firstName').val();
         var lastname = $('#lastName').val();
         var email = $('#email').val();
@@ -97,7 +92,6 @@ app.adminManaUsersView = Backbone.View.extend({
         } else {
 
             if(this.validationEmail(email) == true){
-                console.log('email ok :'+email);
                 this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email': email, 'type': type});
                 var model = this.userCollection.get(id);
 
@@ -113,7 +107,6 @@ app.adminManaUsersView = Backbone.View.extend({
                 $('#adminManaUsersViewSuccess').html('Les modifications ont été effectuées.');
                 $('#adminManaUsersViewSuccess').removeClass('hidden');
             } else {
-                console.log("bug");
                 $('#adminModalUserViewDanger').html('Votre email n\'est pas au bon format. Veuillez modifier ce champ.');
                 $('#adminModalUserViewDanger').removeClass('hidden');
             }
@@ -148,8 +141,6 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     newDestroy: function (element) {
-        console.log(element.attributes.id);
-        console.log("remove");
         var divName = '#user_Id_' + element.attributes.id;
         $(divName).remove();
     },
