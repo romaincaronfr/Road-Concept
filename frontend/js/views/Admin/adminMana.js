@@ -28,7 +28,6 @@ app.adminManaView = Backbone.View.extend({
         var userFname = $('#prenomInput').val();
 
         if(!usermail || !userLname || !usertype || !userPassword || !userFname ){
-            console.log('Il manque qqchose');
             $('#adminManaViewDanger').html('Certains de vos champs est/sont vide. Merci de le(s) remplir.');
             $('#adminManaViewDanger').removeClass('hidden');
             $('#adminManaViewSuccess').addClass('hidden');
@@ -36,12 +35,10 @@ app.adminManaView = Backbone.View.extend({
         } else {
 
             if(this.validationEmail(usermail) == false){
-                console.log('email mauvais format');
                 $('#adminManaViewDanger').html('Votre email n\'est pas au bon format. Merci de le modifier.');
                 $('#adminManaViewDanger').removeClass('hidden');
                 $('#adminManaViewSuccess').addClass('hidden');
             } else {
-                console.log("ça devrait être OK");
                 user = new app.models.userModel({
                     email: usermail,
                     lastName: userLname,
