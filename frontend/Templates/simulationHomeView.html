@@ -2,193 +2,63 @@
     <div class="page-header">
         <h1>
             <span>Mes simulations</span>
-            <a class="btn btn-success pull-right" href="#simulationCreation/<%= id %>">Démarrer une nouvelle simulation</a>
+            <a class="btn btn-success pull-right" href="#simulationCreation/<%= id %>">Démarrer une nouvelle
+                simulation</a>
         </h1>
     </div>
 </div>
 <div class="row">
-    <table class="table table-hover">
+    <h2>
+        <span>Mes simulations terminées</span>
+    </h2>
+</div>
+<div class="row">
+    <table class="table table-hover hidden" id="tableOverSimulation">
         <thead>
         <tr>
             <th>
-                [HEADER]
+                Nom
             </th>
             <th>
-                [HEADER]
+                Date de la simulation
             </th>
             <th>
-                [HEADER]
+                Actions
             </th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
-        <tr>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-            <td>
-                [CONTENT]
-            </td>
-        </tr>
+        <tbody id="overSimulationTable">
+
         </tbody>
     </table>
 </div>
+<div class="row" id="noOverSimulation">
+    <p>Aucune simulation n'est terminée</p>
 </div>
+<div class="row">
+    <h2>
+        <span>Mes simulations en cours d'éxécution</span>
+    </h2>
+</div>
+<div class="row">
+    <table class="table table-hover hidden" id="tableInProgressSimulation">
+        <thead>
+        <tr>
+            <th>
+                Nom
+            </th>
+            <th>
+                Date de la simulation
+            </th>
+            <th>
+                En cours
+            </th>
+        </tr>
+        </thead>
+        <tbody id="inProgressSimulationTable">
+        </tbody>
+    </table>
+</div>
+<div class="row" id="noInProgressSimulation">
+    <p>Aucune simulation n'est en cours d'éxécution</p>
 </div>
