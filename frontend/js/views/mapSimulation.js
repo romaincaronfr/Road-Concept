@@ -371,8 +371,6 @@ app.mapSimulationView = Backbone.View.extend({
             case 6:
                 //CAR
                 var url = 'assets/img/car.png';
-                console.log(feature.getProperties().id);
-                console.log(parseInt(feature.getProperties().id) % 5);
                 switch (parseInt(feature.getProperties().id) % 5) {
                     case 0:
                         url = 'assets/img/car_blue.png';
