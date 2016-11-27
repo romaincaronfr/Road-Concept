@@ -173,7 +173,7 @@ app.mapSimulationView = Backbone.View.extend({
                     disabled: true
                 });
                 $('#timepicker').prop('disabled', true);
-                $('#timepicker').prop('nextSimuSnapshot', true);
+                $('#nextSimuSnapshot').prop('disabled', true);
                 console.log(ui.value);
                 //var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 //$('#timepicker').timepicker('setTime', time);
@@ -196,7 +196,7 @@ app.mapSimulationView = Backbone.View.extend({
                             disabled: false
                         });
                         $('#timepicker').prop('disabled', false);
-                        $('#timepicker').prop('nextSimuSnapshot', false);
+                        $('#nextSimuSnapshot').prop('disabled', false);
                     }
                 });
                 //console.log('time : '+time);
@@ -370,16 +370,36 @@ app.mapSimulationView = Backbone.View.extend({
                 break;
             case 6:
                 //CAR
+                var url = 'assets/img/car.png';
+                console.log(feature.getProperties().id);
+                console.log(parseInt(feature.getProperties().id) % 5);
+                switch (parseInt(feature.getProperties().id) % 5) {
+                    case 0:
+                        url = 'assets/img/car_blue.png';
+                        break;
+                    case 1:
+                        url = 'assets/img/car_green.png';
+                        break;
+                    case 2:
+                        url = 'assets/img/car_pink.png';
+                        break;
+                    case 3:
+                        url = 'assets/img/car_red.png';
+                        break;
+                    case 4:
+                        url = 'assets/img/car_yellow.png';
+                        break;
+                }
                 var angle = feature.getProperties().angle;
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
-                        size: [75, 187],
+                        size: [26, 40],
                         offset: [0, 0],
                         opacity: 1,
                         //scale: 0.027 / resolution,
-                        scale: 0.5,
-                        src: 'assets/img/car.png',
+                        scale: 1,
+                        src: url,
                         rotation: angle
                     })
                 });
