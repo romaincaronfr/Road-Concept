@@ -57,7 +57,7 @@ app.userView = Backbone.View.extend({
 
                 if (this.validationEmail(newEmail) == true) {
 
-                    if (this.emailContainOnceInDatabase(newEmail) == true) {
+                    if (this.emailContainOnceInDatabase(newEmail) == true || initEmail == newEmail) {
                         app.router.navBarV.model.save({
                             'lastName': newNom,
                             'firstName': newPrenom,
