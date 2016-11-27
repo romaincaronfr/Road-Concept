@@ -6,7 +6,7 @@
 app.userView = Backbone.View.extend({
 
     el: '#content',
-    users : null,
+    users: null,
 
 
     events: {
@@ -27,8 +27,6 @@ app.userView = Backbone.View.extend({
         })
             .done(function (data, textStatus, jqXHR) {
                 self.users = data;
-                console.log("Premier : \n email : "+self.users[0].email );
-                console.log(self.users.length);
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 console.log('fail');
@@ -57,9 +55,9 @@ app.userView = Backbone.View.extend({
         } else {
             if (initNom != newNom || initPrenom != newPrenom || initEmail != newEmail) {
 
-                if (this.validationEmail(newEmail) == true ) {
+                if (this.validationEmail(newEmail) == true) {
 
-                    if(this.emailContainOnceInDatabase(newEmail) == true){
+                    if (this.emailContainOnceInDatabase(newEmail) == true) {
                         app.router.navBarV.model.save({
                             'lastName': newNom,
                             'firstName': newPrenom,
@@ -80,8 +78,6 @@ app.userView = Backbone.View.extend({
                     $('#info-text-modal').html("Votre adresse email n'est pas au bon format.");
                     $('#modalInfo').modal('show');
                 }
-
-                //TODO : vérifier que l'email ne soit pas déjà dans la base de donnée
             } else {
                 $('#info-text-modal').html("Aucun changement à enregistrer.");
                 $('#modalInfo').modal('show');
@@ -96,11 +92,11 @@ app.userView = Backbone.View.extend({
         return (false)
     },
 
-    emailContainOnceInDatabase : function (newEmail){
+    emailContainOnceInDatabase: function (newEmail) {
         var once = true;
-        for (var i=0 ; i<this.users.length; i++){
+        for (var i = 0; i < this.users.length; i++) {
             console.log(this.users[i].email);
-            if(this.users[i].email == newEmail){
+            if (this.users[i].email == newEmail) {
                 once = false;
             }
         }
