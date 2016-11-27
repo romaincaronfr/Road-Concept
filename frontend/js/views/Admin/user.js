@@ -30,22 +30,44 @@ app.userView = Backbone.View.extend({
         var newNom = $('#nameInput').val();
         var newPrenom = $('#prenomInput').val();
 
-        if (initNom != newNom || initPrenom != newPrenom || initEmail != newEmail) {
-            app.router.navBarV.model.save({
-                'lastName': newNom,
-                'firstName': newPrenom,
-                'email': newEmail
-            }, {
-                success: function (model, response) {
-                    app.router.navBarV.render();
-                },
-                wait: true // Add this
-            });
-        } else {
-            $('#danger-text-modal').html("Aucun changement à enregistrer.");
-            $('#modalError').modal('show');
-        }
+        if (newEmail == "" || newNom == "" || newPrenom == "") {
 
+            $('#info-text-modal').html("Certains de vos champs n'ont pas été indiqué. Merci de le(s) remplir.");
+            $('#modalInfo').modal('show');
+
+        } else {
+            if (initNom != newNom || initPrenom != newPrenom || initEmail != newEmail) {
+
+                if (this.validationEmail(newEmail) == true) {
+                    app.router.navBarV.model.save({
+                        'lastName': newNom,
+                        'firstName': newPrenom,
+                        'email': newEmail
+                    }, {
+                        success: function (model, response) {
+                            app.router.navBarV.render();
+                        },
+                        wait: true // Add this
+                    });
+                    $('#info-text-modal').html("Votre compte a bien été mis à jour.");
+                    $('#modalInfo').modal('show');
+
+                } else {
+                    $('#info-text-modal').html("Votre adresse email n'est pas au bon format.");
+                    $('#modalInfo').modal('show');
+                }
+            } else {
+                $('#info-text-modal').html("Aucun changement à enregistrer.");
+                $('#modalInfo').modal('show');
+            }
+        }
+    },
+
+    validationEmail: function (mail) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+            return (true)
+        }
+        return (false)
     }
 
 });
