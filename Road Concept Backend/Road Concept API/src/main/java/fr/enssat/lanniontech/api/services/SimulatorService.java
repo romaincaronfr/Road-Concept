@@ -164,7 +164,7 @@ public class SimulatorService extends AbstractService implements Observer {
             Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré.
             feature.setGeometry(new Point(vehicle.getCoordinates()));
             feature.getProperties().put("type", vehicle.getType());
-            feature.getProperties().put("vehicle_id", vehicle.getVehicleID());
+            feature.getProperties().put("id", vehicle.getVehicleID());
             feature.getProperties().put("angle", vehicle.getAngle());
             features.getFeatures().add(feature);
         }

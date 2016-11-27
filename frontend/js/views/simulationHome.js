@@ -5,9 +5,10 @@
 app.simulationHomeView = Backbone.View.extend({
 
     el: '#content',
+    simulationParamsCollection: null,
 
     events: {
-
+        'click .visu_simu_button': 'goVisu'
     },
 
 
@@ -34,23 +35,40 @@ app.simulationHomeView = Backbone.View.extend({
 
     onAddElement: function(model) {
         console.log('on add element');
-        if (!model.get("finish")){
-            if (!$('#noInProgressSimulation').hasClass('hidden')){
-                $('#noInProgressSimulation').addClass('hidden');
-                $('#tableInProgressSimulation').removeClass('hidden');
-            }
-            new app.homeSimulationInProgressTableView({
-                model: model
-            });
+        /*if (!model.get("finish")){
+         if (!$('#noInProgressSimulation').hasClass('hidden')){
+         $('#noInProgressSimulation').addClass('hidden');
+         $('#tableInProgressSimulation').removeClass('hidden');
+         }
+         new app.homeSimulationInProgressTableView({
+         model: model
+         });
 
-        } else {
-            if (!$('#noOverSimulation').hasClass('hidden')){
-                $('#noOverSimulation').addClass('hidden');
-                $('#tableOverSimulation').removeClass('hidden');
-            }
-            new app.homeSimulationOverTableView({
-                model: model
-            });
-        }
+         } else {
+         if (!$('#noOverSimulation').hasClass('hidden')){
+         $('#noOverSimulation').addClass('hidden');
+         $('#tableOverSimulation').removeClass('hidden');
+         }
+         new app.homeSimulationOverTableView({
+         model: model
+         });
+         }*/
+
+        //TODO : supprimer cette partie quand le backend sera ok avec le false
+        $('#noOverSimulation').addClass('hidden');
+        $('#tableOverSimulation').removeClass('hidden');
+        new app.homeSimulationOverTableView({
+            model: model
+        });
+    },
+
+    goVisu: function (event) {
+        console.log('click on visualiser');
+        var id = event.currentTarget.id;
+        id = id.replace('visu_simu_button_', '');
+        console.log(id);
+        var model = this.simulationParamsCollection.get(id);
+        console.log(model);
+        app.router.navigate('simmap/'+id+'/s/'+model.attributes.samplingRate+'/d/'+model.attributes.departureLivingS, {trigger: true});
     }
 });

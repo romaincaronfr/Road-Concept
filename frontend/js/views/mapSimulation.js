@@ -23,12 +23,27 @@ app.mapSimulationView = Backbone.View.extend({
         'change #osmOppacity': 'clickOnOSM',
     },
 
-    initialize: function () {
-        this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation();
-        this.render();
+    initialize: function (option) {
+        console.log("init simmap");
+        this.id = option.id;
+        this.stepSeconds = parseFloat(option.samplingRate);
+        this.departureLivingS = option.departureLivingS;
+        console.log(this.samplingRate);
+        console.log(this.departureLivingS);
+        this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation({id:this.id,timestamp:this.departureLivingS});
         var self = this;
         this.mapDetailsCollectionSimulation.on('sync', self.onSync, self);
         this.mapDetailsCollectionSimulation.on('add', self.onAddElement, self);
+        this.mapDetailsCollectionSimulation.on('remove', self.onRemoveElement, self);
+        this.render();
+    },
+
+    changeID: function (id,samplingRate,departureLivingS) {
+        this.id = id;
+        this.stepSeconds = parseFloat(samplingRate);
+        this.departureLivingS = departureLivingS;
+        this.mapDetailsCollectionSimulation.id = id;
+        this.mapDetailsCollectionSimulation.timestamp = departureLivingS;
     },
 
     render: function () {
@@ -74,7 +89,7 @@ app.mapSimulationView = Backbone.View.extend({
         });
 
         //Réglage de l'opacité du fond de carte OSM
-        this.tile.setOpacity($('#osmOppacity').val());
+        this.tile.setOpacity(0.3);
 
         //Préparation du layer pour notre GeoJSON
         this.vectorSource = new ol.source.Vector();
@@ -120,6 +135,18 @@ app.mapSimulationView = Backbone.View.extend({
         // TODO : remettre le modal d'avertissement à la fin
        // $('#modalAvertissementSimulation').modal('show');
 
+        $( "#osmSlider" ).slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: 1,
+            step: 0.1,
+            value: 0.3,
+            slide: function( event, ui ) {
+                self.changeOppacity(ui.value);
+            }
+        });
+
         // Slider for time simulation
         $( "#sliderSimulation" ).slider({
             orientation: "horizontal",
@@ -127,7 +154,7 @@ app.mapSimulationView = Backbone.View.extend({
             min: 0,
             max: 89999, //86400
             step: this.stepSeconds,
-            value: 25200, // correspond à 7h
+            value: parseFloat(this.departureLivingS), // correspond à 7h
             slide: function( event, ui ) {
                 var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 console.log('---- slide ----');
@@ -138,6 +165,13 @@ app.mapSimulationView = Backbone.View.extend({
             change: function(event,ui){
                 console.log('---- change ----');
                 console.log('event :'+event);
+                $( "#sliderSimulation" ).slider({
+                    disabled: true
+                });
+                $('#timepicker').prop('disabled', true);
+                console.log(ui.value);
+                self.mapDetailsCollectionSimulation.timestamp = ui.value;
+                self.mapDetailsCollectionSimulation.fetch();
                 //console.log('time : '+time);
             }
         });
@@ -148,7 +182,7 @@ app.mapSimulationView = Backbone.View.extend({
             template: false,
             showSeconds: true,
             showMeridian: false,
-            defaultTime: "7:00:00",
+            defaultTime: this.convertSecdsToHrsMinsSecds(this.departureLivingS),
             modalBackDrop : true
         });
 
@@ -168,16 +202,15 @@ app.mapSimulationView = Backbone.View.extend({
         return this;
     },
 
+    changeOppacity: function (value) {
+        this.tile.setOpacity(value);
+    },
+
     onSync: function(){
-        /*if (this.mapDetailsCOllection.length > 0) {
-         this.vectorSource.clear();
-         var geoJson = this.mapDetailsCOllection.toGeoJSON();
-         var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
-         featureProjection: 'EPSG:3857'
-         });
-         this.vectorSource.addFeatures(featuresSource);
-         this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
-         }*/
+        $( "#sliderSimulation" ).slider({
+            disabled: false
+        });
+        $('#timepicker').prop('disabled', false);
         var self = this;
         //this.mapDetailsCOllection.on('add', self.onAddElement, self);
     },
@@ -189,17 +222,25 @@ app.mapSimulationView = Backbone.View.extend({
             success: function(){
                 if (self.mapDetailsCollectionSimulation.length > 0){
                 self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());}
-
             }
         });
     },
 
     onAddElement: function(element){
+        console.log('on add');
         var geojsonModel = element.toGeoJSON();
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
             featureProjection: 'EPSG:3857'
         });
         this.vectorSource.addFeature(newfeature);
+    },
+
+    onRemoveElement: function (element) {
+        console.log("remove");
+        console.log(element);
+        if (this.vectorSource.getFeatureById(element.attributes.id) || this.vectorSource.getFeatureById(element.attributes.id) != null) {
+            this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
+        }
     },
 
     clickOnOSM: function(){
@@ -212,11 +253,11 @@ app.mapSimulationView = Backbone.View.extend({
         var congestion = feature.getProperties().congestion;
         var color;
 
-        if(congestion == 'LOW'){
+        if(congestion < 30){
             color = [46,204,113,1];
-        } else if(congestion == 'MEDIUM'){
+        } else if(congestion >= 30 && congestion < 80){
             color = [211,84,0,1];
-        } else if(congestion == 'HIGH'){
+        } else if(congestion >= 80){
             color = [192,57,43,1];
         }
 
@@ -294,6 +335,7 @@ app.mapSimulationView = Backbone.View.extend({
                         offset: [0, 0],
                         opacity: 1,
                         scale: 0.027 / resolution,
+                        //scale: 0.5,
                         src: 'assets/img/car.png',
                         rotation : angle
                     })

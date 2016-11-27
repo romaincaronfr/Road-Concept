@@ -3,13 +3,14 @@
  */
 app.collections.mapDetailsCollectionSimulation = Backbone.Collection.extend({
     model: app.models.mapDetailsModel,
-    initialize: function() {
+    initialize: function(option) {
+        this.id = option.id;
+        this.timestamp = option.timestamp;
         console.log('mapDetailsCollectionSimulation : Init');
     },
     url: function () {
         //return this.absURL + '/api/maps/' + this.id;
-        console.log(this.absURL + '/api/simulate');
-        return this.absURL + '/api/simulate';
+        return this.absURL + '/api/simulations/'+this.id+'/results?timestamp='+this.timestamp;
     },
     parse: function(response){
         return response.features;

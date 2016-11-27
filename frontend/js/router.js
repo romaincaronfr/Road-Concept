@@ -34,7 +34,7 @@ app.Router = Backbone.Router.extend({
         "logout": "logout",
         "map/:id": "mapDetail",
         "editmap/:id": "mapEdition",
-        "simmap" : "mapSimulation",
+        "simmap/:id/s/:samplingRate/d/:departureLivingS" : "mapSimulation",
         "users": "users",
         "homeSimulation/:id": "homeSimulation",
         "simulationCreation/:id": "simulationCreation"
@@ -113,12 +113,17 @@ app.Router = Backbone.Router.extend({
 
     },
 
-    mapSimulation : function (){
+    mapSimulation : function (id,samplingRate,departureLivingS){
+        console.log("mapSimulation")
+        console.log(id);
+        console.log(samplingRate);
+        console.log(departureLivingS);
 
         this.checkAndInitNavBar();
         if (!this.simmapView){
-            this.simmapView = new app.mapSimulationView();
+            this.simmapView = new app.mapSimulationView({id:id,samplingRate:samplingRate,departureLivingS:departureLivingS});
         } else {
+            this.simmapView.changeID(id,samplingRate,departureLivingS);
             this.simmapView.render();
         }
     },
