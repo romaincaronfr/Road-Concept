@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.api.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.Coordinates;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
@@ -9,11 +8,11 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 import fr.enssat.lanniontech.api.entities.geojson.LineString;
 import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.entities.map.Map;
-import fr.enssat.lanniontech.api.entities.simulation.RoadCongestionLevel;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
@@ -27,13 +26,9 @@ import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.BadRequestException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
 import java.util.UUID;
 
 public class SimulatorService extends AbstractService implements Observer {
@@ -76,14 +71,14 @@ public class SimulatorService extends AbstractService implements Observer {
             } else {
                 type = FeatureType.TRUCK;
             }
-            LOGGER.debug("Inserting vehicle ID = " + vehicle.getId() + " at timestamp = " + vehicle.getTime());
             simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLon(), vehicle.getLat()), vehicle.getAngle(), type);
         }
 
         List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
         for (RoadMetrics metric : roadMetrics) {
-            //LOGGER.debug("Inserting road metrics for FeatureUUID = " + metric.getRoadId() + " at timestamp = " + metric.getTimestamp());
-            simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion(), metric.getTimestamp());
+            if (metric.getCongestion() != 0) {
+                simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion(), metric.getTimestamp());
+            }
         }
         historyManager.removeSample();
     }
@@ -144,11 +139,10 @@ public class SimulatorService extends AbstractService implements Observer {
     public FeatureCollection getResultAt(UUID simulationUUID, int timestamp) {
         Simulation simulation = get(simulationUUID);
         if (timestamp % simulation.getSamplingRate() != 0) {
-            throw new BadRequestException("Invalid timestamp");
+            throw new InvalidParameterException("Invalid timestamp");
         }
 
         FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);
-        //LOGGER.debug("@@@ simulations associated features size = " + features.getFeatures().size());
 
         List<SimulationCongestionResult> congestions = simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
         for (Feature feature : features) {
@@ -156,6 +150,12 @@ public class SimulatorService extends AbstractService implements Observer {
                 if (feature.getUuid().equals(congestion.getFeatureUUID())) {
                     feature.getProperties().put("congestion", congestion.getCongestionPercentage());
                 }
+            }
+        }
+
+        for (Feature feature : features) {
+            if (feature.getProperties().containsKey("congestion")) {
+                feature.getProperties().put("congestion",0);
             }
         }
 
@@ -176,7 +176,7 @@ public class SimulatorService extends AbstractService implements Observer {
         for (SimulationVehicleResult position : simulationResultRepository.getItineraryFor(simulationUUID, vehicleID)) {
             Feature feature = new Feature();
             feature.getProperties().put("type", position.getType());
-            feature.getProperties().put("vehicle_id", position.getVehicleID());
+            feature.getProperties().put("id", position.getVehicleID());
             feature.getProperties().put("angle", position.getAngle());
             feature.getProperties().put("timestamp", position.getTimestamp());
             feature.setGeometry(new Point(new Coordinates(position.getCoordinates().getLongitude(), position.getCoordinates().getLatitude())));
@@ -198,39 +198,5 @@ public class SimulatorService extends AbstractService implements Observer {
 
         // Delete results
         simulationResultRepository.delete(simulationUUID);
-    }
-
-    @Deprecated
-    public FeatureCollection getFakeSimulationResult() throws IOException {
-        InputStream source = getClass().getResourceAsStream("/from-osm-lannion-center.json");
-
-        FeatureCollection features = new ObjectMapper().readValue(source, FeatureCollection.class);
-        new MapService().fromOSMAdaptation(features);
-
-        for (Feature feature : features.getFeatures()) {
-            feature.getProperties().put("congestion", RoadCongestionLevel.random());
-        }
-
-        Random random = new Random();
-        for (int i = 0; i < 200; i++) {
-            Feature feature = features.getFeatures().get(random.nextInt(features.getFeatures().size()));
-            if (feature.getGeometry() instanceof LineString) {
-                LineString lineString = (LineString) feature.getGeometry();
-
-                Feature vehicle = new Feature();
-                vehicle.setUuid(UUID.randomUUID());
-                vehicle.getProperties().put("type", FeatureType.CAR);
-                vehicle.getProperties().put("angle", 7 * random.nextDouble());
-                vehicle.getProperties().put("id", vehicle.getUuid());
-
-                Point point = new Point();
-                Coordinates coords = lineString.getCoordinates().get(random.nextInt(lineString.getCoordinates().size()));
-                point.setCoordinates(coords);
-
-                vehicle.setGeometry(point);
-                features.getFeatures().add(vehicle);
-            }
-        }
-        return features;
     }
 }

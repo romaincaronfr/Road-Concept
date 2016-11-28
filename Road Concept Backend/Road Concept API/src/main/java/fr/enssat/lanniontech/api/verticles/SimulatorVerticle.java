@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -34,8 +35,6 @@ public class SimulatorVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-        router.route(HttpMethod.GET, "/api/simulate").blockingHandler(this::processFakeSimulation); //TODO: Remove this
-
         router.route(HttpMethod.POST, "/api/maps/:mapID/simulations").blockingHandler(this::processCreateSimulation);
         router.route(HttpMethod.GET, "/api/maps/:mapID/simulations").blockingHandler(this::processGetAllSimulationsForMap);
         router.route(HttpMethod.GET, "/api/users/:userID/simulations").blockingHandler(this::processGetAllSimulationsForUser);
@@ -105,16 +104,6 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
-    @Deprecated
-    private void processFakeSimulation(RoutingContext routingContext) {
-        try {
-            FeatureCollection simulationResult = simulatorService.getFakeSimulationResult();
-            HttpResponseBuilder.buildOkResponse(routingContext, simulationResult);
-        } catch (Exception e) {
-            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
-        }
-    }
-
     //TODO: Handle exceptions
     private void processCreateSimulation(RoutingContext routingContext) {
         try {
@@ -152,7 +141,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, features);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        } catch (BadRequestException e) {
+        } catch (InvalidParameterException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "The timestamp value is not coherent with the sampling rate.");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
