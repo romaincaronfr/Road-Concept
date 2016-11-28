@@ -57,7 +57,7 @@ public class VehicleManager {
             k++;
         }
 
-        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 100);
+        Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
         Vehicle V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);

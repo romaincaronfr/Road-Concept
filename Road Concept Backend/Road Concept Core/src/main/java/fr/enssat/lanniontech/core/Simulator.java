@@ -7,13 +7,14 @@ import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Observable;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 
-public class Simulator implements Runnable {
+public class Simulator extends Observable implements Runnable {
     public static Logger LOG = LoggerFactory.getLogger(Simulator.class);
 
     public RoadManager roadManager;
@@ -93,6 +94,8 @@ public class Simulator implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            setChanged();
+            notifyObservers(new String[]{simId.toString(), "finish"});
             progress = 1;
             stopTime = System.currentTimeMillis();
         }
