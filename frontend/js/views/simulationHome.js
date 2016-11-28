@@ -67,6 +67,7 @@ app.simulationHomeView = Backbone.View.extend({
         var id = event.currentTarget.id;
         id = id.replace('visu_simu_button_', '');
         console.log(id);
+        console.log(this.simulationParamsCollection);
         var model = this.simulationParamsCollection.get(id);
         console.log(model);
         app.router.navigate('simmap/'+id+'/s/'+model.attributes.samplingRate+'/d/'+model.attributes.departureLivingS, {trigger: true});
