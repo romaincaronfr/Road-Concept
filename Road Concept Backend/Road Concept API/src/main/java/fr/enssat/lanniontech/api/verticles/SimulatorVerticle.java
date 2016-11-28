@@ -39,9 +39,19 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/maps/:mapID/simulations").blockingHandler(this::processGetAllSimulationsForMap);
         router.route(HttpMethod.GET, "/api/users/:userID/simulations").blockingHandler(this::processGetAllSimulationsForUser);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID").blockingHandler(this::processGetSimulation);
+        router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/progress").blockingHandler(this::processGetSimulationProgress);
         router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
+    }
+
+    //TODO: Handle exceptions + doc Swagger
+    private void processGetSimulationProgress(RoutingContext routingContext) {
+        try {
+            //TODO
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
     }
 
     //TODO: Handle exceptions
@@ -91,7 +101,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
-    //TODO: Handle exceptions
+    //TODO: Handle exceptions + doc Swagger
     private void processGetVehiclePositionHistory(RoutingContext routingContext) {
         try {
             int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
@@ -132,7 +142,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         }
     }
 
-    //TODO: Handle exceptions
+    //TODO: Handle exceptions + doc Swagger
     private void processGetResultAt(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));

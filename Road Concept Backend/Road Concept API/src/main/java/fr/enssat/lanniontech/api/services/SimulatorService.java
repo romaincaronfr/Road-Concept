@@ -172,7 +172,7 @@ public class SimulatorService extends AbstractService implements Observer {
     }
 
     public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
-        FeatureCollection result = new FeatureCollection();
+        FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);
         for (SimulationVehicleResult position : simulationResultRepository.getItineraryFor(simulationUUID, vehicleID)) {
             Feature feature = new Feature();
             feature.getProperties().put("type", position.getType());
@@ -181,9 +181,9 @@ public class SimulatorService extends AbstractService implements Observer {
             feature.getProperties().put("timestamp", position.getTimestamp());
             feature.setGeometry(new Point(new Coordinates(position.getCoordinates().getLongitude(), position.getCoordinates().getLatitude())));
 
-            result.getFeatures().add(feature);
+            features.getFeatures().add(feature);
         }
-        return result;
+        return features;
     }
 
     public void delete(UUID simulationUUID) {
