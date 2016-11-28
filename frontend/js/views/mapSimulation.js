@@ -12,6 +12,8 @@ app.mapSimulationView = Backbone.View.extend({
     value: null,
     vectorSource: null,
     vectorLayer: null,
+    vectorSource2: null,
+    vectorLayer2: null,
     selectPointerMove: null,
     selectPointer: null,
     snap: null,
@@ -111,24 +113,28 @@ app.mapSimulationView = Backbone.View.extend({
             }
         });
         this.map.addLayer(this.vectorLayer);
+        this.vectorSource2 = new ol.source.Vector();
+        this.vectorLayer2 = new ol.layer.Vector({
+            source: this.vectorSource2,
+            style: function (feature, resolution) {
+                return self.generateStyle(feature, resolution);
+            }
+        });
+        this.map.addLayer(this.vectorLayer2);
 
         //Trigger du click sur la map
         this.selectPointer = new ol.interaction.Select({
-            layers: [this.vectorLayer],
+            layers: [this.vectorLayer2],
             style: function (feature, resolution) {
-                return self.generateSelectStyle(feature, resolution);
+                return self.generateSelectMoveStyle(feature, resolution);
             }
         });
         this.selectPointer.on('select', function (e) {
-            if (e.deselected.length > 0) {
-                self.clickCloseInfo();
-            }
-            if (e.selected.length > 0) {
-                self.renderFeatureInformations(e.selected[0]);
-            }
+            console.log(e.selected[0].getProperties().id);
+            console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
         });
         this.selectPointerMove = new ol.interaction.Select({
-            layers: [this.vectorLayer],
+            layers: [this.vectorLayer2],
             condition: ol.events.condition.pointerMove,
             style: function (feature, resolution) {
                 return self.generateSelectMoveStyle(feature, resolution);
@@ -137,9 +143,9 @@ app.mapSimulationView = Backbone.View.extend({
         this.snap = new ol.interaction.Snap({
             source: this.vectorSource
         });
-        //this.map.addInteraction(this.selectPointerMove);
-        //this.map.addInteraction(this.selectPointer);
-        this.map.addInteraction(this.snap);
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+        //this.map.addInteraction(this.snap);
 
         //Fetch de la collection
         this.fetchCollection();
@@ -189,6 +195,7 @@ app.mapSimulationView = Backbone.View.extend({
                     success: function () {
                         console.log("success fetch");
                         self.vectorSource.clear();
+                        self.vectorSource2.clear();
                         if (self.mapDetailsCollectionSimulation.length > 0) {
                             for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
                                 var element = self.mapDetailsCollectionSimulation.models[i];
@@ -196,7 +203,11 @@ app.mapSimulationView = Backbone.View.extend({
                                 var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                                     featureProjection: 'EPSG:3857'
                                 });
-                                self.vectorSource.addFeature(newfeature);
+                                if (element.attributes.type == 6){
+                                    self.vectorSource2.addFeature(newfeature);
+                                } else {
+                                    self.vectorSource.addFeature(newfeature);
+                                }
                             }
                         }
                         $("#sliderSimulation").slider({
@@ -268,7 +279,11 @@ app.mapSimulationView = Backbone.View.extend({
                         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                             featureProjection: 'EPSG:3857'
                         });
-                        self.vectorSource.addFeature(newfeature);
+                        if (element.attributes.type == 6){
+                            self.vectorSource2.addFeature(newfeature);
+                        } else {
+                            self.vectorSource.addFeature(newfeature);
+                        }
                     }
                     self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
                 }
@@ -415,149 +430,31 @@ app.mapSimulationView = Backbone.View.extend({
         }
     },
 
-    generateSelectStyle: function (feature, resolution) {
-        var type = feature.getProperties().type;
-        var geometry = feature.getGeometry();
-        var startCoord = geometry.getFirstCoordinate();
-        var endCoord = geometry.getLastCoordinate();
-        var oneway = 1;
-        var circle = new ol.style.Circle({
-            stroke: new ol.style.Stroke({
-                color: [50, 50, 50, 1]
-            }),
-            fill: new ol.style.Fill({
-                color: [200, 200, 200, 0.8]
-            }),
-            radius: 10
-        });
-        var firstPoint = new ol.style.Style({
-            geometry: new ol.geom.Point(startCoord),
-            image: circle,
-            text: new ol.style.Text({
-                textAlign: "center",
-                textBaseline: "middle",
-                font: 'Normal 12px Arial',
-                text: 'A',
-                fill: circle.getStroke(),
-                offsetX: 0,
-                offsetY: 0,
-                rotation: 0
-            })
-        });
-        var lastPoint = new ol.style.Style({
-            geometry: new ol.geom.Point(endCoord),
-            image: circle,
-            text: new ol.style.Text({
-                textAlign: "center",
-                textBaseline: "middle",
-                font: 'Normal 12px Arial',
-                text: 'B',
-                fill: circle.getStroke(),
-                offsetX: 0,
-                offsetY: 0,
-                rotation: 0
-            })
-        });
-        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
-            oneway = 0.5;
-        }
-        switch (type) {
-            case 1:
-                //SINGLE ROAD
-                var styles = [
-                    // linestring
-                    new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: [26, 155, 252, 1],
-                            width: ((7 + 2) / resolution) * oneway
-                        })
-                    }),
-                    //First point
-                    firstPoint,
-                    //Last point
-                    lastPoint
-                ];
-                return styles;
-                break;
-            case 2:
-                //DOUBLE ROAD
-                var styles = [
-                    // linestring
-                    new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: [26, 155, 252, 1],
-                            width: ((14 + 2) / resolution) * oneway
-                        })
-                    }),
-                    //First point
-                    firstPoint,
-                    //Last point
-                    lastPoint
-                ];
-                return styles;
-                break;
-            case 3:
-                //TRIPLE ROAD
-                var styles = [
-                    // linestring
-                    new ol.style.Style({
-                        stroke: new ol.style.Stroke({
-                            color: [26, 155, 252, 1],
-                            width: ((21 + 1) / resolution) * oneway
-                        })
-                    }),
-                    //First point
-                    firstPoint,
-                    //Last point
-                    lastPoint
-                ];
-                return styles;
-                break;
-            case 4:
-                var style = new ol.style.Style({
-                    fill: new ol.style.Fill({
-                        color: [250, 178, 102, 1]
-                    }),
-                    stroke: new ol.style.Stroke({
-                        color: [26, 155, 252, 1],
-                        width: (3.5 + 2) / resolution
-                    })
-                });
-                return style;
-                break;
-            case 5:
-                //RED_LIGHT
-                console.log(resolution);
-                var style = new ol.style.Style({
-                    image: new ol.style.Icon({
-                        anchor: [0.5, 0.5],
-                        size: [44, 100],
-                        offset: [0, 0],
-                        opacity: 1,
-                        scale: (0.1 + 0.2) / resolution,
-                        src: 'assets/img/redlight.jpg'
-                    })
-                });
-                return style;
-                break;
-            default:
-                console.log("default");
-                break;
-        }
-    },
-
     generateSelectMoveStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
+        var congestion = feature.getProperties().congestion;
+        var color;
+
+        if (congestion < 30) {
+            color = [46, 204, 113, 1];
+        } else if (congestion >= 30 && congestion < 80) {
+            color = [211, 84, 0, 1];
+        } else if (congestion >= 80) {
+            color = [192, 57, 43, 1];
+        }
+
+        // TODO : récupérer les valeurs d'afluence des routes et afficher la couelur en fonction de ça
         var oneway = 1;
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
         }
+
         switch (type) {
             case 1:
                 //SINGLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [26, 155, 252, 1],
+                        color: color,
                         width: (7 / resolution) * oneway
                     })
                 });
@@ -567,7 +464,7 @@ app.mapSimulationView = Backbone.View.extend({
                 //DOUBLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [26, 155, 252, 1],
+                        color: color,
                         width: (14 / resolution) * oneway
                     })
                 });
@@ -577,7 +474,7 @@ app.mapSimulationView = Backbone.View.extend({
                 //TRIPLE ROAD
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: [26, 155, 252, 1],
+                        color: color,
                         width: (21 / resolution) * oneway
                     }),
 
@@ -587,10 +484,10 @@ app.mapSimulationView = Backbone.View.extend({
             case 4:
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color: [26, 155, 252, 1]
+                        color: [250, 178, 102, 1]
                     }),
                     stroke: new ol.style.Stroke({
-                        color: [26, 155, 252, 1],
+                        color: color,
                         width: 3.5 / resolution
                     })
                 });
@@ -604,8 +501,43 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: (0.1 + 0.2) / resolution,
+                        scale: 0.1 / resolution,
                         src: 'assets/img/redlight.jpg'
+                    })
+                });
+                return style;
+                break;
+            case 6:
+                //CAR
+                var url = 'assets/img/car.png';
+                switch (parseInt(feature.getProperties().id) % 5) {
+                    case 0:
+                        url = 'assets/img/car_blue.png';
+                        break;
+                    case 1:
+                        url = 'assets/img/car_green.png';
+                        break;
+                    case 2:
+                        url = 'assets/img/car_pink.png';
+                        break;
+                    case 3:
+                        url = 'assets/img/car_red.png';
+                        break;
+                    case 4:
+                        url = 'assets/img/car_yellow.png';
+                        break;
+                }
+                var angle = feature.getProperties().angle;
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [26, 40],
+                        offset: [0, 0],
+                        opacity: 1,
+                        //scale: 0.027 / resolution,
+                        scale: 1.5,
+                        src: url,
+                        rotation: angle
                     })
                 });
                 return style;
