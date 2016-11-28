@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.positioning;
 
+import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 
 public class SpaceTimePosition extends Position {
@@ -24,8 +25,13 @@ public class SpaceTimePosition extends Position {
         double lon = (A.lon + B.lon) / 2;
         double lat = (A.lat + B.lat) / 2;
 
+        double lonDir = A.lon - B.lon;
+        double latDir = A.lat - B.lat;
+
+        double angle = Tools.getOrientedAngle(0,1,lonDir,latDir);
+
         //todo compute angle from A and B
-        return new SpaceTimePosition(lon, lat, time, 0, vehicleId,type);
+        return new SpaceTimePosition(lon, lat, time, angle, vehicleId,type);
     }
 
     public int getTime() {
