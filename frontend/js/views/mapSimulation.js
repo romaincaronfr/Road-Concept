@@ -18,6 +18,7 @@ app.mapSimulationView = Backbone.View.extend({
     mapDetailsCollectionSimulation: null,
     stepSeconds: 60, // On veut un step sur le slider de 60 s
     timeSimulation: null,
+    mapID: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -29,8 +30,11 @@ app.mapSimulationView = Backbone.View.extend({
         this.id = option.id;
         this.stepSeconds = parseFloat(option.samplingRate);
         this.departureLivingS = option.departureLivingS;
+        this.mapID = option.idMap;
         console.log(this.samplingRate);
         console.log(this.departureLivingS);
+        console.log(this.mapID);
+        console.log(option);
         this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation({
             id: this.id,
             timestamp: this.departureLivingS
@@ -42,8 +46,9 @@ app.mapSimulationView = Backbone.View.extend({
         this.render();
     },
 
-    changeID: function (id, samplingRate, departureLivingS) {
+    changeID: function (id, samplingRate, departureLivingS,idMap) {
         this.id = id;
+        this.idMap = idMap;
         this.stepSeconds = parseFloat(samplingRate);
         this.departureLivingS = departureLivingS;
         this.mapDetailsCollectionSimulation.id = id;
@@ -66,7 +71,9 @@ app.mapSimulationView = Backbone.View.extend({
 
         //Ajout de la template au body
         //this.$el.append(this.template(new Backbone.Model({"id": this.mapDetailsCollectionSimulation.id})));
-        this.$el.append(this.template());
+        var map = this.mapID;
+        var mod = new Backbone.Model({"mapID": map});
+        this.$el.append(this.template(mod.attributes));
 
         //Fond de carte OSM
         this.tile = new ol.layer.Tile({
