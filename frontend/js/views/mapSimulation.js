@@ -130,10 +130,12 @@ app.mapSimulationView = Backbone.View.extend({
             }
         });
         this.selectPointer.on('select', function (e) {
-            console.log(e.selected[0].getProperties().id);
-            console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id));
-            console.log(self.mapDetailsCollectionSimulation);
-            console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
+            if (e.selected[0]) {
+                console.log(e.selected[0].getProperties().id);
+                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id));
+                console.log(self.mapDetailsCollectionSimulation);
+                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
+            }
         });
         this.selectPointerMove = new ol.interaction.Select({
             layers: [this.vectorLayer2],
