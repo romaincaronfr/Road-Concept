@@ -476,6 +476,7 @@ app.simulationCreationView = Backbone.View.extend({
     renderFeatureCreation: function (feature) {
         var featureid = feature.getProperties().id;
         var model = this.mapDetailsCOllection.get(featureid);
+        var pass = false;
         switch (this.step) {
             case 0:
                 $('#habitZone').hide();
@@ -485,6 +486,7 @@ app.simulationCreationView = Backbone.View.extend({
                 new app.mapPopUpCreateHabitationZoneView({
                     model: model
                 });
+                pass = true;
                 break;
             case 2:
                 $('#workZone').hide();
@@ -493,16 +495,19 @@ app.simulationCreationView = Backbone.View.extend({
                 new app.mapPopUpCreateWorkZoneView({
                     model: model
                 });
+                pass = true;
                 break;
         }
 
-        if (this.step < 4) {
-            this.step++;
-        }
-        console.log('step : ' + this.step);
+        if (pass == true) {
+            if (this.step < 4) {
+                this.step++;
+            }
+            console.log('step : ' + this.step);
 
-        this.map.removeInteraction(this.selectPointerMove);
-        this.map.removeInteraction(this.selectPointer);
+            this.map.removeInteraction(this.selectPointerMove);
+            this.map.removeInteraction(this.selectPointer);
+        }
     },
 
     validModel: function () {
