@@ -131,6 +131,8 @@ app.mapSimulationView = Backbone.View.extend({
         });
         this.selectPointer.on('select', function (e) {
             console.log(e.selected[0].getProperties().id);
+            console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id));
+            console.log(self.mapDetailsCollectionSimulation);
             console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
         });
         this.selectPointerMove = new ol.interaction.Select({
@@ -190,7 +192,8 @@ app.mapSimulationView = Backbone.View.extend({
                 console.log(ui.value);
                 //var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 //$('#timepicker').timepicker('setTime', time);
-                self.mapDetailsCollectionSimulation.timestamp = ui.value;
+                self.mapDetailsCollectionSimulation.timestamp = String(ui.value);
+                self.selectPointer.se
                 self.mapDetailsCollectionSimulation.fetch({
                     success: function () {
                         console.log("success fetch");
