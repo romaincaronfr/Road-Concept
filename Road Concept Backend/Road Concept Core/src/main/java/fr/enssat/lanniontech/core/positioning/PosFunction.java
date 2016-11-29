@@ -38,7 +38,7 @@ public class PosFunction {
         if (Double.isNaN(lat) || Double.isNaN(lon)) {
             LOG.debug("out of bound");
         }
-        return new Position(lat, lon);
+        return new Position(lon, lat);
     }
 
     /**

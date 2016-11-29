@@ -7,13 +7,25 @@ import java.util.List;
 
 public class PositionManager {
     private List<Position> positions;
+    public double minLat;
+    public double maxLat;
+    public double minLon;
+    public double maxLon;
 
     public PositionManager() {
         positions = new ArrayList<>();
+        maxLat = -360;
+        maxLon = -360;
+        minLat = 360;
+        minLon = 360;
     }
 
-    public Position addPosition(double lat, double lon) {
-        return addPosition(new Position(lat, lon));
+    public Position addPosition(double lon, double lat) {
+        maxLon = Math.max(maxLon,lon);
+        maxLat = Math.max(maxLat,lat);
+        minLon = Math.min(minLon,lon);
+        minLat = Math.min(minLat,lat);
+        return addPosition(new Position(lon, lat));
     }
 
     public Position addPosition(Position pos) {
@@ -29,5 +41,11 @@ public class PositionManager {
 
     public int getSize() {
         return positions.size();
+    }
+
+    public boolean isInRange(Position P){
+        double e = 0.01;
+        return P.getLat()<=maxLat+e && P.getLat()>=minLat-e &&
+                P.getLon()<=maxLon+e && P.getLon()>=minLon-e;
     }
 }

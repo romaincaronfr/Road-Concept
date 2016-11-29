@@ -30,7 +30,6 @@ public class SpaceTimePosition extends Position {
 
         double angle = -Tools.getOrientedAngle(0,1,lonDir,latDir);
 
-        //todo compute angle from A and B
         return new SpaceTimePosition(lon, lat, time, angle, vehicleId,type);
     }
 
