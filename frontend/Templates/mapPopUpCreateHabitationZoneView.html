@@ -15,7 +15,8 @@
         <div class="form-group">
             <label class="control-label col-sm-2">Nombre d'habitants*</label>
             <div class="col-sm-10">
-                <input type="number" min="0" id="nbHabit" class="form-control" placeholder="ex : 150">
+                <input type="number" min="1" max="1000" id="nbHabit" class="form-control" placeholder="ex : 150">
+                <p class="help-block">de 1 à 1000</p>
             </div>
         </div>
         <!--Pourcentage de voitures-->
@@ -28,7 +29,7 @@
         </div>
 
         <div class="alert alert-danger" id="alertEmptyHabitation" hidden>
-            <strong>Tous les champs ne sont pas remplis !</strong>
+            Tous les champs ne sont pas remplis !
         </div>
 
         <div class="form-group">

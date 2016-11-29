@@ -12,8 +12,6 @@ app.simulationCreationView = Backbone.View.extend({
     snap: null,
     mapDetailsCOllection: null,
     step: 0,
-    nameSim: null,
-    sampling_rate: null,
     startHour: null,
     returnHour: null,
     living_feature: null,
@@ -27,7 +25,6 @@ app.simulationCreationView = Backbone.View.extend({
         'click .removeModel': 'cancelUnderCreation',
         'click #cancelCreationSimu': 'cancelCreationSimu',
         'change #carRepart': 'showPercent',
-        'click #startSim': 'startSimu',
         'click #launch': 'launchSim'
     },
 
@@ -517,8 +514,11 @@ app.simulationCreationView = Backbone.View.extend({
                 var nbCar = $('#nbHabit').val();
                 var percent = $('#carRepart').val();
 
-                if (nbCar == "") {
+                if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
                     $('#alertEmptyHabitation').show();
+                    setTimeout(function () {
+                        $('#alertEmptyHabitation').hide();
+                    }, 5000);
                 } else {
                     $('#alertEmptyHabitation').hide();
                     $('#habitZoneParam').hide();
@@ -535,6 +535,9 @@ app.simulationCreationView = Backbone.View.extend({
                 if (this.getTotalSecond(hour) < (this.getTotalSecond(this.startHour) + 3600)) {
                     $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour)+1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
                     $('#alertEmptyWork').show();
+                    setTimeout(function () {
+                        $('#alertEmptyWork').hide();
+                    }, 5000);
                 } else {
                     $('#alertEmptyWork').hide();
                     $('#workZoneParam').hide();
@@ -592,12 +595,38 @@ app.simulationCreationView = Backbone.View.extend({
         this.step = 0;
     },
 
-    startSimu: function () {
-        //Afficher popup formulaire avec nom et précision
-    },
-
     launchSim: function () {
         //Envoyer les infos au serveur (nom, précision, heures, etc.) et afficher barre chargement
+        var name = $('#simName').val();
+        var sampling_rate = $('#sampling_rate').val();
+
+        if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
+            $('#alertEmptyStart').show();
+            setTimeout(function () {
+                $('#alertEmptyStart').hide();
+            }, 5000);
+        } else {
+            var collection = new app.collections.simulationParamsCollection({id:this.id});
+            var model = new app.models.simulationParamsModel({
+                name: name,
+                sampling_rate: parseInt(sampling_rate),
+                departure_living_s: this.getTotalSecond(this.startHour),
+                departure_working_s: this.getTotalSecond(this.returnHour),
+                living_feature: this.living_feature,
+                working_feature: this.working_feature,
+                car_percentage: parseInt(this.car_percentage),
+                vehicle_count: parseInt(this.vehicle_count)
+            });
+            console.log(model);
+            collection.add(model);
+            model.save(null, {
+                success: function () {
+                    $('#alertEmptyStart').hide();
+                    $('#modalStartSim').modal('hide');
+                    console.log("success");
+                }
+            });
+        }
     },
 
     previous: function (){
