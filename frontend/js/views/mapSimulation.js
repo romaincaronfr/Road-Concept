@@ -420,8 +420,8 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [26, 40],
                         offset: [0, 0],
                         opacity: 1,
-                        //scale: 0.027 / resolution,
-                        scale: 1,
+                        scale: 0.15 / resolution,
+                        //scale: 1,
                         src: url,
                         rotation: angle
                     })
@@ -504,7 +504,7 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: 0.1 / resolution,
+                        scale: 0.104 / resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });
@@ -537,8 +537,8 @@ app.mapSimulationView = Backbone.View.extend({
                         size: [26, 40],
                         offset: [0, 0],
                         opacity: 1,
-                        //scale: 0.027 / resolution,
-                        scale: 1.5,
+                        scale: 0.3 / resolution,
+                        //scale: 1.5,
                         src: url,
                         rotation: angle
                     })
