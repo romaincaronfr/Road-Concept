@@ -25,7 +25,7 @@
                 <div id="habitZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone d'habitation</div>
                 <div id="workZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée" hidden>Veuillez sélectionner une route correspondant à votre zone de travail</div>
                 <div id="workZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone de travail</div>
-                <button id="startSim" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>   Simulation</button>
+                <button id="startSim" class="btn btn-default btn-block" data-toggle="modal" data-target="#modalStartSim" data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>   Simulation</button>
             </div>
         </div>
     </div>
@@ -58,6 +58,53 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div id="modalStartSim" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Lancement d'une nouvelle simulation</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+
+                            <label for="simName" class="col-sm-2 control-label">
+                                Nom*
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="simName"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="sampling_rate" class="col-sm-2 control-label">
+                                Précision*
+                            </label>
+                            <div class="col-sm-10">
+                                <input type="number" min="1" max="920" placeholder="ex: 30" class="form-control" id="sampling_rate"/>
+                                <p class="help-block">intervale entre chaque snapshot (en secondes)</p>
+                                <p class="help-block">de 1s à 920s (15min)</p>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger" id="alertEmptyStart" hidden>
+                            Tous les champs ne sont pas remplis !
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-12 control-label">* Champs obligatoires</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Retour</button>
+                    <button type="button" class="btn btn-success" id="launch">Lancer</button>
+                </div>
+            </div>
         </div>
     </div>
 
