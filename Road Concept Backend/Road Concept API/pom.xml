@@ -2,177 +2,167 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>road-concept</artifactId>
+<parent>
+    <artifactId>road-concept</artifactId>
+    <groupId>fr.enssat.lanniontech</groupId>
+    <version>0.1-SNAPSHOT</version>
+</parent>
+
+<modelVersion>4.0.0</modelVersion>
+<artifactId>road-concept-api</artifactId>
+<packaging>jar</packaging>
+
+<properties>
+    <jackson.version>2.8.3</jackson.version>
+    <vertx.version>3.3.3</vertx.version>
+    <vertx-unit.version>3.3.3</vertx-unit.version>
+    <apache-httpclient.version>4.5.2</apache-httpclient.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
+    <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
+    <postgresql.version>9.4.1211.jre7</postgresql.version>
+    <dbcp.version>2.1.1</dbcp.version>
+    <jBCrypt.version>0.4.1</jBCrypt.version>
+    <jersey-common.version>2.23.2</jersey-common.version>
+    <cloning.version>1.9.2</cloning.version>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-core</artifactId>
+        <version>${vertx.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-web</artifactId>
+        <version>${vertx.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>${mongo-java-driver.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresql.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-dbcp2</artifactId>
+        <version>${dbcp.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>${apache-httpclient.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>javax.ws.rs-api</artifactId>
+        <version>${javax-ws-rs-api.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+    </dependency>
+
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
         <groupId>fr.enssat.lanniontech</groupId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
+        <artifactId>road-concept-core</artifactId>
+        <version>${project.version}</version>
+    </dependency>
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>road-concept-api</artifactId>
-    <packaging>jar</packaging>
+    <dependency>
+        <groupId>de.svenkubiak</groupId>
+        <artifactId>jBCrypt</artifactId>
+        <version>${jBCrypt.version}</version>
+    </dependency>
 
-    <repositories>
-        <repository>
-            <id>my.mvn.repo</id>
-            <url>https://github.com/keesun/mvn-repo/raw/master</url>
-        </repository>
-    </repositories>
+    <dependency>
+        <groupId>uk.com.robust-it</groupId>
+        <artifactId>cloning</artifactId>
+        <version>${cloning.version}</version>
+    </dependency>
 
-    <properties>
-        <jackson.version>2.8.3</jackson.version>
-        <vertx.version>3.3.3</vertx.version>
-        <vertx-unit.version>3.3.3</vertx-unit.version>
-        <apache-httpclient.version>4.5.2</apache-httpclient.version>
-        <commons-lang3.version>3.4</commons-lang3.version>
-        <javax-ws-rs-api.version>2.1-m01</javax-ws-rs-api.version>
-        <mongo-java-driver.version>3.3.0</mongo-java-driver.version>
-        <postgresql.version>9.4.1211.jre7</postgresql.version>
-        <dbcp.version>2.1.1</dbcp.version>
-        <jBCrypt.version>0.4.1</jBCrypt.version>
-        <jersey-common.version>2.23.2</jersey-common.version>
-    </properties>
+    <!--<dependency> &lt;!&ndash; Used when a JSON field is missing or not set... &ndash;&gt;-->
+    <!--<groupId>org.glassfish.jersey.core</groupId>-->
+    <!--<artifactId>jersey-common</artifactId>-->
+    <!--<version>${jersey-common.version}</version>-->
+    <!--</dependency>-->
 
-    <dependencies>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-core</artifactId>
-            <version>${vertx.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-web</artifactId>
-            <version>${vertx.version}</version>
-        </dependency>
+    <!-- TEST DEPENDENCIES -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-unit</artifactId>
+        <version>${vertx-unit.version}</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
 
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${mongo-java-driver.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <version>${dbcp.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>${apache-httpclient.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>${javax-ws-rs-api.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>fr.enssat.lanniontech</groupId>
-            <artifactId>road-concept-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.svenkubiak</groupId>
-            <artifactId>jBCrypt</artifactId>
-            <version>${jBCrypt.version}</version>
-        </dependency>
-
-        <dependency> <!-- Used when a JSON field is missing or not set... -->
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
-            <version>${jersey-common.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>uk.com.robust-it</groupId>
-            <artifactId>cloning</artifactId>
-            <version>1.9.2</version>
-        </dependency>
-
-        <!-- TEST DEPENDENCIES -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.vertx</groupId>
-            <artifactId>vertx-unit</artifactId>
-            <version>${vertx-unit.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>io.vertx.core.Launcher</Main-Class>
-                                        <Main-Verticle>fr.enssat.lanniontech.api.verticles.HttpServerVerticle</Main-Verticle>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
-                            <artifactSet/>
-                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar</outputFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<build>
+    <plugins>
+        <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.5.1</version>
+            <configuration>
+                <source>${java.version}</source>
+                <target>${java.version}</target>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.4.3</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <transformers>
+                            <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <manifestEntries>
+                                    <Main-Class>io.vertx.core.Launcher</Main-Class>
+                                    <Main-Verticle>fr.enssat.lanniontech.api.verticles.HttpServerVerticle
+                                    </Main-Verticle>
+                                </manifestEntries>
+                            </transformer>
+                        </transformers>
+                        <artifactSet/>
+                        <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
+                        </outputFile>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 
 </project>

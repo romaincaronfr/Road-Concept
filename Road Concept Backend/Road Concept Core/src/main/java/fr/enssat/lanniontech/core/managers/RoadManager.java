@@ -22,17 +22,16 @@ import java.util.UUID;
 
 public class RoadManager {
 
-    public static Logger LOG = LoggerFactory.getLogger(RoadManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoadManager.class);
 
-
-    private Map<Position, List<RoadSection>> RoadEdges;
+    private Map<Position, List<RoadSection>> roadEdges;
     private List<RoadSection> roadSections;
     private Map<UUID, Road> roads;
     private Map<Position, Intersection> intersectionMap;
     private List<EndRoadTrajectory> deadEnds;
 
     public RoadManager() {
-        RoadEdges = new HashMap<>();
+        roadEdges = new HashMap<>();
         roadSections = new ArrayList<>();
         deadEnds = new ArrayList<>();
         roads = new HashMap<>();
@@ -75,17 +74,17 @@ public class RoadManager {
      * assemble the new RoadSection to the Road on the Position
      */
     private void assembleRoadSections(RoadSection Rs1, Position P, Road myRoad) {
-        if (RoadEdges.containsKey(P)) {
-            if (RoadEdges.get(P).size() == 1 && RoadEdges.get(P).get(0).getMyRoad() == myRoad) {
-                RoadSection Rs2 = RoadEdges.get(P).get(0);
+        if (roadEdges.containsKey(P)) {
+            if (roadEdges.get(P).size() == 1 && roadEdges.get(P).get(0).getMyRoad() == myRoad) {
+                RoadSection Rs2 = roadEdges.get(P).get(0);
                 fuseRoadsSection(Rs1, Rs2, P);
-                RoadEdges.remove(P);
+                roadEdges.remove(P);
             } else {
-                RoadEdges.get(P).add(Rs1);
+                roadEdges.get(P).add(Rs1);
             }
         } else {
-            RoadEdges.put(P, new ArrayList<>());
-            RoadEdges.get(P).add(Rs1);
+            roadEdges.put(P, new ArrayList<>());
+            roadEdges.get(P).add(Rs1);
         }
     }
 
@@ -105,8 +104,8 @@ public class RoadManager {
      * check all the roadEdges and crete the right end Type (DeadEnd or Intersection)
      */
     public void closeRoads() {
-        for (Position P : RoadEdges.keySet()) {
-            if (RoadEdges.get(P).size() == 1) {
+        for (Position P : roadEdges.keySet()) {
+            if (roadEdges.get(P).size() == 1) {
                 closeEdge(P);
             } else {
                 createIntersection(P);
@@ -115,17 +114,17 @@ public class RoadManager {
     }
 
     private void createIntersection(Position P) {
-        Intersection I = new Intersection(P);
-        for (RoadSection Rs : RoadEdges.get(P)) {
-            I.addRoadSection(Rs);
+        Intersection intersection = new Intersection(P);
+        for (RoadSection section : roadEdges.get(P)) {
+            intersection.addRoadSection(section);
         }
-        I.assembleIntersection();
-        intersectionMap.put(P, I);
+        intersection.assembleIntersection();
+        intersectionMap.put(P, intersection);
     }
 
     private void closeEdge(Position P) {
-        SimpleTrajectory source = RoadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
-        SimpleTrajectory destination = RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
+        SimpleTrajectory source = roadEdges.get(P).get(0).getLeftLane(P).getInsertTrajectory();
+        SimpleTrajectory destination = roadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
         EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
 
         TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd, source.getStop(), 0);
@@ -174,27 +173,27 @@ public class RoadManager {
             trajectoryToCheck.put(r.getLaneAB().getInsertTrajectory(), false);
             trajectoryToCheck.put(r.getLaneBA().getInsertTrajectory(), false);
         }
-        LOG.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
+        LOGGER.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
         for (EndRoadTrajectory trajectory : deadEnds) {
             if (trajectory.getLength() < 0) {
                 deadEndProblems++;
-                LOG.error("DEAD_END length negative");
+                LOGGER.error("DEAD_END length negative");
             }
 
             if (trajectory.getSource() == null) {
                 deadEndProblems++;
-                LOG.error("DEAD_END source is null");
+                LOGGER.error("DEAD_END source is null");
             }
 
             if (trajectory.getDestination() == null) {
                 deadEndProblems++;
-                LOG.error("DEAD_END destination is null");
+                LOGGER.error("DEAD_END destination is null");
             }
 
             trajectoryToCheck.put(trajectory, false);
         }
-        LOG.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
+        LOGGER.debug("integrity check result for DeadEnds(" + deadEnds.size() + "): " + deadEndProblems);
 
         if (intersectionProblems == 0 && lanesProblems == 0 && deadEndProblems == 0) {
             trajectoryProblems = checkTrajectoryAccess(trajectoryToCheck);
@@ -209,23 +208,23 @@ public class RoadManager {
         int problem = 0;
         if (lane.getInsertTrajectory().getLength() <= 0 || Double.isNaN(lane.getInsertTrajectory().getLength())) {
             problem++;
-            LOG.error("trajectory is negative or NaN");
+            LOGGER.error("trajectory is negative or NaN");
         }
 
         if (lane.getInsertTrajectory().getDestinationType() == TrajectoryEndType.UNDEFINED) {
             problem++;
-            LOG.error("trajectory destination type is undefined");
+            LOGGER.error("trajectory destination type is undefined");
         }
 
-        if (lane.getInsertTrajectory().getDestinationsTrajectories().size() == 0) {
+        if (lane.getInsertTrajectory().getDestinationsTrajectories().isEmpty()) {
             problem++;
-            LOG.error("trajectory have no destination");
+            LOGGER.error("trajectory have no destination");
         }
 
         for (TrajectoryJunction junction : lane.getInsertTrajectory().getSourcesTrajectories().values()) {
             if (junction == null) {
                 problem++;
-                LOG.error("trajectory have null destination");
+                LOGGER.error("trajectory have null destination");
             }
         }
         return problem;
@@ -233,21 +232,20 @@ public class RoadManager {
 
     private int checkTrajectoryAccess(Map<Trajectory, Boolean> trajectoryMap) {
         int notExploredTrajetories = 0;
-        LOG.debug("Total trajectories: " + trajectoryMap.size());
+        LOGGER.debug("Total trajectories: " + trajectoryMap.size());
         Trajectory start = (Trajectory) trajectoryMap.keySet().toArray()[0];
         try {
             start.explore(trajectoryMap);
-        } catch (StackOverflowError e) {
+        } catch (StackOverflowError e) { //FIXME: Desastreux pour les performances !!!
             return 1;
         }
-
 
         for (boolean explored : trajectoryMap.values()) {
             if (!explored) {
                 notExploredTrajetories++;
             }
         }
-        LOG.debug(" trajectories not reached: " + notExploredTrajetories);
+        LOGGER.debug(" trajectories not reached: " + notExploredTrajetories);
 
         return notExploredTrajetories;
     }

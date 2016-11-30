@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class SimpleTrajectory extends Trajectory {
 
-    public static Logger LOG = LoggerFactory.getLogger(SimpleTrajectory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleTrajectory.class);
 
     private Map<UUID, TrajectoryJunction> sourcesTrajectories;
     private TrajectoryEndType sourceType;
@@ -102,8 +102,8 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public double getSpeedOfFirst() {
-        if (vehiclesSides.size() == 0) {
-            if (getDestinationsTrajectories().size() == 0) {
+        if (vehiclesSides.isEmpty()) {
+            if (getDestinationsTrajectories().isEmpty()) {
                 return 0;
             } else {
                 return getNext().getDestination().getSpeedOfFirst();
@@ -117,7 +117,7 @@ public class SimpleTrajectory extends Trajectory {
     public double getNextCarSpeed(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            if (getDestinationsTrajectories().size() == 0) {
+            if (getDestinationsTrajectories().isEmpty()) {
                 return 0;
             } else {
                 return getNext().getDestination().getSpeedOfFirst();
@@ -129,7 +129,7 @@ public class SimpleTrajectory extends Trajectory {
 
     @Override
     public double getDistanceToFirst(double freeDistance) {
-        if (vehiclesSides.size() == 0) {
+        if (vehiclesSides.isEmpty()) {
             if (freeDistance - length > 0) {
                 return length + getNext().getDestination().getDistanceToFirst(freeDistance);
             } else {

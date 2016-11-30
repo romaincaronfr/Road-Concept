@@ -2,9 +2,7 @@ package trajectory;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
-import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +34,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 0,UUID.randomUUID());
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 0, UUID.randomUUID());
 
         Assert.assertTrue(sT.isInverted());
 
@@ -54,7 +52,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 10,UUID.randomUUID());
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 10, UUID.randomUUID());
 
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 
@@ -70,7 +68,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 10,UUID.randomUUID());
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 10, UUID.randomUUID());
 
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 

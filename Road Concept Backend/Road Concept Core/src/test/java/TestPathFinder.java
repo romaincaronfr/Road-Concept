@@ -2,7 +2,6 @@ import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,19 +10,19 @@ import java.util.UUID;
 
 public class TestPathFinder {
 
-    public static Simulator tearDown(){
+    public static Simulator tearDown() {
         Simulator Sim = new Simulator();
 
-        Position C = Sim.positionManager.addPosition(40, 0);
-        Position D = Sim.positionManager.addPosition(40.1, 0);
-        Position E = Sim.positionManager.addPosition(40.2, 0);
-        Position B = Sim.positionManager.addPosition(40, 0.1);
-        Position A = Sim.positionManager.addPosition(40.1, 0.1);
-        Position F = Sim.positionManager.addPosition(40.2, 0.1);
+        Position C = Sim.getPositionManager().addPosition(40, 0);
+        Position D = Sim.getPositionManager().addPosition(40.1, 0);
+        Position E = Sim.getPositionManager().addPosition(40.2, 0);
+        Position B = Sim.getPositionManager().addPosition(40, 0.1);
+        Position A = Sim.getPositionManager().addPosition(40.1, 0.1);
+        Position F = Sim.getPositionManager().addPosition(40.2, 0.1);
 
-        Position G0 = Sim.positionManager.addPosition(40.1, 0.2);
-        Position G1 = Sim.positionManager.addPosition(40, 0.3);
-        Position G2 = Sim.positionManager.addPosition(40.2, 0.3);
+        Position G0 = Sim.getPositionManager().addPosition(40.1, 0.2);
+        Position G1 = Sim.getPositionManager().addPosition(40, 0.3);
+        Position G2 = Sim.getPositionManager().addPosition(40.2, 0.3);
 
         UUID id1 = UUID.fromString("0-0-0-0-1");
         UUID id2 = UUID.fromString("0-0-0-0-2");
@@ -32,62 +31,62 @@ public class TestPathFinder {
         UUID id5 = UUID.fromString("0-0-0-0-5");
         UUID id6 = UUID.fromString("0-0-0-0-6");
 
-        Sim.roadManager.addRoadSectionToRoad(A, B, id1);
-        Sim.roadManager.addRoadSectionToRoad(B, C, id1);
-        Sim.roadManager.addRoadSectionToRoad(C, D, id1);
-        Sim.roadManager.addRoadSectionToRoad(D, A, id2);
-        Sim.roadManager.addRoadSectionToRoad(D, E, id3);
-        Sim.roadManager.addRoadSectionToRoad(E, F, id3);
-        Sim.roadManager.addRoadSectionToRoad(F, A, id3);
-        Sim.roadManager.addRoadSectionToRoad(A, G0, id4);
-        Sim.roadManager.addRoadSectionToRoad(G0, G1, id5);
-        Sim.roadManager.addRoadSectionToRoad(G0, G2, id6);
+        Sim.getRoadManager().addRoadSectionToRoad(A, B, id1);
+        Sim.getRoadManager().addRoadSectionToRoad(B, C, id1);
+        Sim.getRoadManager().addRoadSectionToRoad(C, D, id1);
+        Sim.getRoadManager().addRoadSectionToRoad(D, A, id2);
+        Sim.getRoadManager().addRoadSectionToRoad(D, E, id3);
+        Sim.getRoadManager().addRoadSectionToRoad(E, F, id3);
+        Sim.getRoadManager().addRoadSectionToRoad(F, A, id3);
+        Sim.getRoadManager().addRoadSectionToRoad(A, G0, id4);
+        Sim.getRoadManager().addRoadSectionToRoad(G0, G1, id5);
+        Sim.getRoadManager().addRoadSectionToRoad(G0, G2, id6);
 
-        Sim.roadManager.closeRoads();
+        Sim.getRoadManager().closeRoads();
 
-        int integrity = Sim.roadManager.checkIntegrity();
+        int integrity = Sim.getRoadManager().checkIntegrity();
 
-        Assert.assertEquals(0,integrity);
+        Assert.assertEquals(0, integrity);
         return Sim;
     }
 
     @Test
-    public void testRandomPathLength(){
+    public void testRandomPathLength() {
         Simulator simulator = tearDown();
 
-        PathFinder pathFinder = new PathFinder(simulator.roadManager);
+        PathFinder pathFinder = new PathFinder(simulator.getRoadManager());
 
-        Trajectory startTrajectory = simulator.roadManager.getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
+        Trajectory startTrajectory = simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
 
         for (int i = 0; i < 10; i++) {
-            Path testPath = pathFinder.getRandomPath(startTrajectory,10*i);
+            Path testPath = pathFinder.getRandomPath(startTrajectory, 10 * i);
 
-            Assert.assertEquals(10*i+1,testPath.getSize());
+            Assert.assertEquals(10 * i + 1, testPath.getSize());
         }
 
     }
 
     @Test
-    public void testAStarPath(){
+    public void testAStarPath() {
         Simulator simulator = tearDown();
 
-        PathFinder pathFinder = new PathFinder(simulator.roadManager);
+        PathFinder pathFinder = new PathFinder(simulator.getRoadManager());
 
-        Trajectory startTrajectory = simulator.roadManager.getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
+        Trajectory startTrajectory = simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
 
         Path testPath = null;
 
-        testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-5"),false);
+        testPath = pathFinder.getPathTo(startTrajectory, UUID.fromString("0-0-0-0-5"), false);
 
-        Assert.assertEquals(2,testPath.getSize());
+        Assert.assertEquals(2, testPath.getSize());
 
-        testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-4"),true);
+        testPath = pathFinder.getPathTo(startTrajectory, UUID.fromString("0-0-0-0-4"), true);
 
-        Assert.assertEquals(2,testPath.getSize());
+        Assert.assertEquals(2, testPath.getSize());
 
-        testPath = pathFinder.getPathTo(startTrajectory,UUID.fromString("0-0-0-0-1"),true);
+        testPath = pathFinder.getPathTo(startTrajectory, UUID.fromString("0-0-0-0-1"), true);
 
-        Assert.assertEquals(4,testPath.getSize());
+        Assert.assertEquals(4, testPath.getSize());
 
     }
 }

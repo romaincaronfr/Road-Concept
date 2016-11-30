@@ -25,6 +25,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_map = ? AND id_user = ?";
     private static final String UPDATE_FINISH = "UPDATE simulation SET finish = ? WHERE uuid = ? AND id_user = ?";
+    private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
 
     // CREATE
     // ------
@@ -198,5 +199,25 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     public int delete(Simulation simulation) throws DatabaseOperationException {
         return delete("simulation", simulation);
+    }
+
+    /**
+     * Warning: only supposed to be called on server start-up
+     */
+    public void deleteUnfinished() {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_NOT_FINISH)) {
+                try (ResultSet result = statement.executeQuery()) {
+
+                    while (result.next()) {
+                        UUID uuid = UUID.fromString(result.getString("uuid"));
+                        deleteAssociatedFeatures(uuid);
+                        LOGGER.warn("Simulation " + uuid + " was not finish on server start-up and has been deleted.");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, Simulation.class);
+        }
     }
 }

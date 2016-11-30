@@ -58,10 +58,10 @@ public final class DatabaseConnector {
             try (Connection initConnection = getConnection()) {
                 initializeDeveloppmentSchema(initConnection);
                 new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
-                LOGGER.debug("Default administrator account has been created.");
+                LOGGER.info("Default administrator account has been created.");
             } catch (EntityAlreadyExistsException ignored) {
                 // The default admin user already exists, just ignore the exception
-                LOGGER.debug("Default admin user already exists ! Nothing created.");
+                LOGGER.info("Default admin user already exists ! Nothing created.");
             } catch (SQLException e) {
                 LOGGER.error(ExceptionUtils.getStackTrace(e));
                 throw new SQLUnexpectedException(e);

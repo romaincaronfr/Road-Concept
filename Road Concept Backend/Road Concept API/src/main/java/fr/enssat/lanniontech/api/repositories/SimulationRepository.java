@@ -12,7 +12,6 @@ import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.JSONUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +71,6 @@ public class SimulationRepository extends AbstractRepository {
                 }
                 return features;
             } catch (Exception e) {
-                LOGGER.debug(ExceptionUtils.getStackTrace(e));
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
             }
         }
@@ -85,7 +83,6 @@ public class SimulationRepository extends AbstractRepository {
                 MongoCollection<Document> collection = db.getCollection(computeDuplicatedCollectionName(simulationUUID));
                 collection.drop();
             } catch (Exception e) {
-                LOGGER.error(ExceptionUtils.getStackTrace(e));
                 throw new DatabaseOperationException("Error occured @@@ TODO", e);
             }
         }
@@ -100,6 +97,7 @@ public class SimulationRepository extends AbstractRepository {
     }
 
     /**
+     * TODO: Ne fonctionne pas ...  à analyser
      * Clone a collection.
      *
      * @param fromCollectionName

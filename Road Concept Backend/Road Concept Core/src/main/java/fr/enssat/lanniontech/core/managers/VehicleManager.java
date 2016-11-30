@@ -34,7 +34,7 @@ public class VehicleManager {
         }
     }
 
-    public void addToSpawnArea(RoadSection RS) {
+    private void addToSpawnArea(RoadSection RS) {
         spawnArea.add(RS);
     }
 
@@ -47,8 +47,6 @@ public class VehicleManager {
         Lane startingLane = gen.nextBoolean() ? spawnArea.get(startingRoad).getLaneAB() : spawnArea.get(startingRoad).getLaneBA();
         double startingPos = 4;
         int k = 0;
-        System.out.println(startingLane.getLength());
-        System.out.println(startingPos);
         while (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 15, startingPos + 5)) {
             startingPos = gen.nextInt((int) ((startingLane.getLength()) * 10)) / 10.0;
             if (k > 10) {

@@ -3,7 +3,7 @@ package fr.enssat.lanniontech.core.positioning;
 import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 
-public class SpaceTimePosition extends Position {
+public final class SpaceTimePosition extends Position {
 
     private final int time;
     private final double angle;
@@ -22,11 +22,11 @@ public class SpaceTimePosition extends Position {
 
     public static SpaceTimePosition getMean(Position A, Position B, int time, int vehicleId, VehicleType type) {
 
-        double lon = (A.lon + B.lon) / 2;
-        double lat = (A.lat + B.lat) / 2;
+        double lon = (A.getLongitude() + B.getLongitude()) / 2;
+        double lat = (A.getLatitude() + B.getLatitude()) / 2;
 
-        double lonDir = A.lon - B.lon;
-        double latDir = A.lat - B.lat;
+        double lonDir = A.getLongitude() - B.getLongitude();
+        double latDir = A.getLatitude() - B.getLatitude();
 
         double angle = -Tools.getOrientedAngle(0, 1, lonDir, latDir);
 

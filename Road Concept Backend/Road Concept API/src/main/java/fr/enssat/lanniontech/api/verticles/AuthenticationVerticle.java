@@ -43,7 +43,6 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-
         /*
          * The login route *DO NOT* contains "/api" in its path since it *MUST* be accessible when the user is not logged in.
          */

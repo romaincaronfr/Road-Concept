@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory;
 import java.util.UUID;
 
 public class Vehicle {
-    public static Logger LOG = LoggerFactory.getLogger(Vehicle.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Vehicle.class);
+
     private final double length;
     private double distanceDone;// in m
     private Side frontSide;
@@ -35,14 +36,18 @@ public class Vehicle {
      *         length of the vehicle
      */
     private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath, VehicleAI AI) {
-        this.ID = ID;
+        this.setID(ID);
         this.length = length;
-        this.distanceDone = 0;
-        this.myPath = myPath;
-        this.frontSide = new Side(length + startPos, this, start);
-        this.backSide = new Side(startPos, this, start);
-        this.historyManager = historyManager;
-        this.AI = AI;
+        this.setDistanceDone(0);
+        this.setMyPath(myPath);
+        this.setFrontSide(new Side(length + startPos, this, start));
+        this.setBackSide(new Side(startPos, this, start));
+        this.setHistoryManager(historyManager);
+        this.setAI(AI);
+    }
+
+    public static Logger getLOGGER() {
+        return LOGGER;
     }
 
     /**
@@ -50,13 +55,13 @@ public class Vehicle {
      */
     public void updateAcceleration() {
         // double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
-        double nextCarDist = AI.getFreeDistance() + 10;
+        double nextCarDist = getAI().getFreeDistance() + 10;
 
         double nextCarSpeed = 0;
-        if (nextCarDist < AI.getFreeDistance()) {
-            nextCarSpeed = frontSide.getNextCarSpeed();
+        if (nextCarDist < getAI().getFreeDistance()) {
+            nextCarSpeed = getFrontSide().getNextCarSpeed();
         }
-        AI.updateAcceleration(nextCarDist, nextCarSpeed, roadMaxSpeed());
+        getAI().updateAcceleration(nextCarDist, nextCarSpeed, roadMaxSpeed());
     }
 
     private double roadMaxSpeed() {
@@ -68,37 +73,37 @@ public class Vehicle {
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
      */
     public void updatePos(double time) {
-        double dDone = AI.getDistanceDone(time);
-        this.distanceDone += dDone;
-        backSide.moveOnPath(dDone);
-        frontSide.moveOnPath(dDone);
+        double dDone = getAI().getDistanceDone(time);
+        this.setDistanceDone(getDistanceDone() + dDone);
+        getBackSide().moveOnPath(dDone);
+        getFrontSide().moveOnPath(dDone);
     }
 
     public void logPosition(int time) {
-        historyManager.addPosition(getGPSPosition(time));
+        getHistoryManager().addPosition(getGPSPosition(time));
     }
 
     public double getSpeed() {
-        return AI.getSpeed();
+        return getAI().getSpeed();
     }
 
     public SpaceTimePosition getGPSPosition(int time) {
-        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID, type);
+        return SpaceTimePosition.getMean(getFrontSide().getGPS(), getBackSide().getGPS(), time, getID(), getType());
     }
 
     public UUID getPathStep(int i) {
-        return myPath.getStep(i);
+        return getMyPath().getStep(i);
     }
 
     public boolean isArrived() {
-        return backSide.getNextRoad() == null;
+        return getBackSide().getNextRoad() == null;
     }
 
     public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 3.5;
         VehicleAI AI = new VehicleAI(3, 1.5, 4);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
-        V.type = VehicleType.CAR;
+        V.setType(VehicleType.CAR);
         return V;
     }
 
@@ -106,7 +111,75 @@ public class Vehicle {
         double length = 15;
         VehicleAI AI = new VehicleAI(2, 1, 10);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
-        V.type = VehicleType.TRUCK;
+        V.setType(VehicleType.TRUCK);
         return V;
+    }
+
+    public double getLength() {
+        return length;
+    }
+
+    public double getDistanceDone() {
+        return distanceDone;
+    }
+
+    public void setDistanceDone(double distanceDone) {
+        this.distanceDone = distanceDone;
+    }
+
+    public Side getFrontSide() {
+        return frontSide;
+    }
+
+    public void setFrontSide(Side frontSide) {
+        this.frontSide = frontSide;
+    }
+
+    public Side getBackSide() {
+        return backSide;
+    }
+
+    public void setBackSide(Side backSide) {
+        this.backSide = backSide;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    public void setHistoryManager(HistoryManager historyManager) {
+        this.historyManager = historyManager;
+    }
+
+    public Path getMyPath() {
+        return myPath;
+    }
+
+    public void setMyPath(Path myPath) {
+        this.myPath = myPath;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
+
+    public void setType(VehicleType type) {
+        this.type = type;
+    }
+
+    public VehicleAI getAI() {
+        return AI;
+    }
+
+    public void setAI(VehicleAI AI) {
+        this.AI = AI;
     }
 }

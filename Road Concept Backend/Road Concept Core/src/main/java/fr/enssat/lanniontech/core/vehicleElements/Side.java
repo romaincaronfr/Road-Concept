@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class Side {
 
-    public static Logger LOG = LoggerFactory.getLogger(Side.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Side.class);
 
     private Trajectory myTrajectory;
 
@@ -48,19 +48,13 @@ public class Side {
         if (this.pos > pos) {
             myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext().getDestination();
-            try {
-                myTrajectory.getIn(this);
-            } catch (NullPointerException e) {
-                System.err.println(myTrajectory);
-                throw e;
-            }
-
+            myTrajectory.getIn(this);
         }
         this.pos = pos;
     }
 
     public void moveOnPath(double distance) {
-        double hypPos = this.pos + distance;
+        double hypPos = pos + distance;
         double pos = myTrajectory.getPos(this.pos + distance);
         if (hypPos > pos) {
             this.pos = pos;
@@ -69,18 +63,13 @@ public class Side {
             if (myTrajectory.getRoadId() != myRoad) {
                 myRoad = myTrajectory.getRoadId();
                 if (nextRoad != myRoad) {
-                    LOG.error(nextRoad + " != " + myRoad);
+                    LOGGER.error(nextRoad + " != " + myRoad);
                 }
                 nextRoad = myVehicle.getPathStep(++pathStep);
-                //LOG.debug("trajectory changed, now on road : " + myRoad);
-                //LOG.debug("is on step : " + pathStep);
+                //LOGGER.debug("trajectory changed, now on road : " + myRoad);
+                //LOGGER.debug("is on step : " + pathStep);
             }
-            try {
-                myTrajectory.getIn(this);
-            } catch (NullPointerException e) {
-                System.err.println(myTrajectory);
-                throw e;
-            }
+            myTrajectory.getIn(this);
         } else {
             this.pos = pos;
         }

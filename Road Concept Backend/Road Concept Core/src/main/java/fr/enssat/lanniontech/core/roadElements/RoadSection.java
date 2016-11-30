@@ -72,11 +72,7 @@ public class RoadSection {
     }
 
     public double getWPos(Lane lane, double width) {
-        if (lane == laneAB) {
-            return width / 2;
-        } else {
-            return -width / 2;
-        }
+        return lane == laneAB ? width / 2 : -width / 2;
     }
 
     public Road getMyRoad() {

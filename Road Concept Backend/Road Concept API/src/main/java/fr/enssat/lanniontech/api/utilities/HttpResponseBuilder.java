@@ -20,7 +20,7 @@ public class HttpResponseBuilder {
         routingContext.response().setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         routingContext.response().end(JSONUtils.toJSON(error));
 
-        LOGGER.debug(ExceptionUtils.getStackTrace(cause));
+        LOGGER.error(ExceptionUtils.getStackTrace(cause));
     }
 
     public static void buildUnexpectedErrorResponse(RoutingContext routingContext) {

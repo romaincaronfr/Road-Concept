@@ -25,6 +25,7 @@ public class EndRoadTrajectory extends Trajectory {
     //------------inherited methods----------//
 
 
+    @Override
     public TrajectoryJunction getNext() {
         return destination;
     }
@@ -34,14 +35,16 @@ public class EndRoadTrajectory extends Trajectory {
         return getNext();
     }
 
+    @Override
     public double getSpeedOfFirst() {
-        if (vehiclesSides.size() == 0) {
+        if (vehiclesSides.isEmpty()) {
             return destination.getDestination().getSpeedOfFirst();
         } else {
             return vehiclesSides.get(0).getMyVehicle().getSpeed();
         }
     }
 
+    @Override
     public double getNextCarSpeed(Side side) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -51,8 +54,9 @@ public class EndRoadTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public double getDistanceToFirst(double freeDistance) {
-        if (vehiclesSides.size() == 0) {
+        if (vehiclesSides.isEmpty()) {
             if (freeDistance - length > 0) {
                 return length + destination.getDestination().getDistanceToFirst(freeDistance - length);
             } else {
@@ -63,6 +67,7 @@ public class EndRoadTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public double getDistanceToNext(Side side, double freeDistance) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -77,6 +82,7 @@ public class EndRoadTrajectory extends Trajectory {
         }
     }
 
+    @Override
     public Position getGPS(double pos) {
         return pf.get(pos);
     }
@@ -97,10 +103,11 @@ public class EndRoadTrajectory extends Trajectory {
         this.source = source;
     }
 
+    @Override
     public void explore(Map<Trajectory, Boolean> trajectoryMap) {
         if (!trajectoryMap.get(this)) {
             trajectoryMap.replace(this, true);
-            this.destination.getDestination().explore(trajectoryMap);
+            destination.getDestination().explore(trajectoryMap);
         }
     }
 

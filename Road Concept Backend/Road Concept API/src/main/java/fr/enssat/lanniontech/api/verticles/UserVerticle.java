@@ -95,7 +95,7 @@ public class UserVerticle extends AbstractVerticle {
             String lastName = body.getString("lastName");
             String firstName = body.getString("firstName");
             if (StringUtils.isBlank(email) || StringUtils.isBlank(password) || StringUtils.isBlank(lastName) || StringUtils.isBlank(firstName)) {
-                throw new BadRequestException();
+                throw new InvalidParameterException("Bad format for parameters. Check the API documentation.");
             }
             UserType type = UserType.forValue(body.getInteger("type"));
 
@@ -105,7 +105,7 @@ public class UserVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
         } catch (PrivilegeLevelException e) {
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (ClassCastException | BadRequestException e) {
+        } catch (ClassCastException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Bad format for parameters. Check the API documentation.");
         } catch (InvalidParameterException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, e.getMessage());

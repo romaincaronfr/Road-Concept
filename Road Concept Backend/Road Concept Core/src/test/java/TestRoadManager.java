@@ -2,7 +2,6 @@ import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
-import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,8 +18,8 @@ public class TestRoadManager {
         Position C = new Position(2, 2);
         Road R = new Road(UUID.randomUUID());
 
-        RoadSection RS1 = RM.addRoadSection(A, B,R);
-        RoadSection RS2 = RM.addRoadSection(B, C,R);
+        RoadSection RS1 = RM.addRoadSection(A, B, R);
+        RoadSection RS2 = RM.addRoadSection(B, C, R);
 
         Assert.assertTrue(RS1.getLaneAB().getNextLane() == RS2.getLaneAB());
         Assert.assertTrue(RS2.getLaneBA().getNextLane() == RS1.getLaneBA());

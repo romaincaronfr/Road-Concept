@@ -15,6 +15,7 @@ public class Path {
         path.add(dest);
     }
 
+    // FIXME: ON NE FAIT PAS UN CATCH VIDE !!! En plus, y'a des exceptions qui pètent...
     public UUID getStep(int step) {
         UUID stepUuid = null;
         try {

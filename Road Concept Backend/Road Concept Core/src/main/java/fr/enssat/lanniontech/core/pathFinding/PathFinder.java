@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class PathFinder {
 
-    private static Logger LOG = LoggerFactory.getLogger(PathFinder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PathFinder.class);
 
     private RoadManager roadManager;
     private Random gen;
@@ -31,7 +31,7 @@ public class PathFinder {
     public Path getRandomPath(Trajectory source, int length) {
         Path myPath = new Path();
         UUID step = source.getRoadId();
-        LOG.debug("starting road : " + step);
+        LOGGER.debug("starting road : " + step);
         myPath.addToPath(step);
         Intersection nextInter = source.getNextIntersection();
         List<SimpleTrajectory> possibleNext;
@@ -79,12 +79,12 @@ public class PathFinder {
 
         while (!openNodes.isEmpty() && finalNode == null) {
             node = openNodes.get(0);
-            if (closedNodes.containsKey(node.intersection) && closedNodes.get(node.intersection).cost >= node.cost) {
+            if (closedNodes.containsKey(node.getIntersection()) && closedNodes.get(node.getIntersection()).getCost() >= node.getCost()) {
                 openNodes.remove(node);
             } else {
-                for (Trajectory t : node.intersection.getTrajectoriesFrom(node.source)) {
-                    if (t.getNextIntersection() != node.intersection) {
-                        Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(), Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(), node, t.getNextIntersection());
+                for (Trajectory t : node.getIntersection().getTrajectoriesFrom(node.getSource())) {
+                    if (t.getNextIntersection() != node.getIntersection()) {
+                        Node newNode = new Node(node.getCost() + roadManager.getRoad(t.getRoadId()).getLength(), Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(), node, t.getNextIntersection());
                         int pos = 0;
                         while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
                             pos++;
@@ -93,31 +93,31 @@ public class PathFinder {
                     }
 
 
-                    if (t.getRoadId().equals(destination) && node.intersection == goal) {
+                    if (t.getRoadId().equals(destination) && node.getIntersection() == goal) {
                         finalNode = node;
                     }
                 }
                 openNodes.remove(node);
-                closedNodes.replace(node.intersection, node);
+                closedNodes.replace(node.getIntersection(), node);
             }
         }
 
         if (finalNode == null) {
-            LOG.error("destination unreachable");
+            LOGGER.error("destination unreachable");
         }
 
         reconstructPath(myPath, finalNode);
         myPath.addToPath(destination);
-        //LOG.debug(myPath.toString());
+        //LOGGER.debug(myPath.toString());
 
         return myPath;
     }
 
     private void reconstructPath(Path myPath, Node node) {
-        if (node.sourceNode != null) {
-            reconstructPath(myPath, node.sourceNode);
+        if (node.getSourceNode() != null) {
+            reconstructPath(myPath, node.getSourceNode());
         }
-        myPath.addToPath(node.source);
+        myPath.addToPath(node.getSource());
     }
 
 }

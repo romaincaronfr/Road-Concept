@@ -53,7 +53,7 @@ public class SimulatorService extends AbstractService implements Observer {
 
             // Observe the simulator to get results in real time
             simulation.getSimulator().addObserver(this); // Being notified when the simulation is finish
-            simulation.getSimulator().historyManager.addObserver(this); // Being notified at each result step
+            simulation.getSimulator().getHistoryManager().addObserver(this); // Being notified at each result step
 
             start(simulation);
 
@@ -93,7 +93,7 @@ public class SimulatorService extends AbstractService implements Observer {
                     } else {
                         type = FeatureType.TRUCK;
                     }
-                    simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLon(), vehicle.getLat()), vehicle.getAngle(), type);
+                    simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
                 }
 
                 List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
@@ -107,6 +107,7 @@ public class SimulatorService extends AbstractService implements Observer {
                 Simulation simulation = get(simulationUUID);
                 simulationParametersRepository.updateFinish(simulation, true);
                 simulation.setFinish(true);
+                simulation.setSimulator(null); // garbage collector
             }
         }
     }
@@ -115,18 +116,18 @@ public class SimulatorService extends AbstractService implements Observer {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
-        simulation.getSimulator().vehicleManager.addToSpawnArea(simulation.getSimulator().roadManager.getRoad(simulation.getLivingFeatureUUID()));
+        simulation.getSimulator().getVehicleManager().addToSpawnArea(simulation.getSimulator().getRoadManager().getRoad(simulation.getLivingFeatureUUID()));
         int count = 0; //TODO: REMOVE
         for (int i = 0; i < simulation.getVehicleCount(); i++) {
-            if (simulation.getSimulator().vehicleManager.addVehicle()) {
+            if (simulation.getSimulator().getVehicleManager().addVehicle()) {
                 count++;
             }
         }
         LOGGER.debug("VEHICLE COUNT = " + count);
-        // TODO: Définir point d'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
+        // TODO: Définir point vertx-default-jul-logging.properties'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
 
-        // return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
-        return simulation.getSimulator().launchSimulation(86400, 1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
+        return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
+        //return simulation.getSimulator().launchSimulation(86400, 1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
 
     private void sendFeatures(Simulation simulation, FeatureCollection features) {
@@ -136,15 +137,15 @@ public class SimulatorService extends AbstractService implements Observer {
                 Coordinates last = road.getCoordinates().get(0);
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
                     Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulation.getSimulator().positionManager.addPosition(last.getLongitude(), last.getLatitude());
-                    Position B = simulation.getSimulator().positionManager.addPosition(coordinates.getLongitude(), coordinates.getLatitude());
-                    simulation.getSimulator().roadManager.addRoadSectionToRoad(A, B, feature.getUuid());
+                    Position A = simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude());
+                    Position B = simulation.getSimulator().getPositionManager().addPosition(coordinates.getLongitude(), coordinates.getLatitude());
+                    simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid());
                     last = coordinates;
                 }
             }
         }
-        simulation.getSimulator().roadManager.closeRoads();
-        if (simulation.getSimulator().roadManager.checkIntegrity() != 0) {
+        simulation.getSimulator().getRoadManager().closeRoads();
+        if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
             throw new RoadConceptUnexpectedException();
         }
     }
@@ -221,11 +222,7 @@ public class SimulatorService extends AbstractService implements Observer {
 
         // Delete simulation parameters
         simulationParametersRepository.delete(simulation);
-
         // Delete duplicated features
         simulationGlobalRepository.deleteAssociatedFeatures(simulationUUID);
-
-        // Delete results
-        simulationResultRepository.delete(simulationUUID);
     }
 }

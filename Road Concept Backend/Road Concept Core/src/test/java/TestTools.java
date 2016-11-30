@@ -7,11 +7,11 @@ import org.junit.Test;
  */
 public class TestTools {
     @Test
-    public void testOrientedAngle(){
-        Assert.assertEquals(0, Tools.getOrientedAngle(0,1,0,1),0.000000000001);
+    public void testOrientedAngle() {
+        Assert.assertEquals(0, Tools.getOrientedAngle(0, 1, 0, 1), 0.000000000001);
 
-        Assert.assertEquals(Math.PI, Tools.getOrientedAngle(0,1,0,-1),0.000000000001);
-        Assert.assertEquals(-Math.PI/2, Tools.getOrientedAngle(0,1,1,0),0.000000000001);
-        Assert.assertEquals(Math.PI/2, Tools.getOrientedAngle(0,1,-1,0),0.000000000001);
+        Assert.assertEquals(Math.PI, Tools.getOrientedAngle(0, 1, 0, -1), 0.000000000001);
+        Assert.assertEquals(-Math.PI / 2, Tools.getOrientedAngle(0, 1, 1, 0), 0.000000000001);
+        Assert.assertEquals(Math.PI / 2, Tools.getOrientedAngle(0, 1, -1, 0), 0.000000000001);
     }
 }

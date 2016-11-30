@@ -14,11 +14,11 @@ import java.util.UUID;
 public class testEndRoadTrajectory {
 
     @Test
-    public void test1EdgeClosing(){
-        Position A = new Position(0,0);
-        Position B = new Position(0,1);
+    public void test1EdgeClosing() {
+        Position A = new Position(0, 0);
+        Position B = new Position(0, 1);
 
-        RoadSection RS = new RoadSection(A,B);
+        RoadSection RS = new RoadSection(A, B);
 
         Assert.assertNull(RS.getLaneAB().getInsertTrajectory().getNext());
         Assert.assertNull(RS.getLaneBA().getInsertTrajectory().getNext());
@@ -26,20 +26,18 @@ public class testEndRoadTrajectory {
         SimpleTrajectory AB = RS.getLaneAB().getInsertTrajectory();
         SimpleTrajectory BA = RS.getLaneBA().getInsertTrajectory();
 
-        EndRoadTrajectory BB = new EndRoadTrajectory(AB,BA, UUID.randomUUID());
+        EndRoadTrajectory BB = new EndRoadTrajectory(AB, BA, UUID.randomUUID());
 
-        TrajectoryJunction junction = new TrajectoryJunction(AB,BB,
-                AB.getStop(),0);
+        TrajectoryJunction junction = new TrajectoryJunction(AB, BB, AB.getStop(), 0);
         AB.addDestination(junction);
         BB.setSource(junction);
 
-        junction = new TrajectoryJunction(BB,BA,
-                BB.getLength(),BA.getStart());
+        junction = new TrajectoryJunction(BB, BA, BB.getLength(), BA.getStart());
         BA.addSource(junction);
         BB.setDestination(junction);
 
-        Assert.assertEquals(BB,AB.getNext().getDestination());
-        Assert.assertEquals(BA,BB.getNext().getDestination());
+        Assert.assertEquals(BB, AB.getNext().getDestination());
+        Assert.assertEquals(BA, BB.getNext().getDestination());
 
         Assert.assertNull(BA.getNext());
     }

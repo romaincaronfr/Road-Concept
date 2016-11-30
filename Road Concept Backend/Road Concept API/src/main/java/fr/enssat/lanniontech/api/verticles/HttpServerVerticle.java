@@ -1,5 +1,7 @@
 package fr.enssat.lanniontech.api.verticles;
 
+import fr.enssat.lanniontech.api.entities.simulation.Simulation;
+import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -7,6 +9,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.CorsHandler;
@@ -16,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
+import java.util.Iterator;
+import java.util.List;
 
 public class HttpServerVerticle extends AbstractVerticle {
 
@@ -29,6 +34,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
 
         DatabaseConnector.setUp(); // Throws if the server can't connect/set up the databases connections
+        cleanUpData();
 
         configureGlobalHandlers(router);
 
@@ -39,6 +45,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new UserVerticle(router));
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
+        LOGGER.warn("Road Concept API successfully started !");
     }
 
     private void configureGlobalHandlers(Router router) {
@@ -58,6 +65,7 @@ public class HttpServerVerticle extends AbstractVerticle {
             if (routingContext.session() == null || routingContext.session().get(Constants.SESSION_CURRENT_USER) == null) {
                 HttpResponseBuilder.buildUnauthorizedResponse(routingContext);
             } else {
+                checkActivesSimulations(routingContext); //TODO: Do it here ? Really ?
                 routingContext.next(); // process the next handler, if any
             }
         });
@@ -78,5 +86,20 @@ public class HttpServerVerticle extends AbstractVerticle {
         corsHandler.allowedHeader("Access-Control-Allow-Origin");
         corsHandler.allowedHeader("Access-Control-Allow-Headers");
         corsHandler.allowCredentials(true);
+    }
+
+    private void cleanUpData() {
+        SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
+        simulationParametersRepository.deleteUnfinished();
+    }
+
+    private void checkActivesSimulations(RoutingContext routingContext) {
+        List<Simulation> sessionStoredSimulations = routingContext.session().get("actives_simulations");
+        for (Iterator<Simulation> iterator = sessionStoredSimulations.iterator(); iterator.hasNext(); ) {
+            Simulation simulation = iterator.next();
+            if (simulation.isFinish()) {
+                iterator.remove();
+            }
+        }
     }
 }

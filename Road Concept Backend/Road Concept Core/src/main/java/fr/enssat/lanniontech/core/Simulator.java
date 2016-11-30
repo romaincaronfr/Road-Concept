@@ -15,12 +15,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 
 
 public class Simulator extends Observable implements Runnable {
-    public static Logger LOG = LoggerFactory.getLogger(Simulator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Simulator.class);
 
-    public RoadManager roadManager;
-    public PositionManager positionManager;
-    public VehicleManager vehicleManager;
-    public HistoryManager historyManager;
+    private final RoadManager roadManager;
+    private final PositionManager positionManager;
+    private final VehicleManager vehicleManager;
+    private final HistoryManager historyManager;
 
     private double progress;
     private Thread simulatorThread;
@@ -96,7 +96,7 @@ public class Simulator extends Observable implements Runnable {
             notifyObservers(simId);
             progress = 1;
             stopTime = System.currentTimeMillis();
-            LOG.debug("Simulation " + simId + " ended after " + this.getDuration() + " ms");
+            LOGGER.debug("Simulation " + simId + " ended after " + getDuration() + " ms");
         }
     }
 
@@ -131,4 +131,19 @@ public class Simulator extends Observable implements Runnable {
         }
     }
 
+    public RoadManager getRoadManager() {
+        return roadManager;
+    }
+
+    public PositionManager getPositionManager() {
+        return positionManager;
+    }
+
+    public VehicleManager getVehicleManager() {
+        return vehicleManager;
+    }
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
 }

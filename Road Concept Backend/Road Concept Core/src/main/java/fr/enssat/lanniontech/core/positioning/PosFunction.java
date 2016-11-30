@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 
 public class PosFunction {
 
-    public static Logger LOG = LoggerFactory.getLogger(PosFunction.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(PosFunction.class);
 
     private double alat;
     private double blat;
@@ -19,10 +18,10 @@ public class PosFunction {
     public PosFunction(Position P1, Position P2) {
         double length = Position.length(P1, P2);
 
-        blat = P1.lat;
-        alat = (P2.lat - P1.lat) / length;
-        blon = P1.lon;
-        alon = (P2.lon - P1.lon) / length;
+        blat = P1.getLatitude();
+        alat = (P2.getLatitude() - P1.getLatitude()) / length;
+        blon = P1.getLongitude();
+        alon = (P2.getLongitude() - P1.getLongitude()) / length;
 
         clat = alon;
         clon = -alat;
@@ -36,7 +35,7 @@ public class PosFunction {
         double lat = alat * pos + blat + clat * wpos;
         double lon = alon * pos + blon + clon * wpos;
         if (Double.isNaN(lat) || Double.isNaN(lon)) {
-            LOG.debug("out of bound");
+            LOGGER.debug("out of bound");
         }
         return new Position(lon, lat);
     }
@@ -90,7 +89,7 @@ public class PosFunction {
             p[0] = (R[1] - (p[1] * M[3])) / M[2];
         }
 
-        //LOG.debug("p[0] = "+ p[0] + " p[1] = " + p[1]);
+        //LOGGER.debug("p[0] = "+ p[0] + " p[1] = " + p[1]);
 
         return p;
     }

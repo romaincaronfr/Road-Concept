@@ -75,7 +75,6 @@ public class MapService extends AbstractService {
 
     public Feature updateFeature(int mapID, Feature feature) {
         long count = mapFeatureRepository.delete(mapID, feature.getUuid());
-        LOGGER.debug("Deleted count = " + count);
         if (count == 0) {
             throw new EntityNotExistingException(Feature.class);
         }
@@ -99,21 +98,7 @@ public class MapService extends AbstractService {
         }
 
         FeatureCollection features = JSONUtils.fromJSON(fileData, FeatureCollection.class);
-        int nullID = 0;
-        for (Feature getted : features.getFeatures()) {
-            if (getted.getOpenStreetMapID().equals("null") || getted.getOpenStreetMapID() == null) {
-                nullID++;
-            }
-        }
-        LOGGER.debug("BEFORE OSM ADAPTATION NULL COUNT = " + nullID);
-        nullID = 0;
         fromOSMAdaptation(features);
-        for (Feature getted : features.getFeatures()) {
-            if (getted.getOpenStreetMapID().equals("null") || getted.getOpenStreetMapID() == null) {
-                nullID++;
-            }
-        }
-        LOGGER.debug("AFTER OSM ADAPTATION NULL COUNT = " + nullID);
 
         long startTime = System.nanoTime();
         features = IntersectionsSplitter.process(features);
@@ -142,24 +127,15 @@ public class MapService extends AbstractService {
             //            }
         }
 
-        nullID = 0;
-        for (Feature getted : toAdd.getFeatures()) {
-            if (getted.getOpenStreetMapID() == null) {
-                nullID++;
-            }
-        }
-
-        LOGGER.debug("TO ADD OSM ID NULL COUNT = " + nullID);
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
         }
-        LOGGER.debug("@@@ TIME SPENT ON EXPERIMENTAL STUFF : " + duration / 1000000 + "milliseconds");
-        LOGGER.debug("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
+        LOGGER.info("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
         return toAdd.getFeatures().size();
     }
 
     //FIXME: refactor + extraire en constante les colonnes
-    public void fromOSMAdaptation(FeatureCollection features) {
+    private void fromOSMAdaptation(FeatureCollection features) {
         for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
 
@@ -382,9 +358,7 @@ public class MapService extends AbstractService {
                         Coordinates firstPointRoadB;
                         firstPointRoadB = new Coordinates(createdRoad.getCoordinates().get(i).getLongitude(), createdRoad.getCoordinates().get(i).getLatitude());
                         boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB);
-                        LOGGER.debug("@@@ j = : " + j);
                         if (intersectionPoint) {
-                            LOGGER.debug("@@@ Intersection detected ! firstPointRoadA = " + firstPointRoadA + " lastPointRoadA = " + lastPointRoadA);
                             splitNewFeatureAt.set(i, true);
                             coordinaToCheck.getCoordinates().add(j + 1, createdRoad.getCoordinates().get(i));
                             tabBool.get(uuid).add(j + 1, true);

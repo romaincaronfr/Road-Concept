@@ -1,8 +1,6 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Road;
-import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.UUID;
