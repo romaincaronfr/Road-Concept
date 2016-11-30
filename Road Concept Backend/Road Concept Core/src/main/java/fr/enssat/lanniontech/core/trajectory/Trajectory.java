@@ -108,8 +108,6 @@ public abstract class Trajectory {
 
     /**
      * return the distance to the first vehicle
-     *
-     * @param freeDistance
      */
     public abstract double getDistanceToFirst(double freeDistance);
 

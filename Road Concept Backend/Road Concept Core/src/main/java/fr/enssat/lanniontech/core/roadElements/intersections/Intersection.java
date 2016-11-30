@@ -6,7 +6,11 @@ import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class Intersection {
 
@@ -48,9 +52,6 @@ public class Intersection {
 
     /**
      * add the passed Roadsection to the intersection
-     *
-     * @param Rs
-     * @return
      */
     public boolean addRoadSection(RoadSection Rs) {
         if (Rs.getA() != P && Rs.getB() != P) {

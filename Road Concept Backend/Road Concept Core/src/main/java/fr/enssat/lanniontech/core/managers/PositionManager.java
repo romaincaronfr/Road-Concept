@@ -45,7 +45,6 @@ public class PositionManager {
 
     public boolean isInRange(Position P) {
         double e = 0.01;
-        return P.getLat() <= maxLat + e && P.getLat() >= minLat - e &&
-                P.getLon() <= maxLon + e && P.getLon() >= minLon - e;
+        return P.getLat() <= maxLat + e && P.getLat() >= minLat - e && P.getLon() <= maxLon + e && P.getLon() >= minLon - e;
     }
 }
