@@ -5,6 +5,8 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
+import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
+import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -13,11 +15,11 @@ import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,7 +50,12 @@ public class SimulatorVerticle extends AbstractVerticle {
     //TODO: Handle exceptions + doc Swagger
     private void processGetSimulationProgress(RoutingContext routingContext) {
         try {
-            //TODO
+            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
+            List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
+            int progress = simulatorService.getExecutionProgress(simulationUUID, activesSimulations);
+            HttpResponseBuilder.buildOkResponse(routingContext, progress);
+        } catch (ProgressUnavailableException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "The given simulation is not currently available :( (not in the session)");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
@@ -83,6 +90,16 @@ public class SimulatorVerticle extends AbstractVerticle {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
             simulatorService.delete(simulationUUID);
+
+            // Remove the given simulation from the session scope, if present
+            List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
+            for (Iterator<Simulation> iterator = activesSimulations.iterator(); iterator.hasNext(); ) {
+                Simulation simulation = iterator.next();
+                if (simulation.getUuid().equals(simulationUUID)) {
+                    iterator.remove();
+                }
+            }
+
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -135,9 +152,16 @@ public class SimulatorVerticle extends AbstractVerticle {
             int vehicleCount = body.getInteger("vehicle_count");
 
             Simulation simulation = simulatorService.create(currentUser, name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
+
+            List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
+            activesSimulations.add(simulation);
+
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
+        } catch (RoadConceptUnexpectedException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "An error occured in the simulator. Check params ?");
+        } catch (EntityNotExistingException e) {
+            HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
-            LOGGER.debug(ExceptionUtils.getStackTrace(e));
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }

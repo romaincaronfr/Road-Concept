@@ -9,11 +9,16 @@ import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class PathFinder {
 
-    public static Logger LOG = LoggerFactory.getLogger(PathFinder.class);
+    private static Logger LOG = LoggerFactory.getLogger(PathFinder.class);
 
     private RoadManager roadManager;
     private Random gen;
@@ -52,7 +57,7 @@ public class PathFinder {
         Path myPath = new Path();
 
         Intersection start = source.getNextIntersection();
-        Intersection goal = null;
+        Intersection goal;
         if (reverse) {
             goal = roadManager.getIntersection(roadManager.getRoad(destination).getB());
             if (goal == null) {
@@ -72,16 +77,14 @@ public class PathFinder {
         Node node = new Node(0, Position.length(start.getP(), goal.getP()), source.getRoadId(), null, start);
         openNodes.add(node);
 
-        while (openNodes.size() > 0 && finalNode == null) {
+        while (!openNodes.isEmpty() && finalNode == null) {
             node = openNodes.get(0);
             if (closedNodes.containsKey(node.intersection) && closedNodes.get(node.intersection).cost >= node.cost) {
                 openNodes.remove(node);
             } else {
                 for (Trajectory t : node.intersection.getTrajectoriesFrom(node.source)) {
                     if (t.getNextIntersection() != node.intersection) {
-                        Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(),
-                                Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(),
-                                node, t.getNextIntersection());
+                        Node newNode = new Node(node.cost + roadManager.getRoad(t.getRoadId()).getLength(), Position.length(t.getNextIntersection().getP(), goal.getP()), t.getRoadId(), node, t.getNextIntersection());
                         int pos = 0;
                         while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
                             pos++;

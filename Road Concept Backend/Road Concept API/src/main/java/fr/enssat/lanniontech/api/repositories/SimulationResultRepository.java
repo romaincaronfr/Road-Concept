@@ -36,6 +36,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // ==========
 
     public void addRoadMetric(UUID simulationUUID, UUID featureUUID, int congestion, int timestamp) {
+        //LOGGER.debug("Inserting congestion " + congestion + " at timestamp " + timestamp);
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
 
@@ -82,6 +83,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // ========
 
     public void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
+        //LOGGER.debug("Inserting vehicle " + vehicleID + " at timestamp " + timestamp);
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
 
@@ -117,7 +119,6 @@ public class SimulationResultRepository extends SimulationRepository {
                         step.setTimestamp(result.getInt("timestamp_s"));
                         step.setType(FeatureType.forValue(result.getInt("type")));
                         step.setVehicleID(vehicleID);
-
                         double longitude = result.getDouble("longitude");
                         double latitude = result.getDouble("latitude");
                         step.setCoordinates(new Coordinates(longitude, latitude));
@@ -146,7 +147,6 @@ public class SimulationResultRepository extends SimulationRepository {
                         step.setTimestamp(timestamp);
                         step.setType(FeatureType.forValue(result.getInt("type")));
                         step.setVehicleID(result.getInt("vehicle_id"));
-
                         double longitude = result.getDouble("longitude");
                         double latitude = result.getDouble("latitude");
                         step.setCoordinates(new Coordinates(longitude, latitude));
@@ -169,13 +169,13 @@ public class SimulationResultRepository extends SimulationRepository {
      * Delete all the results associated to the given simulation
      */
     public void delete(UUID simulationUUID) {
-        delete(simulationUUID, DELETE_ROAD_METRICS, null); //TODO clazz
-        delete(simulationUUID, DELETE_VEHCILES_POSITIONS, null); // TODO clazz
+        delete(simulationUUID, DELETE_ROAD_METRICS, SimulationCongestionResult.class);
+        delete(simulationUUID, DELETE_VEHCILES_POSITIONS, SimulationVehicleResult.class);
     }
 
     private void delete(UUID simulationUUID, String query, Class<? extends Entity> clazz) {
         try (Connection connection = getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(DELETE_VEHCILES_POSITIONS)) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.executeUpdate();
             }

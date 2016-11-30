@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.api.verticles;
 
 import fr.enssat.lanniontech.api.entities.User;
+import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.AuthenticationException;
 import fr.enssat.lanniontech.api.services.AuthenticationService;
 import fr.enssat.lanniontech.api.utilities.Constants;
@@ -20,6 +21,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.MediaType;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -48,7 +50,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/login").blockingHandler(this::processLogin);
 
         router.route(HttpMethod.POST, "/api/logout").handler(this::processLogout);
-        router.route(HttpMethod.GET, "/api/me").handler(this::processUserDetails);
+        router.route(HttpMethod.GET, "/api/me").handler(this::processGetUserDetails);
     }
 
     // ========
@@ -70,7 +72,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
     }
 
     private void processLogin(RoutingContext routingContext) {
-        // The content type is not set by default for this request
+        // The content type is not set by default for this request (not starting with /api)
         routingContext.response().putHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
         try {
             JsonObject requestBody = routingContext.getBodyAsJson();
@@ -84,6 +86,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
+            routingContext.session().put("actives_simulations", new ArrayList<Simulation>()); //FIXME: Never cleared, execpt on logout... Memory leak !
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (BadRequestException | ClassCastException e) {
@@ -97,7 +100,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
         }
     }
 
-    private void processUserDetails(RoutingContext routingContext) {
+    private void processGetUserDetails(RoutingContext routingContext) {
         try {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             HttpResponseBuilder.buildOkResponse(routingContext, currentUser);

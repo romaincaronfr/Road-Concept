@@ -5,11 +5,19 @@ import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
-import fr.enssat.lanniontech.core.trajectory.*;
+import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
+import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryEndType;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class RoadManager {
@@ -120,13 +128,11 @@ public class RoadManager {
         SimpleTrajectory destination = RoadEdges.get(P).get(0).getRightLane(P).getInsertTrajectory();
         EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
 
-        TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd,
-                source.getStop(), 0);
+        TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd, source.getStop(), 0);
         source.addDestination(junction);
         deadEnd.setSource(junction);
 
-        junction = new TrajectoryJunction(deadEnd, destination,
-                deadEnd.getLength(), destination.getStart());
+        junction = new TrajectoryJunction(deadEnd, destination, deadEnd.getLength(), destination.getStart());
         destination.addSource(junction);
         deadEnd.setDestination(junction);
 
@@ -258,7 +264,7 @@ public class RoadManager {
 
     public void saveSates(HistoryManager historyManager, int timestamp) {
         for (Road road : roads.values()) {
-            historyManager.AddRoadMetric(road.getMetrics(timestamp));
+            historyManager.addRoadMetric(road.getMetrics(timestamp));
         }
     }
 }

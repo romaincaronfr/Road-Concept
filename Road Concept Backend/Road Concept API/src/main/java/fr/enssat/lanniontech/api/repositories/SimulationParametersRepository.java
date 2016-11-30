@@ -3,7 +3,6 @@ package fr.enssat.lanniontech.api.repositories;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
-import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
+
 public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
@@ -23,12 +24,13 @@ public class SimulationParametersRepository extends SimulationRepository {
     private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_map = ? AND id_user = ?";
+    private static final String UPDATE_FINISH = "UPDATE simulation SET finish = ? WHERE uuid = ? AND id_user = ?";
 
     // CREATE
     // ------
 
     public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
 
@@ -74,7 +76,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ===
 
     public List<Simulation> getAll(int userID) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, userID);
 
@@ -108,7 +110,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public Simulation getFromUUID(UUID uuid) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_UUID)) {
                 statement.setString(1, uuid.toString());
 
@@ -140,7 +142,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public List<Simulation> getAllFromMap(User user, int mapID) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
                 statement.setInt(2, user.getId());
@@ -167,6 +169,23 @@ public class SimulationParametersRepository extends SimulationRepository {
                     }
                     return simulations;
                 }
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, Simulation.class);
+        }
+    }
+
+    // ======
+    // UPDATE
+    // ======
+
+    public void updateFinish(Simulation simulation, boolean newValue) {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(UPDATE_FINISH)) {
+                statement.setBoolean(1, newValue);
+                statement.setString(2, simulation.getUuid().toString());
+                statement.setInt(3, simulation.getCreatorID());
+                statement.executeUpdate();
             }
         } catch (SQLException e) {
             throw processBasicSQLException(e, Simulation.class);

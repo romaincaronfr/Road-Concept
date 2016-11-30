@@ -96,7 +96,7 @@ public class Simulator extends Observable implements Runnable {
             notifyObservers(simId);
             progress = 1;
             stopTime = System.currentTimeMillis();
-            LOG.debug("sim " + simId + " ended after " + this.getDuration() + " ms");
+            LOG.debug("Simulation " + simId + " ended after " + this.getDuration() + " ms");
         }
     }
 

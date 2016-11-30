@@ -25,14 +25,16 @@ public class Vehicle {
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
      *
-     * @param ID             identifier for the vehicle
-     * @param start          lane where the vehicle is placed
-     * @param startPos       position in the lane of the new vehicle
-     * @param length         length of the vehicle
-     * @param historyManager
+     * @param ID
+     *         identifier for the vehicle
+     * @param start
+     *         lane where the vehicle is placed
+     * @param startPos
+     *         position in the lane of the new vehicle
+     * @param length
+     *         length of the vehicle
      */
-    private Vehicle(int ID, Lane start, double startPos, double length,
-                    HistoryManager historyManager, Path myPath, VehicleAI AI) {
+    private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath, VehicleAI AI) {
         this.ID = ID;
         this.length = length;
         this.distanceDone = 0;
@@ -47,7 +49,9 @@ public class Vehicle {
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
+        // double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
+        double nextCarDist = AI.getFreeDistance() + 10;
+
         double nextCarSpeed = 0;
         if (nextCarDist < AI.getFreeDistance()) {
             nextCarSpeed = frontSide.getNextCarSpeed();
@@ -71,7 +75,7 @@ public class Vehicle {
     }
 
     public void logPosition(int time) {
-        historyManager.AddPosition(getGPSPosition(time));
+        historyManager.addPosition(getGPSPosition(time));
     }
 
     public double getSpeed() {

@@ -28,14 +28,14 @@ public class HistoryManager extends Observable {
         this.positionManager = positionManager;
     }
 
-    public void AddPosition(SpaceTimePosition P) {
-        if(!positionManager.isInRange(P)){
+    public void addPosition(SpaceTimePosition P) {
+        if (!positionManager.isInRange(P)) {
             System.err.println("car out of bounds");
         }
         currentPositionSample.add(P);
     }
 
-    public void AddRoadMetric(RoadMetrics R) {
+    public void addRoadMetric(RoadMetrics R) {
         currentRoadMetricsSample.add(R);
     }
 
@@ -61,7 +61,7 @@ public class HistoryManager extends Observable {
         return sample;
     }
 
-    public void removeSample() {
+    public void removeSamples() {
         try {
             lock.writeLock().lock();
             positionHistoryFiFo.remove(0);
