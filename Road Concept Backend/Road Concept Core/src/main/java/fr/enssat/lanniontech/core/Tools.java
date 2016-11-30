@@ -11,16 +11,16 @@ public class Tools {
         return (double) tmp / factor;
     }
 
-    public static double getOrientedAngle(double mainX,double mainY,double X,double Y){
+    public static double getOrientedAngle(double mainX, double mainY, double X, double Y) {
         double res;
-        double dotProduct = mainX*X + mainY*Y;
-        double mainNorm = Math.sqrt(mainX*mainX+mainY*mainY);
-        double norm = Math.sqrt(X*X+Y*Y);
+        double dotProduct = mainX * X + mainY * Y;
+        double mainNorm = Math.sqrt(mainX * mainX + mainY * mainY);
+        double norm = Math.sqrt(X * X + Y * Y);
 
-        res = Math.acos(dotProduct/(mainNorm*norm));
+        res = Math.acos(dotProduct / (mainNorm * norm));
 
-        if(mainX*Y - mainY*X < 0){
-            res = res*-1;
+        if (mainX * Y - mainY * X < 0) {
+            res = res * -1;
         }
 
         return res;

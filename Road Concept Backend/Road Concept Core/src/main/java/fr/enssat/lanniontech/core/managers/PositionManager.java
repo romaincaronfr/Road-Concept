@@ -21,10 +21,10 @@ public class PositionManager {
     }
 
     public Position addPosition(double lon, double lat) {
-        maxLon = Math.max(maxLon,lon);
-        maxLat = Math.max(maxLat,lat);
-        minLon = Math.min(minLon,lon);
-        minLat = Math.min(minLat,lat);
+        maxLon = Math.max(maxLon, lon);
+        maxLat = Math.max(maxLat, lat);
+        minLon = Math.min(minLon, lon);
+        minLat = Math.min(minLat, lat);
         return addPosition(new Position(lon, lat));
     }
 
@@ -43,9 +43,9 @@ public class PositionManager {
         return positions.size();
     }
 
-    public boolean isInRange(Position P){
+    public boolean isInRange(Position P) {
         double e = 0.01;
-        return P.getLat()<=maxLat+e && P.getLat()>=minLat-e &&
-                P.getLon()<=maxLon+e && P.getLon()>=minLon-e;
+        return P.getLat() <= maxLat + e && P.getLat() >= minLat - e &&
+                P.getLon() <= maxLon + e && P.getLon() >= minLon - e;
     }
 }

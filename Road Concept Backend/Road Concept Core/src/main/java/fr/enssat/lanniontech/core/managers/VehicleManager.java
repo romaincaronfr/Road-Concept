@@ -72,7 +72,7 @@ public class VehicleManager {
 
         for (Vehicle activeVehicle : activeVehicles) {
             activeVehicle.updatePos(precision);
-            if(log){
+            if (log) {
                 activeVehicle.logPosition(timestamp);
             }
         }

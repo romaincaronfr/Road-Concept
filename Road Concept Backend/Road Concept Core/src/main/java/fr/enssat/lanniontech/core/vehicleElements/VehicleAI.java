@@ -21,10 +21,10 @@ public class VehicleAI {
     public void updateAcceleration(double distanceToNext, double speedOfNext, double v0) {
         double Sprime = s0 + Va * T + (Va * (Va - speedOfNext)) / (2 * Math.sqrt(a * b));
         A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / distanceToNext, 2));
-        A=0;//TODO deactivate to enable IDM
+        A = 0;//TODO deactivate to enable IDM
     }
 
-    public double getDistanceDone(double time){
+    public double getDistanceDone(double time) {
         double dDone = Va * time;
         Va += A * time;
         return dDone;
@@ -34,7 +34,7 @@ public class VehicleAI {
         return Va;
     }
 
-    public double getFreeDistance(){
-        return Va*T*2;
+    public double getFreeDistance() {
+        return Va * T * 2;
     }
 }

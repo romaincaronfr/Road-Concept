@@ -49,13 +49,13 @@ public class Vehicle {
     public void updateAcceleration() {
         double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
         double nextCarSpeed = 0;
-        if(nextCarDist < AI.getFreeDistance()){
+        if (nextCarDist < AI.getFreeDistance()) {
             nextCarSpeed = frontSide.getNextCarSpeed();
         }
-        AI.updateAcceleration(nextCarDist,nextCarSpeed,roadMaxSpeed());
+        AI.updateAcceleration(nextCarDist, nextCarSpeed, roadMaxSpeed());
     }
 
-    private double roadMaxSpeed(){
+    private double roadMaxSpeed() {
         return Tools.kphToMph(90);
         //todo get the max speed of the current road
     }
@@ -70,7 +70,7 @@ public class Vehicle {
         frontSide.moveOnPath(dDone);
     }
 
-    public void logPosition(int time){
+    public void logPosition(int time) {
         historyManager.AddPosition(getGPSPosition(time));
     }
 
@@ -79,7 +79,7 @@ public class Vehicle {
     }
 
     public SpaceTimePosition getGPSPosition(int time) {
-        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID,type);
+        return SpaceTimePosition.getMean(frontSide.getGPS(), backSide.getGPS(), time, ID, type);
     }
 
     public UUID getPathStep(int i) {
@@ -90,18 +90,18 @@ public class Vehicle {
         return backSide.getNextRoad() == null;
     }
 
-    public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
+    public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 3.5;
-        VehicleAI AI = new VehicleAI(3,1.5,4);
-        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath,AI);
+        VehicleAI AI = new VehicleAI(3, 1.5, 4);
+        Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.type = VehicleType.CAR;
         return V;
     }
 
-    public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath){
+    public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 15;
-        VehicleAI AI = new VehicleAI(2,1,10);
-        Vehicle V = new Vehicle(ID,start,startPos,length,historyManager,myPath,AI);
+        VehicleAI AI = new VehicleAI(2, 1, 10);
+        Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.type = VehicleType.TRUCK;
         return V;
     }

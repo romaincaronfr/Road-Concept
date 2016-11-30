@@ -32,7 +32,7 @@ public class Simulator extends Observable implements Runnable {
     private int samplingRate;
     private UUID simId;
 
-    public Simulator(){
+    public Simulator() {
         this(UUID.randomUUID());
     }
 
@@ -74,9 +74,9 @@ public class Simulator extends Observable implements Runnable {
             for (long i = 0; i < stepCycles; i++) {
 
                 if (j == samplingRate) {
-                    timestamp += (int)(samplingRate*precision);
+                    timestamp += (int) (samplingRate * precision);
                     vehicleManager.newStep(precision, true, timestamp);
-                    roadManager.saveSates(historyManager,timestamp);
+                    roadManager.saveSates(historyManager, timestamp);
                     historyManager.commitChanges(simId);
                     j = 1;
                 } else {
@@ -91,8 +91,6 @@ public class Simulator extends Observable implements Runnable {
                     wl.unlock();
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             setChanged();
             notifyObservers(new String[]{simId.toString(), "finish"});

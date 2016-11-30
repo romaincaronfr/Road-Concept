@@ -9,7 +9,7 @@ import java.util.Observable;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class HistoryManager extends Observable{
+public class HistoryManager extends Observable {
     //structure: <VehicleId,<timestamp,Position>>
     private List<List<SpaceTimePosition>> positionHistoryFiFo;
     private List<List<RoadMetrics>> roadMetricsHistoryFiFo;
@@ -30,48 +30,48 @@ public class HistoryManager extends Observable{
         currentPositionSample.add(P);
     }
 
-    public void AddRoadMetric(RoadMetrics R){
+    public void AddRoadMetric(RoadMetrics R) {
         currentRoadMetricsSample.add(R);
     }
 
-    public List<RoadMetrics> getRoadMetricsSample(){
+    public List<RoadMetrics> getRoadMetricsSample() {
         List<RoadMetrics> sample = null;
         try {
             lock.readLock().lock();
             sample = roadMetricsHistoryFiFo.get(0);
-        }finally {
+        } finally {
             lock.readLock().unlock();
         }
         return sample;
     }
 
-    public List<SpaceTimePosition> getPositionSample(){
+    public List<SpaceTimePosition> getPositionSample() {
         List<SpaceTimePosition> sample = null;
         try {
             lock.readLock().lock();
             sample = positionHistoryFiFo.get(0);
-        }finally {
+        } finally {
             lock.readLock().unlock();
         }
         return sample;
     }
 
-    public void removeSample(){
+    public void removeSample() {
         try {
             lock.writeLock().lock();
             positionHistoryFiFo.remove(0);
             roadMetricsHistoryFiFo.remove(0);
-        }finally {
+        } finally {
             lock.writeLock().unlock();
         }
     }
 
-    public void commitChanges(UUID simId){
+    public void commitChanges(UUID simId) {
         try {
             lock.writeLock().lock();
             positionHistoryFiFo.add(currentPositionSample);
             roadMetricsHistoryFiFo.add(currentRoadMetricsSample);
-        }finally {
+        } finally {
             lock.writeLock().unlock();
         }
         currentRoadMetricsSample = new ArrayList<>();

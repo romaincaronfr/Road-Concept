@@ -72,7 +72,7 @@ public class RoadManager {
                 RoadSection Rs2 = RoadEdges.get(P).get(0);
                 fuseRoadsSection(Rs1, Rs2, P);
                 RoadEdges.remove(P);
-            }else{
+            } else {
                 RoadEdges.get(P).add(Rs1);
             }
         } else {
@@ -112,7 +112,7 @@ public class RoadManager {
             I.addRoadSection(Rs);
         }
         I.assembleIntersection();
-        intersectionMap.put(P,I);
+        intersectionMap.put(P, I);
     }
 
     private void closeEdge(Position P) {
@@ -257,7 +257,7 @@ public class RoadManager {
     }
 
     public void saveSates(HistoryManager historyManager, int timestamp) {
-        for(Road road : roads.values()){
+        for (Road road : roads.values()) {
             historyManager.AddRoadMetric(road.getMetrics(timestamp));
         }
     }

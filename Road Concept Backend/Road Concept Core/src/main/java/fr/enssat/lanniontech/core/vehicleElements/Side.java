@@ -80,13 +80,13 @@ public class Side {
                 System.err.println(myTrajectory);
                 throw e;
             }
-        }else{
+        } else {
             this.pos = pos;
         }
     }
 
     public double getDistanceToNextCar(double freeDistance) {
-        return myTrajectory.getDistanceToNext(this,freeDistance);
+        return myTrajectory.getDistanceToNext(this, freeDistance);
     }
 
     public double getNextCarSpeed() {

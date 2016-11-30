@@ -53,9 +53,9 @@ public class EndRoadTrajectory extends Trajectory {
 
     public double getDistanceToFirst(double freeDistance) {
         if (vehiclesSides.size() == 0) {
-            if(freeDistance - length > 0) {
+            if (freeDistance - length > 0) {
                 return length + destination.getDestination().getDistanceToFirst(freeDistance - length);
-            }else {
+            } else {
                 return length;
             }
         } else {
@@ -67,9 +67,9 @@ public class EndRoadTrajectory extends Trajectory {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
             double distance = length - side.getPos();
-            if(freeDistance - distance > 0) {
+            if (freeDistance - distance > 0) {
                 return length - side.getPos() + destination.getDestination().getDistanceToFirst(freeDistance - distance);
-            }else{
+            } else {
                 return distance;
             }
         } else {

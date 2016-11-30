@@ -11,7 +11,7 @@ public class SpaceTimePosition extends Position {
     private final VehicleType type;
 
     //todo reset to private
-    private SpaceTimePosition(double lon, double lat, int time, double angle, int vehicleId,VehicleType type) {
+    private SpaceTimePosition(double lon, double lat, int time, double angle, int vehicleId, VehicleType type) {
         super(lon, lat);
 
         this.vehicleId = vehicleId;
@@ -28,9 +28,9 @@ public class SpaceTimePosition extends Position {
         double lonDir = A.lon - B.lon;
         double latDir = A.lat - B.lat;
 
-        double angle = -Tools.getOrientedAngle(0,1,lonDir,latDir);
+        double angle = -Tools.getOrientedAngle(0, 1, lonDir, latDir);
 
-        return new SpaceTimePosition(lon, lat, time, angle, vehicleId,type);
+        return new SpaceTimePosition(lon, lat, time, angle, vehicleId, type);
     }
 
     public int getTime() {
