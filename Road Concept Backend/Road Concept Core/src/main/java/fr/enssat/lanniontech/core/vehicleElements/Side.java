@@ -60,8 +60,9 @@ public class Side {
     }
 
     public void moveOnPath(double distance) {
+        double hypPos = this.pos + distance;
         double pos = myTrajectory.getPos(this.pos + distance);
-        if (this.pos > pos) {
+        if (hypPos > pos) {
             this.pos = pos;
             myTrajectory.getOut(this);
             myTrajectory = myTrajectory.getNext(nextRoad).getDestination();

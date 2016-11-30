@@ -41,7 +41,7 @@ public class Simulator extends Observable implements Runnable {
         l = new ReentrantReadWriteLock();
 
         positionManager = new PositionManager();
-        historyManager = new HistoryManager();
+        historyManager = new HistoryManager(positionManager);
         roadManager = new RoadManager();
         vehicleManager = new VehicleManager(historyManager, roadManager);
 
@@ -93,9 +93,10 @@ public class Simulator extends Observable implements Runnable {
             }
         } finally {
             setChanged();
-            notifyObservers(new String[]{simId.toString(), "finish"});
+            notifyObservers(simId);
             progress = 1;
             stopTime = System.currentTimeMillis();
+            LOG.debug("sim " + simId + " ended after " + this.getDuration() + " ms");
         }
     }
 

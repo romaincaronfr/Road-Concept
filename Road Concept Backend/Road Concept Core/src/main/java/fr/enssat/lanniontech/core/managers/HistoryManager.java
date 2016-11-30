@@ -16,17 +16,22 @@ public class HistoryManager extends Observable {
     private List<SpaceTimePosition> currentPositionSample;
     private List<RoadMetrics> currentRoadMetricsSample;
     private ReentrantReadWriteLock lock;
+    private PositionManager positionManager;
 
 
-    public HistoryManager() {
+    public HistoryManager(PositionManager positionManager) {
         lock = new ReentrantReadWriteLock();
         positionHistoryFiFo = new ArrayList<>();
         roadMetricsHistoryFiFo = new ArrayList<>();
         currentPositionSample = new ArrayList<>();
         currentRoadMetricsSample = new ArrayList<>();
+        this.positionManager = positionManager;
     }
 
     public void AddPosition(SpaceTimePosition P) {
+        if(!positionManager.isInRange(P)){
+            System.err.println("car out of bounds");
+        }
         currentPositionSample.add(P);
     }
 
