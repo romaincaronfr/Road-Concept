@@ -27,7 +27,7 @@ app.simulationHomeView = Backbone.View.extend({
             success: function(){
                 for(var i=0; i<self.simulationParamsCollection.length; i++) {
                     var model = self.simulationParamsCollection.models[i];
-                    /*if (!model.get("finish")){
+                    if (!model.get("finish")){
                      if (!$('#noInProgressSimulation').hasClass('hidden')){
                      $('#noInProgressSimulation').addClass('hidden');
                      $('#tableInProgressSimulation').removeClass('hidden');
@@ -44,14 +44,14 @@ app.simulationHomeView = Backbone.View.extend({
                      new app.homeSimulationOverTableView({
                      model: model
                      });
-                     }*/
+                     }
 
                     //TODO : supprimer cette partie quand le backend sera ok avec le false
-                    $('#noOverSimulation').addClass('hidden');
+                    /*$('#noOverSimulation').addClass('hidden');
                     $('#tableOverSimulation').removeClass('hidden');
                     new app.homeSimulationOverTableView({
                         model: model
-                    });
+                    });*/
                 }
             }
         });

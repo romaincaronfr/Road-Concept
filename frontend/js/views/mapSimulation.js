@@ -135,9 +135,6 @@ app.mapSimulationView = Backbone.View.extend({
         this.selectPointer.on('select', function (e) {
             if (e.selected[0]) {
                 console.log(e.selected[0].getProperties().id);
-                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id));
-                console.log(self.mapDetailsCollectionSimulation);
-                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
                 app.router.navigate('simmapCar/s/'+self.id+'/t/'+self.nowTime+'/samp/'+self.stepSeconds+'/map/'+self.mapID+'/car/'+e.selected[0].getProperties().id, {trigger: true});
                 //simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar
             }
