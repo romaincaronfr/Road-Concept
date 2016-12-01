@@ -203,10 +203,13 @@ public class SimulatorService extends AbstractService implements Observer {
 
     public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
         FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);
-        for (SimulationVehicleResult position : simulationResultRepository.getItineraryFor(simulationUUID, vehicleID)) {
+        List<SimulationVehicleResult> history = simulationResultRepository.getItineraryFor(simulationUUID, vehicleID);
+        for (int i = 0; i < history.size() ; i++) {
+            SimulationVehicleResult position = history.get(i);
             Feature feature = new Feature();
+            feature.getProperties().put("id",i);
             feature.getProperties().put("type", position.getType());
-            feature.getProperties().put("id", position.getVehicleID());
+            feature.getProperties().put("vehicle_id", position.getVehicleID());
             feature.getProperties().put("angle", position.getAngle());
             feature.getProperties().put("timestamp", position.getTimestamp());
             feature.setGeometry(new Point(new Coordinates(position.getCoordinates().getLongitude(), position.getCoordinates().getLatitude())));

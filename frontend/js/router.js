@@ -37,7 +37,8 @@ app.Router = Backbone.Router.extend({
         "simmap/:id/s/:samplingRate/d/:departureLivingS/m/:idMap" : "mapSimulation",
         "users": "users",
         "homeSimulation/:id": "homeSimulation",
-        "simulationCreation/:id": "simulationCreation"
+        "simulationCreation/:id": "simulationCreation",
+        "simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar" : "carSimulation"
     },
 
     initialize: function () {
@@ -52,6 +53,7 @@ app.Router = Backbone.Router.extend({
         this.simmapView = null;
         this.homeSimuV = null;
         this.simuCreatV = null;
+        this.simuCarV = null;
     },
 
     start: function () {
@@ -164,6 +166,18 @@ app.Router = Backbone.Router.extend({
             console.log("homeSimulation non null");
             this.homeSimuV.changeID(id);
             this.homeSimuV.render();
+        }
+    },
+
+    carSimulation: function(idSimu,simTime,sampling,idMap,idCar){
+        this.checkAndInitNavBar();
+        if (!this.simuCarV){
+            console.log("simCarV null");
+            this.simuCarV = new app.mapCarSimulationView({idSimu:idSimu, simTime:simTime,sampling:sampling,idMap:idMap,idCar:idCar});
+        } else {
+            console.log("simCarV not null");
+            this.simuCarV.changeID(idSimu,simTime,sampling,idMap,idCar);
+            this.simuCarV.render();
         }
     },
 
