@@ -7,9 +7,7 @@ import java.util.UUID;
 public class SimulationCongestionResult implements Entity {
 
     private UUID featureUUID;
-    //private UUID simulationUUID;
     private int congestionPercentage;
-    //  private int timestamp;
 
     public UUID getFeatureUUID() {
         return featureUUID;
@@ -19,14 +17,6 @@ public class SimulationCongestionResult implements Entity {
         this.featureUUID = featureUUID;
     }
 
-    //    public UUID getSimulationUUID() {
-    //        return simulationUUID;
-    //    }
-    //
-    //    public void setSimulationUUID(UUID simulationUUID) {
-    //        this.simulationUUID = simulationUUID;
-    //    }
-
     public int getCongestionPercentage() {
         return congestionPercentage;
     }
@@ -35,11 +25,4 @@ public class SimulationCongestionResult implements Entity {
         this.congestionPercentage = congestionPercentage;
     }
 
-    //    public int getTimestamp() {
-    //        return timestamp;
-    //    }
-    //
-    //    public void setTimestamp(int timestamp) {
-    //        this.timestamp = timestamp;
-    //    }
 }

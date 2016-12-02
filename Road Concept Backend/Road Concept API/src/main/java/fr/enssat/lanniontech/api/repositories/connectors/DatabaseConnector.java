@@ -8,7 +8,6 @@ import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.SQLUnexpectedException;
 import fr.enssat.lanniontech.api.services.UserService;
 import fr.enssat.lanniontech.api.utilities.Constants;
-import fr.enssat.lanniontech.api.utilities.ProjetEnvironment;
 import fr.enssat.lanniontech.api.utilities.SQLScriptRunner;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -54,19 +53,18 @@ public final class DatabaseConnector {
 
     private static void setUpSQL() throws SQLUnexpectedException {
         configurePostgreSQL();
-        if (Constants.ENVIRONMENT == ProjetEnvironment.DEVELOPPMENT) {
-            try (Connection initConnection = getConnection()) {
-                initializeDeveloppmentSchema(initConnection);
-                new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
-                LOGGER.info("Default administrator account has been created.");
-            } catch (EntityAlreadyExistsException ignored) {
-                // The default admin user already exists, just ignore the exception
-                LOGGER.info("Default admin user already exists ! Nothing created.");
-            } catch (SQLException e) {
-                LOGGER.error(ExceptionUtils.getStackTrace(e));
-                throw new SQLUnexpectedException(e);
-            }
+        try (Connection initConnection = getConnection()) {
+            initializeDeveloppmentSchema(initConnection);
+            new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
+            LOGGER.info("Default administrator account has been created.");
+        } catch (EntityAlreadyExistsException ignored) {
+            // The default admin user already exists, just ignore the exception
+            LOGGER.info("Default admin user already exists ! Nothing created.");
+        } catch (SQLException e) {
+            LOGGER.error(ExceptionUtils.getStackTrace(e));
+            throw new SQLUnexpectedException(e);
         }
+
     }
 
     private static void configurePostgreSQL() {

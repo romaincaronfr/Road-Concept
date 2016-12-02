@@ -4,15 +4,12 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.StaticHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Simple verticle to serve static API documentation.
  */
 public class APIDocVerticle extends AbstractVerticle {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(APIDocVerticle.class);
     private static final String DOC_PATH = "/doc*";
 
     private Router router;

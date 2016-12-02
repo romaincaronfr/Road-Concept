@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.utilities;
 
-import fr.enssat.lanniontech.api.entities.RestException;
+import fr.enssat.lanniontech.api.entities.RestErrorMessage;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -13,7 +13,7 @@ public class HttpResponseBuilder {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpResponseBuilder.class);
 
     public static void buildUnexpectedErrorResponse(RoutingContext routingContext, Throwable cause) {
-        RestException error = new RestException();
+        RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         error.setCause("Unexpected error due to [" + cause.getClass() + "]");
 
@@ -24,7 +24,7 @@ public class HttpResponseBuilder {
     }
 
     public static void buildUnexpectedErrorResponse(RoutingContext routingContext) {
-        RestException error = new RestException();
+        RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         error.setCause("Unexpected error occured");
 
@@ -33,7 +33,7 @@ public class HttpResponseBuilder {
     }
 
     public static void buildForbiddenResponse(RoutingContext routingContext, String cause) {
-        RestException error = new RestException();
+        RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_FORBIDDEN);
         error.setCause(cause);
 
@@ -47,7 +47,7 @@ public class HttpResponseBuilder {
     }
 
     public static void buildBadRequestResponse(RoutingContext routingContext, String cause) {
-        RestException error = new RestException();
+        RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_BAD_REQUEST);
         error.setCause(cause);
 
@@ -71,7 +71,7 @@ public class HttpResponseBuilder {
     }
 
     public static void buildNotFoundException(RoutingContext routingContext, EntityNotExistingException e) {
-        RestException error = new RestException();
+        RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_NOT_FOUND);
         error.setCause(e.getEntityClass() + " not found");
         routingContext.response().end(JSONUtils.toJSON(error));

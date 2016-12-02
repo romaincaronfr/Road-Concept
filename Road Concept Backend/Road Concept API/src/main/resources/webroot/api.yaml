@@ -475,23 +475,23 @@ responses:
   '400':
     description: Mauvaise requête. Vérifier les paramètres et les formats.
     schema :
-      $ref: '#/definitions/RestException'
+      $ref: '#/definitions/RestErrorMessage'
   '401':
     description: Authentification nécéssaire. Voir méthode POST /login.
     schema :
-      $ref: '#/definitions/RestException'
+      $ref: '#/definitions/RestErrorMessage'
   '403':
     description: Accès refusé.
     schema:
-      $ref: '#/definitions/RestException'
+      $ref: '#/definitions/RestErrorMessage'
   '404':
     description: Entitée innéxistante.
     schema:
-      $ref: '#/definitions/RestException'
+      $ref: '#/definitions/RestErrorMessage'
   '500':
     description: Erreur interne au serveur. Contacter un administrateur de l'API.
     schema:
-      $ref: '#/definitions/RestException'
+      $ref: '#/definitions/RestErrorMessage'
 
 definitions:
   RestException:

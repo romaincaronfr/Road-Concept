@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
-public class LineString extends MultiPoint {
+public class LineString extends Geometry<Coordinates> {
 
     public LineString() {
     }

@@ -6,20 +6,11 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 
 public class SimulationVehicleResult implements Entity {
 
-    //private UUID simulationUUID;
     private int vehicleID;
     private int timestamp;
     private Coordinates coordinates;
     private double angle;
     private FeatureType type;
-
-    //    public UUID getSimulationUUID() {
-    //        return simulationUUID;
-    //    }
-    //
-    //    public void setSimulationUUID(UUID simulationUUID) {
-    //        this.simulationUUID = simulationUUID;
-    //    }
 
     public int getVehicleID() {
         return vehicleID;

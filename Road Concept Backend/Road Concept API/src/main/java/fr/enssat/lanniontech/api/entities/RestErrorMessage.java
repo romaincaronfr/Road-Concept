@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.api.entities;
 
-public class RestException implements Entity {
+public class RestErrorMessage implements Entity {
 
     private int code;
     private String cause;

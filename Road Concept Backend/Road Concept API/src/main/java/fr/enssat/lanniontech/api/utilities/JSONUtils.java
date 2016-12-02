@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.utilities;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
@@ -19,6 +20,7 @@ public class JSONUtils {
 
     static {
         MAPPER.setSerializationInclusion(Include.NON_NULL);
+        MAPPER.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
         MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 

@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.utilities;
 
 public final class Constants {
 
-    public static final ProjetEnvironment ENVIRONMENT = ProjetEnvironment.DEVELOPPMENT;
     public static final int HTTP_SERVER_PORT = 8080;
     public static final String SESSION_CURRENT_USER = "me";
 

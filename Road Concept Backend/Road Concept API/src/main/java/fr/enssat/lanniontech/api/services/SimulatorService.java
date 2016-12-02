@@ -51,7 +51,6 @@ public class SimulatorService extends AbstractService implements Observer {
 
             simulationGlobalRepository.duplicateFeatures(simulation);
 
-            // Observe the simulator to get results in real time
             simulation.getSimulator().addObserver(this); // Being notified when the simulation is finish
             simulation.getSimulator().getHistoryManager().addObserver(this); // Being notified at each result step
 
@@ -124,15 +123,14 @@ public class SimulatorService extends AbstractService implements Observer {
             }
         }
         LOGGER.debug("VEHICLE COUNT = " + count);
-        // TODO: Définir point vertx-default-jul-logging.properties'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
+        // TODO: Définir point d'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
 
         return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
-        //return simulation.getSimulator().launchSimulation(86400, 1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
 
     private void sendFeatures(Simulation simulation, FeatureCollection features) {
         for (Feature feature : features) {
-            if (feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points
+            if (feature.isRoad()) { // TODO: A voir quand Antoine acceptera de recevoir des ronds points et feux rouges
                 LineString road = (LineString) feature.getGeometry();
                 Coordinates last = road.getCoordinates().get(0);
                 for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
@@ -183,6 +181,7 @@ public class SimulatorService extends AbstractService implements Observer {
             }
         }
 
+        // Congestion is stored as a sparse matrix, so we need to set default congestion congestion value
         for (Feature feature : features) {
             if (!feature.getProperties().containsKey("congestion")) {
                 feature.getProperties().put("congestion", 0);
@@ -191,7 +190,7 @@ public class SimulatorService extends AbstractService implements Observer {
 
         List<SimulationVehicleResult> vehicles = simulationResultRepository.getVehiclesAt(simulationUUID, timestamp);
         for (SimulationVehicleResult vehicle : vehicles) {
-            Feature feature = new Feature(); // ID du véhicule rémonté du simulateur, on n'utilise pas l'UUID généré
+            Feature feature = new Feature(); // Vehicle ID is set from the simulator. We don't use the generated one.
             feature.setGeometry(new Point(vehicle.getCoordinates()));
             feature.getProperties().put("type", vehicle.getType());
             feature.getProperties().put("id", vehicle.getVehicleID());
@@ -204,10 +203,10 @@ public class SimulatorService extends AbstractService implements Observer {
     public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
         FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);
         List<SimulationVehicleResult> history = simulationResultRepository.getItineraryFor(simulationUUID, vehicleID);
-        for (int i = 0; i < history.size() ; i++) {
+        for (int i = 0; i < history.size(); i++) {
             SimulationVehicleResult position = history.get(i);
             Feature feature = new Feature();
-            feature.getProperties().put("id",i);
+            feature.getProperties().put("id", i);
             feature.getProperties().put("type", position.getType());
             feature.getProperties().put("vehicle_id", position.getVehicleID());
             feature.getProperties().put("angle", position.getAngle());

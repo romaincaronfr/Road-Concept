@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS "map_info" (
   "id"          SERIAL PRIMARY KEY,
   "id_user"     INTEGER      NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
   "name"        VARCHAR(100) NOT NULL,
-  "image_url"   VARCHAR(100),
+  "image_url"   TEXT,
   "description" TEXT
 );
 
