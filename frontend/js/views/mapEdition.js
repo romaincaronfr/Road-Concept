@@ -43,7 +43,6 @@ app.mapEditionView = Backbone.View.extend({
         this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('remove', self.onRemoveElement, self);
     },
-
     render: function () {
         //Suppression du content
         this.mapDetailsCOllection.reset();
@@ -872,8 +871,14 @@ app.mapEditionView = Backbone.View.extend({
                 contentType: false
             })
             .done(function (data, textStatus, jqXHR) {
-                self.vectorSource.clear();
-                self.fetchCollection();
+                //self.vectorSource.clear();
+                //self.fetchCollection();
+                self.mapDetailsCOllection.fetch({
+                    remove:false,
+                    success: function(event){
+                        self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
+                    }
+                });
                 $('#waitImport').addClass('hidden');
                 $('#alertSuccessImport').removeClass('hidden');
             })
