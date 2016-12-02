@@ -182,6 +182,7 @@ app.mapSimulationView = Backbone.View.extend({
             slide: function (event, ui) {
                 var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 $('#timepicker').timepicker('setTime', time);
+
             },
             change: function (event, ui) {
                 $("#sliderSimulation").slider({
@@ -197,7 +198,6 @@ app.mapSimulationView = Backbone.View.extend({
                 self.nowTime = ui.value;
                 self.mapDetailsCollectionSimulation.fetch({
                     success: function () {
-                        console.log("success fetch");
                         self.vectorSource.clear();
                         self.vectorSource2.clear();
                         if (self.mapDetailsCollectionSimulation.length > 0) {
@@ -221,7 +221,6 @@ app.mapSimulationView = Backbone.View.extend({
                         $('#nextSimuSnapshot').prop('disabled', false);
                     }
                 });
-                //console.log('time : '+time);
             }
         });
 
@@ -254,7 +253,6 @@ app.mapSimulationView = Backbone.View.extend({
         var value = $( "#sliderSimulation" ).slider( "option", "value" );
         var timeMax = 86400-this.stepSeconds;
         if(value < timeMax){
-            console.log("ON ENTRE");
             $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value+this.stepSeconds));
         }
 
@@ -308,7 +306,6 @@ app.mapSimulationView = Backbone.View.extend({
     },
 
     onAddElement: function (element) {
-        console.log('on add');
         var geojsonModel = element.toGeoJSON();
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
             featureProjection: 'EPSG:3857'
@@ -334,12 +331,26 @@ app.mapSimulationView = Backbone.View.extend({
         var congestion = feature.getProperties().congestion;
         var color;
 
-        if (congestion < 30) {
-            color = [46, 204, 113, 1];
-        } else if (congestion >= 30 && congestion < 80) {
-            color = [211, 84, 0, 1];
-        } else if (congestion >= 80) {
-            color = [192, 57, 43, 1];
+        if (congestion < 10) {
+            color = [51, 255, 0, 1];
+        } else if (congestion  < 20) {
+            color = [102, 253, 0, 1];
+        } else if (congestion  < 30) {
+            color = [153, 255, 0, 1];
+        } else if (congestion  < 40) {
+            color = [204, 255, 0, 1];
+        } else if (congestion  < 50) {
+            color = [255, 255, 0, 1];
+        } else if (congestion  < 60) {
+            color = [255, 204, 0, 1];
+        } else if (congestion  < 70) {
+            color = [255, 153, 0, 1];
+        } else if (congestion  < 80) {
+            color = [255, 102, 0, 1];
+        } else if (congestion  < 90) {
+            color = [255, 51, 0, 1];
+        } else {
+            color = [255, 0, 0, 1];
         }
 
         // TODO : récupérer les valeurs d'afluence des routes et afficher la couelur en fonction de ça
@@ -585,7 +596,6 @@ app.mapSimulationView = Backbone.View.extend({
         m = m < 10 ? '0' + m : m;
         s = s < 10 ? '0' + s : s;
         var time = h + ':' + m + ':' + s;
-        console.log(time);
         return time;
 
     },
