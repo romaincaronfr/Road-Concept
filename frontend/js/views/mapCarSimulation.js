@@ -202,8 +202,7 @@ app.mapCarSimulationView = Backbone.View.extend({
                     stroke: new ol.style.Stroke({
                         color: [231, 76, 60, 1],
                         width: (21 / resolution) * oneway
-                    }),
-
+                    })
                 });
                 return style;
                 break;
@@ -213,7 +212,7 @@ app.mapCarSimulationView = Backbone.View.extend({
                         color: [250, 178, 102, 1]
                     }),
                     stroke: new ol.style.Stroke({
-                        color: color,
+                        color: [26, 155, 252, 1],
                         width: 3.5 / resolution
                     })
                 });
