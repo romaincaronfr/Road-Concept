@@ -413,6 +413,24 @@ paths:
         500:
           $ref: '#/responses/500'
 
+  /api/maps/{mapID}/simulations/{simulationUUID}:
+    parameters:
+      - $ref: '#/parameters/mapID'
+      - $ref: '#/parameters/simulationUUID'
+    delete:
+      description: Supprimer une simulation
+      tags:
+        - Simulations
+      responses:
+        204:
+          description: Simulation supprimée
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
   /api/users/{userID}/simulations:
     parameters:
       - name: userID
@@ -471,6 +489,39 @@ paths:
         500:
           $ref: '#/responses/500'
 
+  /api/simulations/{simulationUUID}/progress:
+    parameters:
+      - $ref: '#/parameters/simulationUUID'
+    get:
+      description: Récupère le pourcentage d'avancement d'éxécution d'une simulation.
+      tags:
+        - Simulations
+      responses:
+        200:
+          description: la simulation
+          schema:
+            type: integer
+            format: int32
+        401:
+          $ref: '#/responses/401'
+        403:
+          $ref: '#/responses/403'
+        500:
+          $ref: '#/responses/500'
+
+  /api/simulations/{simulationUUID}/results:
+    parameters:
+      - $ref: '#/parameters/simulationUUID'
+
+  /api/simulations/{simulationUUID}/vehicles/{vehicleID}:
+    parameters:
+      - $ref: '#/parameters/simulationUUID'
+      - name: vehicleID
+        in: path
+        type: integer
+        format: int32
+        required: true
+
 responses:
   '400':
     description: Mauvaise requête. Vérifier les paramètres et les formats.
@@ -494,7 +545,7 @@ responses:
       $ref: '#/definitions/RestErrorMessage'
 
 definitions:
-  RestException:
+  RestErrorMessage:
     properties:
       code:
         type: integer
