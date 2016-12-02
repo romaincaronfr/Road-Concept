@@ -14,5 +14,5 @@ docker-compose -f docker-compose-prod.yml stop
 docker-compose -f docker-compose-prod.yml build
 
 #start service
-docker-compose -f docker-compose-prod.yml up -d
+docker-compose -f docker-compose-prod.yml up
 
