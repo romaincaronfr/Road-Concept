@@ -83,7 +83,7 @@ public class Road {
     }
 
     public RoadMetrics getMetrics(int timestamp) {
-        return new RoadMetrics(id, timestamp, 0);
+        return new RoadMetrics(id, timestamp, getCongestion());
     }
 
     private int getCongestion(){
@@ -91,6 +91,7 @@ public class Road {
         for (RoadSection section : sections){
             congestion = Math.max(congestion,section.getCongestion());
         }
+        congestion *= 100;
         return (int) congestion;
     }
 }
