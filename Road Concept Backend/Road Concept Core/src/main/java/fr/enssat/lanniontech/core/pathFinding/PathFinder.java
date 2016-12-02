@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.pathFinding;
 
 
+import fr.enssat.lanniontech.core.exceptions.DestinationUnreachableException;
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
@@ -92,7 +93,6 @@ public class PathFinder {
                         openNodes.add(pos, newNode);
                     }
 
-
                     if (t.getRoadId().equals(destination) && node.getIntersection() == goal) {
                         finalNode = node;
                     }
@@ -104,6 +104,7 @@ public class PathFinder {
 
         if (finalNode == null) {
             LOGGER.error("destination unreachable");
+            throw new DestinationUnreachableException();
         }
 
         reconstructPath(myPath, finalNode);
