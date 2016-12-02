@@ -30,16 +30,11 @@ app.mapSimulationView = Backbone.View.extend({
     },
 
     initialize: function (option) {
-        console.log("init simmap");
         this.id = option.id;
         this.stepSeconds = parseFloat(option.samplingRate);
         this.departureLivingS = option.departureLivingS;
         this.mapID = option.idMap;
         this.nowTime = option.departureLivingS;
-        console.log(this.samplingRate);
-        console.log(this.departureLivingS);
-        console.log(this.mapID);
-        console.log(option);
         this.mapDetailsCollectionSimulation = new app.collections.mapDetailsCollectionSimulation({
             id: this.id,
             timestamp: this.departureLivingS
@@ -135,8 +130,7 @@ app.mapSimulationView = Backbone.View.extend({
         });
         this.selectPointer.on('select', function (e) {
             if (e.selected[0]) {
-                console.log(e.selected[0].getProperties().id);
-                app.router.navigate('simmapCar/s/' + self.id + '/t/' + self.nowTime + '/samp/' + self.stepSeconds + '/map/' + self.mapID + '/car/' + e.selected[0].getProperties().id, {trigger: true});
+                app.router.navigate('simmapCar/s/'+self.id+'/t/'+self.nowTime+'/samp/'+self.stepSeconds+'/map/'+self.mapID+'/car/'+e.selected[0].getProperties().id, {trigger: true});
                 //simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar
             }
         });
@@ -190,7 +184,6 @@ app.mapSimulationView = Backbone.View.extend({
                 });
                 $('#timepicker').prop('disabled', true);
                 $('#nextSimuSnapshot').prop('disabled', true);
-                console.log(ui.value);
                 //var time = self.convertSecdsToHrsMinsSecds(ui.value);
                 //$('#timepicker').timepicker('setTime', time);
                 self.mapDetailsCollectionSimulation.timestamp = String(ui.value);
@@ -314,8 +307,6 @@ app.mapSimulationView = Backbone.View.extend({
     },
 
     onRemoveElement: function (element) {
-        console.log("remove");
-        console.log(element);
         if (this.vectorSource.getFeatureById(element.attributes.id) || this.vectorSource.getFeatureById(element.attributes.id) != null) {
             this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
         }
