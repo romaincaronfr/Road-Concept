@@ -25,7 +25,8 @@ app.mapSimulationView = Backbone.View.extend({
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
-        'click #nextSimuSnapshot': 'goNextSnapshot'
+        'click #nextSimuSnapshot': 'goNextSnapshot',
+        'click #backSimuSnapshot' : 'goBackSnapshot',
     },
 
     initialize: function (option) {
@@ -259,6 +260,12 @@ app.mapSimulationView = Backbone.View.extend({
     goNextSnapshot: function () {
         var value = $("#sliderSimulation").slider("option", "value");
         $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value + this.stepSeconds));
+        //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
+    },
+
+    goBackSnapshot: function(){
+        var value = $( "#sliderSimulation" ).slider( "option", "value" );
+        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value-this.stepSeconds));
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
