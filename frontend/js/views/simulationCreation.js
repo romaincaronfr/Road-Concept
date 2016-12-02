@@ -683,6 +683,7 @@ app.simulationCreationView = Backbone.View.extend({
         //Envoyer les infos au serveur (nom, précision, heures, etc.) et afficher barre chargement
         var name = $('#simName').val();
         var sampling_rate = $('#sampling_rate').val();
+        var self = this;
 
         if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
             $('#alertEmptyStart').show();
@@ -704,13 +705,56 @@ app.simulationCreationView = Backbone.View.extend({
             console.log(model);
             collection.add(model);
             model.save(null, {
-                success: function () {
-                    $('#alertEmptyStart').hide();
-                    $('#modalStartSim').modal('hide');
+                success: function (result) {
+                    console.log(result);
+                    //$('#alertEmptyStart').hide();
+                    //$('#modalStartSim').modal('hide');
+                    $('#modalStartSim').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
                     console.log("success");
+                    var simuId = result.attributes.uuid;
+                    $('#titleModalStartSimu').text('Simulation en cours de progression');
+                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>');
+                    $('#startSimulationModalFooter').empty();
+                    self.getProgressSimu(simuId);
                 }
             });
         }
+    },
+
+    getProgressSimu: function (id) {
+        var self = this;
+        $.ajax({
+                url: Backbone.Collection.prototype.absURL + "/api/simulations/"+id+"/progress",
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                contentType: "application/json"
+            })
+            .done(function (data, textStatus, jqXHR) {
+                console.log(data);
+                if (parseInt(data) < 100) {
+                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    setTimeout(function () {
+                        self.getProgressSimu(id);
+                    }, 1000);
+                } else {
+                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    setTimeout(function () {
+                        $('#modalStartSim').modal('hide');
+                        $('.modal-backdrop').remove();
+                        app.router.navigate('#homeSimulation/'+self.id,{trigger: true});
+                    }, 1000);
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                setTimeout(function(){
+                    self.getProgressSimu(id);
+                }, 1000);
+            });
     },
 
     previous: function () {

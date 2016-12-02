@@ -40,7 +40,7 @@
                 </div>
                 <span data-toggle="tooltip" data-placement="top" title="Lancer la simulation">
                     <button id="startSim" class="btn btn-default btn-block" data-target="#modalStartSim"
-                            data-toggle="modal"><span class="glyphicon glyphicon-play"></span> Simulation
+                            data-toggle="modal" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-play"></span> Simulation
                     </button>
                 </span>
             </div>
@@ -87,10 +87,9 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Lancement d'une nouvelle simulation</h4>
+                    <h4 class="modal-title" id="titleModalStartSimu">Lancement d'une nouvelle simulation</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="startSimulationModalBody">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
 
@@ -122,7 +121,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" id="startSimulationModalFooter">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Retour</button>
                     <button type="button" class="btn btn-success" id="launch">Lancer</button>
                 </div>
