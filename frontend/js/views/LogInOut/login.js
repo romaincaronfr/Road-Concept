@@ -46,20 +46,12 @@ app.loginView = Backbone.View.extend({
                     .done(function (data, textStatus, jqXHR) {
                         userModel = new app.models.userModel(data);
                         app.router.navigate('map', {trigger: true});
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                    })
-                    .always(function () {
-                        /* ... */
                     });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 $('#alertLogin').removeClass('hidden');
                 $('#formDiv').removeClass('hidden');
                 $('#waitDiv').addClass('hidden');
-            })
-            .always(function () {
-                /* ... */
             });
     },
 

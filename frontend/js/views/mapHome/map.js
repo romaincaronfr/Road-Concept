@@ -17,11 +17,7 @@ app.mapView = Backbone.View.extend({
         var self = this;
         this.render();
         this.mapCollection.on('add', self.newElement, self);
-        this.mapCollection.on('change', self.newChange, self);
-        this.mapCollection.on('reset', self.newReset, self);
-        this.mapCollection.on('sync', self.newSync, self);
         this.mapCollection.on('destroy', self.newDestroy, self);
-        //this.mapCollection.fetch();
     },
 
     render: function () {
@@ -31,7 +27,6 @@ app.mapView = Backbone.View.extend({
                 model: model
             });
 
-            //this.$el.append(mapTableView.render().el);
         });
         this.mapCollection.fetch();
         return this;
@@ -60,10 +55,10 @@ app.mapView = Backbone.View.extend({
         });
     },
 
-    clickOnPrintMap: function(event){
+    clickOnPrintMap: function (event) {
         var id = event.currentTarget.id;
         id = id.replace('afficher_', '');
-        app.router.navigate('map/'+id, {trigger: true});
+        app.router.navigate('map/' + id, {trigger: true});
     },
 
     newElement: function (element) {
@@ -71,17 +66,6 @@ app.mapView = Backbone.View.extend({
             model: element
         });
     },
-
-    newChange: function (element) {
-    },
-
-    newReset: function () {
-        this.$el.html(this.template());
-    },
-
-    newSync: function (element) {
-    },
-
     newDestroy: function (element) {
         var divName = '#div_mapId_' + element.attributes.id;
         $(divName).remove();
@@ -97,7 +81,7 @@ app.mapView = Backbone.View.extend({
         });
     },
 
-    clickOnremove_map_confirm: function(event){
+    clickOnremove_map_confirm: function (event) {
         var id = event.currentTarget.id;
         id = id.replace('confirmRemoveMap_', '');
         var model = this.mapCollection.get(id);

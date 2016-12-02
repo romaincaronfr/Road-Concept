@@ -8,7 +8,6 @@ app.navBarView = Backbone.View.extend({
     model: null,
 
     initialize: function (redirectToUser, redirectToMap) {
-        var self = this;
         this.getMe(redirectToUser, redirectToMap, this);
     },
 
@@ -55,9 +54,6 @@ app.navBarView = Backbone.View.extend({
             .fail(function (jqXHR, textStatus, errorThrown) {
                 //TODO rediriger qu'en cas d'erreur 401, merci :)
                 app.router.navigate('login', {trigger: true});
-            })
-            .always(function () {
-                /* ... */
             });
     }
 

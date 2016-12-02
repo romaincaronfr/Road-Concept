@@ -28,9 +28,6 @@ app.logoutView = Backbone.View.extend({
             .fail(function (jqXHR, textStatus, errorThrown) {
                 $('#danger-text-modal').html("Erreur lors de la déconnexion. Merci de réessayer.");
                 $('#modalError').modal('show');
-            })
-            .always(function () {
-                /* ... */
             });
     }
 });

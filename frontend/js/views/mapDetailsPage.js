@@ -425,9 +425,5 @@ app.mapDetailsPageView = Backbone.View.extend({
         new app.mapPopUpInfoVisuView({
             model: model
         });
-    },
-
-    fetchCollection: function () {
-        this.mapDetailsCOllection.fetch();
     }
 });

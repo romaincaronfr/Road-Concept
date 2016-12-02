@@ -34,9 +34,6 @@ app.adminManaUsersView = Backbone.View.extend({
             .always(function () {
                 /* ... */
             });
-        this.userCollection.on('change', self.newChange, self);
-        this.userCollection.on('reset', self.newReset, self);
-        this.userCollection.on('sync', self.newSync, self);
         this.userCollection.on('destroy', self.newDestroy, self);
         this.userCollection.on('add', self.newElement, self);
     },
@@ -122,16 +119,6 @@ app.adminManaUsersView = Backbone.View.extend({
         }
     },
 
-    newChange: function (element) {
-    },
-
-    newReset: function () {
-        this.$el.html(this.template());
-    },
-
-    newSync: function (element) {
-    },
-
     newDestroy: function (element) {
         var divName = '#user_Id_' + element.attributes.id;
         $(divName).remove();
@@ -142,5 +129,5 @@ app.adminManaUsersView = Backbone.View.extend({
             return (true)
         }
         return (false)
-    },
+    }
 });

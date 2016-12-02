@@ -40,7 +40,6 @@ app.mapEditionView = Backbone.View.extend({
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         this.render();
         var self = this;
-        this.mapDetailsCOllection.on('sync', self.onSync, self);
         this.mapDetailsCOllection.on('add', self.onAddElement, self);
         this.mapDetailsCOllection.on('remove', self.onRemoveElement, self);
     },
@@ -178,20 +177,6 @@ app.mapEditionView = Backbone.View.extend({
             this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
         }
         this.selectPointer.getFeatures().clear();
-    },
-
-    onSync: function () {
-        /*if (this.mapDetailsCOllection.length > 0) {
-         this.vectorSource.clear();
-         var geoJson = this.mapDetailsCOllection.toGeoJSON();
-         var featuresSource = new ol.format.GeoJSON().readFeatures(geoJson, {
-         featureProjection: 'EPSG:3857'
-         });
-         this.vectorSource.addFeatures(featuresSource);
-         this.map.getView().fit(this.vectorSource.getExtent(), this.map.getSize());
-         }*/
-        var self = this;
-        //this.mapDetailsCOllection.on('add', self.onAddElement, self);
     },
 
     changeOppacity: function (value) {
@@ -565,8 +550,6 @@ app.mapEditionView = Backbone.View.extend({
 
                 self.intersections[self.index] = features;
                 self.index++;
-                //console.log(resolution);
-                //console.log(features);
             });
 
             this.map.addInteraction(this.draw);
@@ -619,7 +602,6 @@ app.mapEditionView = Backbone.View.extend({
                 JSONFeature.properties.intersections = self.intersections;
                 JSONFeature.properties.name = "Unnamed unit road";
                 JSONFeature.properties.id = "1";
-                //console.log(JSONFeature.properties);
                 self.newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
                     collection: self.mapDetailsCOllection
@@ -632,24 +614,7 @@ app.mapEditionView = Backbone.View.extend({
                     featureProjection: 'EPSG:3857'
                 });
                 self.vectorSource.addFeature(newfeature);
-                /*this.newModel.save(null, {
-                    success: (function () {
-                        console.log('success add');
-                        self.mapDetailsCOllection.add(this.newModel);
-                        /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
-                         var selectFeatures = this.selectPointer.getFeatures();
-                         selectFeatures.push(feature);*/
-                    /*})
-                });*/
-                //self.mapDetailsCOllection.add(newModel);
-                /*var feature = this.vectorSource.getFeatureById(newModel.attributes.id);
-                 var selectFeatures = this.selectPointer.getFeatures();
-                 selectFeatures.push(feature);*/
                 self.underCreation();
-                /*var format = new ol.format.GeoJSON();
-                 var routeFeatures = format.writeFeatures(feature);
-                 console.log(format);*/
-                //console.log(intersections);
                 setTimeout(function () {
                     self.interactionZoomDoubleClick.setActive(true);
                 }, 251);
@@ -717,7 +682,6 @@ app.mapEditionView = Backbone.View.extend({
 
     fetchCollection: function () {
         var self = this;
-        //this.mapDetailsCOllection.off("add");
         this.mapDetailsCOllection.fetch({
             success: function () {
                 self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
@@ -833,14 +797,6 @@ app.mapEditionView = Backbone.View.extend({
                         $('#osmInfo').empty();
                     }
                 });
-
-                /*self.vectorSource.removeFeature(self.vectorSource.getFeatureById(model.attributes.id));
-                var geojsonModel = model.toGeoJSON();
-                var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
-                    featureProjection: 'EPSG:3857'
-                });
-                self.selectPointer.getFeatures().clear();
-                self.vectorSource.addFeature(newfeature);*/
             }
         });
     },
@@ -922,9 +878,6 @@ app.mapEditionView = Backbone.View.extend({
             .fail(function (jqXHR, textStatus, errorThrown) {
                 $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, quelque chose s'est mal passée. Veuillez réessayer. (C'est encore le dev qui a du mal bosser...)");
                 $('#modalError').modal('show');
-            })
-            .always(function () {
-                /* ... */
             });
     },
 
