@@ -170,7 +170,7 @@ app.mapSimulationView = Backbone.View.extend({
             orientation: "horizontal",
             range: "min",
             min: 0,
-            max: 89999, //86400
+            max: 86999, //86400
             step: this.stepSeconds,
             value: parseFloat(this.departureLivingS), // correspond à 7h
             slide: function (event, ui) {
