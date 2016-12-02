@@ -21,8 +21,8 @@ app.simulationCreationView = Backbone.View.extend({
 
     events: {
         'click #previous': 'previous',
-        'click .validModel': 'validModel',
-        'click .removeModel': 'cancelUnderCreation',
+        'click .validModelSim': 'validModelSim',
+        'click .removeModelSim': 'cancelUnderCreationSim',
         'click #cancelCreationSimu': 'cancelCreationSimu',
         'change #carRepart': 'showPercent',
         'click #launch': 'launchSim'
@@ -579,7 +579,7 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    validModel: function () {
+    validModelSim: function () {
         var valid = false;
 
         switch (this.step) {
@@ -656,7 +656,7 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    cancelUnderCreation: function () {
+    cancelUnderCreationSim: function () {
         var resolution = this.map.getView().getResolution();
         switch (this.step) {
             case 1:
