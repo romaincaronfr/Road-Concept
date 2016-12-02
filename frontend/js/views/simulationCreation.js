@@ -20,7 +20,7 @@ app.simulationCreationView = Backbone.View.extend({
     vehicle_count: null,
 
     events: {
-        'click #previous': 'previous',
+        'click #previous' : 'previous',
         'click .validModel': 'validModel',
         'click .removeModel': 'cancelUnderCreation',
         'click #cancelCreationSimu': 'cancelCreationSimu',
@@ -99,12 +99,12 @@ app.simulationCreationView = Backbone.View.extend({
                 return self.generateSelectStyle(feature, resolution);
             }
         });
-        this.selectPointer.on('select', function (e) {
+        this.selectPointer.on('select', function (e, resolution) {
             if (e.deselected.length > 0) {
                 self.clickCloseInfo();
             }
             if (e.selected.length > 0) {
-                self.renderFeatureCreation(e.selected[0]);
+                self.renderFeatureCreation(e.selected[0], resolution);
             }
         });
         this.selectPointerMove = new ol.interaction.Select({
@@ -155,7 +155,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     showPercent: function () {
         var val = $('#carRepart').val();
-        $('#percentVal').text(val + "% de voitures - " + (100 - val) + "% de camions");
+        $('#percentVal').text(val + "% de voitures - " + (100-val) + "% de camions");
     },
 
     onAddElement: function (element) {
@@ -473,33 +473,102 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    renderFeatureCreation: function (feature) {
-        var featureid = feature.getProperties().id;
-        var model = this.mapDetailsCOllection.get(featureid);
-        var pass = false;
-        switch (this.step) {
-            case 0:
-                $('#habitZone').hide();
-                $('#habitZoneParam').show();
-                $('#divPrevious').show();
-                this.living_feature = featureid;
-                new app.mapPopUpCreateHabitationZoneView({
-                    model: model
-                });
-                pass = true;
+    generateZoneStyle: function (feature, resolution) {
+        var type = feature.getProperties().type;
+        var oneway = 1;
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
+            oneway = 0.5;
+        }
+
+        switch (type) {
+            case 1:
+                //SINGLE ROAD
+                var width = 7;
+                var originColor = [241, 196, 15, 1];
                 break;
             case 2:
-                $('#workZone').hide();
-                $('#workZoneParam').show();
-                this.working_feature = featureid;
-                new app.mapPopUpCreateWorkZoneView({
-                    model: model
-                });
-                pass = true;
+                //DOUBLE ROAD
+                var width = 14;
+                var originColor = [230, 126, 34, 1];
+                break;
+            case 3:
+                //TRIPLE ROAD
+                var width = 21;
+                var originColor = [231, 76, 60, 1];
+                break;
+            default:
                 break;
         }
 
+        switch (this.step) {
+            case 0:
+                //Habitation Zone
+                var colorStyle = [0, 0, 255, 1];
+                var text = "Zone d'habitation";
+                break;
+            case 2:
+                //Working Zone
+                var colorStyle = [255, 0, 0, 1];
+                var text = "Zone de travail";
+                break;
+            /*case 1:
+            case 3:
+            case 4:
+                var colorStyle = originColor;
+                break;*/
+            default:
+                var colorStyle = originColor;
+                break;
+        }
+
+        var style = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: colorStyle,
+                width: (width / resolution) * oneway
+            }),
+            text: new ol.style.Text({
+                text: text,
+                fill: new ol.style.Fill({
+                    color: colorStyle,
+                    width: (width / resolution) * oneway
+                })
+            })
+        });
+        feature.setStyle(style);
+    },
+
+    renderFeatureCreation: function (feature, resolution) {
+        var featureid = feature.getProperties().id;
+        var type = feature.getProperties().type;
+        var model = this.mapDetailsCOllection.get(featureid);
+        var pass = false;
+        if (type > 0 && type < 4) {
+            switch (this.step) {
+                case 0:
+                    $('#habitZone').hide();
+                    $('#habitZoneParam').show();
+                    $('#divPrevious').show();
+                    this.living_feature = featureid;
+                    new app.mapPopUpCreateHabitationZoneView({
+                        model: model
+                    });
+                    pass = true;
+                    break;
+                case 2:
+                    $('#workZone').hide();
+                    $('#workZoneParam').show();
+                    this.working_feature = featureid;
+                    new app.mapPopUpCreateWorkZoneView({
+                        model: model
+                    });
+                    pass = true;
+                    break;
+            }
+        }
+
         if (pass == true) {
+            this.generateZoneStyle(feature, resolution);
+
             if (this.step < 4) {
                 this.step++;
             }
@@ -517,7 +586,7 @@ app.simulationCreationView = Backbone.View.extend({
             case 1:
                 var hour = $('#startHour').val();
                 var nbCar = $('#nbHabit').val();
-                var percent = $('#carRepart').val();
+                //var percent = $('#carRepart').val();
 
                 if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
                     $('#alertEmptyHabitation').show();
@@ -530,7 +599,8 @@ app.simulationCreationView = Backbone.View.extend({
                     $('#workZone').show();
                     this.startHour = hour;
                     this.vehicle_count = nbCar;
-                    this.car_percentage = percent;
+                    //this.car_percentage = percent;
+                    this.car_percentage = 100;
                     valid = true;
                 }
                 break;
@@ -538,7 +608,7 @@ app.simulationCreationView = Backbone.View.extend({
                 var hour = $('#returnHour').val();
 
                 if (this.getTotalSecond(hour) < (this.getTotalSecond(this.startHour) + 3600)) {
-                    $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour) + 1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
+                    $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour)+1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
                     $('#alertEmptyWork').show();
                     setTimeout(function () {
                         $('#alertEmptyWork').hide();
@@ -574,7 +644,7 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     getTotalSecond: function (hour) {
-        return ((this.getHour(hour) * 60 * 60) + (this.getMinutes(hour) * 60));
+        return ((this.getHour(hour)*60*60) + (this.getMinutes(hour)*60));
     },
 
     formatDigit: function (digit) {
@@ -587,6 +657,15 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     cancelUnderCreation: function () {
+        var resolution = this.map.getView().getResolution();
+        switch (this.step) {
+            case 1:
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.living_feature), resolution);
+                break;
+            case 3:
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.working_feature), resolution);
+                break;
+        }
         $('#osmInfo').empty();
         this.value = 'None';
         this.step--;
@@ -611,7 +690,7 @@ app.simulationCreationView = Backbone.View.extend({
                 $('#alertEmptyStart').hide();
             }, 5000);
         } else {
-            var collection = new app.collections.simulationParamsCollection({id: this.id});
+            var collection = new app.collections.simulationParamsCollection({id:this.id});
             var model = new app.models.simulationParamsModel({
                 name: name,
                 sampling_rate: parseInt(sampling_rate),
@@ -634,61 +713,66 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    previous: function () {
+    previous: function (){
+        var resolution = this.map.getView().getResolution();
+        var pass = false;
+
         switch (this.step) {
             case 1:
                 $('#osmInfo').empty();
                 $('#habitZoneParam').hide();
                 $('#divPrevious').hide();
                 $('#habitZone').show();
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.living_feature), resolution);
                 this.living_feature = null;
-                this.map.addInteraction(this.selectPointerMove);
-                this.map.addInteraction(this.selectPointer);
-                this.map.addInteraction(this.snap);
+                pass = true;
                 break;
             case 2:
                 $('#workZone').hide();
                 $('#divPrevious').hide();
                 $('#habitZone').show();
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.living_feature), resolution);
                 this.living_feature = null;
                 this.startHour = null;
                 this.car_percentage = null;
                 this.vehicle_count = null;
-                this.map.addInteraction(this.selectPointerMove);
-                this.map.addInteraction(this.selectPointer);
-                this.map.addInteraction(this.snap);
+                pass = true;
                 break;
             case 3:
                 $('#osmInfo').empty();
                 $('#workZoneParam').hide();
                 $('#workZone').show();
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.working_feature), resolution);
                 this.working_feature = null;
-                this.map.addInteraction(this.selectPointerMove);
-                this.map.addInteraction(this.selectPointer);
-                this.map.addInteraction(this.snap);
+                pass = true;
                 break;
             case 4:
                 $('#startSim').hide();
                 $('#workZone').show();
+                this.generateZoneStyle(this.vectorSource.getFeatureById(this.working_feature), resolution);
                 this.working_feature = null;
                 this.returnHour = null;
-                this.map.addInteraction(this.selectPointerMove);
-                this.map.addInteraction(this.selectPointer);
-                this.map.addInteraction(this.snap);
+                pass = true;
                 break;
             default:
                 console.log('step > 3 ou < 0');
                 break;
         }
 
-        if (this.step > 0) {
+        if (pass == true) {
+            this.map.addInteraction(this.selectPointerMove);
+            this.map.addInteraction(this.selectPointer);
+            this.map.addInteraction(this.snap);
+        }
+
+        if(this.step > 0){
             if (this.step % 2 == 0) {
                 this.step = this.step - 2;
             } else {
                 this.step--;
             }
         }
-        console.log('cancel, step:' + this.step);
+        console.log('cancel, step:'+this.step);
     }
 });
 
