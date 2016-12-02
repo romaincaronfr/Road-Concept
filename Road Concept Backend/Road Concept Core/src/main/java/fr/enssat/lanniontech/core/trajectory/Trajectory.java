@@ -3,8 +3,6 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,14 +71,14 @@ public abstract class Trajectory {
         return true;
     }
 
-    public void addCar(double space, int carId){
-        if(!loggedVehicles.contains(carId)){
+    public void addCar(double space, int carId) {
+        if (!loggedVehicles.contains(carId)) {
             notFreeSpace += space;
         }
     }
 
-    public double getFreeSpaceRatio(){
-        double res = notFreeSpace/length;
+    public double getFreeSpaceRatio() {
+        double res = notFreeSpace / length;
         notFreeSpace = 0;
         loggedVehicles.clear();
         return res;

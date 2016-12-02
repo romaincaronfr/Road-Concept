@@ -22,7 +22,7 @@ public class Side {
     private int pathStep;
     private double length;
 
-    public Side(double pos, Vehicle myVehicle, Lane myLane,double length) {
+    public Side(double pos, Vehicle myVehicle, Lane myLane, double length) {
         this.myVehicle = myVehicle;
         this.pos = pos;
         this.length = length;
@@ -75,22 +75,22 @@ public class Side {
         } else {
             this.pos = pos;
         }
-        if(pos > 0 && pos < myTrajectory.getLength()) {
+        if (pos > 0 && pos < myTrajectory.getLength()) {
             if (length < 0) {
                 //it's a frontside
 
                 if (pos + length < 0) {
-                    myTrajectory.addCar(pos,myVehicle.getID());
-                }else {
-                    myTrajectory.addCar(-length,myVehicle.getID());
+                    myTrajectory.addCar(pos, myVehicle.getID());
+                } else {
+                    myTrajectory.addCar(-length, myVehicle.getID());
                 }
 
             } else {
                 //it's a backside
                 if (pos + length > myTrajectory.getLength()) {
-                    myTrajectory.addCar(myTrajectory.getLength() - pos,myVehicle.getID());
-                }else {
-                    myTrajectory.addCar(length,myVehicle.getID());
+                    myTrajectory.addCar(myTrajectory.getLength() - pos, myVehicle.getID());
+                } else {
+                    myTrajectory.addCar(length, myVehicle.getID());
                 }
             }
         }

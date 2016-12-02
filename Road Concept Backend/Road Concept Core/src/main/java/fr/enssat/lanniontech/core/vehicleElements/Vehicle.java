@@ -40,8 +40,8 @@ public class Vehicle {
         this.length = length;
         this.setDistanceDone(0);
         this.setMyPath(myPath);
-        this.setFrontSide(new Side(length + startPos, this, start,-length));
-        this.setBackSide(new Side(startPos, this, start,length));
+        this.setFrontSide(new Side(length + startPos, this, start, -length));
+        this.setBackSide(new Side(startPos, this, start, length));
         this.setHistoryManager(historyManager);
         this.setAI(AI);
     }

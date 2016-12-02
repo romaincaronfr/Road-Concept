@@ -46,7 +46,6 @@ public class SimulatorService extends AbstractService implements Observer {
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         //FIXME: The repository should not throw an EntityStillInUseException if the map does not exist
         try {
-            LOGGER.debug("@@@ SAMPLING RATE = " + samplingRate);
             Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
             simulation.setSimulator(new Simulator(simulation.getUuid()));
 
@@ -100,7 +99,7 @@ public class SimulatorService extends AbstractService implements Observer {
                 for (RoadMetrics metric : roadMetrics) {
                     if (metric.getCongestion() != 0) {
                         //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
-                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion() / 10 , metric.getTimestamp());
+                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
                     }
                 }
                 historyManager.removeSamples();

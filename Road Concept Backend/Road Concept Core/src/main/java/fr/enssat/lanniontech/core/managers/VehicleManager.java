@@ -10,7 +10,12 @@ import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class VehicleManager {
     private List<Vehicle> vehicles;
@@ -39,65 +44,65 @@ public class VehicleManager {
         vehiclesBuffers.add(new LinkedList<>());//add work buffer
     }
 
-    public void setLivingArea(UUID id){
+    public void setLivingArea(UUID id) {
         livingArea = roadManager.getRoad(id);
     }
 
-    public void setWorkingArea(UUID id){
+    public void setWorkingArea(UUID id) {
         workingArea = roadManager.getRoad(id);
     }
 
-    public void createTrafficGenerator(int goTimestamp,int returnTimestamp,int vehicles,int ratio){
-        generators.add(new DiracGenerator(goTimestamp,vehicles));       //add the home generator
-        generators.add(new DiracGenerator(returnTimestamp,vehicles));   //add the work generator
+    public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int ratio) {
+        generators.add(new DiracGenerator(goTimestamp, vehicles));       //add the home generator
+        generators.add(new DiracGenerator(returnTimestamp, vehicles));   //add the work generator
     }
 
-    public void updateBuffers(long timestamp){
+    public void updateBuffers(long timestamp) {
         for (int i = 0; i < generators.size(); i++) {
             vehiclesBuffers.get(i).addAll(generators.get(i).addVehicles(timestamp));
         }
     }
 
-    private void insertBuffers(){
+    private void insertBuffers() {
         Iterator<VehicleKernel> iterator = vehiclesBuffers.get(0).iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             VehicleKernel kernel = iterator.next();
-            if(addVehicle(kernel,livingArea,workingArea)){
+            if (addVehicle(kernel, livingArea, workingArea)) {
                 iterator.remove();
-            }else {
+            } else {
                 break;
             }
         }
 
         iterator = vehiclesBuffers.get(1).iterator();
 
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             VehicleKernel kernel = iterator.next();
-            if(addVehicle(kernel,workingArea,livingArea)){
+            if (addVehicle(kernel, workingArea, livingArea)) {
                 iterator.remove();
-            }else {
+            } else {
                 break;
             }
         }
     }
 
-    private boolean addVehicle(VehicleKernel kernel,Road start, Road stop) {
+    private boolean addVehicle(VehicleKernel kernel, Road start, Road stop) {
         RoadSection Rs = start.get(gen.nextInt(start.size()));
         Lane startingLane;
-        if(gen.nextBoolean()){
+        if (gen.nextBoolean()) {
             startingLane = Rs.getLaneAB();
-        }else {
+        } else {
             startingLane = Rs.getLaneBA();
         }
 
-        double startingPos = gen.nextInt((int)startingLane.getLength());
+        double startingPos = gen.nextInt((int) startingLane.getLength());
 
-        if(!startingLane.getInsertTrajectory().rangeIsFree(startingPos-3,startingPos+3)){
+        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 3, startingPos + 3)) {
             return false;
         }
 
         //Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
-        Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(),false);
+        Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
         Vehicle V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);

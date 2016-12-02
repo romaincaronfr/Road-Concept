@@ -43,8 +43,8 @@ public class Lane {
 
     public double getCongestion() {
         double congestion = 0;
-        for(SimpleTrajectory trajectory : trajectories){
-            congestion = Math.max(trajectory.getFreeSpaceRatio(),congestion);
+        for (SimpleTrajectory trajectory : trajectories) {
+            congestion = Math.max(trajectory.getFreeSpaceRatio(), congestion);
         }
         return congestion;
     }

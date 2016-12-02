@@ -2,6 +2,8 @@ package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,9 @@ import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class HistoryManager extends Observable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HistoryManager.class);
+
     //structure: <VehicleId,<timestamp,Position>>
     private List<List<SpaceTimePosition>> positionHistoryFiFo;
     private List<List<RoadMetrics>> roadMetricsHistoryFiFo;
@@ -30,7 +35,7 @@ public class HistoryManager extends Observable {
 
     public void addPosition(SpaceTimePosition P) {
         if (!positionManager.isInRange(P)) {
-            System.err.println("car out of bounds");
+            LOGGER.debug("car out of bounds");
         }
         currentPositionSample.add(P);
     }

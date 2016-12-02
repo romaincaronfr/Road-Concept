@@ -75,11 +75,11 @@ public class Simulator extends Observable implements Runnable {
             int timestamp = -1;
             for (long i = 0; i < stepCycles; i++) {
 
-                if (k == second){
+                if (k == second) {
                     timestamp++;
                     vehicleManager.updateBuffers(timestamp);
                     k = 1;
-                }else {
+                } else {
                     k++;
                 }
 
@@ -93,12 +93,12 @@ public class Simulator extends Observable implements Runnable {
                     j++;
                 }
 
-            try {
-                wl.lock();
-                progress = (double) i / stepCycles;
-            } finally {
-                wl.unlock();
-            }
+                try {
+                    wl.lock();
+                    progress = (double) i / stepCycles;
+                } finally {
+                    wl.unlock();
+                }
             }
         } finally {
             setChanged();
