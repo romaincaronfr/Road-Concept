@@ -19,7 +19,7 @@ app.adminManaView = Backbone.View.extend({
         return this;
     },
 
-    clickOnAjoutUser: function (){
+    clickOnAjoutUser: function () {
 
         var usermail = $('#emailInput').val();
         var userLname = $('#nameInput').val();
@@ -27,14 +27,14 @@ app.adminManaView = Backbone.View.extend({
         var userPassword = $('#passwordInput').val()
         var userFname = $('#prenomInput').val();
 
-        if(!usermail || !userLname || !usertype || !userPassword || !userFname ){
+        if (!usermail || !userLname || !usertype || !userPassword || !userFname) {
             $('#adminManaViewDanger').html('Certains de vos champs est/sont vide. Merci de le(s) remplir.');
             $('#adminManaViewDanger').removeClass('hidden');
             $('#adminManaViewSuccess').addClass('hidden');
 
         } else {
 
-            if(this.validationEmail(usermail) == false){
+            if (this.validationEmail(usermail) == false) {
                 $('#adminManaViewDanger').html('Votre email n\'est pas au bon format. Merci de le modifier.');
                 $('#adminManaViewDanger').removeClass('hidden');
                 $('#adminManaViewSuccess').addClass('hidden');
@@ -46,8 +46,8 @@ app.adminManaView = Backbone.View.extend({
                     password: userPassword,
                     type: usertype
                 });
-                user.save(null,{
-                    success: function(){
+                user.save(null, {
+                    success: function () {
                         $('#adminManaViewSuccess').html('L\'utilisateur a bien été ajouté.');
                         $('#adminManaViewSuccess').removeClass('hidden');
                         $('#adminManaViewDanger').addClass('hidden');

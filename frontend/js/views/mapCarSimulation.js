@@ -39,7 +39,7 @@ app.mapCarSimulationView = Backbone.View.extend({
         this.render();
     },
 
-    changeID: function (idSimu,simTime,sampling,idMap,idCar) {
+    changeID: function (idSimu, simTime, sampling, idMap, idCar) {
         this.id = idCar;
         this.stepSeconds = sampling;
         this.mapID = idMap;
@@ -64,7 +64,12 @@ app.mapCarSimulationView = Backbone.View.extend({
         }
 
         //Ajout de la template au body
-        var mod = new Backbone.Model({"mapID": this.mapID,"simuID": this.idSimu, "samp": this.stepSeconds, "simTime":this.simTime});
+        var mod = new Backbone.Model({
+            "mapID": this.mapID,
+            "simuID": this.idSimu,
+            "samp": this.stepSeconds,
+            "simTime": this.simTime
+        });
         this.$el.append(this.template(mod.attributes));
 
         //Fond de carte OSM
@@ -141,13 +146,13 @@ app.mapCarSimulationView = Backbone.View.extend({
         this.mapDetailsCollectionSimulation.fetch({
             success: function () {
                 if (self.mapDetailsCollectionSimulation.length > 0) {
-                    for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
+                    for (var i = 0; i < self.mapDetailsCollectionSimulation.length; i++) {
                         var element = self.mapDetailsCollectionSimulation.models[i];
                         var geojsonModel = element.toGeoJSON();
                         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                             featureProjection: 'EPSG:3857'
                         });
-                        if (element.attributes.type == 6){
+                        if (element.attributes.type == 6) {
                             self.vectorSource2.addFeature(newfeature);
                         } else {
                             self.vectorSource.addFeature(newfeature);

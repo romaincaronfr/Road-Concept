@@ -12,7 +12,6 @@ app.mapDetailsPageView = Backbone.View.extend({
     selectPointer: null,
 
 
-
     initialize: function (options) {
         this.id = options.id;
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
@@ -25,7 +24,7 @@ app.mapDetailsPageView = Backbone.View.extend({
         //Supression du content
         this.mapDetailsCOllection.reset();
         $('#content').empty();
-        if (this.vectorSource){
+        if (this.vectorSource) {
             this.vectorSource.clear();
         }
 
@@ -107,14 +106,14 @@ app.mapDetailsPageView = Backbone.View.extend({
         //Fetch de la collection
         this.mapDetailsCOllection.fetch();
 
-        $( "#osmSlider" ).slider({
+        $("#osmSlider").slider({
             orientation: "vertical",
             range: "min",
             min: 0,
             max: 1,
             step: 0.1,
             value: 0.3,
-            slide: function( event, ui ) {
+            slide: function (event, ui) {
                 self.changeOppacity(ui.value);
             }
         });
@@ -216,7 +215,7 @@ app.mapDetailsPageView = Backbone.View.extend({
         }
     },
 
-    generateSelectStyle: function(feature,resolution){
+    generateSelectStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
         var geometry = feature.getGeometry();
         var startCoord = geometry.getFirstCoordinate();
@@ -224,10 +223,10 @@ app.mapDetailsPageView = Backbone.View.extend({
         var oneway = 1;
         var circle = new ol.style.Circle({
             stroke: new ol.style.Stroke({
-                color: [50, 50, 50,1]
+                color: [50, 50, 50, 1]
             }),
             fill: new ol.style.Fill({
-                color: [200, 200, 200,0.8]
+                color: [200, 200, 200, 0.8]
             }),
             radius: 10
         });
@@ -259,10 +258,10 @@ app.mapDetailsPageView = Backbone.View.extend({
                 rotation: 0
             })
         });
-        if (feature.getProperties().oneway && feature.getProperties().oneway == true){
+        if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
         }
-        switch (type){
+        switch (type) {
             case 1:
                 //SINGLE ROAD
                 var styles = [
@@ -270,7 +269,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((7+2)/resolution)*oneway
+                            width: ((7 + 2) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -287,7 +286,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((14+2)/resolution)*oneway
+                            width: ((14 + 2) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -304,7 +303,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                     new ol.style.Style({
                         stroke: new ol.style.Stroke({
                             color: [26, 155, 252, 1],
-                            width: ((21+1)/resolution)*oneway
+                            width: ((21 + 1) / resolution) * oneway
                         })
                     }),
                     //First point
@@ -317,11 +316,11 @@ app.mapDetailsPageView = Backbone.View.extend({
             case 4:
                 var style = new ol.style.Style({
                     fill: new ol.style.Fill({
-                        color: [250,178,102,1]
+                        color: [250, 178, 102, 1]
                     }),
                     stroke: new ol.style.Stroke({
                         color: [26, 155, 252, 1],
-                        width: (3.5+2)/resolution
+                        width: (3.5 + 2) / resolution
                     })
                 });
                 return style;
@@ -334,7 +333,7 @@ app.mapDetailsPageView = Backbone.View.extend({
                         size: [44, 100],
                         offset: [0, 0],
                         opacity: 1,
-                        scale: (0.1 + 0.2)/resolution,
+                        scale: (0.1 + 0.2) / resolution,
                         src: 'assets/img/redlight.jpg'
                     })
                 });

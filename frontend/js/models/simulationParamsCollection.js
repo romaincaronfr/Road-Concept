@@ -3,10 +3,10 @@
  */
 app.collections.simulationParamsCollection = Backbone.Collection.extend({
     model: app.models.simulationParamsModel,
-    initialize: function(options) {
+    initialize: function (options) {
         this.id = options.id;
     },
     url: function () {
-        return this.absURL + '/api/maps/' + this.id+'/simulations';
+        return this.absURL + '/api/maps/' + this.id + '/simulations';
     }
 });

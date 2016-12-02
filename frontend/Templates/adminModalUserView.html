@@ -1,61 +1,61 @@
- <div id="submitModifyUserM" class="modal fade" role="dialog">
+<div id="submitModifyUserM" class="modal fade" role="dialog">
 
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modification de l'utilisateur</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger hidden" id="adminModalUserViewDanger">
-                    </div>
-                    <form class="form-horizontal" role="form">
-                        <div class="form-group">
-
-                            <label for="firstName" class="col-sm-2 control-label">
-                                Prénom
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="firstName" value="<%= firstName%>"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            <label for="lastName" class="col-sm-2 control-label">
-                                Nom
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="lastName"value="<%= lastName%>"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                            <label for="email" class="col-sm-2 control-label">
-                                Email
-                            </label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="email"  value="<%= email%>" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="type" class="col-sm-2 control-label">
-                                Type
-                            </label>
-                            <div class="col-sm-10">
-                                <select class="form-control" id="type">
-                                    <option value=1>Utilisateur</option>
-                                    <option value=2>Administrateur</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-success modify_User " id="modify_<%= id %>">Modifier</button>
-                </div>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modification de l'utilisateur</h4>
             </div>
+            <div class="modal-body">
+                <div class="alert alert-danger hidden" id="adminModalUserViewDanger">
+                </div>
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
 
+                        <label for="firstName" class="col-sm-2 control-label">
+                            Prénom
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="firstName" value="<%= firstName%>"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="lastName" class="col-sm-2 control-label">
+                            Nom
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="lastName" value="<%= lastName%>"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <label for="email" class="col-sm-2 control-label">
+                            Email
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="email" value="<%= email%>"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="type" class="col-sm-2 control-label">
+                            Type
+                        </label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="type">
+                                <option value=1>Utilisateur</option>
+                                <option value=2>Administrateur</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success modify_User " id="modify_<%= id %>">Modifier</button>
+            </div>
         </div>
- </div>
+
+    </div>
+</div>

@@ -30,7 +30,7 @@ app.userView = Backbone.View.extend({
         var newNom = $('#nameInput').val();
         var newPrenom = $('#prenomInput').val();
 
-        if (!newEmail  || !newNom  || !newPrenom) {
+        if (!newEmail || !newNom || !newPrenom) {
 
             $('#info-text-modal').html("Certains de vos champs n'ont pas été indiqué. Merci de le(s) remplir.");
             $('#modalInfo').modal('show');
@@ -40,18 +40,18 @@ app.userView = Backbone.View.extend({
 
                 if (this.validationEmail(newEmail) == true) {
 
-                        app.router.navBarV.model.save({
-                            'lastName': newNom,
-                            'firstName': newPrenom,
-                            'email': newEmail
-                        }, {
-                            success: function (model, response) {
-                                app.router.navBarV.render();
-                                $('#info-text-modal').html("Votre compte a bien été mis à jour.");
-                                $('#modalInfo').modal('show');
-                            },
-                            wait: true // Add this
-                        });
+                    app.router.navBarV.model.save({
+                        'lastName': newNom,
+                        'firstName': newPrenom,
+                        'email': newEmail
+                    }, {
+                        success: function (model, response) {
+                            app.router.navBarV.render();
+                            $('#info-text-modal').html("Votre compte a bien été mis à jour.");
+                            $('#modalInfo').modal('show');
+                        },
+                        wait: true // Add this
+                    });
                 } else {
                     $('#info-text-modal').html("Votre adresse email n'est pas au bon format.");
                     $('#modalInfo').modal('show');

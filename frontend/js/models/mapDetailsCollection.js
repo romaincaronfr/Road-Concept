@@ -3,20 +3,20 @@
  */
 app.collections.mapDetailsCollection = Backbone.Collection.extend({
     model: app.models.mapDetailsModel,
-    initialize: function(options) {
+    initialize: function (options) {
         this.id = options.id;
     },
     url: function () {
         return this.absURL + '/api/maps/' + this.id;
     },
-    parse: function(response){
+    parse: function (response) {
         return response.features.features;
     },
-    toGeoJSON: function(){
+    toGeoJSON: function () {
         var features = [];
-        this.models.forEach(function(model){
+        this.models.forEach(function (model) {
             var feature = model.toGeoJSON();
-            if (! _.isEmpty(feature.geometry)) {
+            if (!_.isEmpty(feature.geometry)) {
                 features.push(feature);
             }
         });

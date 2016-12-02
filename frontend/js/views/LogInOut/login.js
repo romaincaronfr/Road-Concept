@@ -55,8 +55,8 @@ app.loginView = Backbone.View.extend({
             });
     },
 
-    pressEnter: function(event){
-        if(event.which === 13 && $('#exampleInputEmail1').val() != '' && $('#exampleInputPassword1').val() !=''){
+    pressEnter: function (event) {
+        if (event.which === 13 && $('#exampleInputEmail1').val() != '' && $('#exampleInputPassword1').val() != '') {
             this.clickOnSubmitLogin();
         }
     }

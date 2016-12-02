@@ -16,10 +16,10 @@ app.mapEditionView = Backbone.View.extend({
     snap: null,
     mapDetailsCOllection: null,
     interactionZoomDoubleClick: null,
-    index:null,
+    index: null,
     intersections: null,
     newModel: null,
-    eventClick:null,
+    eventClick: null,
 
     events: {
         //'click .close_map_info': 'clickCloseInfo',
@@ -130,14 +130,14 @@ app.mapEditionView = Backbone.View.extend({
         //Fetch de la collection
         this.fetchCollection();
 
-        $( "#osmSlider" ).slider({
-                orientation: "vertical",
-                range: "min",
-                min: 0,
-                max: 1,
-                step: 0.1,
-                value: 0.3,
-            slide: function( event, ui ) {
+        $("#osmSlider").slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: 1,
+            step: 0.1,
+            value: 0.3,
+            slide: function (event, ui) {
                 self.changeOppacity(ui.value);
             }
         });
@@ -515,14 +515,14 @@ app.mapEditionView = Backbone.View.extend({
             this.eventClick = this.map.on('click', function (event) {
                 var pixel = event.pixel;
                 var features = {};
-                var marge=0;
+                var marge = 0;
                 var resolution = self.map.getView().getResolution();
 
-                if (resolution>0.5 && resolution<1) {
+                if (resolution > 0.5 && resolution < 1) {
                     marge = 3;
-                } else if (resolution<2) {
+                } else if (resolution < 2) {
                     marge = 7;
-                } else if (resolution<4) {
+                } else if (resolution < 4) {
                     marge = 8;
                 } else {
                     marge = 9;
@@ -537,7 +537,7 @@ app.mapEditionView = Backbone.View.extend({
                 } else {
                     for (var i = pixel[0] - marge; i < pixel[0] + marge; i++) {
                         for (var j = pixel[1] - marge; j < pixel[1] + marge; j++) {
-                            var newPixel = [i,j];
+                            var newPixel = [i, j];
 
                             self.map.forEachFeatureAtPixel(newPixel, function (feature) {
                                 if (feature.getProperties().id && !features[feature.getProperties().id]) {
@@ -574,9 +574,9 @@ app.mapEditionView = Backbone.View.extend({
                 });
                 JSONFeature = JSON.parse(JSONFeature);
                 var newIntersections = [];
-                for (var i = 0;i<self.intersections.length;i++){
+                for (var i = 0; i < self.intersections.length; i++) {
                     newIntersections[i] = [];
-                    for (key in self.intersections[i]){
+                    for (key in self.intersections[i]) {
                         newIntersections[i].push(key);
                     }
                 }
@@ -793,7 +793,7 @@ app.mapEditionView = Backbone.View.extend({
                 self.mapDetailsCOllection.reset();
                 new app.waitMapEditionView();
                 self.mapDetailsCOllection.fetch({
-                    success : function(){
+                    success: function () {
                         $('#osmInfo').empty();
                     }
                 });

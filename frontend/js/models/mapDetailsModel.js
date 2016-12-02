@@ -3,12 +3,12 @@
  */
 app.models.mapDetailsModel = Backbone.Model.extend({
 
-    urlRoot: function() {
+    urlRoot: function () {
         // Backbone adds the model id automatically
-        return this.collection.url()+"/features";
+        return this.collection.url() + "/features";
     },
 
-    parse: function(response){
+    parse: function (response) {
         if (response) {
             var newResponse = {};
             newResponse.geometry = new Backbone.Model(response.geometry);
@@ -22,7 +22,7 @@ app.models.mapDetailsModel = Backbone.Model.extend({
         }
     },
 
-    toGeoJSON: function(){
+    toGeoJSON: function () {
         return {
             "type": "Feature",
             "id": this.attributes.id,
@@ -31,7 +31,7 @@ app.models.mapDetailsModel = Backbone.Model.extend({
         };
     },
 
-    toJSON: function(){
+    toJSON: function () {
         return {
             "type": "Feature",
             "properties": _.omit(this.attributes, 'geometry'),

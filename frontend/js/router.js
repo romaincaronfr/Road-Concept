@@ -32,11 +32,11 @@ app.Router = Backbone.Router.extend({
         "logout": "logout",
         "map/:id": "mapDetail",
         "editmap/:id": "mapEdition",
-        "simmap/:id/s/:samplingRate/d/:departureLivingS/m/:idMap" : "mapSimulation",
+        "simmap/:id/s/:samplingRate/d/:departureLivingS/m/:idMap": "mapSimulation",
         "users": "users",
         "homeSimulation/:id": "homeSimulation",
         "simulationCreation/:id": "simulationCreation",
-        "simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar" : "carSimulation"
+        "simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar": "carSimulation"
     },
 
     initialize: function () {
@@ -90,10 +90,10 @@ app.Router = Backbone.Router.extend({
         }
     },
 
-    mapDetail: function(id){
+    mapDetail: function (id) {
         this.checkAndInitNavBar();
-        if (!this.detailPageV){
-            this.detailPageV = new app.mapDetailsPageView({id:id});
+        if (!this.detailPageV) {
+            this.detailPageV = new app.mapDetailsPageView({id: id});
         } else {
             this.detailPageV.changeID(id);
             this.detailPageV.render();
@@ -101,10 +101,10 @@ app.Router = Backbone.Router.extend({
 
     },
 
-    mapEdition : function(id){
+    mapEdition: function (id) {
         this.checkAndInitNavBar();
-        if (!this.editmapV){
-            this.editmapV = new app.mapEditionView({id:id});
+        if (!this.editmapV) {
+            this.editmapV = new app.mapEditionView({id: id});
         } else {
             this.editmapV.changeID(id);
             this.editmapV.render();
@@ -112,13 +112,18 @@ app.Router = Backbone.Router.extend({
 
     },
 
-    mapSimulation : function (id,samplingRate,departureLivingS,idMap){
+    mapSimulation: function (id, samplingRate, departureLivingS, idMap) {
 
         this.checkAndInitNavBar();
-        if (!this.simmapView){
-            this.simmapView = new app.mapSimulationView({id:id,samplingRate:samplingRate,departureLivingS:departureLivingS,idMap:idMap});
+        if (!this.simmapView) {
+            this.simmapView = new app.mapSimulationView({
+                id: id,
+                samplingRate: samplingRate,
+                departureLivingS: departureLivingS,
+                idMap: idMap
+            });
         } else {
-            this.simmapView.changeID(id,samplingRate,departureLivingS,idMap);
+            this.simmapView.changeID(id, samplingRate, departureLivingS, idMap);
             this.simmapView.render();
         }
     },
@@ -148,31 +153,37 @@ app.Router = Backbone.Router.extend({
         new app.logoutView();
     },
 
-    homeSimulation: function(id){
+    homeSimulation: function (id) {
         this.checkAndDestroyMap();
         this.checkAndInitNavBar();
-        if (!this.homeSimuV){
-            this.homeSimuV = new app.simulationHomeView({id:id});
+        if (!this.homeSimuV) {
+            this.homeSimuV = new app.simulationHomeView({id: id});
         } else {
             this.homeSimuV.changeID(id);
             this.homeSimuV.render();
         }
     },
 
-    carSimulation: function(idSimu,simTime,sampling,idMap,idCar){
+    carSimulation: function (idSimu, simTime, sampling, idMap, idCar) {
         this.checkAndInitNavBar();
-        if (!this.simuCarV){
-            this.simuCarV = new app.mapCarSimulationView({idSimu:idSimu, simTime:simTime,sampling:sampling,idMap:idMap,idCar:idCar});
+        if (!this.simuCarV) {
+            this.simuCarV = new app.mapCarSimulationView({
+                idSimu: idSimu,
+                simTime: simTime,
+                sampling: sampling,
+                idMap: idMap,
+                idCar: idCar
+            });
         } else {
-            this.simuCarV.changeID(idSimu,simTime,sampling,idMap,idCar);
+            this.simuCarV.changeID(idSimu, simTime, sampling, idMap, idCar);
             this.simuCarV.render();
         }
     },
 
-    simulationCreation: function(id){
+    simulationCreation: function (id) {
         this.checkAndInitNavBar();
-        if (!this.simuCreatV){
-            this.simuCreatV = new app.simulationCreationView({id:id});
+        if (!this.simuCreatV) {
+            this.simuCreatV = new app.simulationCreationView({id: id});
         } else {
             this.simuCreatV.changeID(id);
             this.simuCreatV.render();
@@ -191,15 +202,15 @@ app.Router = Backbone.Router.extend({
             this.navBarV = null;
         }
     },
-    checkAndDestroyMap: function() {
+    checkAndDestroyMap: function () {
         $('#mapRow').remove();
     },
     users: function () {
         this.checkAndDestroyMap();
         this.checkAndInitNavBar();
-        if (!this.adminMV){
+        if (!this.adminMV) {
             this.adminMV = new app.adminManaUsersView();
-        }else{
+        } else {
             this.adminMV.render();
         }
     }

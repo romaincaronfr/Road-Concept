@@ -2,7 +2,8 @@
     <div class="osmSidebar">
         <div class="row">
             <div class="col-md-2 col-md-offset-1">
-                <a id="cancelCreationSimu" class="btn btn-danger btn-block" href="#homeSimulation/<%= id %>" data-toggle="tooltip" data-placement="bottom" title="Revenir à la liste des simulations">Annuler</a>
+                <a id="cancelCreationSimu" class="btn btn-danger btn-block" href="#homeSimulation/<%= id %>"
+                   data-toggle="tooltip" data-placement="bottom" title="Revenir à la liste des simulations">Annuler</a>
             </div>
         </div>
     </div>
@@ -17,15 +18,31 @@
         <div id="editButtonChooseTool" class=" btn-group-lg" role="group">
             <div class="col-md-1 col-md-offset-0 ">
                 <div id="divPrevious" hidden>
-                    <button id="previous" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Précédent" ><span class="glyphicon glyphicon-share-alt"></span></button>
+                    <button id="previous" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top"
+                            title="Précédent"><span class="glyphicon glyphicon-share-alt"></span></button>
                 </div>
             </div>
             <div class="col-md-11 col-md-offset-0 ">
-                <div id="habitZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée">Veuillez sélectionner une route correspondant à votre zone d'habitation</div>
-                <div id="habitZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone d'habitation</div>
-                <div id="workZone" class="text-center" data-toggle="tooltip" data-placement="top" title="Un simple clic sur une route pour la créée" hidden>Veuillez sélectionner une route correspondant à votre zone de travail</div>
-                <div id="workZoneParam" class="text-center" data-toggle="tooltip" data-placement="top" title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre zone de travail</div>
-                <button id="startSim" class="btn btn-default btn-block" data-toggle="modal" data-target="#modalStartSim" data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>   Simulation</button>
+                <div id="habitZone" class="text-center" data-toggle="tooltip" data-placement="top"
+                     title="Un simple clic sur une route pour la créée">Veuillez sélectionner une route correspondant à
+                    votre zone d'habitation
+                </div>
+                <div id="habitZoneParam" class="text-center" data-toggle="tooltip" data-placement="top"
+                     title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre
+                    zone d'habitation
+                </div>
+                <div id="workZone" class="text-center" data-toggle="tooltip" data-placement="top"
+                     title="Un simple clic sur une route pour la créée" hidden>Veuillez sélectionner une route
+                    correspondant à votre zone de travail
+                </div>
+                <div id="workZoneParam" class="text-center" data-toggle="tooltip" data-placement="top"
+                     title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre
+                    zone de travail
+                </div>
+                <button id="startSim" class="btn btn-default btn-block" data-toggle="modal" data-target="#modalStartSim"
+                        data-placement="top" title="Lancer la simulation"><span class="glyphicon glyphicon-play"></span>
+                    Simulation
+                </button>
             </div>
         </div>
     </div>
@@ -39,22 +56,26 @@
                 </div>
                 <div class="modal-body">
                     <p>Bienvenue dans la page de création de votre nouvelle simulation!</p>
-                    <p>Il vous sera demandé dans un premier temps, de créer une zone d'habitation et y renseigner les paramètres suivant :
-                       <ul>
-                            <li>Heure de départ</li>
-                            <li>Nombre d'habitants de la zone</li>
-                            <li>Répartition des voitures et des camions</li>
-                       </ul>
+                    <p>Il vous sera demandé dans un premier temps, de créer une zone d'habitation et y renseigner les
+                        paramètres suivant :
+                    <ul>
+                        <li>Heure de départ</li>
+                        <li>Nombre d'habitants de la zone</li>
+                        <li>Répartition des voitures et des camions</li>
+                    </ul>
                     </p>
                     <p>Vous devrez ensuite créer une zone de travail et y renseigner le paramètre suivant :
-                        <ul>
-                            <li>Heure de retour</li>
-                        </ul>
+                    <ul>
+                        <li>Heure de retour</li>
+                    </ul>
                     </p>
-                    <p>Une fois ces étapes passées, vous pourrez à nouveau changer les paramètres de vos deux zones et/ou de lancer la simulation. Au lancement il vous sera demander de donner un nom à votre simulation et de choisir sa précision.</p>
+                    <p>Une fois ces étapes passées, vous pourrez à nouveau changer les paramètres de vos deux zones
+                        et/ou de lancer la simulation. Au lancement il vous sera demander de donner un nom à votre
+                        simulation et de choisir sa précision.</p>
                 </div>
                 <div class="modal-footer">
-                    <button id="ready" type="button" class="btn btn-success" data-dismiss="modal">Je suis prêt !</button>
+                    <button id="ready" type="button" class="btn btn-success" data-dismiss="modal">Je suis prêt !
+                    </button>
                 </div>
             </div>
 
@@ -86,7 +107,8 @@
                                 Précision*
                             </label>
                             <div class="col-sm-10">
-                                <input type="number" min="1" max="920" placeholder="ex: 30" class="form-control" id="sampling_rate"/>
+                                <input type="number" min="1" max="920" placeholder="ex: 30" class="form-control"
+                                       id="sampling_rate"/>
                                 <p class="help-block">intervale entre chaque snapshot (en secondes)</p>
                                 <p class="help-block">de 1s à 920s (15min)</p>
                             </div>

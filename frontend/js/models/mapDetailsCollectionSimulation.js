@@ -3,22 +3,22 @@
  */
 app.collections.mapDetailsCollectionSimulation = Backbone.Collection.extend({
     model: app.models.mapDetailsModel,
-    initialize: function(option) {
+    initialize: function (option) {
         this.id = option.id;
         this.timestamp = option.timestamp;
     },
     url: function () {
         //return this.absURL + '/api/maps/' + this.id;
-        return this.absURL + '/api/simulations/'+this.id+'/results?timestamp='+this.timestamp;
+        return this.absURL + '/api/simulations/' + this.id + '/results?timestamp=' + this.timestamp;
     },
-    parse: function(response){
+    parse: function (response) {
         return response.features;
     },
-    toGeoJSON: function(){
+    toGeoJSON: function () {
         var features = [];
-        this.models.forEach(function(model){
+        this.models.forEach(function (model) {
             var feature = model.toGeoJSON();
-            if (! _.isEmpty(feature.geometry)) {
+            if (!_.isEmpty(feature.geometry)) {
                 features.push(feature);
             }
         });

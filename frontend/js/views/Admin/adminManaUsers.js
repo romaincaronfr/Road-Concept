@@ -18,13 +18,13 @@ app.adminManaUsersView = Backbone.View.extend({
         this.userCollection = new app.collections.userCollection;
         var self = this;
         $.ajax({
-            url: Backbone.Collection.prototype.absURL + "/api/me",
-            type: "GET",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },
-            contentType: "application/json"
-        })
+                url: Backbone.Collection.prototype.absURL + "/api/me",
+                type: "GET",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },
+                contentType: "application/json"
+            })
             .done(function (data, textStatus, jqXHR) {
                 self.myuserId = data.id;
                 self.render();
@@ -78,13 +78,18 @@ app.adminManaUsersView = Backbone.View.extend({
         var id = event.currentTarget.id;
         id = id.replace('modify_', '');
 
-        if(!firstname || !lastname || !email || !type){
+        if (!firstname || !lastname || !email || !type) {
             $('#adminModalUserViewDanger').html('Un ou plusieurs des champs sont vide, merci de le(s) remplir.');
             $('#adminModalUserViewDanger').removeClass('hidden');
         } else {
 
-            if(this.validationEmail(email) == true){
-                this.userCollection.get(id).set({'firstName': firstname, 'lastName': lastname, 'email': email, 'type': type});
+            if (this.validationEmail(email) == true) {
+                this.userCollection.get(id).set({
+                    'firstName': firstname,
+                    'lastName': lastname,
+                    'email': email,
+                    'type': type
+                });
                 var model = this.userCollection.get(id);
 
                 model.save(null, {

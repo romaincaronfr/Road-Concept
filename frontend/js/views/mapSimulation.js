@@ -50,7 +50,7 @@ app.mapSimulationView = Backbone.View.extend({
         this.render();
     },
 
-    changeID: function (id, samplingRate, departureLivingS,idMap) {
+    changeID: function (id, samplingRate, departureLivingS, idMap) {
         this.id = id;
         this.mapID = idMap;
         this.stepSeconds = parseFloat(samplingRate);
@@ -135,7 +135,7 @@ app.mapSimulationView = Backbone.View.extend({
         this.selectPointer.on('select', function (e) {
             if (e.selected[0]) {
                 console.log(e.selected[0].getProperties().id);
-                app.router.navigate('simmapCar/s/'+self.id+'/t/'+self.nowTime+'/samp/'+self.stepSeconds+'/map/'+self.mapID+'/car/'+e.selected[0].getProperties().id, {trigger: true});
+                app.router.navigate('simmapCar/s/' + self.id + '/t/' + self.nowTime + '/samp/' + self.stepSeconds + '/map/' + self.mapID + '/car/' + e.selected[0].getProperties().id, {trigger: true});
                 //simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar
             }
         });
@@ -205,13 +205,13 @@ app.mapSimulationView = Backbone.View.extend({
                         self.vectorSource.clear();
                         self.vectorSource2.clear();
                         if (self.mapDetailsCollectionSimulation.length > 0) {
-                            for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
+                            for (var i = 0; i < self.mapDetailsCollectionSimulation.length; i++) {
                                 var element = self.mapDetailsCollectionSimulation.models[i];
                                 var geojsonModel = element.toGeoJSON();
                                 var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                                     featureProjection: 'EPSG:3857'
                                 });
-                                if (element.attributes.type == 6){
+                                if (element.attributes.type == 6) {
                                     self.vectorSource2.addFeature(newfeature);
                                 } else {
                                     self.vectorSource.addFeature(newfeature);
@@ -256,9 +256,9 @@ app.mapSimulationView = Backbone.View.extend({
         return this;
     },
 
-    goNextSnapshot: function(){
-        var value = $( "#sliderSimulation" ).slider( "option", "value" );
-        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value+this.stepSeconds));
+    goNextSnapshot: function () {
+        var value = $("#sliderSimulation").slider("option", "value");
+        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value + this.stepSeconds));
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
@@ -281,13 +281,13 @@ app.mapSimulationView = Backbone.View.extend({
         this.mapDetailsCollectionSimulation.fetch({
             success: function () {
                 if (self.mapDetailsCollectionSimulation.length > 0) {
-                    for(var i=0; i<self.mapDetailsCollectionSimulation.length; i++) {
+                    for (var i = 0; i < self.mapDetailsCollectionSimulation.length; i++) {
                         var element = self.mapDetailsCollectionSimulation.models[i];
                         var geojsonModel = element.toGeoJSON();
                         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                             featureProjection: 'EPSG:3857'
                         });
-                        if (element.attributes.type == 6){
+                        if (element.attributes.type == 6) {
                             self.vectorSource2.addFeature(newfeature);
                         } else {
                             self.vectorSource.addFeature(newfeature);
