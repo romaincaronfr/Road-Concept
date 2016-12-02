@@ -50,19 +50,12 @@ public class TestSimulator {
             return;
         }
 
-        Sim.getVehicleManager().addToSpawnArea(R);
-
-        int k = 0;
-        for (int i = 0; i < vehicleNumber; i++) {
-            if (Sim.getVehicleManager().addVehicle()) {
-                k++;
-            }
-        }
-        System.out.println(k);
-
+        Sim.getVehicleManager().setLivingArea(id1);
+        Sim.getVehicleManager().setWorkingArea(id6);
+        Sim.getVehicleManager().createTrafficGenerator(3600,30000,vehicleNumber,0);
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

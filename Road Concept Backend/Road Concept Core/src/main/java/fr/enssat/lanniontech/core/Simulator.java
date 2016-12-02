@@ -69,12 +69,20 @@ public class Simulator extends Observable implements Runnable {
         try {
             long stepCycles = (long) (length / precision);
             WriteLock wl = l.writeLock();
-            int j = 1;
-            int timestamp = 0;
+            int j = samplingRate;
+            int second = (int) (1 / precision);
+            int k = second;
+            int timestamp = -1;
             for (long i = 0; i < stepCycles; i++) {
 
+                if (k == second){
+                    timestamp++;
+                    vehicleManager.updateBuffers(timestamp);
+                }else {
+                    k++;
+                }
+
                 if (j == samplingRate) {
-                    timestamp += (int) (samplingRate * precision);
                     vehicleManager.newStep(precision, true, timestamp);
                     roadManager.saveSates(historyManager, timestamp);
                     historyManager.commitChanges(simId);
@@ -84,12 +92,12 @@ public class Simulator extends Observable implements Runnable {
                     j++;
                 }
 
-                try {
-                    wl.lock();
-                    progress = (double) i / stepCycles;
-                } finally {
-                    wl.unlock();
-                }
+            try {
+                wl.lock();
+                progress = (double) i / stepCycles;
+            } finally {
+                wl.unlock();
+            }
             }
         } finally {
             setChanged();
