@@ -46,7 +46,6 @@ app.mapView = Backbone.View.extend({
         var newMapModel = new app.models.mapModel({'name': name, 'description': description, 'image_url': urlImg});
         newMapModel.save(null, {
             success: (function () {
-                console.log('success add');
                 $('#mapName').val('');
                 $('#mapDescription').val('');
                 $('#mapImgURL').val('');
@@ -68,37 +67,28 @@ app.mapView = Backbone.View.extend({
     },
 
     newElement: function (element) {
-        console.log("new element");
         new app.mapTableView({
             model: element
         });
     },
 
     newChange: function (element) {
-        console.log("change collection");
-        console.log(element);
     },
 
     newReset: function () {
-        console.log("reset collection");
         this.$el.html(this.template());
     },
 
     newSync: function (element) {
-        console.log("sync collection");
-        console.log(element);
     },
 
     newDestroy: function (element) {
-        console.log('destroy');
-        console.log(element);
         var divName = '#div_mapId_' + element.attributes.id;
         $(divName).remove();
         $('#modalRemoveMap').modal('hide');
     },
 
     clickOnRemove: function (event) {
-        console.log('click on remove');
         var id = event.currentTarget.id;
         id = id.replace('remove_', '');
         var model = this.mapCollection.get(id);

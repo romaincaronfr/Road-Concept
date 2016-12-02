@@ -54,7 +54,6 @@ app.navBarView = Backbone.View.extend({
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 //TODO rediriger qu'en cas d'erreur 401, merci :)
-                console.log("HTTP Request Failed : /api/me");
                 app.router.navigate('login', {trigger: true});
             })
             .always(function () {

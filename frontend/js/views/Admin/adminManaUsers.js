@@ -30,7 +30,6 @@ app.adminManaUsersView = Backbone.View.extend({
                 self.render();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log('fail');
             })
             .always(function () {
                 /* ... */
@@ -47,7 +46,6 @@ app.adminManaUsersView = Backbone.View.extend({
         var self = this;
         this.userCollection.each(function (model) {
             if (model.attributes.id != self.myuserId) {
-                console.log("if render ok. ID = " + model.attributes.id);
                 var adminUserRow = new app.adminUserRowView({
                     model: model
                 });
@@ -81,10 +79,7 @@ app.adminManaUsersView = Backbone.View.extend({
         var email = $('#email').val();
         var type = parseInt($('#type').val());
         var id = event.currentTarget.id;
-        console.log(id);
         id = id.replace('modify_', '');
-        console.log(id);
-        console.log(event.currentTarget.id);
 
         if(!firstname || !lastname || !email || !type){
             $('#adminModalUserViewDanger').html('Un ou plusieurs des champs sont vide, merci de le(s) remplir.');
@@ -117,7 +112,6 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     clickOnCancelDelete: function () {
-        console.log('canceldelete');
     },
 
     newElement: function (element) {
@@ -129,7 +123,6 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     newChange: function (element) {
-        console.log(element);
     },
 
     newReset: function () {
@@ -137,7 +130,6 @@ app.adminManaUsersView = Backbone.View.extend({
     },
 
     newSync: function (element) {
-        console.log(element);
     },
 
     newDestroy: function (element) {

@@ -30,9 +30,9 @@ var app = {
                 deferreds.push($.get('Templates/' + view + '.html', function (data) {
                     app[view].prototype.template = _.template(data);
                 }, 'html'));
-                console.log("loading view : " + view);
+                //console.log("loading view : " + view);
             } else {
-                console.log(view + " not found");
+                //console.log(view + " not found");
             }
         });
 

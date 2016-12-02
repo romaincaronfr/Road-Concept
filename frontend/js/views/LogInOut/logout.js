@@ -26,7 +26,6 @@ app.logoutView = Backbone.View.extend({
                 app.router.checkAndDestroyNavbar();
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("HTTP Request Failed : /api/logout");
                 $('#danger-text-modal').html("Erreur lors de la déconnexion. Merci de réessayer.");
                 $('#modalError').modal('show');
             })

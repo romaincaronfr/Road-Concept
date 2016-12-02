@@ -260,7 +260,6 @@ app.mapDetailsPageView = Backbone.View.extend({
             })
         });
         if (feature.getProperties().oneway && feature.getProperties().oneway == true){
-            console.log("oneway true");
             oneway = 0.5;
         }
         switch (type){
@@ -329,7 +328,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 break;
             case 5:
                 //RED_LIGHT
-                console.log(resolution);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
@@ -343,7 +341,6 @@ app.mapDetailsPageView = Backbone.View.extend({
                 return style;
                 break;
             default:
-                console.log("default");
                 break;
         }
     },

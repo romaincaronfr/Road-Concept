@@ -16,12 +16,10 @@ app.loginView = Backbone.View.extend({
     },
 
     render: function () {
-        console.log("render login");
         this.$el.html(this.template());
     },
 
     clickOnSubmitLogin: function () {
-        console.log("click on submit");
         $('#formDiv').addClass('hidden');
         $('#waitDiv').removeClass('hidden');
         $.ajax({
@@ -37,7 +35,6 @@ app.loginView = Backbone.View.extend({
                 })
             })
             .done(function (data, textStatus, jqXHR) {
-                console.log("HTTP Request Succeeded: " + jqXHR.status);
                 $.ajax({
                         url: Backbone.Collection.prototype.absURL + "/api/me",
                         type: "GET",
@@ -47,20 +44,16 @@ app.loginView = Backbone.View.extend({
                         contentType: "application/json"
                     })
                     .done(function (data, textStatus, jqXHR) {
-                        console.log("HTTP Request Succeeded: " + jqXHR.status);
                         userModel = new app.models.userModel(data);
-                        console.log(userModel);
                         app.router.navigate('map', {trigger: true});
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log("HTTP Request Failed : /api/me");
                     })
                     .always(function () {
                         /* ... */
                     });
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                console.log("HTTP Request Failed");
                 $('#alertLogin').removeClass('hidden');
                 $('#formDiv').removeClass('hidden');
                 $('#waitDiv').addClass('hidden');

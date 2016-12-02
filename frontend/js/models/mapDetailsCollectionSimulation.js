@@ -6,7 +6,6 @@ app.collections.mapDetailsCollectionSimulation = Backbone.Collection.extend({
     initialize: function(option) {
         this.id = option.id;
         this.timestamp = option.timestamp;
-        console.log('mapDetailsCollectionSimulation : Init');
     },
     url: function () {
         //return this.absURL + '/api/maps/' + this.id;

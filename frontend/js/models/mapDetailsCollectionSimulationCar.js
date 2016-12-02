@@ -6,7 +6,6 @@ app.collections.mapDetailsCollectionSimulationCar = Backbone.Collection.extend({
     initialize: function(option) {
         this.id = option.id;
         this.vehicle_id = option.vehicle_id;
-        console.log('mapDetailsCollectionSimulation : Init');
     },
     url: function () {
         //return this.absURL + '/api/maps/' + this.id;

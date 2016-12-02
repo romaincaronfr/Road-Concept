@@ -55,26 +55,20 @@ app.simulationHomeView = Backbone.View.extend({
     },
 
     changeID: function (id) {
-        console.log("change id = "+id);
         this.id = id;
         this.simulationParamsCollection.id = id;
     },
 
     goVisu: function (event) {
-        console.log('click on visualiser');
         var id = event.currentTarget.id;
         id = id.replace('visu_simu_button_', '');
-        console.log(id);
-        console.log(this.simulationParamsCollection);
         var model = this.simulationParamsCollection.get(id);
-        console.log(model);
         app.router.navigate('simmap/'+id+'/s/'+model.attributes.samplingRate+'/d/'+model.attributes.departureLivingS+'/m/'+this.id, {trigger: true});
     },
 
     goRemoveSimu: function(event){
         var id = event.currentTarget.id;
         id = id.replace('remove_simu_button_', '');
-        console.log(id);
         var model = this.simulationParamsCollection.get(id);
         new app.modalRemoveSimuView({
             model: model

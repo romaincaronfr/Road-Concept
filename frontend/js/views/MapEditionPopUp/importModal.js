@@ -10,7 +10,6 @@ app.importModalView = Backbone.View.extend({
     },
 
     render: function (){
-        console.log("render modal");
         if (!$('#modalImport').length) {
             this.$el.append(this.template);
             $('#modalImport').modal('show');

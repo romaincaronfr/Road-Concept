@@ -27,7 +27,6 @@ app.mapCarSimulationView = Backbone.View.extend({
 
     initialize: function (option) {
         //{idSimu:idSimu, simTime:simTime,sampling:sampling,idMap:idMap,idCar:idCar}
-        console.log("init simmap");
         this.id = option.idCar;
         this.stepSeconds = option.sampling;
         this.mapID = option.idMap;
@@ -128,10 +127,6 @@ app.mapCarSimulationView = Backbone.View.extend({
         });
         this.selectPointer.on('select', function (e) {
             if (e.selected[0]) {
-                console.log(e.selected[0].getProperties().id);
-                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id));
-                console.log(self.mapDetailsCollectionSimulation);
-                console.log(self.mapDetailsCollectionSimulation.get(e.selected[0].getProperties().id).attributes);
             }
         });
         this.selectPointerMove = new ol.interaction.Select({

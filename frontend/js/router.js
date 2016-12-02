@@ -9,9 +9,7 @@ Backbone.sync = (function (syncFn) {
         options = options || {};
         // handle unauthorized error (401)
         options.error = function (xhr, textStatus, errorThrown) {
-            console.log("error sync");
             if (xhr.status === 401) {
-                console.log('error 401');
                 app.router.navigate('login', {trigger: true});
             } else {
                 $('#danger-text-modal').html("<strong>Erreur ! </strong> Désolé, quelque chose s'est mal passée. Veuillez réessayer. (C'est encore le dev qui a du mal bosser...)");
@@ -75,7 +73,6 @@ app.Router = Backbone.Router.extend({
         if (!this.loginV) {
             this.loginV = new app.loginView();
             //app.loginView.render();
-            console.log('reusing home views');
         } else {
             this.loginV.render();
         }
@@ -116,11 +113,6 @@ app.Router = Backbone.Router.extend({
     },
 
     mapSimulation : function (id,samplingRate,departureLivingS,idMap){
-        console.log("mapSimulation")
-        console.log(id);
-        console.log(samplingRate);
-        console.log(departureLivingS);
-        console.log(idMap);
 
         this.checkAndInitNavBar();
         if (!this.simmapView){
@@ -160,10 +152,8 @@ app.Router = Backbone.Router.extend({
         this.checkAndDestroyMap();
         this.checkAndInitNavBar();
         if (!this.homeSimuV){
-            console.log("homeSimulation null");
             this.homeSimuV = new app.simulationHomeView({id:id});
         } else {
-            console.log("homeSimulation non null");
             this.homeSimuV.changeID(id);
             this.homeSimuV.render();
         }
@@ -172,10 +162,8 @@ app.Router = Backbone.Router.extend({
     carSimulation: function(idSimu,simTime,sampling,idMap,idCar){
         this.checkAndInitNavBar();
         if (!this.simuCarV){
-            console.log("simCarV null");
             this.simuCarV = new app.mapCarSimulationView({idSimu:idSimu, simTime:simTime,sampling:sampling,idMap:idMap,idCar:idCar});
         } else {
-            console.log("simCarV not null");
             this.simuCarV.changeID(idSimu,simTime,sampling,idMap,idCar);
             this.simuCarV.render();
         }

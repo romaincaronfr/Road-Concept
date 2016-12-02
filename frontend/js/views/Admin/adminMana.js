@@ -46,7 +46,6 @@ app.adminManaView = Backbone.View.extend({
                     password: userPassword,
                     type: usertype
                 });
-                console.log('user'+user);
                 user.save(null,{
                     success: function(){
                         $('#adminManaViewSuccess').html('L\'utilisateur a bien été ajouté.');

@@ -13,7 +13,6 @@ app.adminModalUserView = Backbone.View.extend({
     },
 
     render: function (model){
-        console.log(model.attributes);
         this.$el.html(this.template(model.attributes));
         //$('#submitModifyUserM').modal();
         $('#type').val(model.attributes.type);

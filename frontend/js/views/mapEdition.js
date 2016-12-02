@@ -150,13 +150,10 @@ app.mapEditionView = Backbone.View.extend({
          * Get the interaction in interactionZoomDoubleClick : zoom when doubleclick
          */
         var interactions = this.map.getInteractions();
-        console.log(interactions);
         for (var i = 0; i < interactions.getLength(); i++) {
             var interaction = interactions.item(i);
             if (interaction instanceof ol.interaction.DoubleClickZoom) {
                 this.interactionZoomDoubleClick = interaction;
-                console.log("interaction Zoom Double Click");
-                console.log(this.interactionZoomDoubleClick);
             }
         }
         return this;
@@ -168,7 +165,6 @@ app.mapEditionView = Backbone.View.extend({
     },
 
     onAddElement: function (element) {
-        console.log("add");
         var geojsonModel = element.toGeoJSON();
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
             featureProjection: 'EPSG:3857'
@@ -177,7 +173,6 @@ app.mapEditionView = Backbone.View.extend({
     },
 
     onRemoveElement: function (element) {
-        console.log("remove");
         $('#osmInfo').empty();
         if (this.vectorSource.getFeatureById(element.attributes.id) || this.vectorSource.getFeatureById(element.attributes.id) != null) {
             this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
@@ -186,7 +181,6 @@ app.mapEditionView = Backbone.View.extend({
     },
 
     onSync: function () {
-        console.log('sync');
         /*if (this.mapDetailsCOllection.length > 0) {
          this.vectorSource.clear();
          var geoJson = this.mapDetailsCOllection.toGeoJSON();
@@ -317,7 +311,6 @@ app.mapEditionView = Backbone.View.extend({
             })
         });
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
-            console.log("oneway true");
             oneway = 0.5;
         }
         switch (type) {
@@ -386,7 +379,6 @@ app.mapEditionView = Backbone.View.extend({
                 break;
             case 5:
                 //RED_LIGHT
-                console.log(resolution);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
@@ -400,7 +392,6 @@ app.mapEditionView = Backbone.View.extend({
                 return style;
                 break;
             default:
-                console.log("default");
                 break;
         }
     },
@@ -527,7 +518,6 @@ app.mapEditionView = Backbone.View.extend({
     },
 
     addInteraction: function () {
-        console.log('Draw : start ' + this.value);
         if (this.value != 'None') {
             this.draw = new ol.interaction.Draw({
                 source: new ol.source.Vector(),
@@ -536,7 +526,6 @@ app.mapEditionView = Backbone.View.extend({
 
             this.index = 0;
             this.intersections = [];
-            console.log(this.intersections);
             var self = this;
             this.eventClick = this.map.on('click', function (event) {
                 var pixel = event.pixel;
@@ -578,8 +567,6 @@ app.mapEditionView = Backbone.View.extend({
                 self.index++;
                 //console.log(resolution);
                 //console.log(features);
-                console.log("nb intersections : " + self.intersections.length);
-                console.log(self.intersections);
             });
 
             this.map.addInteraction(this.draw);
@@ -587,19 +574,15 @@ app.mapEditionView = Backbone.View.extend({
 
 
             this.draw.on('drawstart', function () {
-                console.log('drawStart');
 
                 self.interactionZoomDoubleClick.setActive(false);
 
             });
 
             this.draw.on('change', function (event) {
-                console.log('change draw');
-                console.log(event);
             });
 
             this.draw.on('drawend', function (event) {
-                console.log('Draw : end');
                 var feature = event.feature;
 
                 var JSONFeature = new ol.format.GeoJSON().writeFeature(feature, {
@@ -617,13 +600,11 @@ app.mapEditionView = Backbone.View.extend({
                 self.intersections = newIntersections;
                 switch (self.value) {
                     case 'Polygon':
-                        console.log('Polygon');
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates()[0]);
                         JSONFeature.geometry.type = "LineString";
                         JSONFeature.properties = {type: 4, maxspeed: 30};
                         break;
                     case 'LineString':
-                        console.log('LineString');
                         JSONFeature.geometry.coordinates = self.transoformToGps(feature.getGeometry().getCoordinates());
                         JSONFeature.properties = {type: 1, maxspeed: 50, oneway: "no"};
                         //console.log(self.vectorSource.getFeaturesAtCoordinate(feature.getGeometry().getCoordinates()[0]));
@@ -639,7 +620,6 @@ app.mapEditionView = Backbone.View.extend({
                 JSONFeature.properties.name = "Unnamed unit road";
                 JSONFeature.properties.id = "1";
                 //console.log(JSONFeature.properties);
-                console.log(JSONFeature);
                 self.newModel = new app.models.mapDetailsModel(JSONFeature, {
                     parse: true,
                     collection: self.mapDetailsCOllection
@@ -682,7 +662,6 @@ app.mapEditionView = Backbone.View.extend({
         $('#editButtonChooseTool').hide();
         $('#editButtonCancel').show();
         this.value = $(e.currentTarget).attr('value');
-        console.log('Tool chosen : ' + this.value);
         this.map.removeInteraction(this.selectPointer);
         this.addInteraction(this.value);
 
@@ -712,7 +691,6 @@ app.mapEditionView = Backbone.View.extend({
         $('#editButtonCancel').hide();
         $('#editButtonChooseTool').show();
         this.value = 'None';
-        console.log('Draw : Stop');
         this.newModel = null;
         this.map.unByKey(this.eventClick);
         this.map.removeInteraction(this.draw);
@@ -723,7 +701,6 @@ app.mapEditionView = Backbone.View.extend({
         $('#editButtonCancel').hide();
         $('#editButtonChooseTool').show();
         $('#editBarMenu').hide();
-        console.log('Draw : Stop');
         this.map.removeInteraction(this.draw);
         this.map.removeInteraction(this.selectPointerMove);
     },
@@ -765,11 +742,8 @@ app.mapEditionView = Backbone.View.extend({
 
     validModif: function (event) {
         var id = event.currentTarget.id;
-        console.log(id);
         var model = this.mapDetailsCOllection.get(id);
-        console.log(model);
         if (model.attributes.type == 1 || model.attributes.type == 2 || model.attributes.type == 3) {
-            console.log('if ok');
             model.set({
                 type: parseInt($('#selectTypeRoad').val()),
                 name: $('#roadName').val(),
@@ -808,7 +782,6 @@ app.mapEditionView = Backbone.View.extend({
                 self.vectorSource.addFeature(newfeature);
             }
         });
-        console.log(model.attributes);
     },
 
     removeModif: function (event) {
@@ -820,9 +793,7 @@ app.mapEditionView = Backbone.View.extend({
 
     validModel: function () {
         var model = this.newModel;
-        console.log(this);
         if (model.attributes.type == 1 || model.attributes.type == 2 || model.attributes.type == 3) {
-            console.log('if ok');
             model.set({
                 type: parseInt($('#selectTypeRoad').val()),
                 name: $('#roadName').val(),
@@ -872,7 +843,6 @@ app.mapEditionView = Backbone.View.extend({
                 self.vectorSource.addFeature(newfeature);*/
             }
         });
-        console.log(model.attributes);
     },
 
     clickOnImport: function () {
@@ -944,7 +914,6 @@ app.mapEditionView = Backbone.View.extend({
                 contentType: false
             })
             .done(function (data, textStatus, jqXHR) {
-                console.log("HTTP Request Succeeded: " + jqXHR.status);
                 self.vectorSource.clear();
                 self.fetchCollection();
                 $('#waitImport').addClass('hidden');
