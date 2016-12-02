@@ -684,7 +684,10 @@ app.mapEditionView = Backbone.View.extend({
         var self = this;
         this.mapDetailsCOllection.fetch({
             success: function () {
-                self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
+                if (self.mapDetailsCOllection.length > 0) {
+                    console.log(self.mapDetailsCOllection.length);
+                    self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
+                }
             }
         });
     },
