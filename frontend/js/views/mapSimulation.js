@@ -181,14 +181,9 @@ app.mapSimulationView = Backbone.View.extend({
             value: parseFloat(this.departureLivingS), // correspond à 7h
             slide: function (event, ui) {
                 var time = self.convertSecdsToHrsMinsSecds(ui.value);
-                console.log('---- slide ----');
-                console.log('value : ' + ui.value);
-                console.log('time : ' + time);
                 $('#timepicker').timepicker('setTime', time);
             },
             change: function (event, ui) {
-                console.log('---- change ----');
-                console.log('event :' + event);
                 $("#sliderSimulation").slider({
                     disabled: true
                 });
@@ -241,9 +236,7 @@ app.mapSimulationView = Backbone.View.extend({
         });
 
         $('#timepicker').timepicker().on('changeTime.timepicker', function (e) {
-            console.log(e.time.hours + ':' + e.time.minutes + ':' + e.time.seconds);
             var time = (e.time.hours * 3600) + (e.time.minutes * 60) + e.time.seconds;
-            console.log('ChangeTime time in seconds : ' + time);
             var verifStep = (time % self.stepSeconds);
             if (verifStep != 0) {
                 time -= verifStep;
@@ -257,15 +250,23 @@ app.mapSimulationView = Backbone.View.extend({
         return this;
     },
 
-    goNextSnapshot: function () {
-        var value = $("#sliderSimulation").slider("option", "value");
-        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value + this.stepSeconds));
+    goNextSnapshot: function(){
+        var value = $( "#sliderSimulation" ).slider( "option", "value" );
+        var timeMax = 86400-this.stepSeconds;
+        if(value < timeMax){
+            console.log("ON ENTRE");
+            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value+this.stepSeconds));
+        }
+
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
     goBackSnapshot: function(){
         var value = $( "#sliderSimulation" ).slider( "option", "value" );
-        $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value-this.stepSeconds));
+        var timeMin = this.stepSeconds;
+        if(value > timeMin){
+            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value-this.stepSeconds));
+        }
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
@@ -588,4 +589,6 @@ app.mapSimulationView = Backbone.View.extend({
         return time;
 
     },
+
+
 });
