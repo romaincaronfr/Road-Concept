@@ -109,7 +109,7 @@ public class PathFinder {
 
         reconstructPath(myPath, finalNode);
         myPath.addToPath(destination);
-        LOGGER.debug(myPath.toString());
+        //LOGGER.debug(myPath.toString());
 
         return myPath;
     }
