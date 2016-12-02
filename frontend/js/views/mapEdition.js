@@ -685,7 +685,6 @@ app.mapEditionView = Backbone.View.extend({
         this.mapDetailsCOllection.fetch({
             success: function () {
                 if (self.mapDetailsCOllection.length > 0) {
-                    console.log(self.mapDetailsCOllection.length);
                     self.map.getView().fit(self.vectorSource.getExtent(), self.map.getSize());
                 }
             }
