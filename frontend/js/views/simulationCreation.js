@@ -20,7 +20,7 @@ app.simulationCreationView = Backbone.View.extend({
     vehicle_count: null,
 
     events: {
-        'click #previous' : 'previous',
+        'click #previous': 'previous',
         'click .validModel': 'validModel',
         'click .removeModel': 'cancelUnderCreation',
         'click #cancelCreationSimu': 'cancelCreationSimu',
@@ -155,7 +155,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     showPercent: function () {
         var val = $('#carRepart').val();
-        $('#percentVal').text(val + "% de voitures - " + (100-val) + "% de camions");
+        $('#percentVal').text(val + "% de voitures - " + (100 - val) + "% de camions");
     },
 
     onAddElement: function (element) {
@@ -512,10 +512,10 @@ app.simulationCreationView = Backbone.View.extend({
                 var text = "Zone de travail";
                 break;
             /*case 1:
-            case 3:
-            case 4:
-                var colorStyle = originColor;
-                break;*/
+             case 3:
+             case 4:
+             var colorStyle = originColor;
+             break;*/
             default:
                 var colorStyle = originColor;
                 break;
@@ -608,7 +608,7 @@ app.simulationCreationView = Backbone.View.extend({
                 var hour = $('#returnHour').val();
 
                 if (this.getTotalSecond(hour) < (this.getTotalSecond(this.startHour) + 3600)) {
-                    $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour)+1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
+                    $('#alertEmptyWork').text("L'heure de retour doit être supérieure à " + this.formatDigit(this.getHour(this.startHour) + 1) + ":" + this.formatDigit(this.getMinutes(this.startHour)));
                     $('#alertEmptyWork').show();
                     setTimeout(function () {
                         $('#alertEmptyWork').hide();
@@ -644,7 +644,7 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     getTotalSecond: function (hour) {
-        return ((this.getHour(hour)*60*60) + (this.getMinutes(hour)*60));
+        return ((this.getHour(hour) * 60 * 60) + (this.getMinutes(hour) * 60));
     },
 
     formatDigit: function (digit) {
@@ -690,7 +690,7 @@ app.simulationCreationView = Backbone.View.extend({
                 $('#alertEmptyStart').hide();
             }, 5000);
         } else {
-            var collection = new app.collections.simulationParamsCollection({id:this.id});
+            var collection = new app.collections.simulationParamsCollection({id: this.id});
             var model = new app.models.simulationParamsModel({
                 name: name,
                 sampling_rate: parseInt(sampling_rate),
@@ -713,7 +713,7 @@ app.simulationCreationView = Backbone.View.extend({
         }
     },
 
-    previous: function (){
+    previous: function () {
         var resolution = this.map.getView().getResolution();
         var pass = false;
 
@@ -765,14 +765,14 @@ app.simulationCreationView = Backbone.View.extend({
             this.map.addInteraction(this.snap);
         }
 
-        if(this.step > 0){
+        if (this.step > 0) {
             if (this.step % 2 == 0) {
                 this.step = this.step - 2;
             } else {
                 this.step--;
             }
         }
-        console.log('cancel, step:'+this.step);
+        console.log('cancel, step:' + this.step);
     }
 });
 

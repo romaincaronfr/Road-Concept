@@ -26,7 +26,7 @@ app.mapSimulationView = Backbone.View.extend({
     events: {
         'change #osmOppacity': 'clickOnOSM',
         'click #nextSimuSnapshot': 'goNextSnapshot',
-        'click #backSimuSnapshot' : 'goBackSnapshot',
+        'click #backSimuSnapshot': 'goBackSnapshot',
     },
 
     initialize: function (option) {
@@ -130,7 +130,7 @@ app.mapSimulationView = Backbone.View.extend({
         });
         this.selectPointer.on('select', function (e) {
             if (e.selected[0]) {
-                app.router.navigate('simmapCar/s/'+self.id+'/t/'+self.nowTime+'/samp/'+self.stepSeconds+'/map/'+self.mapID+'/car/'+e.selected[0].getProperties().id, {trigger: true});
+                app.router.navigate('simmapCar/s/' + self.id + '/t/' + self.nowTime + '/samp/' + self.stepSeconds + '/map/' + self.mapID + '/car/' + e.selected[0].getProperties().id, {trigger: true});
                 //simmapCar/s/:idSimu/t/:simTime/samp/:sampling/map/:idMap/car/:idCar
             }
         });
@@ -242,21 +242,21 @@ app.mapSimulationView = Backbone.View.extend({
         return this;
     },
 
-    goNextSnapshot: function(){
-        var value = $( "#sliderSimulation" ).slider( "option", "value" );
-        var timeMax = 86400-this.stepSeconds;
-        if(value < timeMax){
-            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value+this.stepSeconds));
+    goNextSnapshot: function () {
+        var value = $("#sliderSimulation").slider("option", "value");
+        var timeMax = 86400 - this.stepSeconds;
+        if (value < timeMax) {
+            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value + this.stepSeconds));
         }
 
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
 
-    goBackSnapshot: function(){
-        var value = $( "#sliderSimulation" ).slider( "option", "value" );
+    goBackSnapshot: function () {
+        var value = $("#sliderSimulation").slider("option", "value");
         var timeMin = this.stepSeconds;
-        if(value > timeMin){
-            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value-this.stepSeconds));
+        if (value > timeMin) {
+            $('#timepicker').timepicker('setTime', this.convertSecdsToHrsMinsSecds(value - this.stepSeconds));
         }
         //var value = $( "#sliderSimulation" ).slider( "option", "value" , parseFloat(value+this.stepSeconds));
     },
@@ -324,21 +324,21 @@ app.mapSimulationView = Backbone.View.extend({
 
         if (congestion < 10) {
             color = [51, 255, 0, 1];
-        } else if (congestion  < 20) {
+        } else if (congestion < 20) {
             color = [102, 253, 0, 1];
-        } else if (congestion  < 30) {
+        } else if (congestion < 30) {
             color = [153, 255, 0, 1];
-        } else if (congestion  < 40) {
+        } else if (congestion < 40) {
             color = [204, 255, 0, 1];
-        } else if (congestion  < 50) {
+        } else if (congestion < 50) {
             color = [255, 255, 0, 1];
-        } else if (congestion  < 60) {
+        } else if (congestion < 60) {
             color = [255, 204, 0, 1];
-        } else if (congestion  < 70) {
+        } else if (congestion < 70) {
             color = [255, 153, 0, 1];
-        } else if (congestion  < 80) {
+        } else if (congestion < 80) {
             color = [255, 102, 0, 1];
-        } else if (congestion  < 90) {
+        } else if (congestion < 90) {
             color = [255, 51, 0, 1];
         } else {
             color = [255, 0, 0, 1];
