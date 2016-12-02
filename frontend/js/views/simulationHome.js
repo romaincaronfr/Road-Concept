@@ -8,7 +8,9 @@ app.simulationHomeView = Backbone.View.extend({
     simulationParamsCollection: null,
 
     events: {
-        'click .visu_simu_button': 'goVisu'
+        'click .visu_simu_button': 'goVisu',
+        'click .remove_simu_button': 'goRemoveSimu',
+        'click .remove_simu_confirm': 'goConfirmRemoveSimu'
     },
 
 
@@ -45,13 +47,6 @@ app.simulationHomeView = Backbone.View.extend({
                      model: model
                      });
                      }
-
-                    //TODO : supprimer cette partie quand le backend sera ok avec le false
-                    /*$('#noOverSimulation').addClass('hidden');
-                    $('#tableOverSimulation').removeClass('hidden');
-                    new app.homeSimulationOverTableView({
-                        model: model
-                    });*/
                 }
             }
         });
@@ -65,35 +60,6 @@ app.simulationHomeView = Backbone.View.extend({
         this.simulationParamsCollection.id = id;
     },
 
-    onAddElement: function(model) {
-        console.log('on add element');
-        /*if (!model.get("finish")){
-         if (!$('#noInProgressSimulation').hasClass('hidden')){
-         $('#noInProgressSimulation').addClass('hidden');
-         $('#tableInProgressSimulation').removeClass('hidden');
-         }
-         new app.homeSimulationInProgressTableView({
-         model: model
-         });
-
-         } else {
-         if (!$('#noOverSimulation').hasClass('hidden')){
-         $('#noOverSimulation').addClass('hidden');
-         $('#tableOverSimulation').removeClass('hidden');
-         }
-         new app.homeSimulationOverTableView({
-         model: model
-         });
-         }*/
-
-        //TODO : supprimer cette partie quand le backend sera ok avec le false
-        $('#noOverSimulation').addClass('hidden');
-        $('#tableOverSimulation').removeClass('hidden');
-        new app.homeSimulationOverTableView({
-            model: model
-        });
-    },
-
     goVisu: function (event) {
         console.log('click on visualiser');
         var id = event.currentTarget.id;
@@ -103,5 +69,28 @@ app.simulationHomeView = Backbone.View.extend({
         var model = this.simulationParamsCollection.get(id);
         console.log(model);
         app.router.navigate('simmap/'+id+'/s/'+model.attributes.samplingRate+'/d/'+model.attributes.departureLivingS+'/m/'+this.id, {trigger: true});
+    },
+
+    goRemoveSimu: function(event){
+        var id = event.currentTarget.id;
+        id = id.replace('remove_simu_button_', '');
+        console.log(id);
+        var model = this.simulationParamsCollection.get(id);
+        new app.modalRemoveSimuView({
+            model: model
+        });
+    },
+
+    goConfirmRemoveSimu: function (event){
+        var id = event.currentTarget.id;
+        id = id.replace('confirmRemoveSimu_', '');
+        var model = this.simulationParamsCollection.get(id);
+        model.destroy({
+            success: function(){
+                var divName = '#sim_' + id;
+                $(divName).remove();
+                $('#modalRemoveSimu').modal('hide');
+            }
+        });
     }
 });

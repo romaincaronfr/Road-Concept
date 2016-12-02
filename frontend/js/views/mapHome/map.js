@@ -43,7 +43,7 @@ app.mapView = Backbone.View.extend({
         var name = $('#mapName').val();
         var description = $('#mapDescription').val();
         var urlImg = $('#mapImgURL').val();
-        var newMapModel = new app.models.mapModel({'name': name, 'description': description, 'imageURL': urlImg});
+        var newMapModel = new app.models.mapModel({'name': name, 'description': description, 'image_url': urlImg});
         newMapModel.save(null, {
             success: (function () {
                 console.log('success add');

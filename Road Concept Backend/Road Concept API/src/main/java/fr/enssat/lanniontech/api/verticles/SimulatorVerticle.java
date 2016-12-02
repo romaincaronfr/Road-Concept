@@ -43,6 +43,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID").blockingHandler(this::processGetSimulation);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/progress").blockingHandler(this::processGetSimulationProgress);
         router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
+        router.route(HttpMethod.DELETE, "/api/maps/:mapID/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
     }
