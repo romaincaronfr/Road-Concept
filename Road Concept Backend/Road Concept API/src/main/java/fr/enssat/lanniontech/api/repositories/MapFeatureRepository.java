@@ -49,11 +49,6 @@ public class MapFeatureRepository extends MapRepository {
             MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
             MongoCollection<Document> collection = db.getCollection(computeCollectionName(mapID));
 
-
-            for (Feature added : features.getFeatures()) {
-                LOGGER.debug("Going to insert = " + added.getOpenStreetMapID());
-            }
-
             List<Document> documents = new ArrayList<>();
             for (Feature feature : features) {
                 if (feature.getGeometry() instanceof LineString) {

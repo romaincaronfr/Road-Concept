@@ -13,6 +13,7 @@ public class LineString extends Geometry<Coordinates> {
         return getCoordinates().contains(point);
     }
 
+    //TODO: Replace with index == 0 || index = size - 1
     public boolean isFirstOrLast(Coordinates point) {
         return getCoordinates().getFirst().equals(point) || getCoordinates().getLast().equals(point);
     }

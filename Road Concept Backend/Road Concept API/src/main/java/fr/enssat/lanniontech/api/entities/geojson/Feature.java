@@ -20,7 +20,7 @@ public class Feature extends GeoJsonObject {
     private Map<String, Object> properties = new HashMap<>();
     @JsonInclude(Include.ALWAYS)
     private GeoJsonObject geometry;
-    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
+    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
     private String openStreetMapID;
 
     @JsonIgnore
@@ -58,12 +58,12 @@ public class Feature extends GeoJsonObject {
         this.uuid = uuid;
     }
 
-    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
+    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
     public String getOpenStreetMapID() {
         return openStreetMapID;
     }
 
-    @JsonProperty(value = "id", access = Access.WRITE_ONLY)
+    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
     public void setOpenStreetMapID(String openStreetMapID) {
         this.openStreetMapID = openStreetMapID;
     }

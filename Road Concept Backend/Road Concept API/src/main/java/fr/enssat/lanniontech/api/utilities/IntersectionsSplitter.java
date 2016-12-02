@@ -129,10 +129,17 @@ public class IntersectionsSplitter {
     private static Feature[] split(Feature featureToSplit, int index) {
         Feature newOneRoad1 = new Feature();
         Feature newOneRoad2 = new Feature();
+
         newOneRoad1.setProperties(new HashMap<>(featureToSplit.getProperties()));
         newOneRoad2.setProperties(new HashMap<>(featureToSplit.getProperties()));
+
+        // OSM ID is not in the 'properties'
+        newOneRoad1.setOpenStreetMapID(featureToSplit.getOpenStreetMapID()); // Strings are immutable
+        newOneRoad2.setOpenStreetMapID(featureToSplit.getOpenStreetMapID());
+
         newOneRoad1.setGeometry(new LineString());
         newOneRoad2.setGeometry(new LineString());
+
         newOneRoad1.getProperties().remove("id");
         newOneRoad2.getProperties().remove("id");
         newOneRoad1.getProperties().put("id", newOneRoad1.getUuid());

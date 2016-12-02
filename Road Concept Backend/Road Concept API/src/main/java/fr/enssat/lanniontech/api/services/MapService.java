@@ -97,44 +97,36 @@ public class MapService extends AbstractService {
             throw new EntityNotExistingException();
         }
 
-        FeatureCollection features = JSONUtils.fromJSON(fileData, FeatureCollection.class);
-        fromOSMAdaptation(features);
-
-        long startTime = System.nanoTime();
-        features = IntersectionsSplitter.process(features);
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
+        FeatureCollection importedFeatures = JSONUtils.fromJSON(fileData, FeatureCollection.class);
+        fromOSMAdaptation(importedFeatures);
+        importedFeatures = IntersectionsSplitter.process(importedFeatures);
 
         FeatureCollection toAdd = new FeatureCollection();
         FeatureCollection existingFeatures = mapFeatureRepository.getAll(mapID);
-        for (Feature feature : features) {
-            if (existingFeatures.getFeatures().isEmpty()) {
-                LOGGER.debug("Adding feature with osm id = " + feature.getOpenStreetMapID());
-                toAdd.getFeatures().add(feature);
-            } else {
-                for (Feature existingFeature : existingFeatures) {
-                    if (feature.getOpenStreetMapID().equals(existingFeature.getOpenStreetMapID())) {
-                        break;
-                    } else {
-                        toAdd.getFeatures().add(feature);
-                    }
-                }
-            }
 
-            //            Feature retrieved = mapFeatureRepository.getFromOSMID(mapID, feature.getOpenStreetMapID());
-            //            if (retrieved == null) {
-            //                toAdd.getFeatures().add(feature);
-            //            }
+        for (Feature feature : importedFeatures) {
+            boolean add = true;
+            int i = 0;
+            while (i < existingFeatures.getFeatures().size() && add) {
+                if (feature.getOpenStreetMapID().equals(existingFeatures.getFeatures().get(i).getOpenStreetMapID())) {
+                    LOGGER.debug("Duplicated feature detected for OSM id = " + feature.getOpenStreetMapID());
+                    add = false;
+                }
+                i++;
+            }
+            if (add) {
+                toAdd.getFeatures().add(feature);
+            }
         }
 
         if (!toAdd.getFeatures().isEmpty()) {
             mapFeatureRepository.createAll(mapID, toAdd);
         }
-        LOGGER.info("Duplicated features : " + (features.getFeatures().size() - toAdd.getFeatures().size()));
+
+        LOGGER.info("Duplicated features : " + (importedFeatures.getFeatures().size() - toAdd.getFeatures().size()));
         return toAdd.getFeatures().size();
     }
 
-    //FIXME: refactor + extraire en constante les colonnes
     private void fromOSMAdaptation(FeatureCollection features) {
         for (Iterator<Feature> iterator = features.getFeatures().iterator(); iterator.hasNext(); ) {
             Feature feature = iterator.next();
@@ -180,10 +172,8 @@ public class MapService extends AbstractService {
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
-        Integer time = getRedLightTime(feature.getProperties());
-        if (time != null) { //TODO: Vérifier que à null, il n'est pas mis dans les properties
-            newProperties.put("redlighttime", time);
-        }
+        newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
+
         feature.getProperties().clear();
         feature.getProperties().putAll(newProperties);
     }

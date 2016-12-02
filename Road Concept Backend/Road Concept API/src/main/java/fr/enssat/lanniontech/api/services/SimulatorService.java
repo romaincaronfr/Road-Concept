@@ -166,8 +166,11 @@ public class SimulatorService extends AbstractService implements Observer {
 
     public FeatureCollection getResultAt(UUID simulationUUID, int timestamp) {
         Simulation simulation = get(simulationUUID);
-        if (timestamp % simulation.getSamplingRate() != 0) {
-            throw new InvalidParameterException("Invalid timestamp");
+
+        if (timestamp < 0 || timestamp >= 86400) {
+            throw new InvalidParameterException("Invalid timestamp (min value = 0 | max value = 86399)");
+        } else if (timestamp % simulation.getSamplingRate() != 0) {
+            throw new InvalidParameterException("Timestamp must be consistent with the simulation sampling rate.");
         }
 
         FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);

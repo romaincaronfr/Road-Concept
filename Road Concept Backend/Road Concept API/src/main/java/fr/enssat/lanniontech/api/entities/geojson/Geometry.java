@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public abstract class Geometry<T> extends GeoJsonObject {
 
-    private LinkedList<T> coordinates = new LinkedList<>(); // Need to keep order
+    private LinkedList<T> coordinates = new LinkedList<>(); // TODO: Improve performances by re-using ArrayList
 
     @SafeVarargs
     public Geometry(T... elements) {

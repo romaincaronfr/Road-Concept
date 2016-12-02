@@ -36,7 +36,6 @@ public class SimulationResultRepository extends SimulationRepository {
     // ==========
 
     public void addRoadMetric(UUID simulationUUID, UUID featureUUID, int congestion, int timestamp) {
-        LOGGER.debug("Inserting congestion " + congestion + " at timestamp " + timestamp);
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
 
@@ -83,7 +82,6 @@ public class SimulationResultRepository extends SimulationRepository {
     // ========
 
     public void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
-        LOGGER.debug("Inserting vehicle " + vehicleID + " at timestamp " + timestamp);
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
 
