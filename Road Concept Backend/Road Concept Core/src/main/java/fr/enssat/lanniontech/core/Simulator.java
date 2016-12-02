@@ -78,6 +78,7 @@ public class Simulator extends Observable implements Runnable {
                 if (k == second){
                     timestamp++;
                     vehicleManager.updateBuffers(timestamp);
+                    k = 1;
                 }else {
                     k++;
                 }
