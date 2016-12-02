@@ -123,14 +123,6 @@ public class Simulator extends Observable implements Runnable {
         }
     }
 
-    public void waitForEnd() {
-        try {
-            simulatorThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     public RoadManager getRoadManager() {
         return roadManager;
     }

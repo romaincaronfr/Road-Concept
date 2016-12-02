@@ -83,6 +83,14 @@ public class Road {
     }
 
     public RoadMetrics getMetrics(int timestamp) {
-        return new RoadMetrics(id, timestamp, 0); // TODO Antoine: Ajout du timestamp
+        return new RoadMetrics(id, timestamp, 0);
+    }
+
+    private int getCongestion(){
+        double congestion = 0;
+        for (RoadSection section : sections){
+            congestion = Math.max(congestion,section.getCongestion());
+        }
+        return (int) congestion;
     }
 }

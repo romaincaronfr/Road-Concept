@@ -13,9 +13,13 @@ public abstract class Trajectory {
 
     protected List<Side> vehiclesSides;
     protected double length;
+    protected double notFreeSpace;
+    private List<Integer> loggedVehicles;
     protected UUID roadId;
 
     public Trajectory(UUID roadId) {
+        loggedVehicles = new ArrayList<>();
+        notFreeSpace = 0;
         this.roadId = roadId;
         this.vehiclesSides = new ArrayList<>();
     }
@@ -65,6 +69,19 @@ public abstract class Trajectory {
             i++;
         }
         return true;
+    }
+
+    public void addCar(double space, int carId){
+        if(!loggedVehicles.contains(carId)){
+            notFreeSpace += space;
+        }
+    }
+
+    public double getFreeSpaceRatio(){
+        double res = notFreeSpace/length;
+        notFreeSpace = 0;
+        loggedVehicles.clear();
+        return res;
     }
 
     /**

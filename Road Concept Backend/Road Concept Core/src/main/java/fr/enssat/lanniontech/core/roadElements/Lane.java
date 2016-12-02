@@ -40,4 +40,12 @@ public class Lane {
     public SimpleTrajectory getInsertTrajectory() {
         return trajectories.get(0);
     }
+
+    public double getCongestion() {
+        double congestion = 0;
+        for(SimpleTrajectory trajectory : trajectories){
+            congestion = Math.max(trajectory.getFreeSpaceRatio(),congestion);
+        }
+        return congestion;
+    }
 }

@@ -78,4 +78,8 @@ public class RoadSection {
     public Road getMyRoad() {
         return myRoad;
     }
+
+    public double getCongestion() {
+        return Math.max(laneAB.getCongestion(),laneBA.getCongestion());
+    }
 }

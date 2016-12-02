@@ -20,10 +20,12 @@ public class Side {
     private UUID myRoad;
     private UUID nextRoad;
     private int pathStep;
+    private double length;
 
-    public Side(double pos, Vehicle myVehicle, Lane myLane) {
+    public Side(double pos, Vehicle myVehicle, Lane myLane,double length) {
         this.myVehicle = myVehicle;
         this.pos = pos;
+        this.length = length;
         myTrajectory = myLane.getInsertTrajectory();
         myTrajectory.getIn(this);
         pathStep = 1;
@@ -73,6 +75,26 @@ public class Side {
         } else {
             this.pos = pos;
         }
+        if(pos > 0 && pos < myTrajectory.getLength()) {
+            if (length < 0) {
+                //it's a frontside
+
+                if (pos + length < 0) {
+                    myTrajectory.addCar(pos,myVehicle.getID());
+                }else {
+                    myTrajectory.addCar(-length,myVehicle.getID());
+                }
+
+            } else {
+                //it's a backside
+                if (pos + length > myTrajectory.getLength()) {
+                    myTrajectory.addCar(myTrajectory.getLength() - pos,myVehicle.getID());
+                }else {
+                    myTrajectory.addCar(length,myVehicle.getID());
+                }
+            }
+        }
+
     }
 
     public double getDistanceToNextCar(double freeDistance) {
