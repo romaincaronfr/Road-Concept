@@ -116,15 +116,19 @@ public class SimulatorService extends AbstractService implements Observer {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
-        simulation.getSimulator().getVehicleManager().addToSpawnArea(simulation.getSimulator().getRoadManager().getRoad(simulation.getLivingFeatureUUID()));
-        int count = 0; //TODO: REMOVE
-        for (int i = 0; i < simulation.getVehicleCount(); i++) {
-            if (simulation.getSimulator().getVehicleManager().addVehicle()) {
-                count++;
-            }
-        }
-        LOGGER.debug("VEHICLE COUNT = " + count);
-        // TODO: Définir point d'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
+        simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
+        simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
+
+        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
+
+//        int count = 0; //TODO: REMOVE
+//        for (int i = 0; i < simulation.getVehicleCount(); i++) {
+//            if (simulation.getSimulator().getVehicleManager().addVehicle()) {
+//                count++;
+//            }
+//        }
+//        LOGGER.debug("VEHICLE COUNT = " + count);
+//        // TODO: Définir point d'arrivée + heure de départ lieu habitation + heure de départ lieu de travail
 
         return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
