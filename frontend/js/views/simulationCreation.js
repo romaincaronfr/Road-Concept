@@ -547,7 +547,7 @@ app.simulationCreationView = Backbone.View.extend({
                 case 0:
                     $('#habitZone').hide();
                     $('#habitZoneParam').show();
-                    $('#divPrevious').show();
+                    //$('#divPrevious').show();
                     this.living_feature = featureid;
                     new app.mapPopUpCreateHabitationZoneView({
                         model: model
@@ -721,7 +721,7 @@ app.simulationCreationView = Backbone.View.extend({
             case 1:
                 $('#osmInfo').empty();
                 $('#habitZoneParam').hide();
-                $('#divPrevious').hide();
+                //$('#divPrevious').hide();
                 $('#habitZone').show();
                 this.generateZoneStyle(this.vectorSource.getFeatureById(this.living_feature), resolution);
                 this.living_feature = null;
@@ -729,7 +729,7 @@ app.simulationCreationView = Backbone.View.extend({
                 break;
             case 2:
                 $('#workZone').hide();
-                $('#divPrevious').hide();
+                //$('#divPrevious').hide();
                 $('#habitZone').show();
                 this.generateZoneStyle(this.vectorSource.getFeatureById(this.living_feature), resolution);
                 this.living_feature = null;
