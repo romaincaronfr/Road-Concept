@@ -10,7 +10,6 @@ public final class SpaceTimePosition extends Position {
     private final int vehicleId;
     private final VehicleType type;
 
-    //todo reset to private
     private SpaceTimePosition(double lon, double lat, int time, double angle, int vehicleId, VehicleType type) {
         super(lon, lat);
 

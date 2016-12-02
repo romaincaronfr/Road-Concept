@@ -75,12 +75,11 @@ public class SQLScriptRunner {
      * @return string[] - commands from file
      */
     private static String[] formatString(Reader reader) {
-
         StringBuilder result = new StringBuilder();
         String line;
         try (LineNumberReader lineReader = new LineNumberReader(reader)) {
             while ((line = lineReader.readLine()) != null) {
-                if (!line.startsWith("--") && !line.startsWith("//") && !line.startsWith("#")) { //DO NOTHING if it is a commented line
+                if (!line.startsWith("--") && !line.startsWith("//") && !line.startsWith("#")) { // DO NOTHING if it is a commented line
                     result.append(line);
                 }
             }
