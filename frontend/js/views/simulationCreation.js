@@ -31,6 +31,8 @@ app.simulationCreationView = Backbone.View.extend({
     initialize: function (options) {
         this.id = options.id;
         console.log('id:' + this.id);
+        this.step = 0;
+        console.log("step : " + this.step);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         console.log(this.mapDetailsCOllection);
         this.render();
@@ -176,6 +178,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     onSync: function () {
         console.log('sync');
+        this.step = 0;
         /*if (this.mapDetailsCOllection.length > 0) {
          this.vectorSource.clear();
          var geoJson = this.mapDetailsCOllection.toGeoJSON();
