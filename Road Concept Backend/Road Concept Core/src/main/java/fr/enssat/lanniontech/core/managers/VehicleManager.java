@@ -10,56 +10,46 @@ import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class VehicleManager {
     private List<Vehicle> vehicles;
     private List<Vehicle> activeVehicles;
-    private List<RoadSection> spawnArea;
+    private Road livingArea;
+    private Road workingArea;
     private Random gen;
     private HistoryManager historyManager;
+    private RoadManager roadManager;
     private PathFinder pathFinder;
 
     public VehicleManager(HistoryManager history, RoadManager roadManager) {
         historyManager = history;
         vehicles = new ArrayList<>();
         activeVehicles = new ArrayList<>();
-        spawnArea = new ArrayList<>();
+        this.roadManager = roadManager;
         gen = new Random();
         pathFinder = new PathFinder(roadManager);
     }
 
-    public void addToSpawnArea(Road R) {
-        for (int i = 0; i < R.size(); i++) {
-            addToSpawnArea(R.get(i));
-        }
+    public void setLivingArea(UUID id){
+        livingArea = roadManager.getRoad(id);
     }
 
-    private void addToSpawnArea(RoadSection RS) {
-        spawnArea.add(RS);
+    public void setWorkingArea(UUID id){
+        workingArea = roadManager.getRoad(id);
+    }
+
+    public void createTrafficGenerator(int goTimestamp,int returnTimestamp,int vehicles,int ratio){
+        //todo
     }
 
     public boolean addVehicle() {
-        int startingRoad = 0;
-        if (spawnArea.size() > 1) {
-            startingRoad = gen.nextInt(spawnArea.size() - 1);
-        }
-
-        Lane startingLane = gen.nextBoolean() ? spawnArea.get(startingRoad).getLaneAB() : spawnArea.get(startingRoad).getLaneBA();
-        double startingPos = 4;
-        int k = 0;
-        while (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 15, startingPos + 5)) {
-            startingPos = gen.nextInt((int) ((startingLane.getLength()) * 10)) / 10.0;
-            if (k > 10) {
-                return false;
-            }
-            k++;
-        }
-
+        /*
         Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 100);
         Vehicle V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
         vehicles.add(V);
         activeVehicles.add(V);
-        V.logPosition(0);
+        V.logPosition(0);*/
         return true;
     }
 
