@@ -10,6 +10,11 @@ Pour pouvoir compiler et éxécuter le projet en local sur votre poste, les dép
 * [Docker] - Automatisation du déploiement de l'application dans des conteneurs logiciels
 * [Docker Compose] - Utilitaire Docker pour gérer des applications multi conteneurs
 
+## Architecture
+![Architecture](./misc/architecture.jpeg)
+
+> Architecture du projet
+
 ## Comment déployer localement le projet ?
 
 Récupérer le projet à l'aide du dépôt git hébergé sur GitHub
@@ -50,11 +55,6 @@ Pour supprimer définitivement les conteneurs et images Docker associés au proj
 ```sh
 $ ./dockerRemoveAll.sh
 ```
-
-## Architecture
-![Architecture](./misc/architecture.jpeg)
-
-> Architecture du projet
 
 **Free Software, Hell Yeah!**
 
