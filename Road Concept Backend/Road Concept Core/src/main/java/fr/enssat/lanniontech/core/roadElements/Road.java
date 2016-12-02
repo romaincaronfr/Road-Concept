@@ -87,11 +87,11 @@ public class Road {
     }
 
     private int getCongestion(){
-        double congestion = 0;
+        Double congestion = 0.;
         for (RoadSection section : sections){
             congestion = Math.max(congestion,section.getCongestion());
         }
         congestion *= 100;
-        return (int) congestion;
+        return congestion.intValue();
     }
 }

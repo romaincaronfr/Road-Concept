@@ -98,7 +98,8 @@ public class SimulatorService extends AbstractService implements Observer {
                 List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
                 for (RoadMetrics metric : roadMetrics) {
                     if (metric.getCongestion() != 0) {
-                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion(), metric.getTimestamp());
+                        //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
+                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion() / 10 , metric.getTimestamp());
                     }
                 }
                 historyManager.removeSamples();
