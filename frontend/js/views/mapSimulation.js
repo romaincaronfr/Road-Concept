@@ -344,7 +344,6 @@ app.mapSimulationView = Backbone.View.extend({
             color = [255, 0, 0, 1];
         }
 
-        // TODO : récupérer les valeurs d'afluence des routes et afficher la couelur en fonction de ça
         var oneway = 1;
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
