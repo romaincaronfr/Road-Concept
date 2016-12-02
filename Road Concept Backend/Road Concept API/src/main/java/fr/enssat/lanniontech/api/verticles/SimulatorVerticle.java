@@ -6,7 +6,6 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
-import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.services.SimulatorService;
 import fr.enssat.lanniontech.api.utilities.Constants;
 import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
@@ -158,8 +157,6 @@ public class SimulatorVerticle extends AbstractVerticle {
             activesSimulations.add(simulation);
 
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
-        } catch (RoadConceptUnexpectedException e) {
-            HttpResponseBuilder.buildBadRequestResponse(routingContext, "An error occured in the simulator. Check params ?");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
