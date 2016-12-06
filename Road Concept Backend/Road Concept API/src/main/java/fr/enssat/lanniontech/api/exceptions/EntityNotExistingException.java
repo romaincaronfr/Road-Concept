@@ -3,11 +3,7 @@ package fr.enssat.lanniontech.api.exceptions;
 
 public class EntityNotExistingException extends RuntimeException {
 
-    private Class entityClass;
-
-    public EntityNotExistingException() {
-
-    }
+    private final Class entityClass;
 
     public EntityNotExistingException(Class entityClass) {
         this.entityClass = entityClass;
@@ -17,7 +13,4 @@ public class EntityNotExistingException extends RuntimeException {
         return entityClass.toString();
     }
 
-    public void setEntityClass(Class entityClass) {
-        this.entityClass = entityClass;
-    }
 }

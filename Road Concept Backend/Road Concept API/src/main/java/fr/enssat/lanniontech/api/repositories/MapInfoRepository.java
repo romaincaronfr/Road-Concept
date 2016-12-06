@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
-import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class MapInfoRepository extends MapRepository {
     // CREATE
     // ------
 
-    public MapInfo create(User user, String name, String imageURL, String description) throws DatabaseOperationException {
+    public MapInfo create(User user, String name, String imageURL, String description) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setInt(1, user.getId());
@@ -58,7 +57,7 @@ public class MapInfoRepository extends MapRepository {
     // GET
     // ---
 
-    public List<MapInfo> getAll(User user) throws DatabaseOperationException {
+    public List<MapInfo> getAll(User user){
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, user.getId());
@@ -84,7 +83,7 @@ public class MapInfoRepository extends MapRepository {
         }
     }
 
-    public MapInfo get(int mapID) throws DatabaseOperationException {
+    public MapInfo get(int mapID) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
                 statement.setInt(1, mapID);
@@ -110,7 +109,7 @@ public class MapInfoRepository extends MapRepository {
     // DELETE
     // ------
 
-    public int delete(int mapID) throws DatabaseOperationException {
+    public int delete(int mapID) {
         MapInfo map = new MapInfo();
         map.setId(mapID);
         return delete("map_info", map);

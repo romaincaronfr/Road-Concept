@@ -22,6 +22,10 @@ public abstract class AbstractRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRepository.class);
 
+    protected String sanitize(String value) {
+        return value.replaceAll("[^\\w]", "");
+    }
+
     // ===================
     // SQL - UPDATE ENTITY
     // ===================
@@ -60,9 +64,9 @@ public abstract class AbstractRepository {
     // SQL - DELETE ENTITY
     // ===================
 
-    protected final int delete(String tableName, SQLEntity entity) throws DatabaseOperationException {
+    protected final int delete(String tableName, SQLEntity entity) {
         try (Connection connection = getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + tableName + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
+            try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + sanitize(tableName) + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
                 if (entity.getIdentifierValue() instanceof UUID) {
                     statement.setObject(1, entity.getIdentifierValue().toString());
                 } else {

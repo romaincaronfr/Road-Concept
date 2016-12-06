@@ -3,13 +3,6 @@ package fr.enssat.lanniontech.api.exceptions;
 public class JSONProcessingException extends RoadConceptException {
 
     /**
-     * Constructs a new JSONProcessingException with default message.
-     */
-    public JSONProcessingException() {
-
-    }
-
-    /**
      * Constructs a new JSONProcessingException with specified detail message.
      */
     public JSONProcessingException(String message) {

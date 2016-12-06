@@ -1,7 +1,6 @@
 package fr.enssat.lanniontech.api.repositories;
 
 import com.mongodb.MongoClient;
-import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import fr.enssat.lanniontech.api.entities.geojson.Feature;
@@ -25,8 +24,6 @@ public class SimulationRepository extends AbstractRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationRepository.class);
 
     public void duplicateFeatures(Simulation simulation) {
-        //   cloneCollection(MapFeatureRepository.computeCollectionName(simulation.getMapID()), computeDuplicatedCollectionName(simulation.getUuid()));
-
         MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
         FeatureCollection features = mapFeatureRepository.getAll(simulation.getMapID());
         createAll(simulation.getUuid(), features);
@@ -96,24 +93,4 @@ public class SimulationRepository extends AbstractRepository {
         return "simulation_" + uuid;
     }
 
-    /**
-     * TODO: Ne fonctionne pas ...  à analyser
-     * Clone a collection.
-     *
-     * @param fromCollectionName
-     *         - The name of collection to be cloned
-     * @param toCollectionName
-     *         - The name of the cloned collection
-     */
-    private void cloneCollection(String fromCollectionName, String toCollectionName) throws MongoException {
-        try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
-            MongoDatabase db = client.getDatabase(Constants.MONGODB_DATABASE_NAME);
-            MongoCollection toCol = db.getCollection(toCollectionName);
-
-            List<Document> ops = new ArrayList<>();
-            ops.add(new Document("$out", toCollectionName));
-            MongoCollection sourceCollection = db.getCollection(fromCollectionName);
-            sourceCollection.aggregate(ops);
-        }
-    }
 }

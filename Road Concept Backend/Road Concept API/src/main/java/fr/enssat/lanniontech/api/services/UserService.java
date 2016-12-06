@@ -37,18 +37,10 @@ public class UserService extends AbstractService {
         return matcher.matches();
     }
 
-    private User get(String email) {
-        User user = repository.getFromEmail(email);
-        if (user == null) {
-            throw new EntityNotExistingException();
-        }
-        return user;
-    }
-
     public User get(int id) {
         User user = repository.getFromId(id);
         if (user == null) {
-            throw new EntityNotExistingException();
+            throw new EntityNotExistingException(User.class);
         }
         return user;
     }

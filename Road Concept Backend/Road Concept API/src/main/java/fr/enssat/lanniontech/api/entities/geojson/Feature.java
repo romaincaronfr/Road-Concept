@@ -17,10 +17,10 @@ public class Feature extends GeoJsonObject {
     @JsonProperty(access = Access.WRITE_ONLY)
     private UUID uuid = UUID.randomUUID();
     @JsonInclude(Include.NON_NULL)
-    private Map<String, Object> properties = new HashMap<>();
+    private Map<String, Object> properties = new HashMap<>(); //NOSONAR: Java HashMap can be serialized without problem
     @JsonInclude(Include.ALWAYS)
     private GeoJsonObject geometry;
-    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
+    @JsonProperty(value = "id")
     private String openStreetMapID;
 
     @JsonIgnore
@@ -28,7 +28,7 @@ public class Feature extends GeoJsonObject {
         FeatureType type;
         try {
             type = (FeatureType) getProperties().get("type"); // from osm
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e) { //NOSONAR
             type = FeatureType.forValue((Integer) getProperties().get("type")); // created by the user
         }
         return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
@@ -58,12 +58,12 @@ public class Feature extends GeoJsonObject {
         this.uuid = uuid;
     }
 
-    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
+    @JsonProperty(value = "id")
     public String getOpenStreetMapID() {
         return openStreetMapID;
     }
 
-    @JsonProperty(value = "id"/*, access = Access.WRITE_ONLY*/)
+    @JsonProperty(value = "id")
     public void setOpenStreetMapID(String openStreetMapID) {
         this.openStreetMapID = openStreetMapID;
     }
@@ -75,8 +75,12 @@ public class Feature extends GeoJsonObject {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Feature feature = (Feature) o;
         return feature.getUuid().equals(getUuid());

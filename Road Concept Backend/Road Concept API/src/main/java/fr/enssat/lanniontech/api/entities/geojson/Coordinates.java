@@ -14,9 +14,6 @@ public class Coordinates implements Serializable {
     private double longitude;
     private double latitude;
 
-    public Coordinates() {
-    }
-
     public Coordinates(double longitude, double latitude) {
         this.longitude = longitude;
         this.latitude = latitude;
@@ -40,8 +37,12 @@ public class Coordinates implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
 
         Coordinates that = (Coordinates) o;
 

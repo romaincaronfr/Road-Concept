@@ -20,7 +20,7 @@ public final class Constants {
 
     public static final String POSTGRESQL_DATABASE_NAME = "roadconcept";
     public static final String POSTGRESQL_USER_NAME = "roadconcept";
-    public static final String POSTGRESQL_USER_PASSWORD = "roadconcept";
+    public static final String POSTGRESQL_USER_PASSWORD = "roadconcept"; //NOSONAR
     //public static final String POSTGRESQL_SERVER_HOST = "postgresql";
     public static final String POSTGRESQL_SERVER_HOST = "localhost";
 

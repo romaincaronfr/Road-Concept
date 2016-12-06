@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import java.io.Serializable;
 
 @JsonTypeInfo(property = "type", use = Id.NAME)
-//@JsonSubTypes({@Type(Feature.class), @Type(FeatureCollection.class), @Type(Point.class), @Type(Polygon.class), @Type(MultiPolygon.class), @Type(MultiPoint.class), @Type(LineString.class)})
 @JsonSubTypes({@Type(Feature.class), @Type(FeatureCollection.class), @Type(Point.class), @Type(LineString.class), @Type(Polygon.class)})
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties({"_id", "crs", "bbox"})

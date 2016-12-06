@@ -1,14 +1,12 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class Polygon extends Geometry<List<Coordinates>> {
-
-    public Polygon() {
-    }
 
     public Polygon(List<Coordinates> polygon) {
         add(polygon);
@@ -29,7 +27,9 @@ public class Polygon extends Geometry<List<Coordinates>> {
     }
 
     private void assertExteriorRing() {
-        if (getCoordinates().isEmpty()) throw new RuntimeException("No exterior ring definied");
+        if (getCoordinates().isEmpty()){
+            throw new RoadConceptUnexpectedException("No exterior ring definied");
+        }
     }
 
     @JsonIgnore

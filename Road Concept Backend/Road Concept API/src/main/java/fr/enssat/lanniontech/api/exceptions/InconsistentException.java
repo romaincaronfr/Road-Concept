@@ -11,3 +11,4 @@ public class InconsistentException extends RoadConceptException {
         super(clazz1 + " is not consistent with " + clazz2);
     }
 }
+

@@ -3,13 +3,6 @@ package fr.enssat.lanniontech.api.exceptions;
 public class InvalidParameterException extends RoadConceptException {
 
     /**
-     * Constructs a new InvalidParameterException with default message.
-     */
-    public InvalidParameterException() {
-
-    }
-
-    /**
      * Constructs a new InvalidParameterException with specified detail message.
      */
     public InvalidParameterException(String message) {

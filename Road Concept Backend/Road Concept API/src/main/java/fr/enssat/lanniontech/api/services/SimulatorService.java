@@ -44,7 +44,6 @@ public class SimulatorService extends AbstractService implements Observer {
     private MapService mapService = new MapService();
 
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
-        //FIXME: The repository should not throw an EntityStillInUseException if the map does not exist
         try {
             Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
             simulation.setSimulator(new Simulator(simulation.getUuid()));
@@ -57,7 +56,7 @@ public class SimulatorService extends AbstractService implements Observer {
             start(simulation);
 
             return simulation;
-        } catch (EntityStillInUseException e) {
+        } catch (EntityStillInUseException e) { //FIXME: The repository should not throw an EntityStillInUseException if the map does not exist
             throw new EntityNotExistingException(Map.class);
         }
     }
@@ -112,7 +111,7 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
-    private boolean start(Simulation simulation) throws EntityNotExistingException {
+    private boolean start(Simulation simulation) {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
@@ -140,7 +139,7 @@ public class SimulatorService extends AbstractService implements Observer {
         }
         simulation.getSimulator().getRoadManager().closeRoads();
         if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
-            throw new RoadConceptUnexpectedException();
+            throw new RoadConceptUnexpectedException("Simulator check integrity failed");
         }
     }
 

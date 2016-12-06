@@ -9,10 +9,10 @@ public class AuthenticationService extends AbstractService {
 
     private UserRepository userRepository = new UserRepository();
 
-    public User login(String email, String password) throws AuthenticationException {
+    public User login(String email, String password) {
         User user = userRepository.getFromEmail(email);
         if (user == null || !BCrypt.checkpw(password, user.getPassword())) { // login failed
-            throw new AuthenticationException();
+            throw new AuthenticationException("Invalid credentials");
         }
         return user; // login success
     }

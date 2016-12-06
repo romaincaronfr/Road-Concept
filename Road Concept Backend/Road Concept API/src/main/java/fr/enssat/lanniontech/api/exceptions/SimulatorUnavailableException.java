@@ -3,13 +3,6 @@ package fr.enssat.lanniontech.api.exceptions;
 public class SimulatorUnavailableException extends RoadConceptException {
 
     /**
-     * Constructs a new SimulatorUnavailableException with default message.
-     */
-    public SimulatorUnavailableException() {
-
-    }
-
-    /**
      * Constructs a new SimulatorUnavailableException with specified detail message.
      */
     public SimulatorUnavailableException(String message) {

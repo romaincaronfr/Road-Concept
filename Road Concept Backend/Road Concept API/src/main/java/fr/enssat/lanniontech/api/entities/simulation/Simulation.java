@@ -124,7 +124,7 @@ public class Simulation implements SQLEntity {
         this.carPercentage = carPercentage;
     }
 
-    public Simulator getSimulator() throws SimulatorUnavailableException {
+    public Simulator getSimulator() {
         if (!finish) {
             return simulator;
         }

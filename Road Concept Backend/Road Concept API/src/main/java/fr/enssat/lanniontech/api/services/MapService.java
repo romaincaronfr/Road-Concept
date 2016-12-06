@@ -91,10 +91,10 @@ public class MapService extends AbstractService {
     // OPEN STREET MAP IMPORTS
     // =======================
 
-    public int importFromOSM(User user, int mapID, String fileData) throws Exception {
+    public int importFromOSM(User user, int mapID, String fileData) {
         MapInfo infos = mapInfoRepository.get(mapID);
         if (infos == null) {
-            throw new EntityNotExistingException();
+            throw new EntityNotExistingException(MapInfo.class);
         }
 
         FeatureCollection importedFeatures = JSONUtils.fromJSON(fileData, FeatureCollection.class);
@@ -182,7 +182,7 @@ public class MapService extends AbstractService {
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("junction")) {
             String junction = (String) tags.get("junction");
-            if (junction.equals("roundabout")) {
+            if ("roundabout".equals(junction)) {
                 return FeatureType.ROUNDABOUT;
             }
         }
@@ -256,7 +256,7 @@ public class MapService extends AbstractService {
     private boolean getBridge(Map<String, Object> properties) {
         if (properties.containsKey("bridge")) {
             String oneway = (String) properties.get("bridge");
-            if (oneway.equals("yes")) {
+            if ("yes".equals(oneway)) {
                 return true;
             }
         }
@@ -264,7 +264,7 @@ public class MapService extends AbstractService {
             Map tags = (LinkedHashMap) properties.get("tags");
             if (tags.containsKey("bridge")) {
                 String oneway = (String) tags.get("bridge");
-                if (oneway.equals("yes")) {
+                if ("yes".equals(oneway)) {
                     return true;
                 }
             }

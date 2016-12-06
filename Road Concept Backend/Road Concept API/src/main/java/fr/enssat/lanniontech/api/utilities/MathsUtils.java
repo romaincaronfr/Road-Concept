@@ -16,9 +16,11 @@ public final class MathsUtils {
     }
 
     public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
 
-        BigDecimal bd = new BigDecimal(value);
+        BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
@@ -31,9 +33,9 @@ public final class MathsUtils {
         double cX = p2.getLongitude();
         double cY = p2.getLatitude();
 
-        double distanceAB = Math.sqrt(Math.pow((aX - bX), 2) + Math.pow((aY - bY), 2));
-        double distanceAC = Math.sqrt(Math.pow((aX - cX), 2) + Math.pow((aY - cY), 2));
-        double distanceCB = Math.sqrt(Math.pow((cX - bX), 2) + Math.pow((cY - bY), 2));
+        double distanceAB = Math.sqrt(Math.pow(aX - bX, 2) + Math.pow(aY - bY, 2));
+        double distanceAC = Math.sqrt(Math.pow(aX - cX, 2) + Math.pow(aY - cY, 2));
+        double distanceCB = Math.sqrt(Math.pow(cX - bX, 2) + Math.pow(cY - bY, 2));
         double distancePoint = distanceAC + distanceCB;
 
         return distancePoint > distanceAB - 0.0003 && distancePoint < distanceAB + 0.0003;

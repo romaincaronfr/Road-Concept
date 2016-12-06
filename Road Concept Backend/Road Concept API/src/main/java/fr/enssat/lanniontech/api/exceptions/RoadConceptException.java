@@ -2,10 +2,6 @@ package fr.enssat.lanniontech.api.exceptions;
 
 public abstract class RoadConceptException extends RuntimeException {
 
-    public RoadConceptException() {
-
-    }
-
     public RoadConceptException(String message) {
         super(message);
     }

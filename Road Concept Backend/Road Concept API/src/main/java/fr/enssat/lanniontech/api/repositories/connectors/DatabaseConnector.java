@@ -25,7 +25,11 @@ public final class DatabaseConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseConnector.class);
 
-    private static BasicDataSource DATA_SOURCE = new BasicDataSource(); // Vert.x will destroy it on stop
+    private static final BasicDataSource DATA_SOURCE = new BasicDataSource(); // Vert.x will destroy it on stop
+
+    private DatabaseConnector(){
+        // Prevent instantiation
+    }
 
     // ==============
     // DB CONNECTIONS
@@ -51,20 +55,18 @@ public final class DatabaseConnector {
         setUpNoSQL();
     }
 
-    private static void setUpSQL() throws SQLUnexpectedException {
+    private static void setUpSQL() {
         configurePostgreSQL();
         try (Connection initConnection = getConnection()) {
             initializeDeveloppmentSchema(initConnection);
             new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
             LOGGER.info("Default administrator account has been created.");
-        } catch (EntityAlreadyExistsException ignored) {
-            // The default admin user already exists, just ignore the exception
+        } catch (EntityAlreadyExistsException ignored) { // NOSONAR: The default admin user already exists, just ignore the exception
             LOGGER.info("Default admin user already exists ! Nothing created.");
         } catch (SQLException e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
             throw new SQLUnexpectedException(e);
         }
-
     }
 
     private static void configurePostgreSQL() {

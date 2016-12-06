@@ -3,13 +3,6 @@ package fr.enssat.lanniontech.api.exceptions;
 public class AuthenticationException extends RoadConceptException {
 
     /**
-     * Constructs a new AuthenticationException with default message.
-     */
-    public AuthenticationException() {
-
-    }
-
-    /**
      * Constructs a new AuthenticationException with specified detail message.
      */
     public AuthenticationException(String message) {

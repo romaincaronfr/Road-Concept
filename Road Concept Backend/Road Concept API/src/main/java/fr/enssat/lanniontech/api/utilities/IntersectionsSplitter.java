@@ -14,9 +14,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class IntersectionsSplitter {
+public final class IntersectionsSplitter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IntersectionsSplitter.class);
+
+    private IntersectionsSplitter() {
+        // prevent instantiation
+    }
 
     public static FeatureCollection process(FeatureCollection map) {
         Map<Coordinates, List<Feature>> explosionPivot = new HashMap<>();

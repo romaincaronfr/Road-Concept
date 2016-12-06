@@ -21,9 +21,7 @@ public class CoordinatesDeserializer extends JsonDeserializer<Coordinates> {
     }
 
     private Coordinates deserializeArray(JsonParser jp, DeserializationContext ctxt) throws IOException {
-        Coordinates node = new Coordinates();
-        node.setLongitude(extractDouble(jp, ctxt, false));
-        node.setLatitude(extractDouble(jp, ctxt, false));
+        Coordinates node = new Coordinates(extractDouble(jp, ctxt, false), extractDouble(jp, ctxt, false));
 
         List<Double> additionalElementsList = new ArrayList<>();
         while (jp.hasCurrentToken() && jp.getCurrentToken() != JsonToken.END_ARRAY) {
@@ -44,13 +42,17 @@ public class CoordinatesDeserializer extends JsonDeserializer<Coordinates> {
     private double extractDouble(JsonParser jp, DeserializationContext ctxt, boolean optional) throws IOException {
         JsonToken token = jp.nextToken();
         if (token == null) {
-            if (optional) return Double.NaN;
-            else throw ctxt.mappingException("Unexpected end-of-input when binding data into Coordinates");
+            if (optional){
+                return Double.NaN;
+            }
+            throw ctxt.mappingException("Unexpected end-of-input when binding data into Coordinates");
         } else {
             switch (token) {
                 case END_ARRAY:
-                    if (optional) return Double.NaN;
-                    else throw ctxt.mappingException("Unexpected end-of-input when binding data into Coordinates");
+                    if (optional) {
+                        return Double.NaN;
+                    }
+                    throw ctxt.mappingException("Unexpected end-of-input when binding data into Coordinates");
                 case VALUE_NUMBER_FLOAT:
                     return jp.getDoubleValue();
                 case VALUE_NUMBER_INT:

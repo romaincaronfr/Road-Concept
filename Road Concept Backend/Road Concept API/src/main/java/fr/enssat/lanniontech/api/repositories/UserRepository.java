@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
-import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +19,13 @@ public class UserRepository extends AbstractRepository {
 
     private static final String INSERT = "INSERT INTO final_user(email, password, first_name, last_name, type) VALUES (?, ?, ?, ?, ?) RETURNING id";
     private static final String SELECT_FROM_ID = "SELECT email, password, first_name, last_name, type FROM final_user WHERE id = ?";
-    private static final String SELECT_FROM_EMAIL = "SELECT id, password, first_name, last_name, type FROM final_user WHERE email = ?";
     private static final String SELECT_ALL = "SELECT id, email, password, first_name, last_name, type FROM final_user";
 
     // ======
     // CREATE
     // ======
 
-    public User create(String email, String lastName, String firstName, String password, UserType type) throws DatabaseOperationException {
+    public User create(String email, String lastName, String firstName, String password, UserType type) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setString(1, email);
@@ -57,19 +55,19 @@ public class UserRepository extends AbstractRepository {
     // UPDATE
     // ======
 
-    public void updateLastName(User user, String newValue) throws DatabaseOperationException {
+    public void updateLastName(User user, String newValue){
         updateStringField("final_user", "last_name", user, newValue);
     }
 
-    public void updateFirstName(User user, String newValue) throws DatabaseOperationException {
+    public void updateFirstName(User user, String newValue) {
         updateStringField("final_user", "first_name", user, newValue);
     }
 
-    public void updateEmail(User user, String newValue) throws DatabaseOperationException {
+    public void updateEmail(User user, String newValue) {
         updateStringField("final_user", "email", user, newValue);
     }
 
-    public void updateType(User user, UserType newValue) throws DatabaseOperationException {
+    public void updateType(User user, UserType newValue){
         updateIntField("final_user", "type", user, newValue.getJsonID());
     }
 
@@ -77,7 +75,7 @@ public class UserRepository extends AbstractRepository {
     // GET
     // ===
 
-    public List<User> getAll() throws DatabaseOperationException {
+    public List<User> getAll() {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 try (ResultSet result = statement.executeQuery()) {
@@ -102,7 +100,7 @@ public class UserRepository extends AbstractRepository {
         }
     }
 
-    public User getFromId(int id) throws DatabaseOperationException {
+    public User getFromId(int id)  {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
                 statement.setInt(1, id);
@@ -126,35 +124,11 @@ public class UserRepository extends AbstractRepository {
         }
     }
 
-    public User getFromEmail(String email) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
-            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_EMAIL)) {
-                statement.setString(1, email);
-
-                try (ResultSet result = statement.executeQuery()) {
-                    if (result.next()) {
-                        User user = new User();
-                        user.setId(result.getInt("id"));
-                        user.setEmail(email);
-                        user.setPassword(result.getString("password"));
-                        user.setFirstName(result.getString("first_name"));
-                        user.setLastName(result.getString("last_name"));
-                        user.setType(UserType.forValue(result.getInt("type")));
-                        return user;
-                    }
-                    return null; // No row
-                }
-            }
-        } catch (SQLException e) {
-            throw processBasicSQLException(e, User.class);
-        }
-    }
-
     // ======
     // DELETE
     // ======
 
-    public int delete(User user) throws DatabaseOperationException {
+    public int delete(User user) {
         return delete("final_user", user);
     }
 }

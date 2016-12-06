@@ -1,27 +1,22 @@
 package fr.enssat.lanniontech.api.entities.geojson;
 
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Geometry<T> extends GeoJsonObject {
 
-    private LinkedList<T> coordinates = new LinkedList<>(); // TODO: Improve performances by re-using ArrayList
-
-    @SafeVarargs
-    public Geometry(T... elements) {
-        Collections.addAll(coordinates, elements);
-    }
+    private List<T> coordinates = new ArrayList<T>(); //NOSONAR: List can be serialized without problem
 
     public Geometry<T> add(T elements) {
         coordinates.add(elements);
         return this;
     }
 
-    public LinkedList<T> getCoordinates() {
+    public List<T> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(LinkedList<T> coordinates) {
+    public void setCoordinates(List<T> coordinates) {
         this.coordinates = coordinates;
     }
 

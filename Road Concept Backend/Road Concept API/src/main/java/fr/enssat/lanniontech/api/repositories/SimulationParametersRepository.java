@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
-import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) throws DatabaseOperationException {
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -76,7 +75,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // GET
     // ===
 
-    public List<Simulation> getAll(int userID) throws DatabaseOperationException {
+    public List<Simulation> getAll(int userID) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, userID);
@@ -110,7 +109,7 @@ public class SimulationParametersRepository extends SimulationRepository {
         }
     }
 
-    public Simulation getFromUUID(UUID uuid) throws DatabaseOperationException {
+    public Simulation getFromUUID(UUID uuid) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_UUID)) {
                 statement.setString(1, uuid.toString());
@@ -142,7 +141,7 @@ public class SimulationParametersRepository extends SimulationRepository {
         }
     }
 
-    public List<Simulation> getAllFromMap(User user, int mapID) throws DatabaseOperationException {
+    public List<Simulation> getAllFromMap(User user, int mapID) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
@@ -197,7 +196,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // DELETE
     // ======
 
-    public int delete(Simulation simulation) throws DatabaseOperationException {
+    public int delete(Simulation simulation) {
         return delete("simulation", simulation);
     }
 

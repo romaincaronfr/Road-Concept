@@ -3,13 +3,6 @@ package fr.enssat.lanniontech.api.exceptions;
 public class PrivilegeLevelException extends RoadConceptException {
 
     /**
-     * Constructs a new PrivilegeLevelException with default message.
-     */
-    public PrivilegeLevelException() {
-
-    }
-
-    /**
      * Constructs a new PrivilegeLevelException with specified detail message.
      */
     public PrivilegeLevelException(String message) {

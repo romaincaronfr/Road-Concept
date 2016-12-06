@@ -80,8 +80,7 @@ public class MapFeatureRepository extends MapRepository {
                 String uuid = (String) result.getProperties().get("id");
                 result.setUuid(UUID.fromString(uuid));
                 return result;
-            } catch (NoSuchElementException e) {
-                e.printStackTrace();
+            } catch (NoSuchElementException e) { //NOSONAR
                 return null;
             } catch (Exception e) {
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
@@ -151,7 +150,7 @@ public class MapFeatureRepository extends MapRepository {
                 String uuid = (String) result.getProperties().get("id");
                 result.setUuid(UUID.fromString(uuid));
                 return result;
-            } catch (NoSuchElementException e) {
+            } catch (NoSuchElementException e) { //NOSONAR
                 return null;
             } catch (Exception e) {
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);

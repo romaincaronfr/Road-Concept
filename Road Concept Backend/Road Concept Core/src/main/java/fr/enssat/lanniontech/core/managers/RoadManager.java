@@ -38,12 +38,6 @@ public class RoadManager {
         intersectionMap = new HashMap<>();
     }
 
-    @Deprecated
-    public RoadSection addRoadSection(Position A, Position B) {
-        Road R = new Road(UUID.randomUUID());
-        return addRoadSection(A, B, R);
-    }
-
     /**
      * create and assemble the road section to its Road
      */
@@ -61,11 +55,7 @@ public class RoadManager {
      * Create and add a RoadSection from the specified positions to the specified Road
      */
     public Road addRoadSectionToRoad(Position A, Position B, UUID id) {
-        Road R = roads.get(id);
-        if (R == null) {
-            R = new Road(id);
-            roads.put(id, R);
-        }
+        Road R = roads.computeIfAbsent(id, k -> new Road(id));
         R.addSection(addRoadSection(A, B, R));
         return R;
     }

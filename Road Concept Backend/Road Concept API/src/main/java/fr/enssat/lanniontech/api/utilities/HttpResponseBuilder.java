@@ -12,6 +12,10 @@ public class HttpResponseBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpResponseBuilder.class);
 
+    private HttpResponseBuilder() {
+        // prevent instantiation
+    }
+
     public static void buildUnexpectedErrorResponse(RoutingContext routingContext, Throwable cause) {
         RestErrorMessage error = new RestErrorMessage();
         error.setCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);

@@ -31,7 +31,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationVerticle.class);
 
     private static final String INPUT_JSON_EMAIL = "email";
-    private static final String INPUT_JSON_PASSWORD = "password";
+    private static final String INPUT_JSON_PASSWORD = "password"; //NOSONAR
 
     private AuthenticationService authenticationService = new AuthenticationService();
 
@@ -85,7 +85,7 @@ public class AuthenticationVerticle extends AbstractVerticle {
 
             // We can't use "routingContext.user()" since we don't use any Vert.x auth provider
             routingContext.session().put(Constants.SESSION_CURRENT_USER, user);
-            routingContext.session().put("actives_simulations", new ArrayList<Simulation>()); //FIXME: Never cleared, execpt on logout... Memory leak !
+            routingContext.session().put("actives_simulations", new ArrayList<Simulation>());
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (BadRequestException | ClassCastException e) {
