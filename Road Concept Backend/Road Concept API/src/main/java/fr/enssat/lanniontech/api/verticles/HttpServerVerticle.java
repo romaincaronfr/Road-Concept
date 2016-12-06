@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.MediaType;
-import java.util.Iterator;
 import java.util.List;
 
 public class HttpServerVerticle extends AbstractVerticle {
@@ -95,11 +94,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 
     private void checkActivesSimulations(RoutingContext routingContext) {
         List<Simulation> sessionStoredSimulations = routingContext.session().get("actives_simulations");
-        for (Iterator<Simulation> iterator = sessionStoredSimulations.iterator(); iterator.hasNext(); ) {
-            Simulation simulation = iterator.next();
-            if (simulation.isFinish()) {
-                iterator.remove();
-            }
-        }
+        sessionStoredSimulations.removeIf(Simulation::isFinish);
     }
 }
