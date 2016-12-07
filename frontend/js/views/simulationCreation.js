@@ -589,7 +589,7 @@ app.simulationCreationView = Backbone.View.extend({
             case 1:
                 var hour = $('#startHour').val();
                 var nbCar = $('#nbHabit').val();
-                //var percent = $('#carRepart').val();
+                var percent = $('#carRepart').val();
 
                 if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
                     $('#alertEmptyHabitation').show();
@@ -602,8 +602,7 @@ app.simulationCreationView = Backbone.View.extend({
                     $('#workZone').show();
                     this.startHour = hour;
                     this.vehicle_count = nbCar;
-                    //this.car_percentage = percent;
-                    this.car_percentage = 100;
+                    this.car_percentage = percent;
                     valid = true;
                 }
                 break;
