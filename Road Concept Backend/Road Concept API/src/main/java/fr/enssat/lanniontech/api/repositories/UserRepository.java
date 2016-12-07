@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
+import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ public class UserRepository extends AbstractRepository {
 
     private static final String INSERT = "INSERT INTO final_user(email, password, first_name, last_name, type) VALUES (?, ?, ?, ?, ?) RETURNING id";
     private static final String SELECT_FROM_ID = "SELECT email, password, first_name, last_name, type FROM final_user WHERE id = ?";
+    private static final String SELECT_FROM_EMAIL = "SELECT id, password, first_name, last_name, type FROM final_user WHERE email = ?";
     private static final String SELECT_ALL = "SELECT id, email, password, first_name, last_name, type FROM final_user";
 
     // ======
@@ -55,7 +57,7 @@ public class UserRepository extends AbstractRepository {
     // UPDATE
     // ======
 
-    public void updateLastName(User user, String newValue){
+    public void updateLastName(User user, String newValue) {
         updateStringField("final_user", "last_name", user, newValue);
     }
 
@@ -67,7 +69,7 @@ public class UserRepository extends AbstractRepository {
         updateStringField("final_user", "email", user, newValue);
     }
 
-    public void updateType(User user, UserType newValue){
+    public void updateType(User user, UserType newValue) {
         updateIntField("final_user", "type", user, newValue.getJsonID());
     }
 
@@ -100,7 +102,7 @@ public class UserRepository extends AbstractRepository {
         }
     }
 
-    public User getFromId(int id)  {
+    public User getFromId(int id) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
                 statement.setInt(1, id);
@@ -110,6 +112,30 @@ public class UserRepository extends AbstractRepository {
                         User user = new User();
                         user.setId(id);
                         user.setEmail(result.getString("email"));
+                        user.setPassword(result.getString("password"));
+                        user.setFirstName(result.getString("first_name"));
+                        user.setLastName(result.getString("last_name"));
+                        user.setType(UserType.forValue(result.getInt("type")));
+                        return user;
+                    }
+                    return null; // No row
+                }
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, User.class);
+        }
+    }
+
+    public User getFromEmail(String email) throws DatabaseOperationException {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_EMAIL)) {
+                statement.setString(1, email);
+
+                try (ResultSet result = statement.executeQuery()) {
+                    if (result.next()) {
+                        User user = new User();
+                        user.setId(result.getInt("id"));
+                        user.setEmail(email);
                         user.setPassword(result.getString("password"));
                         user.setFirstName(result.getString("first_name"));
                         user.setLastName(result.getString("last_name"));

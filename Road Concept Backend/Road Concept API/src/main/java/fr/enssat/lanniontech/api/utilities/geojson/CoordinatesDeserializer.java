@@ -42,7 +42,7 @@ public class CoordinatesDeserializer extends JsonDeserializer<Coordinates> {
     private double extractDouble(JsonParser jp, DeserializationContext ctxt, boolean optional) throws IOException {
         JsonToken token = jp.nextToken();
         if (token == null) {
-            if (optional){
+            if (optional) {
                 return Double.NaN;
             }
             throw ctxt.mappingException("Unexpected end-of-input when binding data into Coordinates");

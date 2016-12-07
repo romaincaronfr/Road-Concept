@@ -30,16 +30,16 @@ public class TestSimulator {
         UUID id5 = UUID.fromString("0-0-0-0-5");
         UUID id6 = UUID.fromString("0-0-0-0-6");
 
-        Road R = Sim.getRoadManager().addRoadSectionToRoad(A, B, id1);
-        Sim.getRoadManager().addRoadSectionToRoad(B, C, id1);
-        Sim.getRoadManager().addRoadSectionToRoad(C, D, id1);
-        Sim.getRoadManager().addRoadSectionToRoad(D, A, id2);
-        Sim.getRoadManager().addRoadSectionToRoad(D, E, id3);
-        Sim.getRoadManager().addRoadSectionToRoad(E, F, id3);
-        Sim.getRoadManager().addRoadSectionToRoad(F, A, id3);
-        Sim.getRoadManager().addRoadSectionToRoad(A, G0, id4);
-        Sim.getRoadManager().addRoadSectionToRoad(G0, G1, id5);
-        Sim.getRoadManager().addRoadSectionToRoad(G0, G2, id6);
+        Road R = Sim.getRoadManager().addRoadSectionToRoad(A, B, id1, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(B, C, id1, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(C, D, id1, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(D, A, id2, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(D, E, id3, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(E, F, id3, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(F, A, id3, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(A, G0, id4, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(G0, G1, id5, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(G0, G2, id6, 50, false);
 
         Sim.getRoadManager().closeRoads();
 

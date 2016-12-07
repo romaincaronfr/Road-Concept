@@ -8,14 +8,6 @@ import java.util.List;
 
 public class Polygon extends Geometry<List<Coordinates>> {
 
-    public Polygon(List<Coordinates> polygon) {
-        add(polygon);
-    }
-
-    public Polygon(Coordinates... polygon) {
-        add(Arrays.asList(polygon));
-    }
-
     @JsonIgnore
     public List<Coordinates> getExteriorRing() {
         assertExteriorRing();
@@ -27,7 +19,7 @@ public class Polygon extends Geometry<List<Coordinates>> {
     }
 
     private void assertExteriorRing() {
-        if (getCoordinates().isEmpty()){
+        if (getCoordinates().isEmpty()) {
             throw new RoadConceptUnexpectedException("No exterior ring definied");
         }
     }

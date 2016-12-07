@@ -24,11 +24,11 @@ public class TestIntersection {
         UUID uuid3 = UUID.randomUUID();
         UUID uuid4 = UUID.randomUUID();
 
-        Road R1 = RM.addRoadSectionToRoad(A, I, uuid0);
-        Road R2 = RM.addRoadSectionToRoad(B, I, uuid1);
-        Road R3 = RM.addRoadSectionToRoad(C, I, uuid2);
-        Road R4 = RM.addRoadSectionToRoad(D, I, uuid3);
-        Road R5 = RM.addRoadSectionToRoad(E, I, uuid4);
+        Road R1 = RM.addRoadSectionToRoad(A, I, uuid0, 50, false);
+        Road R2 = RM.addRoadSectionToRoad(B, I, uuid1, 50, false);
+        Road R3 = RM.addRoadSectionToRoad(C, I, uuid2, 50, false);
+        Road R4 = RM.addRoadSectionToRoad(D, I, uuid3, 50, false);
+        Road R5 = RM.addRoadSectionToRoad(E, I, uuid4, 50, false);
 
 
     }

@@ -132,7 +132,15 @@ public class SimulatorService extends AbstractService implements Observer {
                     Coordinates coordinates = road.getCoordinates().get(i);
                     Position A = simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude());
                     Position B = simulation.getSimulator().getPositionManager().addPosition(coordinates.getLongitude(), coordinates.getLatitude());
-                    simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid());
+                    int maxSpeed = (int) feature.getProperties().get("maxspeed");
+                    String oneWayString = (String) feature.getProperties().get("oneway");
+                    boolean oneWay;
+                    if (oneWayString == null || "no".equals(oneWayString)) {
+                        oneWay = false;
+                    } else {
+                        oneWay = true;
+                    }
+                    simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
                     last = coordinates;
                 }
             }

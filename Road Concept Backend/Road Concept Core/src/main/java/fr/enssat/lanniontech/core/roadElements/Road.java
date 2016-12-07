@@ -8,20 +8,22 @@ import java.util.UUID;
 
 public class Road {
     private UUID id;
-    private double maxSpeed;
     private List<RoadSection> sections;
     private double length;
     private double timeWeigth;
     private Position A;
     private Position B;
+    private int maxSpeed;
+    private boolean oneWay;
 
-    public Road(UUID id) {
-        this(id, 50);
-    }
+    //    public Road(UUID id) {
+    //        this(id, 50, false);
+    //    }
 
-    public Road(UUID id, double maxSpeed) {
+    public Road(UUID id, int maxSpeed, boolean oneWay) {
         this.id = id;
         this.maxSpeed = maxSpeed;
+        this.oneWay = oneWay;
         this.sections = new ArrayList<>();
         this.length = 0;
         this.timeWeigth = 0;

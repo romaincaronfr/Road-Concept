@@ -16,7 +16,7 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
-        Road R = new Road(UUID.randomUUID());
+        Road R = new Road(UUID.randomUUID(), 50, false);
 
         RoadSection RS1 = RM.addRoadSection(A, B, R);
         RoadSection RS2 = RM.addRoadSection(B, C, R);
@@ -33,7 +33,7 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
-        Road R = new Road(UUID.randomUUID());
+        Road R = new Road(UUID.randomUUID(), 50, false);
 
         RoadSection RS1 = RM.addRoadSection(A, B, R);
         RoadSection RS2 = RM.addRoadSection(C, A, R);

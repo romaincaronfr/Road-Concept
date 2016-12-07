@@ -54,8 +54,8 @@ public class RoadManager {
     /**
      * Create and add a RoadSection from the specified positions to the specified Road
      */
-    public Road addRoadSectionToRoad(Position A, Position B, UUID id) {
-        Road R = roads.computeIfAbsent(id, k -> new Road(id));
+    public Road addRoadSectionToRoad(Position A, Position B, UUID id, int maxSpeed, boolean oneWay) {
+        Road R = roads.computeIfAbsent(id, k -> new Road(id, maxSpeed, oneWay));
         R.addSection(addRoadSection(A, B, R));
         return R;
     }

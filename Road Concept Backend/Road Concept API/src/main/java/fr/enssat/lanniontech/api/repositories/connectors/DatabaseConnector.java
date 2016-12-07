@@ -27,7 +27,7 @@ public final class DatabaseConnector {
 
     private static final BasicDataSource DATA_SOURCE = new BasicDataSource(); // Vert.x will destroy it on stop
 
-    private DatabaseConnector(){
+    private DatabaseConnector() {
         // Prevent instantiation
     }
 

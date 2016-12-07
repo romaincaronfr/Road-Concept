@@ -23,4 +23,5 @@ public class DatabaseOperationException extends RoadConceptException {
      */
     public DatabaseOperationException(Throwable cause) {
         super(cause);
-    }}
+    }
+}

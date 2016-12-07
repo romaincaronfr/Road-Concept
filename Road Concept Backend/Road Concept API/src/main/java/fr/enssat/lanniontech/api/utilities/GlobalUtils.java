@@ -4,7 +4,7 @@ import com.rits.cloning.Cloner;
 
 public class GlobalUtils {
 
-    private GlobalUtils(){
+    private GlobalUtils() {
         // prevent instantiation
     }
 

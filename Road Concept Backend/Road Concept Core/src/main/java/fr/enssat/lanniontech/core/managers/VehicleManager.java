@@ -9,6 +9,7 @@ import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
+import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,9 +53,9 @@ public class VehicleManager {
         workingArea = roadManager.getRoad(id);
     }
 
-    public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int ratio) {
-        generators.add(new DiracGenerator(goTimestamp, vehicles));       //add the home generator
-        generators.add(new DiracGenerator(returnTimestamp, vehicles));   //add the work generator
+    public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int carPercentage) {
+        generators.add(new DiracGenerator(goTimestamp, vehicles, carPercentage));       //add the home generator
+        generators.add(new DiracGenerator(returnTimestamp, vehicles, carPercentage));   //add the work generator
     }
 
     public void updateBuffers(long timestamp) {
@@ -103,7 +104,12 @@ public class VehicleManager {
 
         //Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
         Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
-        Vehicle V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
+        Vehicle V;
+        if (kernel.getType() == VehicleType.CAR) {
+            V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
+        } else {
+            V = Vehicle.createTruck(vehicles.size(), startingLane, startingPos, historyManager, myPath);
+        }
         vehicles.add(V);
         activeVehicles.add(V);
         return true;

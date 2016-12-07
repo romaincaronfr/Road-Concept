@@ -442,6 +442,24 @@ app.mapSimulationView = Backbone.View.extend({
                 });
                 return style;
                 break;
+            case 7:
+                //TRUCK
+                var url = 'assets/img/truck.png';
+                var angle = feature.getProperties().angle;
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [30, 60],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: 0.15 / resolution,
+                        //scale: 1,
+                        src: url,
+                        rotation: angle
+                    })
+                });
+                return style;
+                break;
             default:
                 break;
         }

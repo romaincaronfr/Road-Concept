@@ -4,6 +4,10 @@ public class Point extends GeoJsonObject {
 
     private Coordinates coordinates;
 
+    public Point() {
+        // Needed by Jackson
+    }
+
     public Point(Coordinates coordinates) {
         this.coordinates = coordinates;
     }

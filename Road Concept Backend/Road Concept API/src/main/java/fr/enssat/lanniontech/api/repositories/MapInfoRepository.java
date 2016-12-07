@@ -57,7 +57,7 @@ public class MapInfoRepository extends MapRepository {
     // GET
     // ---
 
-    public List<MapInfo> getAll(User user){
+    public List<MapInfo> getAll(User user) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, user.getId());

@@ -45,6 +45,14 @@ public class UserService extends AbstractService {
         return user;
     }
 
+    private User get(String email) {
+        User user = repository.getFromEmail(email);
+        if (user == null) {
+            throw new EntityNotExistingException(User.class);
+        }
+        return user;
+    }
+
     public User update(User user) {
         User current = repository.getFromId(user.getId());
         if (current == null) {

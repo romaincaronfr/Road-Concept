@@ -1,9 +1,12 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Road;
 import fr.enssat.lanniontech.core.roadElements.RoadSection;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.UUID;
 
 /**
  * Created by 4r3 on 04/10/16.
@@ -16,8 +19,8 @@ public class TestPosFunction {
         Position B = new Position(0, 1);
         Position C = new Position(0, 2);
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(B, C);
+        RoadSection RS1 = RM.addRoadSection(A, B, new Road(UUID.randomUUID(), 50, false));
+        RoadSection RS2 = RM.addRoadSection(B, C, new Road(UUID.randomUUID(), 50, false));
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -35,8 +38,8 @@ public class TestPosFunction {
         Position B = new Position(0, 1);
         Position C = new Position(0, -1);
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(B, C);
+        RoadSection RS1 = RM.addRoadSection(A, B, new Road(UUID.randomUUID(), 50, false));
+        RoadSection RS2 = RM.addRoadSection(B, C, new Road(UUID.randomUUID(), 50, false));
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -54,8 +57,8 @@ public class TestPosFunction {
         Position B = new Position(0, 1);
         Position C = new Position(1, 1);
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(B, C);
+        RoadSection RS1 = RM.addRoadSection(A, B, new Road(UUID.randomUUID(), 50, false));
+        RoadSection RS2 = RM.addRoadSection(B, C, new Road(UUID.randomUUID(), 50, false));
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();
@@ -74,8 +77,8 @@ public class TestPosFunction {
         Position B = new Position(0, 1);
         Position C = new Position(-1, 1);
 
-        RoadSection RS1 = RM.addRoadSection(A, B);
-        RoadSection RS2 = RM.addRoadSection(B, C);
+        RoadSection RS1 = RM.addRoadSection(A, B, new Road(UUID.randomUUID(), 50, false));
+        RoadSection RS2 = RM.addRoadSection(B, C, new Road(UUID.randomUUID(), 50, false));
 
         PosFunction Pf1 = RS1.getFunction();
         PosFunction Pf2 = RS2.getFunction();

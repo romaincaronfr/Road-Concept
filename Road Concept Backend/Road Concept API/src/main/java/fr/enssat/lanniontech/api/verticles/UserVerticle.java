@@ -174,7 +174,7 @@ public class UserVerticle extends AbstractVerticle {
     private void checkAdminLevel(RoutingContext routingContext) { //TODO: Déplacer cette vérification dans la couche service ?
         User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
         if (currentUser.getType() == null || currentUser.getType() != UserType.ADMINISTRATOR) {
-            throw new PrivilegeLevelException();
+            throw new PrivilegeLevelException("Operation reserved to administrators");
         }
     }
 }
