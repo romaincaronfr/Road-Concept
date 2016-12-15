@@ -5,18 +5,6 @@ package fr.enssat.lanniontech.roadconceptandroid.Entities;
  */
 
 public class Login implements Entity {
-<<<<<<< Updated upstream
-    private String token;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-}
-=======
     private String Cookie;
 
     public Login(String cookie) {
@@ -31,4 +19,3 @@ public class Login implements Entity {
         Cookie = cookie;
     }
 }
->>>>>>> Stashed changes
