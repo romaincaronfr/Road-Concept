@@ -12,7 +12,12 @@ public class Constants {
 
     private static final String BASE_URL = "http://roadconcept.4r3.fr";
     private static final String BASE_PORT = "8081";
+<<<<<<< Updated upstream
     public static final String SERVER_URL = BASE_URL+BASE_PORT;
+=======
+    public static final String SERVER_URL = BASE_URL+":"+BASE_PORT;
+    public static final String LOGIN_URL = SERVER_URL+"/login";
+>>>>>>> Stashed changes
 
     // ====================
     // SINGLETON MANAGEMENT

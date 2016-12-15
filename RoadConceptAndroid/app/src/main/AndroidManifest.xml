@@ -17,4 +17,8 @@
         </activity>
     </application>
 
+<<<<<<< Updated upstream
+=======
+    <uses-permission android:name="android.permission.INTERNET"/>
+>>>>>>> Stashed changes
 </manifest>
