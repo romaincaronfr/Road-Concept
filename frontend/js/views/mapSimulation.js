@@ -200,7 +200,7 @@ app.mapSimulationView = Backbone.View.extend({
                                 var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                                     featureProjection: 'EPSG:3857'
                                 });
-                                if (element.attributes.type == 6) {
+                                if (element.attributes.type == 6 || element.attributes.type == 7) {
                                     self.vectorSource2.addFeature(newfeature);
                                 } else {
                                     self.vectorSource.addFeature(newfeature);
@@ -286,7 +286,7 @@ app.mapSimulationView = Backbone.View.extend({
                         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
                             featureProjection: 'EPSG:3857'
                         });
-                        if (element.attributes.type == 6) {
+                        if (element.attributes.type == 6 || element.attributes.type == 7) {
                             self.vectorSource2.addFeature(newfeature);
                         } else {
                             self.vectorSource.addFeature(newfeature);
@@ -571,6 +571,24 @@ app.mapSimulationView = Backbone.View.extend({
                         opacity: 1,
                         scale: 0.3 / resolution,
                         //scale: 1.5,
+                        src: url,
+                        rotation: angle
+                    })
+                });
+                return style;
+                break;
+            case 7:
+                //TRUCK
+                var url = 'assets/img/truck.png';
+                var angle = feature.getProperties().angle;
+                var style = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        anchor: [0.5, 0.5],
+                        size: [30, 60],
+                        offset: [0, 0],
+                        opacity: 1,
+                        scale: 0.3 / resolution,
+                        //scale: 1,
                         src: url,
                         rotation: angle
                     })
