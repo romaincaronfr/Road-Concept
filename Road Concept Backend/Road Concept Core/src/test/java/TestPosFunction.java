@@ -120,21 +120,21 @@ public class TestPosFunction {
 
         Ps = Pf1.getInterPos(Pf2, 1, -1);
 
-        Assert.assertEquals(-1, Ps[0], 0.00000001);
+        Assert.assertEquals(1, Ps[0], 0.00000001);
         Assert.assertEquals(Ps[1], Ps[0], 0.00000001);
 
         Assert.assertEquals(Pf1.get(Ps[0], 1), Pf2.get(Ps[1], -1));
 
         Ps = Pf1.getInterPos(Pf2, -1, 1);
 
-        Assert.assertEquals(1, Ps[0], 0.00000001);
+        Assert.assertEquals(-1, Ps[0], 0.00000001);
         Assert.assertEquals(Ps[0], Ps[1], 0.00000001);
 
         Assert.assertEquals(Pf1.get(Ps[0], -1), Pf2.get(Ps[1], 1));
 
         Ps = Pf1.getInterPos(Pf2, 0, 1);
 
-        Assert.assertEquals(1, Ps[0], 0.00000001);
+        Assert.assertEquals(-1, Ps[0], 0.00000001);
         Assert.assertEquals(0, Ps[1], 0.00000001);
 
         Assert.assertEquals(Pf1.get(Ps[0], 0), Pf2.get(Ps[1], 1));

@@ -10,7 +10,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 100;
+        int vehicleNumber = 1000;
 
         Position C = Sim.getPositionManager().addPosition(40, 0);
         Position D = Sim.getPositionManager().addPosition(40.1, 0);
@@ -52,7 +52,7 @@ public class TestSimulator {
 
         Sim.getVehicleManager().setLivingArea(id1);
         Sim.getVehicleManager().setWorkingArea(id6);
-        Sim.getVehicleManager().createTrafficGenerator(3600,30000,vehicleNumber,0);
+        Sim.getVehicleManager().createTrafficGenerator(3600,36000,vehicleNumber,70);
 
         try {
             Thread.sleep(1000);
@@ -67,6 +67,7 @@ public class TestSimulator {
         while (Sim.getProgress() < 1) {
             System.out.println("Sim time: " + Sim.getDuration());
             System.out.println("Sim progress: " + Tools.round(100 * Sim.getProgress(), 3));
+            System.out.println("Active vehicles: " + Sim.getVehicleManager().getVehiclesNumber());
             System.out.println("------------------------------------------------");
             try {
                 Thread.sleep(500);

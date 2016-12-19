@@ -23,8 +23,8 @@ public class PosFunction {
         blon = P1.getLongitude();
         alon = (P2.getLongitude() - P1.getLongitude()) / length;
 
-        clat = alon;
-        clon = -alat;
+        clat = -alon;
+        clon = alat;
     }
 
     public Position get(double pos) {
@@ -35,7 +35,7 @@ public class PosFunction {
         double lat = alat * pos + blat + clat * wpos;
         double lon = alon * pos + blon + clon * wpos;
         if (Double.isNaN(lat) || Double.isNaN(lon)) {
-            LOGGER.debug("out of bound");
+            LOGGER.error("position out of bound");
         }
         return new Position(lon, lat);
     }
