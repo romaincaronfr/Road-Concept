@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.roadElements;
 
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class Lane {
     private double width;
     private List<SimpleTrajectory> trajectories; //rigth side (0) << left side
 
-    Lane(RoadSection myRoadSection, double length) {
+    public Lane(RoadSection myRoadSection, double length) {
         this.length = Math.abs(length);
         width = 3.5;
         trajectories = new ArrayList<>();

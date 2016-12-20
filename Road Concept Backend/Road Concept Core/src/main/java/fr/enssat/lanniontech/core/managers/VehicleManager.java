@@ -6,8 +6,8 @@ import fr.enssat.lanniontech.core.generators.VehicleKernel;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
-import fr.enssat.lanniontech.core.roadElements.Road;
-import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 

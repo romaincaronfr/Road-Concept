@@ -1,29 +1,25 @@
-package fr.enssat.lanniontech.core.roadElements;
+package fr.enssat.lanniontech.core.roadElements.roads;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Road {
+public abstract class Road {
     private UUID id;
-    private List<RoadSection> sections;
     private double length;
     private double timeWeigth;
     private Position A;
     private Position B;
     private int maxSpeed;
-    private boolean oneWay;
-
-    //    public Road(UUID id) {
-    //        this(id, 50, false);
-    //    }
+    protected List<RoadSection> sections;
 
     public Road(UUID id, int maxSpeed, boolean oneWay) {
         this.id = id;
         this.maxSpeed = maxSpeed;
-        this.oneWay = oneWay;
         this.sections = new ArrayList<>();
         this.length = 0;
         this.timeWeigth = 0;
@@ -60,10 +56,6 @@ public class Road {
         updateRoad();
     }
 
-    public RoadSection get(int i) {
-        return sections.get(i);
-    }
-
     public int size() {
         return sections.size();
     }
@@ -96,4 +88,6 @@ public class Road {
         congestion *= 100;
         return congestion.intValue();
     }
+
+    public abstract RoadSection get(int i);
 }

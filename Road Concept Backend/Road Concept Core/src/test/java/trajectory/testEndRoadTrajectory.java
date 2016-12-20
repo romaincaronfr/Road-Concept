@@ -2,8 +2,8 @@ package trajectory;
 
 
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.Road;
-import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;

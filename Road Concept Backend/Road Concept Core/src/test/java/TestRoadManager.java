@@ -1,7 +1,7 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.Road;
-import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import org.junit.Assert;
 import org.junit.Test;
 

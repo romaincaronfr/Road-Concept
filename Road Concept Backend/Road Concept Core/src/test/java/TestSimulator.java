@@ -1,7 +1,6 @@
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.Tools;
 import fr.enssat.lanniontech.core.positioning.Position;
-import fr.enssat.lanniontech.core.roadElements.Road;
 
 import java.util.UUID;
 
@@ -30,7 +29,7 @@ public class TestSimulator {
         UUID id5 = UUID.fromString("0-0-0-0-5");
         UUID id6 = UUID.fromString("0-0-0-0-6");
 
-        Road R = Sim.getRoadManager().addRoadSectionToRoad(A, B, id1, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(A, B, id1, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(B, C, id1, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(C, D, id1, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(D, A, id2, 50, false);

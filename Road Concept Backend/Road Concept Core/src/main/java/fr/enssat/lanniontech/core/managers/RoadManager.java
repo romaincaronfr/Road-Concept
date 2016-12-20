@@ -2,8 +2,10 @@ package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
-import fr.enssat.lanniontech.core.roadElements.Road;
-import fr.enssat.lanniontech.core.roadElements.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
@@ -42,7 +44,7 @@ public class RoadManager {
      * create and assemble the road section to its Road
      */
     public RoadSection addRoadSection(Position A, Position B, Road myRoad) {
-        RoadSection RS1 = new RoadSection(A, B, myRoad);
+        RoadSection RS1 = new DualWayRoadSection(A, B, myRoad);
 
         roadSections.add(RS1);
         assembleRoadSections(RS1, A, myRoad);
@@ -55,7 +57,7 @@ public class RoadManager {
      * Create and add a RoadSection from the specified positions to the specified Road
      */
     public Road addRoadSectionToRoad(Position A, Position B, UUID id, int maxSpeed, boolean oneWay) {
-        Road R = roads.computeIfAbsent(id, k -> new Road(id, maxSpeed, oneWay));
+        Road R = roads.computeIfAbsent(id, k -> new DualWayRoad(id, maxSpeed));
         R.addSection(addRoadSection(A, B, R));
         return R;
     }
@@ -81,7 +83,7 @@ public class RoadManager {
     /**
      * assemble the lanes of the both roadsections RS1 & RS2 on the position P
      */
-    private void fuseRoadsSection(RoadSection RS1, RoadSection RS2, Position P) {
+    private void fuseRoadsSection(DualWayRoadSection RS1, DualWayRoadSection RS2, Position P) {
         RS1.getLeftLane(P).setNextLane(RS2.getRightLane(P));
         RS2.getLeftLane(P).setNextLane(RS1.getRightLane(P));
         assembleLanes(RS1.getLeftLane(P), RS2.getRightLane(P));
