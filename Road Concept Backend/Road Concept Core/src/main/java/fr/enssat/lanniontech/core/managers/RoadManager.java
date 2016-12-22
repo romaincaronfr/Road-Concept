@@ -182,6 +182,9 @@ public class RoadManager {
         }
         LOGGER.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
+        intersectionProblems = checkIntersections();
+        LOGGER.debug("integrity check result for intersections(" + intersectionMap.size() + "): " + intersectionProblems);
+
         for (EndRoadTrajectory trajectory : deadEnds) {
             if (trajectory.getLength() < 0) {
                 deadEndProblems++;
@@ -255,6 +258,17 @@ public class RoadManager {
         LOGGER.debug(" trajectories not reached: " + notExploredTrajetories);
 
         return notExploredTrajetories;
+    }
+
+    private int checkIntersections(){
+        int res = 0;
+        for (Intersection I :intersectionMap.values()){
+            if(I.getIncommingSize() < 2 || I.getOutgoingSize() < 2){
+                res ++;
+                LOGGER.error("intersection is too small");
+            }
+        }
+        return res;
     }
 
     //GETTERS

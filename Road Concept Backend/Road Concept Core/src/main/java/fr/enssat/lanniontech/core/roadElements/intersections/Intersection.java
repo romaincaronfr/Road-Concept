@@ -68,12 +68,12 @@ public class Intersection {
         return true;
     }
 
-    public int getTrajectoriesSize() {
-        int s = 0;
-        for (UUID uuid : trajectories.keySet()) {
-            s += trajectories.get(uuid).size();
-        }
-        return s;
+    public int getIncommingSize() {
+        return incomingTrajectories.size();
+    }
+
+    public int getOutgoingSize(){
+        return outgoingTrajectories.size();
     }
 
     public List<SimpleTrajectory> getTrajectories() {
