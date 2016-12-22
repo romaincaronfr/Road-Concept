@@ -2,6 +2,7 @@ import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,7 +57,8 @@ public class TestPathFinder {
 
         PathFinder pathFinder = new PathFinder(simulator.getRoadManager());
 
-        Trajectory startTrajectory = simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
+        DualWayRoadSection roadSection = (DualWayRoadSection) simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0);
+        Trajectory startTrajectory = roadSection.getLaneAB().getInsertTrajectory();
 
         for (int i = 0; i < 10; i++) {
             Path testPath = pathFinder.getRandomPath(startTrajectory, 10 * i);
@@ -72,7 +74,8 @@ public class TestPathFinder {
 
         PathFinder pathFinder = new PathFinder(simulator.getRoadManager());
 
-        Trajectory startTrajectory = simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0).getLaneAB().getInsertTrajectory();
+        DualWayRoadSection roadSection = (DualWayRoadSection) simulator.getRoadManager().getRoad(UUID.fromString("0-0-0-0-6")).get(0);
+        Trajectory startTrajectory = roadSection.getLaneAB().getInsertTrajectory();
 
         Path testPath = null;
 

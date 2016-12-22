@@ -6,6 +6,9 @@ import fr.enssat.lanniontech.core.generators.VehicleKernel;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
@@ -90,10 +93,14 @@ public class VehicleManager {
     private boolean addVehicle(VehicleKernel kernel, Road start, Road stop) {
         RoadSection Rs = start.get(gen.nextInt(start.size()));
         Lane startingLane;
-        if (gen.nextBoolean()) {
-            startingLane = Rs.getLaneAB();
-        } else {
-            startingLane = Rs.getLaneBA();
+        if(Rs instanceof DualWayRoadSection) {
+            if (gen.nextBoolean()) {
+                startingLane = ((DualWayRoadSection)Rs).getLaneAB();
+            } else {
+                startingLane = ((DualWayRoadSection)Rs).getLaneBA();
+            }
+        }else{
+            startingLane = ((OneWayRoadSection)Rs).getLane();
         }
 
         double startingPos = gen.nextInt((int) startingLane.getLength());

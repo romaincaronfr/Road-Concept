@@ -13,6 +13,26 @@ public class OneWayRoadSection extends RoadSection {
         lane = new Lane(this,0);
     }
 
+    public Lane getLane() {
+        return lane;
+    }
+
+    @Override
+    public Lane getInputLane(Position P) {
+        if(P == A){
+            return lane;
+        }
+        return null;
+    }
+
+    @Override
+    public Lane getOutputLane(Position P) {
+        if(P == B){
+            return lane;
+        }
+        return null;
+    }
+
     @Override
     public double getCongestion() {
         return lane.getCongestion();

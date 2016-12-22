@@ -57,10 +57,14 @@ public class Intersection {
         if (Rs.getA() != P && Rs.getB() != P) {
             return false;
         }
-        Lane incomingLane = Rs.getLeftLane(P);
-        Lane outgoingLane = Rs.getRightLane(P);
-        incomingTrajectories.add(incomingLane.getInsertTrajectory());
-        outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
+        Lane incomingLane = Rs.getOutputLane(P);
+        Lane outgoingLane = Rs.getInputLane(P);
+        if(incomingLane != null){
+            incomingTrajectories.add(incomingLane.getInsertTrajectory());
+        }
+        if(outgoingLane != null){
+            outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
+        }
         return true;
     }
 

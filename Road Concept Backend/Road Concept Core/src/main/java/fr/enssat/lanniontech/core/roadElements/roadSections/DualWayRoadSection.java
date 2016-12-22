@@ -15,7 +15,8 @@ public class DualWayRoadSection extends RoadSection{
         laneBA = new Lane(this, -length);
     }
 
-    public Lane getRightLane(Position P) {
+    @Override
+    public Lane getInputLane(Position P) {
         if (P == A) {
             return laneAB;
         } else {
@@ -23,7 +24,8 @@ public class DualWayRoadSection extends RoadSection{
         }
     }
 
-    public Lane getLeftLane(Position P) {
+    @Override
+    public Lane getOutputLane(Position P) {
         if (P == B) {
             return laneAB;
         } else {

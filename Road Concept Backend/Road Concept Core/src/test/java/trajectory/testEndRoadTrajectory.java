@@ -2,6 +2,8 @@ package trajectory;
 
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
@@ -19,7 +21,7 @@ public class testEndRoadTrajectory {
         Position A = new Position(0, 0);
         Position B = new Position(0, 1);
 
-        RoadSection RS = new RoadSection(A, B, new Road(UUID.randomUUID(), 50, false));
+        DualWayRoadSection RS = new DualWayRoadSection(A, B, new DualWayRoad(UUID.randomUUID(), 50));
 
         Assert.assertNull(RS.getLaneAB().getInsertTrajectory().getNext());
         Assert.assertNull(RS.getLaneBA().getInsertTrajectory().getNext());

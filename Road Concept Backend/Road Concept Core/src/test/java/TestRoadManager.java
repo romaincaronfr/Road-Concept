@@ -1,5 +1,7 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import org.junit.Assert;
@@ -16,10 +18,10 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
-        Road R = new Road(UUID.randomUUID(), 50, false);
+        Road R = new OneWayRoad(UUID.randomUUID(), 50);
 
-        RoadSection RS1 = RM.addRoadSection(A, B, R);
-        RoadSection RS2 = RM.addRoadSection(B, C, R);
+        DualWayRoadSection RS1 = (DualWayRoadSection) RM.addRoadSection(A, B, R);
+        DualWayRoadSection RS2 = (DualWayRoadSection) RM.addRoadSection(B, C, R);
 
         Assert.assertTrue(RS1.getLaneAB().getNextLane() == RS2.getLaneAB());
         Assert.assertTrue(RS2.getLaneBA().getNextLane() == RS1.getLaneBA());
@@ -33,10 +35,10 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
-        Road R = new Road(UUID.randomUUID(), 50, false);
+        Road R = new OneWayRoad(UUID.randomUUID(), 50);
 
-        RoadSection RS1 = RM.addRoadSection(A, B, R);
-        RoadSection RS2 = RM.addRoadSection(C, A, R);
+        DualWayRoadSection RS1 = (DualWayRoadSection) RM.addRoadSection(A, B, R);
+        DualWayRoadSection RS2 = (DualWayRoadSection) RM.addRoadSection(C, A, R);
 
         Assert.assertTrue(RS2.getLaneAB().getNextLane() == RS1.getLaneAB());
         Assert.assertTrue(RS1.getLaneBA().getNextLane() == RS2.getLaneBA());
