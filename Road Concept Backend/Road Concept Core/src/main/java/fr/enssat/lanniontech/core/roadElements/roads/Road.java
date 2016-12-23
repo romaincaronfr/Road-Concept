@@ -90,4 +90,8 @@ public abstract class Road {
     }
 
     public abstract RoadSection get(int i);
+
+    public int getMaxSpeed() {
+        return maxSpeed;
+    }
 }

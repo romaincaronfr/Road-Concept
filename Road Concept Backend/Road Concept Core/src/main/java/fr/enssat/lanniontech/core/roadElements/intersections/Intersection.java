@@ -18,6 +18,7 @@ public class Intersection {
     private List<SimpleTrajectory> incomingTrajectories;
     private List<SimpleTrajectory> outgoingTrajectories;
     private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
+    private boolean valid;
     //structure is <source ,<destination, destinationTrajectory>>
 
     public Intersection(Position P) {
@@ -25,6 +26,7 @@ public class Intersection {
         incomingTrajectories = new ArrayList<>();
         outgoingTrajectories = new ArrayList<>();
         trajectories = new HashMap<>();
+        valid = true;
     }
 
     /**
@@ -34,8 +36,10 @@ public class Intersection {
         for (SimpleTrajectory source : incomingTrajectories) {
             //create the entry in the trajectories table
             Map<UUID, SimpleTrajectory> myTrajectories = new HashMap<>();
+            boolean valid = false;
             for (SimpleTrajectory destination : outgoingTrajectories) {
                 if (source.getRoadId() != destination.getRoadId()) {
+                    valid = true;
                     myTrajectories.put(destination.getRoadId(), destination);
 
                     TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
@@ -46,6 +50,7 @@ public class Intersection {
                     destination.setSourceIntersection(this);
                 }
             }
+            this.valid &= valid;
             trajectories.put(source.getRoadId(), myTrajectories);
         }
     }
@@ -92,5 +97,9 @@ public class Intersection {
 
     public Position getP() {
         return P;
+    }
+
+    public boolean isValid(){
+        return valid;
     }
 }

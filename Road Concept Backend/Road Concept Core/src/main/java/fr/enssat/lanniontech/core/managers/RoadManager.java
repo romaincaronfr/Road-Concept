@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
+import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
@@ -44,22 +45,38 @@ public class RoadManager {
     /**
      * create and assemble the road section to its Road
      */
-    public RoadSection addRoadSection(Position A, Position B, Road myRoad) {
-        RoadSection RS1 = new DualWayRoadSection(A, B, myRoad);
+    public RoadSection addDualWayRoadSection(Position A, Position B, Road myRoad) {
+        DualWayRoadSection RS = new DualWayRoadSection(A, B, myRoad);
 
-        roadSections.add(RS1);
-        assembleDualWayRoadSections(RS1, A, myRoad);
-        assembleDualWayRoadSections(RS1, B, myRoad);
+        roadSections.add(RS);
+        assembleDualWayRoadSections(RS, A, myRoad);
+        assembleDualWayRoadSections(RS, B, myRoad);
 
-        return RS1;
+        return RS;
+    }
+
+    private RoadSection addOneWayRoadSection(Position A, Position B, Road myRoad){
+        OneWayRoadSection RS = new OneWayRoadSection(A, B, myRoad);
+
+        roadSections.add(RS);
+        assembleOneWayRoadSections(RS, A, myRoad);
+        assembleOneWayRoadSections(RS, B, myRoad);
+
+        return RS;
     }
 
     /**
      * Create and add a RoadSection from the specified positions to the specified Road
      */
     public Road addRoadSectionToRoad(Position A, Position B, UUID id, int maxSpeed, boolean oneWay) {
-        Road R = roads.computeIfAbsent(id, k -> new DualWayRoad(id, maxSpeed));
-        R.addSection(addRoadSection(A, B, R));
+        Road R;
+        if(oneWay){
+            R = roads.computeIfAbsent(id, k -> new OneWayRoad(id, maxSpeed));
+            R.addSection(addOneWayRoadSection(A,B,R));
+        }else {
+            R = roads.computeIfAbsent(id, k -> new DualWayRoad(id, maxSpeed));
+            R.addSection(addDualWayRoadSection(A, B, R));
+        }
         return R;
     }
 
@@ -70,7 +87,22 @@ public class RoadManager {
         if (roadEdges.containsKey(P)) {
             if (roadEdges.get(P).size() == 1 && roadEdges.get(P).get(0).getMyRoad() == myRoad) {
                 RoadSection Rs2 = roadEdges.get(P).get(0);
-                fuseDualWayRoadsSection((DualWayRoadSection)Rs1, (DualWayRoadSection)Rs2, P);
+                fuseDualWayRoadSection((DualWayRoadSection)Rs1, (DualWayRoadSection)Rs2, P);
+                roadEdges.remove(P);
+            } else {
+                roadEdges.get(P).add(Rs1);
+            }
+        } else {
+            roadEdges.put(P, new ArrayList<>());
+            roadEdges.get(P).add(Rs1);
+        }
+    }
+
+    private void assembleOneWayRoadSections(OneWayRoadSection Rs1, Position P, Road myRoad) {
+        if (roadEdges.containsKey(P)) {
+            if (roadEdges.get(P).size() == 1 && roadEdges.get(P).get(0).getMyRoad() == myRoad) {
+                OneWayRoadSection Rs2 = (OneWayRoadSection) roadEdges.get(P).get(0);
+                fuseOneWayRoadSection(Rs1, Rs2, P);
                 roadEdges.remove(P);
             } else {
                 roadEdges.get(P).add(Rs1);
@@ -84,11 +116,23 @@ public class RoadManager {
     /**
      * assemble the lanes of the both roadsections RS1 & RS2 on the position P
      */
-    private void fuseDualWayRoadsSection(DualWayRoadSection RS1, DualWayRoadSection RS2, Position P) {
+    private void fuseDualWayRoadSection(DualWayRoadSection RS1, DualWayRoadSection RS2, Position P) {
             RS1.getOutputLane(P).setNextLane(RS2.getInputLane(P));
             RS2.getOutputLane(P).setNextLane(RS1.getInputLane(P));
             assembleLanes(RS1.getOutputLane(P), RS2.getInputLane(P));
             assembleLanes(RS2.getOutputLane(P), RS1.getInputLane(P));
+    }
+
+    private void fuseOneWayRoadSection(OneWayRoadSection RS1, OneWayRoadSection RS2, Position P) {
+        Lane L1 = RS1.getOutputLane(P);
+        Lane L2 = RS2.getInputLane(P);
+        if(L1 == null){
+            L1 = RS2.getOutputLane(P);
+            L2 = RS1.getInputLane(P);
+        }
+
+        L1.setNextLane(L2);
+        assembleLanes(L1, L2);
     }
 
     //TRAJECTORIES ASSEMBLY
@@ -100,7 +144,11 @@ public class RoadManager {
         for (Position P : roadEdges.keySet()) {
             if (roadEdges.get(P).size() == 1) {
                 closeEdge(P);
-            } else {
+            }
+        }
+
+        for (Position P : roadEdges.keySet()) {
+            if (roadEdges.get(P).size() > 1) {
                 createIntersection(P);
             }
         }
@@ -117,26 +165,43 @@ public class RoadManager {
 
     private void closeEdge(Position P) {
         RoadSection r = roadEdges.get(P).get(0);
-        if(r instanceof DualWayRoadSection) {
-            SimpleTrajectory source = r.getOutputLane(P).getInsertTrajectory();
-            SimpleTrajectory destination = r.getInputLane(P).getInsertTrajectory();
-            EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
-
-            TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd, source.getStop(), 0);
-            source.addDestination(junction);
-            deadEnd.setSource(junction);
-
-            junction = new TrajectoryJunction(deadEnd, destination, deadEnd.getLength(), destination.getStart());
-            destination.addSource(junction);
-            deadEnd.setDestination(junction);
-
-            source.setDestinationType(TrajectoryEndType.DEAD_END);
-            destination.setSourceType(TrajectoryEndType.DEAD_END);
-
-            deadEnds.add(deadEnd);
+        if(r instanceof OneWayRoadSection) {
+            transformAsDeadEnd(r.getMyRoad());
+            r = roadEdges.get(P).get(0);
         }
-        else{
-            LOGGER.error("impossible to close " + r.getMyRoad().getId());
+        SimpleTrajectory source = r.getOutputLane(P).getInsertTrajectory();
+        SimpleTrajectory destination = r.getInputLane(P).getInsertTrajectory();
+        EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
+
+        TrajectoryJunction junction = new TrajectoryJunction(source, deadEnd, source.getStop(), 0);
+        source.addDestination(junction);
+        deadEnd.setSource(junction);
+
+        junction = new TrajectoryJunction(deadEnd, destination, deadEnd.getLength(), destination.getStart());
+        destination.addSource(junction);
+        deadEnd.setDestination(junction);
+
+        source.setDestinationType(TrajectoryEndType.DEAD_END);
+        destination.setSourceType(TrajectoryEndType.DEAD_END);
+
+        deadEnds.add(deadEnd);
+    }
+
+    private void transformAsDeadEnd(Road myRoad){
+        List<Position> positions = new ArrayList<>();
+        int i;
+        positions.add(myRoad.getA());
+        for (i = 0; i < myRoad.size(); i++) {
+            roadSections.remove(myRoad.get(i));
+            positions.add(myRoad.get(i).getB());
+        }
+
+        roads.remove(myRoad.getId());
+        roadEdges.get(myRoad.getA()).remove(myRoad.get(0));
+        roadEdges.get(myRoad.getB()).remove(myRoad.get(myRoad.size()-1));
+
+        for ( i = 1; i < positions.size(); i++) {
+            addRoadSectionToRoad(positions.get(i-1),positions.get(i),myRoad.getId(),myRoad.getMaxSpeed(),false);
         }
     }
 
@@ -263,9 +328,8 @@ public class RoadManager {
     private int checkIntersections(){
         int res = 0;
         for (Intersection I :intersectionMap.values()){
-            if(I.getIncommingSize() < 2 || I.getOutgoingSize() < 2){
-                res ++;
-                LOGGER.error("intersection is too small");
+            if(!I.isValid()){
+                res ++ ;
             }
         }
         return res;

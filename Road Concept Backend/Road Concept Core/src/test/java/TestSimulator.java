@@ -9,7 +9,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 1000;
+        int vehicleNumber = 1;
 
         Position C = Sim.getPositionManager().addPosition(40, 0);
         Position D = Sim.getPositionManager().addPosition(40.1, 0);
@@ -21,6 +21,7 @@ public class TestSimulator {
         Position G0 = Sim.getPositionManager().addPosition(40.1, 0.2);
         Position G1 = Sim.getPositionManager().addPosition(40, 0.3);
         Position G2 = Sim.getPositionManager().addPosition(40.2, 0.3);
+        Position H = Sim.getPositionManager().addPosition(40.2, 0.4);
 
         UUID id1 = UUID.fromString("0-0-0-0-1");
         UUID id2 = UUID.fromString("0-0-0-0-2");
@@ -28,6 +29,7 @@ public class TestSimulator {
         UUID id4 = UUID.fromString("0-0-0-0-4");
         UUID id5 = UUID.fromString("0-0-0-0-5");
         UUID id6 = UUID.fromString("0-0-0-0-6");
+        UUID id7 = UUID.fromString("0-0-0-0-7");
 
         Sim.getRoadManager().addRoadSectionToRoad(A, B, id1, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(B, C, id1, 50, false);
@@ -39,6 +41,7 @@ public class TestSimulator {
         Sim.getRoadManager().addRoadSectionToRoad(A, G0, id4, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(G0, G1, id5, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(G0, G2, id6, 50, false);
+        Sim.getRoadManager().addRoadSectionToRoad(G2, H, id7, 50, true);
 
         Sim.getRoadManager().closeRoads();
 
