@@ -153,6 +153,38 @@ app.mapSimulationView = Backbone.View.extend({
         // TODO : remettre le modal d'avertissement à la fin
         // $('#modalAvertissementSimulation').modal('show');
 
+        var info = $('#info');
+        info.tooltip({
+            animation: false,
+            trigger: 'manual'
+        });
+
+        var displayFeatureInfo = function(pixel) {
+            info.css({
+                left: pixel[0] + 'px',
+                top: (pixel[1] - 15) + 'px'
+            });
+            var feature = self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+                return feature;
+            });
+            if (feature && (feature.getProperties().type == 6 || feature.getProperties().type == 7)) {
+                info.tooltip('hide')
+                    .attr('data-original-title', "Cliquez pour visualiser l'itinéraire complet du véhicule")
+                    .tooltip('fixTitle')
+                    .tooltip('show');
+            } else {
+                info.tooltip('hide');
+            }
+        };
+
+        this.map.on('pointermove', function(evt) {
+            if (evt.dragging) {
+                info.tooltip('hide');
+                return;
+            }
+            displayFeatureInfo(self.map.getEventPixel(evt.originalEvent));
+        });
+
         $("#osmSlider").slider({
             orientation: "vertical",
             range: "min",
@@ -469,6 +501,26 @@ app.mapSimulationView = Backbone.View.extend({
         var type = feature.getProperties().type;
         var congestion = feature.getProperties().congestion;
         var color;
+        /*var info = $('#info');
+        var pixel = this.map.getPixelFromCoordinate(feature.getGeometry().getCoordinates());
+
+        info.tooltip({
+            animation: false,
+            trigger: 'manual'
+        });
+        info.css({
+            left: pixel[0] + 'px',
+            top: (pixel[1] - 15) + 'px'
+        });
+
+        if (type == 6 || type == 7) {
+            info.tooltip('hide')
+                .attr('data-original-title', feature.get('id'))
+                .tooltip('fixTitle')
+                .tooltip('show');
+        } else {
+            info.tooltip('hide');
+        }*/
 
         if (congestion < 30) {
             color = [46, 204, 113, 1];
