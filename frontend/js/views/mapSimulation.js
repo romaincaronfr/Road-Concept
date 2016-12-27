@@ -164,7 +164,7 @@ app.mapSimulationView = Backbone.View.extend({
                 left: pixel[0] + 'px',
                 top: (pixel[1] - 15) + 'px'
             });
-            var feature = self.map.forEachFeatureAtPixel(pixel, function(feature, layer) {
+            var feature = self.map.forEachFeatureAtPixel(pixel, function(feature) {
                 return feature;
             });
             if (feature && (feature.getProperties().type == 6 || feature.getProperties().type == 7)) {
