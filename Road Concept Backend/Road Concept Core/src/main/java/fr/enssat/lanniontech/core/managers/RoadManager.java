@@ -81,10 +81,37 @@ public class RoadManager {
         return R;
     }
 
-    public Road addRoundAbout(List<Position>, UUID id){
+    public Road addRoundAbout(List<Position> positions, UUID id){
         RoundAbout R = new RoundAbout(id);
+        List<OneWayRoadSection> sections = new ArrayList<>();
         roads.put(id,R);
-        
+        OneWayRoadSection S0,S1,S2;
+        Position P1 = positions.get(1);
+        Position P2 = positions.get(0);
+        S1 = new OneWayRoadSection(P2,P1,R);
+        S0 = S1;
+
+        sections.add(S1);
+        roadSections.add(S1);
+
+        for (int i = 2; i<positions.size();i++){
+            P2 = positions.get(i);
+            S2 = new OneWayRoadSection(P1,P2,R);
+
+            roadSections.add(S2);
+
+            fuseOneWayRoadSection(S1,S2,P1);
+            P1 = P2;
+            S1 = S2;
+        }
+
+        P2 = positions.get(0);
+        S2 = new OneWayRoadSection(P1,P2,R);
+        roadSections.add(S2);
+
+        fuseOneWayRoadSection(S1,S2,P1);
+        fuseOneWayRoadSection(S2,sections.get(0),P2);
+
         return R;
     }
     /**
