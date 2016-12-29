@@ -2630,7 +2630,6 @@ input[type="search"] {
   }
 }
 .form-group {
-  margin-bottom: 15px;
 }
 .form-group .col-sm-12{
   padding-right: 0;
@@ -5458,6 +5457,17 @@ button.list-group-item-danger.active:focus {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+.panel-body .btn-success {
+  margin-top: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.panel-body .btn-danger {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+ }
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
