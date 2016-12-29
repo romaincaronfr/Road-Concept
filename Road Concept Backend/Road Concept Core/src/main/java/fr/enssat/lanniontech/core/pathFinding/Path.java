@@ -12,16 +12,17 @@ public class Path {
     }
 
     public void addToPath(UUID dest) {
-        path.add(dest);
+        if(path.isEmpty() || path.get(path.size()-1)!=dest){
+            path.add(dest);
+        }
     }
 
-    // FIXME: ON NE FAIT PAS UN CATCH VIDE !!! En plus, y'a des exceptions qui pètent...
     public UUID getStep(int step) {
-        UUID stepUuid = null;
+        UUID stepUuid;
         try {
             stepUuid = path.get(step);
         } catch (Exception e) {
-
+            return null;
         }
         return stepUuid;
     }

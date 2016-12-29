@@ -9,7 +9,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 100;
+        int vehicleNumber = 1000;
 
         Position C = Sim.getPositionManager().addPosition(40, 0);
         Position D = Sim.getPositionManager().addPosition(40.1, 0);
@@ -58,7 +58,7 @@ public class TestSimulator {
         }
 
         Sim.getVehicleManager().setLivingArea(id1);
-        Sim.getVehicleManager().setWorkingArea(id8);
+        Sim.getVehicleManager().setWorkingArea(id6);
         Sim.getVehicleManager().createTrafficGenerator(3600,36000,vehicleNumber,70);
 
         try {

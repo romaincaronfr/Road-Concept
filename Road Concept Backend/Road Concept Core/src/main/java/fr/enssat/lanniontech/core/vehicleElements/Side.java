@@ -45,6 +45,7 @@ public class Side {
         return myVehicle;
     }
 
+    @Deprecated
     public void move(double distance) {
         double pos = myTrajectory.getPos(this.pos + distance);
         if (this.pos > pos) {
