@@ -1,6 +1,5 @@
 package fr.enssat.lanniontech.core.roadElements.roads;
 
-import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
 
 import java.util.UUID;

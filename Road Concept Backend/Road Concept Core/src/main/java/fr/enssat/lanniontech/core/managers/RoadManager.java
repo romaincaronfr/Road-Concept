@@ -9,6 +9,7 @@ import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.roadElements.roads.RoundAbout;
 import fr.enssat.lanniontech.core.trajectory.EndRoadTrajectory;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
@@ -80,6 +81,12 @@ public class RoadManager {
         return R;
     }
 
+    public Road addRoundAbout(List<Position>, UUID id){
+        RoundAbout R = new RoundAbout(id);
+        roads.put(id,R);
+        
+        return R;
+    }
     /**
      * assemble the new RoadSection to the Road on the Position
      */
