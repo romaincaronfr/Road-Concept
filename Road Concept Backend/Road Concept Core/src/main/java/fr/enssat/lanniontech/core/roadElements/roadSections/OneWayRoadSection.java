@@ -10,7 +10,7 @@ public class OneWayRoadSection extends RoadSection {
 
     public OneWayRoadSection(Position A, Position B, Road myRoad){
         super(A, B, myRoad);
-        lane = new Lane(this,0);
+        lane = new Lane(this,length);
     }
 
     public Lane getLane() {

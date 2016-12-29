@@ -9,7 +9,7 @@ public class TestSimulator {
         //simulation init
         Simulator Sim = new Simulator();
 
-        int vehicleNumber = 1;
+        int vehicleNumber = 100;
 
         Position C = Sim.getPositionManager().addPosition(40, 0);
         Position D = Sim.getPositionManager().addPosition(40.1, 0);
@@ -21,7 +21,8 @@ public class TestSimulator {
         Position G0 = Sim.getPositionManager().addPosition(40.1, 0.2);
         Position G1 = Sim.getPositionManager().addPosition(40, 0.3);
         Position G2 = Sim.getPositionManager().addPosition(40.2, 0.3);
-        Position H = Sim.getPositionManager().addPosition(40.2, 0.4);
+        Position H0 = Sim.getPositionManager().addPosition(40.2, 0.4);
+        Position H1 = Sim.getPositionManager().addPosition(40.3, 0.3);
 
         UUID id1 = UUID.fromString("0-0-0-0-1");
         UUID id2 = UUID.fromString("0-0-0-0-2");
@@ -30,6 +31,8 @@ public class TestSimulator {
         UUID id5 = UUID.fromString("0-0-0-0-5");
         UUID id6 = UUID.fromString("0-0-0-0-6");
         UUID id7 = UUID.fromString("0-0-0-0-7");
+        UUID id8 = UUID.fromString("0-0-0-0-8");
+        UUID id9 = UUID.fromString("0-0-0-0-9");
 
         Sim.getRoadManager().addRoadSectionToRoad(A, B, id1, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(B, C, id1, 50, false);
@@ -41,7 +44,9 @@ public class TestSimulator {
         Sim.getRoadManager().addRoadSectionToRoad(A, G0, id4, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(G0, G1, id5, 50, false);
         Sim.getRoadManager().addRoadSectionToRoad(G0, G2, id6, 50, false);
-        Sim.getRoadManager().addRoadSectionToRoad(G2, H, id7, 50, true);
+        Sim.getRoadManager().addRoadSectionToRoad(G2, H0, id7, 50, true);
+        Sim.getRoadManager().addRoadSectionToRoad(H0, H1, id8, 50, true);
+        Sim.getRoadManager().addRoadSectionToRoad(H1, G2, id9, 50, true);
 
         Sim.getRoadManager().closeRoads();
 
@@ -53,7 +58,7 @@ public class TestSimulator {
         }
 
         Sim.getVehicleManager().setLivingArea(id1);
-        Sim.getVehicleManager().setWorkingArea(id6);
+        Sim.getVehicleManager().setWorkingArea(id8);
         Sim.getVehicleManager().createTrafficGenerator(3600,36000,vehicleNumber,70);
 
         try {

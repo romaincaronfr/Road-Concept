@@ -141,14 +141,17 @@ public class RoadManager {
      * check all the roadEdges and crete the right end Type (DeadEnd or Intersection)
      */
     public void closeRoads() {
+        int i = 0;
         for (Position P : roadEdges.keySet()) {
             if (roadEdges.get(P).size() == 1) {
                 RoadSection r = roadEdges.get(P).get(0);
                 if(r instanceof OneWayRoadSection) {
                     transformAsDualWayRoad(r.getMyRoad());
+                    i++;
                 }
             }
         }
+        LOGGER.info("roads transformed : " + i);
 
         for (Position P : roadEdges.keySet()) {
             if (roadEdges.get(P).size() == 1) {
