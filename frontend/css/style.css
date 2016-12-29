@@ -71,13 +71,13 @@ body {
 #osmInfo {
     position: absolute;
     top: 20%;
-    margin-bottom: 70px;
-    right: 10px;
-    width: 30%;
+    right: 0;
+    width: 25%;
     max-height: 60%;
     background-color: #4f5d6b;
     z-index: 999;
     overflow: auto;
+    border-radius: 10px 0 0 10px;
 }
 
 .not-active {

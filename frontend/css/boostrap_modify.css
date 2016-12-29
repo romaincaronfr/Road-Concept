@@ -2559,7 +2559,6 @@ output {
   background-color: #ffffff;
   background-image: none;
   border: 1px solid transparent;
-  border-radius: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
@@ -2632,6 +2631,9 @@ input[type="search"] {
 }
 .form-group {
   margin-bottom: 15px;
+}
+.form-group .col-sm-12{
+  padding-right: 0;
 }
 .radio,
 .checkbox {
@@ -2978,7 +2980,6 @@ select[multiple].input-lg {
 }
 .form-horizontal .form-group {
   margin-left: -15px;
-  margin-right: -15px;
 }
 @media (min-width: 768px) {
   .form-horizontal .control-label {
@@ -5226,20 +5227,18 @@ a.thumbnail.active {
   list-style: none;
 }
 .list-group {
-  margin-bottom: 20px;
   padding-left: 0;
 }
 .list-group-item {
   position: relative;
   display: block;
   padding: 10px 15px;
-  margin-bottom: -1px;
+  margin-bottom: 0;
   background-color: #4e5d6c;
   border: 1px solid transparent;
 }
 .list-group-item:first-child {
   border-top-right-radius: 0;
-  border-top-left-radius: 0;
 }
 .list-group-item:last-child {
   margin-bottom: 0;
@@ -5338,7 +5337,7 @@ button.list-group-item-success.active:focus {
 }
 .list-group-item-info {
   color: #ebebeb;
-  background-color: #5bc0de;
+  background-color: #809dc1;
 }
 a.list-group-item-info,
 button.list-group-item-info {
@@ -5441,12 +5440,30 @@ button.list-group-item-danger.active:focus {
 }
 .panel-body {
   padding: 15px;
+  padding-right: 0;
+}
+.panel-body .list-group-item-info {
+  border-top-left-radius: 10px;
+}
+.panel-body .form-control {
+  border-bottom-left-radius: 10px;
+  background-color: #ebebeb;
+}
+.panel-body p.list-group-item {
+  background-color: #ebebeb;
+  color: #2b3e50;
+  border-bottom-left-radius: 10px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
   border-top-right-radius: -1;
   border-top-left-radius: -1;
+  text-align: center;
 }
 .panel-heading > .dropdown .dropdown-toggle {
   color: inherit;
@@ -5667,6 +5684,7 @@ button.list-group-item-danger.active:focus {
   border-bottom: 1px solid transparent;
 }
 .panel-default {
+  margin-bottom: 0px;
   border-color: transparent;
 }
 .panel-default > .panel-heading {
