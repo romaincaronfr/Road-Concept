@@ -94,7 +94,7 @@ public class VehicleManager {
         RoadSection Rs = start.get(gen.nextInt(start.size()));
         Lane startingLane;
         if(Rs instanceof DualWayRoadSection) {
-            if (gen.nextBoolean()) {
+            if (true) {
                 startingLane = ((DualWayRoadSection)Rs).getLaneAB();
             } else {
                 startingLane = ((DualWayRoadSection)Rs).getLaneBA();

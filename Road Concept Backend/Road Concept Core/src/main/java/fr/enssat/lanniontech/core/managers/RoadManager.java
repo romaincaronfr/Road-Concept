@@ -143,12 +143,17 @@ public class RoadManager {
     public void closeRoads() {
         for (Position P : roadEdges.keySet()) {
             if (roadEdges.get(P).size() == 1) {
-                closeEdge(P);
+                RoadSection r = roadEdges.get(P).get(0);
+                if(r instanceof OneWayRoadSection) {
+                    transformAsDualWayRoad(r.getMyRoad());
+                }
             }
         }
 
         for (Position P : roadEdges.keySet()) {
-            if (roadEdges.get(P).size() > 1) {
+            if (roadEdges.get(P).size() == 1) {
+                closeEdge(P);
+            }else{
                 createIntersection(P);
             }
         }
@@ -165,10 +170,6 @@ public class RoadManager {
 
     private void closeEdge(Position P) {
         RoadSection r = roadEdges.get(P).get(0);
-        if(r instanceof OneWayRoadSection) {
-            transformAsDeadEnd(r.getMyRoad());
-            r = roadEdges.get(P).get(0);
-        }
         SimpleTrajectory source = r.getOutputLane(P).getInsertTrajectory();
         SimpleTrajectory destination = r.getInputLane(P).getInsertTrajectory();
         EndRoadTrajectory deadEnd = new EndRoadTrajectory(source, destination, source.getRoadId());
@@ -187,7 +188,7 @@ public class RoadManager {
         deadEnds.add(deadEnd);
     }
 
-    private void transformAsDeadEnd(Road myRoad){
+    private void transformAsDualWayRoad(Road myRoad){
         List<Position> positions = new ArrayList<>();
         int i;
         positions.add(myRoad.getA());
