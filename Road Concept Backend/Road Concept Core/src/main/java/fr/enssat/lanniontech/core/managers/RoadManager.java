@@ -19,11 +19,7 @@ import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 
 public class RoadManager {
@@ -154,7 +150,13 @@ public class RoadManager {
         }
 
         int i = 0;
+        List<Position> positions = new ArrayList<>();
         for (Position P : roadEdges.keySet()) {
+            positions.add(P);
+        }
+
+        i=0;
+        for (Position P : positions) {
             if (roadEdges.get(P).size() == 1) {
                 RoadSection r = roadEdges.get(P).get(0);
                 if(r instanceof OneWayRoadSection) {
@@ -165,7 +167,7 @@ public class RoadManager {
         }
         LOGGER.info("roads transformed : " + i);
 
-        for (Position P : roadEdges.keySet()) {
+        for (Position P : positions) {
             if (roadEdges.get(P).size() == 1) {
                 closeEdge(P);
             }else{
