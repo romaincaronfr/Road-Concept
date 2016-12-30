@@ -129,36 +129,39 @@ public class SimulatorService extends AbstractService implements Observer {
         for (Feature feature : features) {
             if (feature.getGeometry() instanceof LineString) {
                 LineString road = (LineString) feature.getGeometry();
-                Coordinates last = road.getCoordinates().get(0);
-                List<Position> roundaboutPositions = new ArrayList<>();
 
-                if (feature.isRoundabout()) {
-                    roundaboutPositions.add(simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude()));
-                }
+                if(feature.isRoad()){
+                    Coordinates last = road.getCoordinates().get(0);
 
-                for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
-                    Coordinates coordinates = road.getCoordinates().get(i);
-                    Position A = simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude());
-                    Position B = simulation.getSimulator().getPositionManager().addPosition(coordinates.getLongitude(), coordinates.getLatitude());
+                    for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
+                        Coordinates coordinates = road.getCoordinates().get(i);
+                        Position A = simulation.getSimulator().getPositionManager().
+                                addPosition(last.getLongitude(), last.getLatitude());
+                        Position B = simulation.getSimulator().getPositionManager().
+                                addPosition(coordinates.getLongitude(), coordinates.getLatitude());
 
-                    if (feature.isRoundabout()) {
-                        roundaboutPositions.add(B);
+                        int maxSpeed = (int) feature.getProperties().get("maxspeed");
+                        boolean oneWay = computeOneWayFromProperty((String) feature.getProperties().get("oneway"));
+
+                        if (isReverseDrawed((String) feature.getProperties().get("oneway"))) {
+                            Collections.reverse(road.getCoordinates());
+                        }
+
+                        simulation.getSimulator().getRoadManager().
+                                addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
+
+                        last = coordinates;
                     }
 
-                    int maxSpeed = (int) feature.getProperties().get("maxspeed");
-                    boolean oneWay = computeOneWayFromProperty((String) feature.getProperties().get("oneway"));
-
-                    if (isReverseDrawed((String) feature.getProperties().get("oneway"))) {
-                        Collections.reverse(road.getCoordinates());
+                }else if (feature.isRoundabout()) {
+                    List<Position> roundaboutPositions = new ArrayList<>();
+                    for (Coordinates C : road.getCoordinates()){
+                        roundaboutPositions.add(simulation.getSimulator().getPositionManager().
+                                addPosition(C.getLongitude(), C.getLatitude()));
                     }
-                    if (feature.isRoad()) {
-                        simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
-                    }
-                    last = coordinates;
-                }
-                if (feature.isRoundabout()) {
                     simulation.getSimulator().getRoadManager().addRoundAbout(roundaboutPositions, feature.getUuid());
                 }
+
             }
         }
         simulation.getSimulator().getRoadManager().closeRoads();
