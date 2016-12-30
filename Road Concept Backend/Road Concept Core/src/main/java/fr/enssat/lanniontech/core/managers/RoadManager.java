@@ -185,6 +185,7 @@ public class RoadManager {
 
     private void createRoundAbout(UUID id){
         List<Position> positions = roundAbouts.get(id);
+        positions.remove(positions.size()-1);
         RoundAbout R = new RoundAbout(id);
         roads.put(id,R);
 

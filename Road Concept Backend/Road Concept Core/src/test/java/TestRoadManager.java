@@ -61,6 +61,7 @@ public class TestRoadManager {
         list.add(P2);
         list.add(P3);
         list.add(P4);
+        list.add(P1);
 
         UUID id1 = UUID.fromString("0-0-0-0-1");
         UUID id2 = UUID.fromString("0-0-0-0-2");
