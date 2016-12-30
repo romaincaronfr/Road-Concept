@@ -122,6 +122,7 @@ public class MapFeatureRepository extends MapRepository {
                 }
                 return features;
             } catch (Exception e) {
+                e.printStackTrace();
                 throw new DatabaseOperationException("Error while reading JSON from NoSQL database", e);
             }
         }

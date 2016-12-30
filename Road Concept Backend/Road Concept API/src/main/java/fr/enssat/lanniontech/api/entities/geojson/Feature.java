@@ -33,6 +33,7 @@ public class Feature extends GeoJsonObject {
         return geometry instanceof LineString && getType() == FeatureType.ROUNDABOUT;
     }
 
+    @JsonIgnore
     public FeatureType getType() {
         FeatureType type;
         try {
