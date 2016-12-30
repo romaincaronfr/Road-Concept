@@ -1,6 +1,7 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -29,8 +30,6 @@ public class TestIntersection {
         Road R3 = RM.addRoadSectionToRoad(C, I, uuid2, 50, false);
         Road R4 = RM.addRoadSectionToRoad(D, I, uuid3, 50, false);
         Road R5 = RM.addRoadSectionToRoad(E, I, uuid4, 50, false);
-
-
     }
 
 }

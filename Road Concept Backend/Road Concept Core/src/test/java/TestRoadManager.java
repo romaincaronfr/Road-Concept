@@ -54,6 +54,7 @@ public class TestRoadManager {
         Position P2 = new Position(0,1);
         Position P3 = new Position(-1,0);
         Position P4 = new Position(0,-1);
+        Position P0 = new Position(2,0);
 
         List<Position> list = new ArrayList<>();
         list.add(P1);
@@ -61,9 +62,14 @@ public class TestRoadManager {
         list.add(P3);
         list.add(P4);
 
-        UUID id = UUID.fromString("0-0-0-0-1");
+        UUID id1 = UUID.fromString("0-0-0-0-1");
+        UUID id2 = UUID.fromString("0-0-0-0-2");
 
-        RM.addRoundAbout(list,id);
+        RM.addRoundAbout(list,id1);
+
+        RM.addRoadSectionToRoad(P0,P1,id2,50,false);
+
+        RM.closeRoads();
 
         int integrity = RM.checkIntegrity();
 

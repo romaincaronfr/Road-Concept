@@ -15,10 +15,10 @@ import java.util.UUID;
 public class Intersection {
 
     private Position P;
-    private List<SimpleTrajectory> incomingTrajectories;
-    private List<SimpleTrajectory> outgoingTrajectories;
-    private Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
-    private boolean valid;
+    protected List<SimpleTrajectory> incomingTrajectories;
+    protected List<SimpleTrajectory> outgoingTrajectories;
+    protected Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
+    protected boolean valid;
     //structure is <source ,<destination, destinationTrajectory>>
 
     public Intersection(Position P) {

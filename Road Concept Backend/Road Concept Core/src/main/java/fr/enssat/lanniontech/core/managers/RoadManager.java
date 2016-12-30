@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.roadElements.intersections.RoundAboutIO;
 import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
@@ -34,6 +35,7 @@ public class RoadManager {
     private Map<UUID, Road> roads;
     private Map<Position, Intersection> intersectionMap;
     private List<EndRoadTrajectory> deadEnds;
+    private Map<UUID, List<Position>> roundAbouts;
 
     public RoadManager() {
         roadEdges = new HashMap<>();
@@ -41,6 +43,7 @@ public class RoadManager {
         deadEnds = new ArrayList<>();
         roads = new HashMap<>();
         intersectionMap = new HashMap<>();
+        roundAbouts = new HashMap<>();
     }
 
     /**
@@ -81,39 +84,10 @@ public class RoadManager {
         return R;
     }
 
-    public Road addRoundAbout(List<Position> positions, UUID id){
-        RoundAbout R = new RoundAbout(id);
-        List<OneWayRoadSection> sections = new ArrayList<>();
-        roads.put(id,R);
-        OneWayRoadSection S0,S1,S2;
-        Position P1 = positions.get(1);
-        Position P2 = positions.get(0);
-        S1 = new OneWayRoadSection(P2,P1,R);
-        S0 = S1;
-
-        sections.add(S1);
-        roadSections.add(S1);
-
-        for (int i = 2; i<positions.size();i++){
-            P2 = positions.get(i);
-            S2 = new OneWayRoadSection(P1,P2,R);
-
-            roadSections.add(S2);
-
-            fuseOneWayRoadSection(S1,S2,P1);
-            P1 = P2;
-            S1 = S2;
-        }
-
-        P2 = positions.get(0);
-        S2 = new OneWayRoadSection(P1,P2,R);
-        roadSections.add(S2);
-
-        fuseOneWayRoadSection(S1,S2,P1);
-        fuseOneWayRoadSection(S2,sections.get(0),P2);
-
-        return R;
+    public void addRoundAbout(List<Position> positions, UUID id){
+        roundAbouts.put(id,positions);
     }
+
     /**
      * assemble the new RoadSection to the Road on the Position
      */
@@ -175,6 +149,10 @@ public class RoadManager {
      * check all the roadEdges and crete the right end Type (DeadEnd or Intersection)
      */
     public void closeRoads() {
+        for( UUID id: roundAbouts.keySet()){
+            createRoundAbout(id);
+        }
+
         int i = 0;
         for (Position P : roadEdges.keySet()) {
             if (roadEdges.get(P).size() == 1) {
@@ -203,6 +181,62 @@ public class RoadManager {
         }
         intersection.assembleIntersection();
         intersectionMap.put(P, intersection);
+    }
+
+    private void createRoundAbout(UUID id){
+        List<Position> positions = roundAbouts.get(id);
+        RoundAbout R = new RoundAbout(id);
+        roads.put(id,R);
+
+        List<OneWayRoadSection> sections = new ArrayList<>();
+        OneWayRoadSection S;
+
+        //create the structure
+
+        roads.put(id,R);
+        Position P1 = positions.get(1);
+        Position P2 = positions.get(0);
+        S = new OneWayRoadSection(P2, P1, R);
+
+        sections.add(S);
+        roadSections.add(S);
+
+        for (int i = 2; i<positions.size();i++){
+            P2 = positions.get(i);
+            S = new OneWayRoadSection(P1,P2,R);
+            sections.add(S);
+            roadSections.add(S);
+            P1 = P2;
+        }
+
+        P2 = positions.get(0);
+        S = new OneWayRoadSection(P1,P2,R);
+        roadSections.add(S);
+        sections.add(S);
+
+        //assemble the structure
+
+        int j = positions.size()-1;
+        for (int i = 0; i < positions.size(); i++) {
+            if(roadEdges.keySet().contains(positions.get(i))){
+                Intersection intersection = new RoundAboutIO(positions.get(i),id);
+
+                for (RoadSection section : roadEdges.get(positions.get(i))) {
+                    intersection.addRoadSection(section);
+                }
+                intersection.addRoadSection(sections.get(i));
+                intersection.addRoadSection(sections.get(j));
+
+                intersection.assembleIntersection();
+                intersectionMap.put(positions.get(i), intersection);
+
+                roadEdges.remove(positions.get(i));
+            }else {
+                fuseOneWayRoadSection(sections.get(i),sections.get(j),positions.get(i));
+            }
+            j=(j+1)%positions.size();
+        }
+
     }
 
     private void closeEdge(Position P) {
@@ -269,7 +303,6 @@ public class RoadManager {
         //check integrity for simple trajectories
 
         for (RoadSection r : roadSections) {
-
             if(r instanceof DualWayRoadSection){
                 lanesProblems += checkLane(((DualWayRoadSection)r).getLaneAB());
                 lanesProblems += checkLane(((DualWayRoadSection)r).getLaneBA());
@@ -280,8 +313,6 @@ public class RoadManager {
                 lanesProblems += checkLane(((OneWayRoadSection)r).getLane());
                 trajectoryToCheck.put(((OneWayRoadSection)r).getLane().getInsertTrajectory(),false);
             }
-
-
         }
         LOGGER.debug("integrity check result for RoadSections(" + roadSections.size() + "): " + lanesProblems);
 
