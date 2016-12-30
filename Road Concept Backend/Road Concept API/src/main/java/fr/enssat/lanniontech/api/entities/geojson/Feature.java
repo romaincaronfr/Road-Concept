@@ -25,13 +25,22 @@ public class Feature extends GeoJsonObject {
 
     @JsonIgnore
     public boolean isRoad() {
+        return geometry instanceof LineString && getType() != FeatureType.ROUNDABOUT;
+    }
+
+    @JsonIgnore
+    public boolean isRoundabout() {
+        return geometry instanceof LineString && getType() == FeatureType.ROUNDABOUT;
+    }
+
+    public FeatureType getType() {
         FeatureType type;
         try {
             type = (FeatureType) getProperties().get("type"); // from osm
         } catch (ClassCastException e) { //NOSONAR
             type = FeatureType.forValue((Integer) getProperties().get("type")); // created by the user
         }
-        return geometry instanceof LineString && type != FeatureType.ROUNDABOUT;
+        return type;
     }
 
     public Map<String, Object> getProperties() {
