@@ -5,17 +5,18 @@ import fr.enssat.lanniontech.core.exceptions.DestinationUnreachableException;
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class PathFinder {
 
@@ -57,50 +58,55 @@ public class PathFinder {
     public Path getPathTo(Trajectory source, UUID destination, boolean reverse) {
         Path myPath = new Path();
 
-        Intersection start = source.getNextIntersection();
-        Intersection goal;
-        if (reverse) {
-            goal = roadManager.getIntersection(roadManager.getRoad(destination).getB());
-            if (goal == null) {
-                goal = roadManager.getIntersection(roadManager.getRoad(destination).getA());
-            }
-        } else {
-            goal = roadManager.getIntersection(roadManager.getRoad(destination).getA());
-            if (goal == null) {
-                goal = roadManager.getIntersection(roadManager.getRoad(destination).getB());
+        Trajectory goal;
+
+        Road destinationRoad = roadManager.getRoad(destination);
+        RoadSection roadSection = destinationRoad.get(destinationRoad.size()/2);
+        if(roadSection instanceof OneWayRoadSection){
+            goal = ((OneWayRoadSection)roadSection).getLane().getInsertTrajectory();
+        }else {
+            if(reverse){
+                goal = ((DualWayRoadSection)roadSection).getLaneBA().getInsertTrajectory();
+            }else {
+                goal = ((DualWayRoadSection)roadSection).getLaneAB().getInsertTrajectory();
             }
         }
 
         List<Node> openNodes = new LinkedList<>();
-        Map<Intersection, Node> closedNodes = new HashMap<>();
+        Map<Trajectory, Node> closedNodes = new HashMap<>();
         Node finalNode = null;
 
-        Node node = new Node(0, Position.length(start.getP(), goal.getP()), source.getRoadId(),
-                null, start);
+        Node node = new Node(0, Position.length(source.getPosition(), goal.getPosition()),
+                null,source);
         openNodes.add(node);
 
         while (!openNodes.isEmpty() && finalNode == null) {
+            //recupere le node le plus proche
             node = openNodes.get(0);
-            for (Trajectory t : node.getIntersection().getTrajectoriesFrom(node.getSource())) {
-                Intersection I = t.getNextIntersection();
-                double cost = node.getCost() + roadManager.getRoad(t.getRoadId()).getLength();
-                if (!closedNodes.containsKey(I) ||
-                        closedNodes.get(I).getCost() >= cost) {
-                    Node newNode = new Node(cost, Position.length(I.getP(), goal.getP()),
-                            t.getRoadId(), node, I);
-                    int pos = 0;
-                    while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
-                        pos++;
+            openNodes.remove(node);
+            //pour toute les tajectoire de ce node
+            for (TrajectoryJunction tj : node.getTrajectory().getAllNext()) {
+                Trajectory t = tj.getDestination();
+                //on verifie que le node n'a pas deja été exploré
+                if(!closedNodes.keySet().contains(t)){
+                    //calcul du cout du node
+                    double cost = node.getCost() + t.getLength();
+                    //creation du node
+                    Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()),
+                            node, t);
+                    //si la destination est la meme que la trajectoire
+                    if(t==goal){
+                        finalNode = newNode;
+                    }else{
+                        int pos = 0;
+                        while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
+                            pos++;
+                        }
+                        openNodes.add(pos, newNode);
                     }
-                    openNodes.add(pos, newNode);
                 }
-
-                if (t.getRoadId().equals(destination) && node.getIntersection() == goal) {
-                    finalNode = node;
-                }
-                openNodes.remove(node);
-                closedNodes.replace(node.getIntersection(), node);
             }
+            closedNodes.put(node.getTrajectory(),node);
         }
 
         if (finalNode == null) {
@@ -109,7 +115,7 @@ public class PathFinder {
         }
 
         reconstructPath(myPath, finalNode);
-        myPath.addToPath(destination);
+        //myPath.addToPath(destination);
 
         return myPath;
     }
@@ -118,7 +124,7 @@ public class PathFinder {
         if (node.getSourceNode() != null) {
             reconstructPath(myPath, node.getSourceNode());
         }
-        myPath.addToPath(node.getSource());
+        myPath.addToPath(node.getTrajectory().getRoadId());
     }
 
 }

@@ -5,6 +5,8 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,7 +16,7 @@ public class EndRoadTrajectory extends Trajectory {
     private PosFunction pf;
 
     public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination, UUID roadId) {
-        super(roadId);
+        super(roadId,Position.getMean(source.getGPS(source.getStop()),destination.getGPS(0)));
 
         Position A = source.getGPS(source.getStop());
         Position B = destination.getGPS(0);
@@ -114,5 +116,13 @@ public class EndRoadTrajectory extends Trajectory {
     @Override
     public Intersection getNextIntersection() {
         return destination.getDestination().getNextIntersection();
+    }
+
+
+    @Override
+    public List<TrajectoryJunction> getAllNext() {
+        List<TrajectoryJunction> l = new ArrayList<>();
+        l.add(destination);
+        return l;
     }
 }

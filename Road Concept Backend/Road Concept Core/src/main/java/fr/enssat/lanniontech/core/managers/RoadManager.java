@@ -413,6 +413,7 @@ public class RoadManager {
         int res = 0;
         for (Intersection I :intersectionMap.values()){
             if(!I.isValid()){
+                LOGGER.error("corrupted intersection at: " + I.getP());
                 res ++ ;
             }
         }

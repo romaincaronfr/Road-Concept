@@ -12,16 +12,22 @@ import java.util.UUID;
 public abstract class Trajectory {
 
     protected List<Side> vehiclesSides;
+    private Position position;
     protected double length;
     protected double notFreeSpace;
     private List<Integer> loggedVehicles;
     protected UUID roadId;
 
-    public Trajectory(UUID roadId) {
+    public Trajectory(UUID roadId,Position position) {
         loggedVehicles = new ArrayList<>();
         notFreeSpace = 0;
         this.roadId = roadId;
         this.vehiclesSides = new ArrayList<>();
+        this.position = position;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     /**
@@ -97,6 +103,11 @@ public abstract class Trajectory {
     public double getLength() {
         return length;
     }
+
+    /**
+     * return all the destination trajectories
+     */
+    public abstract List<TrajectoryJunction> getAllNext();
 
     /**
      * return the next default trajectory

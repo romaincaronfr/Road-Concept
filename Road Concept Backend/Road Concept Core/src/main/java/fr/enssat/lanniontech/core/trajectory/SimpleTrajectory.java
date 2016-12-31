@@ -7,9 +7,7 @@ import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SimpleTrajectory extends Trajectory {
 
@@ -30,8 +28,8 @@ public class SimpleTrajectory extends Trajectory {
     private Intersection destIntersection;
 
 
-    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId) {
-        super(roadId);
+    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId,Position position) {
+        super(roadId,position);
         sourcesTrajectories = new HashMap<>();
         destinationsTrajectories = new HashMap<>();
         sourceType = TrajectoryEndType.UNDEFINED;
@@ -221,5 +219,14 @@ public class SimpleTrajectory extends Trajectory {
         } else {
             return getNext().getDestination().getNextIntersection();
         }
+    }
+
+    @Override
+    public List<TrajectoryJunction> getAllNext() {
+        List<TrajectoryJunction> destinations = new ArrayList<>();
+        for (TrajectoryJunction junction : destinationsTrajectories.values()){
+            destinations.add(junction);
+        }
+        return destinations;
     }
 }

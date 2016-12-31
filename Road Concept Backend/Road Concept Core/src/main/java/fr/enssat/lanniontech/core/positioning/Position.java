@@ -40,6 +40,10 @@ public class Position {
         return Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude-pos.getLongitude())<E;
     }
 
+    public static Position getMean(Position P1,Position P2){
+        return new Position((P1.getLongitude()+P2.getLongitude())/2,(P1.getLatitude()+P2.getLatitude())/2);
+    }
+
     @Override
     public int hashCode() {
         int result;

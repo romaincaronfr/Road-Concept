@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.roadElements;
 
+import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
@@ -17,9 +18,11 @@ public class Lane {
         width = 3.5;
         trajectories = new ArrayList<>();
         if (length > 0) {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2, myRoadSection.getMyRoad().getId()));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2,
+                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB())));
         } else {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2, myRoadSection.getMyRoad().getId()));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2,
+                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB())));
         }
     }
 
