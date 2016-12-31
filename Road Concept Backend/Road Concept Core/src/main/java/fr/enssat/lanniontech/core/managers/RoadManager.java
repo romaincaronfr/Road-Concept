@@ -69,7 +69,8 @@ public class RoadManager {
      * Create and add a RoadSection from the specified positions to the specified Road
      */
     public Road addRoadSectionToRoad(Position A, Position B, UUID id, int maxSpeed, boolean oneWay) {
-        if(A==B){
+        if(A.equals(B)){
+            LOGGER.error("Dropped section A: " + A + ", B: " + B + ", on road: " + id);
             return null;
         }
         Road R;
@@ -84,6 +85,14 @@ public class RoadManager {
     }
 
     public void addRoundAbout(List<Position> positions, UUID id){
+        int i = 1;
+        while(i<positions.size()){
+            if(positions.get(i)==positions.get(i-1)){
+                positions.remove(i);
+            }else{
+                i++;
+            }
+        }
         roundAbouts.put(id,positions);
     }
 

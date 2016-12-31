@@ -318,16 +318,20 @@ public class MapService extends AbstractService {
         Map<UUID, Feature> tab = new HashMap<>();
         Map<UUID, List<Boolean>> tabBool = new HashMap<>();
 
-        List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
-        Collections.fill(splitNewFeatureAt, Boolean.FALSE);
+        //List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
+        //Collections.fill(splitNewFeatureAt, Boolean.FALSE);
 
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
 
+        //regarde le tableau des intersection potentielles
         for (int i = 0; i < potentialIntersections.size(); i++) {
             if (!potentialIntersections.get(i).isEmpty()) {
 
+                //verifie les potentiele routes intersectée pour le point i
                 for (String uuidToCheck : potentialIntersections.get(i)) {
                     UUID uuid = UUID.fromString(uuidToCheck);
+
+                    //clone la route potentielement coupée
                     if (!tab.containsKey(uuid)) {
                         Feature featureToCheck = getFeature(mapID, uuid);
                         Feature duplicatedFeatureToCheck = GlobalUtils.CLONER.deepClone(featureToCheck);
@@ -337,8 +341,10 @@ public class MapService extends AbstractService {
                         Collections.fill(newList, Boolean.FALSE);
                         tabBool.put(uuid, newList);
                     }
+
                     Feature duplicatedFeatureToCheck = tab.get(uuid);
 
+                    //recup de coordonées
                     LineString coordinaToCheck = (LineString) duplicatedFeatureToCheck.getGeometry();
 
                     for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 1; j++) {
@@ -349,7 +355,7 @@ public class MapService extends AbstractService {
                         firstPointRoadB = new Coordinates(createdRoad.getCoordinates().get(i).getLongitude(), createdRoad.getCoordinates().get(i).getLatitude());
                         boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB);
                         if (intersectionPoint) {
-                            splitNewFeatureAt.set(i, true);
+                            //splitNewFeatureAt.set(i, true);
                             coordinaToCheck.getCoordinates().add(j + 1, createdRoad.getCoordinates().get(i));
                             tabBool.get(uuid).add(j + 1, true);
                             break;

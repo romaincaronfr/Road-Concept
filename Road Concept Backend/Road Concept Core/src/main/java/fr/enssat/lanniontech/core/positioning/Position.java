@@ -4,6 +4,8 @@ import fr.enssat.lanniontech.core.Tools;
 
 public class Position {
 
+    private final double E = 0.00000001;
+
     private Double latitude;
     private Double longitude;
 
@@ -35,15 +37,7 @@ public class Position {
     }
 
     public boolean equals(Position pos) {
-        return latitude.equals(pos.getLatitude()) && longitude.equals(pos.getLongitude());
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        return Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude-pos.getLongitude())<E;
     }
 
     @Override
