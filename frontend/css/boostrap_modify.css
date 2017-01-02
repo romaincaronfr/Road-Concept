@@ -5458,7 +5458,7 @@ button.list-group-item-danger.active:focus {
   -webkit-box-orient: vertical;
 }
 .panel-body .btn-success {
-  margin-top: 15px;
+  margin-top: 20px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
@@ -5468,6 +5468,18 @@ button.list-group-item-danger.active:focus {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
  }
+.panel-body .alert-danger {
+  margin-top: 15px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.panel-body .help-block {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 5%;
+  vertical-align: middle;
+  color: #ebebeb;
+}
 .panel-heading {
   padding: 10px 15px;
   border-bottom: 1px solid transparent;
@@ -5924,6 +5936,9 @@ button.close {
   box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
   background-clip: padding-box;
   outline: 0;
+}
+.modal-content .form-control{
+  margin-top: 5px;
 }
 .modal-backdrop {
   position: fixed;

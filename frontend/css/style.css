@@ -185,6 +185,10 @@ body {
     z-index: 999;
 }
 
+#editBarMenu .text-center{
+    margin-top: 15px;
+}
+
 .glyphicon-refresh-animate {
     -animation: spin .7s infinite linear;
     -webkit-animation: spinWebkit .7s infinite linear;

@@ -1,58 +1,63 @@
-<form class="form-horizontal" style="margin: 4px;">
-    <fieldset>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>Configuration des paramètres du lieu d'habitation</h4>
+        <!--<p class="close close_map_info"aria-label="close" title="close">×</p>-->
+    </div>
 
-        <!-- Form Name -->
-        <legend>Configuration des paramètres du lieu d'habitation</legend>
+    <div class="panel-body">
+        <div class="list-group" id="listInfoMap">
+            <form class="form-horizontal">
+                <fieldset>
+                    <!-- Heure de départ-->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Heure de départ</h4>
+                            <input type="time" value="08:00" id="startHour" class="form-control"/>
+                        </div>
+                    </div>
+                    <!-- Nombre d'habitants-->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Nombre d'habitants*</h4>
+                            <input type="number" min="1" max="1000" id="nbHabit" class="form-control" placeholder="ex : 150">
+                            <p class="help-block">de 1 à 1000</p>
+                        </div>
+                    </div>
+                    <!--Pourcentage de voitures-->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Répartition</h4>
+                            <input type="range" id="carRepart" class="form-control" style="background-color: #0f0f0f">
+                            <p class="help-block" id="percentVal">50% de voitures - 50% de camions</p>
+                        </div>
+                    </div>
 
-        <!-- Heure de départ-->
-        <div class="form-group">
-            <label class="control-label col-sm-2">Heure de départ</label>
-            <div class="input-group date" id="datetimepicker1">
-                <input type="time" value="08:00" id="startHour" class="form-control"/>
-            </div>
-        </div>
-        <!-- Nombre d'habitants-->
-        <div class="form-group">
-            <label class="control-label col-sm-2">Nombre d'habitants*</label>
-            <div class="col-sm-10">
-                <input type="number" min="1" max="1000" id="nbHabit" class="form-control" placeholder="ex : 150">
-                <p class="help-block">de 1 à 1000</p>
-            </div>
-        </div>
-        <!--Pourcentage de voitures-->
-        <div class="form-group">
-            <label class="control-label col-sm-2">Répartition</label>
-            <div class="col-sm-10">
-                <input type="range" id="carRepart" class="form-control">
-                <p class="help-block" id="percentVal">50% de voitures - 50% de camions</p>
-            </div>
-        </div>
+                    <div class="alert alert-danger" id="alertEmptyHabitation" hidden>
+                        Tous les champs ne sont pas remplis !
+                    </div>
 
-        <div class="alert alert-danger" id="alertEmptyHabitation" hidden>
-            Tous les champs ne sont pas remplis !
-        </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-12" style="padding-right: 3%">* Champs obligatoires</label>
+                    </div>
 
-        <div class="form-group">
-            <label class="control-label col-sm-12">* Champs obligatoires</label>
-        </div>
+                    <!-- Envoi -->
+                    <div class="form-group">
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModelSim" aria-label="">
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
 
-        <!-- Envoi -->
-        <div class="form-group">
-            <div class="text-right col-sm-12">
-                <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModelSim" aria-label="">
-                    Enregistrer
-                </button>
-            </div>
+                    <!-- Annuler -->
+                    <div class="form-group" hidden>
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModelSim"
+                                    aria-label="">Annuler
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-
-        <!-- Annuler -->
-        <div class="form-group" hidden>
-            <div class="text-right col-sm-12">
-                <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModelSim"
-                        aria-label="">Annuler
-                </button>
-            </div>
-        </div>
-
-    </fieldset>
-</form>
+    </div>
+</div>

@@ -1,72 +1,75 @@
-<form class="form-horizontal" style="margin: 4px;">
-    <fieldset>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>Initialisation des paramètres de la route</h4>
+        <!--<p class="close close_map_info"aria-label="close" title="close">×</p>-->
+    </div>
 
+    <div class="panel-body">
+        <div class="list-group" id="listInfoMap">
+            <form class="form-horizontal">
+                <fieldset>
+                    <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
 
-        <!-- change col-sm-N to reflect how you would like your column spacing (http://getbootstrap.com/css/#forms-control-sizes) -->
+                    <!-- Fuel UX Select http://getfuelux.com/javascript.html#selectlist -->
+                    <div class="">
+                        <h4 class="list-group-item list-group-item-info">Type</h4>
+                        <select class="form-control" id="selectTypeRoad">
+                            <option value=1>Route simple</option>
+                            <option value=2>Route double</option>
+                            <option value=3>Route triple</option>
+                        </select>
+                    </div>
+                    <!-- Text input http://getbootstrap.com/css/#forms -->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Nom</h4>
+                            <input type="text" class="form-control" id="roadName" placeholder="Nom de la route" required=""
+                                   value="<%= name %>">
+                        </div>
+                    </div>
+                    <!-- Text input http://getbootstrap.com/css/#forms -->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Limitation de vitesse</h4>
+                            <input type="number" class="form-control" id="maxspeedRoad" placeholder="Vitesse" required=""
+                                   value="<%= maxspeed %>">
+                            <p class="help-block">en km/h</p>
+                        </div>
+                    </div>
+                    <div class="">
+                        <h4 class="list-group-item list-group-item-info">Sens unique</h4>
+                        <select class="form-control" id="onwayRoad">
+                            <option value="no">Non</option>
+                            <option value="yes">Oui</option>
+                        </select>
+                    </div>
+                    <div class="hidden" id="wayDiv">
+                        <h4 class="list-group-item list-group-item-info">Sens</h4>
+                        <select class="form-control" id="wayRoad">
+                            <option value="yes">De A vers B</option>
+                            <option value="-1">De B vers A</option>
+                        </select>
+                    </div>
 
+                    <div class="form-group">
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModel" aria-label="">
+                                Enregistrer
+                            </button>
 
-        <!-- Form Name -->
-        <legend>Initialisation des paramètres de la route</legend>
+                        </div>
+                    </div>
 
-        <!-- Fuel UX Select http://getfuelux.com/javascript.html#selectlist -->
-        <div class="">
-            <label for="selectTypeRoad">Type</label>
-            <select class="form-control" id="selectTypeRoad" style="margin-bottom: 6px">
-                <option value=1>Route simple</option>
-                <option value=2>Route double</option>
-                <option value=3>Route triple</option>
-            </select>
+                    <div class="form-group">
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModel"
+                                    aria-label="">Annuler
+                            </button>
+
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
         </div>
-        <!-- Text input http://getbootstrap.com/css/#forms -->
-        <div class="form-group">
-            <label for="roadName" class="control-label col-sm-2">Nom</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="roadName" placeholder="Nom de la route" required=""
-                       value="<%= name %>">
-
-            </div>
-        </div>
-        <!-- Text input http://getbootstrap.com/css/#forms -->
-        <div class="form-group">
-            <label for="maxspeedRoad" class="control-label col-sm-2">Limitation de vitesse</label>
-            <div class="col-sm-10">
-                <input type="number" class="form-control" id="maxspeedRoad" placeholder="Vitesse" required=""
-                       value="<%= maxspeed %>">
-                <p class="help-block">en km/h</p>
-            </div>
-        </div>
-        <div class="">
-            <label for="onwayRoad">Sens unique</label>
-            <select class="form-control" id="onwayRoad" style="margin-bottom: 6px">
-                <option value="no">Non</option>
-                <option value="yes">Oui</option>
-            </select>
-        </div>
-        <div class="hidden" id="wayDiv">
-            <label for="wayRoad">Sens</label>
-            <select class="form-control" id="wayRoad" style="margin-bottom: 6px">
-                <option value="yes">De A vers B</option>
-                <option value="-1">De B vers A</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <div class="text-right col-sm-12">
-                <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModel" aria-label="">
-                    Enregistrer
-                </button>
-
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="text-right col-sm-12">
-                <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModel"
-                        aria-label="">Annuler
-                </button>
-
-            </div>
-        </div>
-
-    </fieldset>
-</form>
+    </div>
+</div>

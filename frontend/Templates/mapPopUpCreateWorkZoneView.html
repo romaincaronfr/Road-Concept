@@ -1,37 +1,42 @@
-<form class="form-horizontal" style="margin: 4px;">
-    <fieldset>
+<div class="panel panel-default">
+    <div class="panel-heading"><h4>Configuration des paramètres du lieu de travail</h4>
+        <!--<p class="close close_map_info"aria-label="close" title="close">×</p>-->
+    </div>
 
-        <!-- Form Name -->
-        <legend>Configuration des paramètres du lieu de travail</legend>
+    <div class="panel-body">
+        <div class="list-group" id="listInfoMap">
+            <form class="form-horizontal">
+                <fieldset>
+                    <!-- Heure de retour-->
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <h4 class="list-group-item list-group-item-info">Heure de retour</h4>
+                            <input type="time" value="18:00" id="returnHour" class="form-control"/>
+                        </div>
+                    </div>
 
-        <!-- Heure de retour-->
-        <div class="form-group">
-            <label class="control-label col-sm-2">Heure de retour</label>
-            <div class="input-group date" id="datetimepicker1">
-                <input type="time" value="18:00" id="returnHour" class="form-control"/>
-            </div>
+                    <div class="alert alert-danger" id="alertEmptyWork" hidden>
+                    </div>
+
+                    <!-- Envoi -->
+                    <div class="form-group">
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModelSim" aria-label="">
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Annuler -->
+                    <div class="form-group" hidden>
+                        <div class="text-right col-sm-12">
+                            <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModelSim"
+                                    aria-label="">Annuler
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-
-        <div class="alert alert-danger" id="alertEmptyWork" hidden>
-        </div>
-
-        <!-- Envoi -->
-        <div class="form-group">
-            <div class="text-right col-sm-12">
-                <button type="button" id="<%= id %>" name="" class="btn btn-success btn-block validModelSim" aria-label="">
-                    Enregistrer
-                </button>
-            </div>
-        </div>
-
-        <!-- Annuler -->
-        <div class="form-group" hidden>
-            <div class="text-right col-sm-12">
-                <button type="button" id="removeRoad_<%= id %>" name="" class="btn btn-danger btn-block removeModelSim"
-                        aria-label="">Annuler
-                </button>
-            </div>
-        </div>
-
-    </fieldset>
-</form>
+    </div>
+</div>

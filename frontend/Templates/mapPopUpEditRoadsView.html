@@ -32,19 +32,19 @@
                             <h4 class="list-group-item list-group-item-info">Limitation de vitesse</h4>
                             <input type="number" class="form-control" id="maxspeedRoad" placeholder="Vitesse" required=""
                                    value="<%= maxspeed %>">
-                            <!--<p class="help-block">en km/h</p>-->
+                            <p class="help-block">en km/h</p>
                         </div>
                     </div>
                     <div class="">
                         <h4 class="list-group-item list-group-item-info">Sens unique</h4>
-                        <select class="form-control" id="onwayRoad" style="margin-bottom: 6px">
+                        <select class="form-control" id="onwayRoad">
                             <option value="no">Non</option>
                             <option value="yes">Oui</option>
                         </select>
                     </div>
                     <div class="hidden" id="wayDiv">
                         <h4 class="list-group-item list-group-item-info">Sens</h4>
-                        <select class="form-control" id="wayRoad" style="margin-bottom: 6px">
+                        <select class="form-control" id="wayRoad">
                             <option value="yes">De A vers B</option>
                             <option value="-1">De B vers A</option>
                         </select>
