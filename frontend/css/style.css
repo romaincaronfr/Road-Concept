@@ -176,9 +176,9 @@ body {
 
 #editBarMenu {
     position: absolute;
-    width: 80%;
+    width: 60%;
     bottom: 0;
-    left : 10%;
+    left : 20%;
     height: 8%;
     border-radius: 10px 10px 0px 0px;
     background-color: #4f5d6b;
