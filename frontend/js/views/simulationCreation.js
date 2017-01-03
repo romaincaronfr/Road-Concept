@@ -718,7 +718,7 @@ app.simulationCreationView = Backbone.View.extend({
                     console.log("success");
                     var simuId = result.attributes.uuid;
                     $('#titleModalStartSimu').text('Simulation en cours de progression');
-                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div></div>');
+                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris">0%</div></div>');
                     $('#startSimulationModalFooter').empty();
                     self.getProgressSimu(simuId);
                 }
@@ -739,12 +739,14 @@ app.simulationCreationView = Backbone.View.extend({
             .done(function (data, textStatus, jqXHR) {
                 console.log(data);
                 if (parseInt(data) < 100) {
-                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    //$('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').prop('style','width:'+data+'%');
                     setTimeout(function () {
                         self.getProgressSimu(id);
                     }, 1000);
                 } else {
-                    $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    //$('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
+                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').prop('style','width:'+data+'%');
                     setTimeout(function () {
                         $('#modalStartSim').modal('hide');
                         $('.modal-backdrop').remove();
