@@ -4,7 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum FeatureType {
-    SINLGE_ROAD(1), DOUBLE_ROAD(2), TRIPLE_ROAD(3), ROUNDABOUT(4), RED_LIGHT(5), CAR(6), TRUCK(7);
+    SINGLE_ROAD(1),
+    DOUBLE_ROAD(2),
+    TRIPLE_ROAD(3),
+    ROUNDABOUT(4),
+    //RED_LIGHT(5),
+    CAR(6),
+    TRUCK(7);
 
     private final int jsonID;
 

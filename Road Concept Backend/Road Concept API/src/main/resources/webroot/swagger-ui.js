@@ -4282,7 +4282,7 @@
                 var quoteRegexp = require("regexp-quote");
 
                 function each(obj, cb) {
-                    if (obj)Object.keys(obj).forEach(function (key) {
+                    if (obj) Object.keys(obj).forEach(function (key) {
                         cb(obj[key], key)
                     })
                 }
@@ -5099,7 +5099,7 @@
                         if (end <= start) {
                             return ""
                         }
-                        if (!encoding)encoding = "utf8";
+                        if (!encoding) encoding = "utf8";
                         while (true) {
                             switch (encoding) {
                                 case"hex":
@@ -5184,7 +5184,7 @@
                         var max = exports.INSPECT_MAX_BYTES;
                         if (this.length > 0) {
                             str = this.toString("hex", 0, max).match(/.{2}/g).join(" ");
-                            if (this.length > max)str += " ... "
+                            if (this.length > max) str += " ... "
                         }
                         return "<Buffer " + str + ">"
                     };
@@ -5251,11 +5251,11 @@
                         if (isNaN(byteOffset)) {
                             byteOffset = dir ? 0 : buffer.length - 1
                         }
-                        if (byteOffset < 0)byteOffset = buffer.length + byteOffset;
+                        if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
                         if (byteOffset >= buffer.length) {
                             if (dir)return -1; else byteOffset = buffer.length - 1
                         } else if (byteOffset < 0) {
-                            if (dir)byteOffset = 0; else return -1
+                            if (dir) byteOffset = 0; else return -1
                         }
                         if (typeof val === "string") {
                             val = Buffer.from(val, encoding)
@@ -5308,15 +5308,15 @@
                             var foundIndex = -1;
                             for (i = byteOffset; i < arrLength; i++) {
                                 if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
-                                    if (foundIndex === -1)foundIndex = i;
+                                    if (foundIndex === -1) foundIndex = i;
                                     if (i - foundIndex + 1 === valLength)return foundIndex * indexSize
                                 } else {
-                                    if (foundIndex !== -1)i -= i - foundIndex;
+                                    if (foundIndex !== -1) i -= i - foundIndex;
                                     foundIndex = -1
                                 }
                             }
                         } else {
-                            if (byteOffset + valLength > arrLength)byteOffset = arrLength - valLength;
+                            if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
                             for (i = byteOffset; i >= 0; i--) {
                                 var found = true;
                                 for (var j = 0; j < valLength; j++) {
@@ -5397,7 +5397,7 @@
                             offset = offset | 0;
                             if (isFinite(length)) {
                                 length = length | 0;
-                                if (encoding === undefined)encoding = "utf8"
+                                if (encoding === undefined) encoding = "utf8"
                             } else {
                                 encoding = length;
                                 length = undefined
@@ -5406,11 +5406,11 @@
                             throw new Error("Buffer.write(string, encoding, offset[, length]) is no longer supported")
                         }
                         var remaining = this.length - offset;
-                        if (length === undefined || length > remaining)length = remaining;
+                        if (length === undefined || length > remaining) length = remaining;
                         if (string.length > 0 && (length < 0 || offset < 0) || offset > this.length) {
                             throw new RangeError("Attempt to write outside buffer bounds")
                         }
-                        if (!encoding)encoding = "utf8";
+                        if (!encoding) encoding = "utf8";
                         var loweredCase = false;
                         for (; ;) {
                             switch (encoding) {
@@ -5545,8 +5545,8 @@
 
                     function hexSlice(buf, start, end) {
                         var len = buf.length;
-                        if (!start || start < 0)start = 0;
-                        if (!end || end < 0 || end > len)end = len;
+                        if (!start || start < 0) start = 0;
+                        if (!end || end < 0 || end > len) end = len;
                         var out = "";
                         for (var i = start; i < end; ++i) {
                             out += toHex(buf[i])
@@ -5569,17 +5569,17 @@
                         end = end === undefined ? len : ~~end;
                         if (start < 0) {
                             start += len;
-                            if (start < 0)start = 0
+                            if (start < 0) start = 0
                         } else if (start > len) {
                             start = len
                         }
                         if (end < 0) {
                             end += len;
-                            if (end < 0)end = 0
+                            if (end < 0) end = 0
                         } else if (end > len) {
                             end = len
                         }
-                        if (end < start)end = start;
+                        if (end < start) end = start;
                         var newBuf;
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             newBuf = this.subarray(start, end);
@@ -5601,7 +5601,7 @@
                     Buffer.prototype.readUIntLE = function readUIntLE(offset, byteLength, noAssert) {
                         offset = offset | 0;
                         byteLength = byteLength | 0;
-                        if (!noAssert)checkOffset(offset, byteLength, this.length);
+                        if (!noAssert) checkOffset(offset, byteLength, this.length);
                         var val = this[offset];
                         var mul = 1;
                         var i = 0;
@@ -5624,29 +5624,29 @@
                         return val
                     };
                     Buffer.prototype.readUInt8 = function readUInt8(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 1, this.length);
+                        if (!noAssert) checkOffset(offset, 1, this.length);
                         return this[offset]
                     };
                     Buffer.prototype.readUInt16LE = function readUInt16LE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 2, this.length);
+                        if (!noAssert) checkOffset(offset, 2, this.length);
                         return this[offset] | this[offset + 1] << 8
                     };
                     Buffer.prototype.readUInt16BE = function readUInt16BE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 2, this.length);
+                        if (!noAssert) checkOffset(offset, 2, this.length);
                         return this[offset] << 8 | this[offset + 1]
                     };
                     Buffer.prototype.readUInt32LE = function readUInt32LE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return (this[offset] | this[offset + 1] << 8 | this[offset + 2] << 16) + this[offset + 3] * 16777216
                     };
                     Buffer.prototype.readUInt32BE = function readUInt32BE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return this[offset] * 16777216 + (this[offset + 1] << 16 | this[offset + 2] << 8 | this[offset + 3])
                     };
                     Buffer.prototype.readIntLE = function readIntLE(offset, byteLength, noAssert) {
                         offset = offset | 0;
                         byteLength = byteLength | 0;
-                        if (!noAssert)checkOffset(offset, byteLength, this.length);
+                        if (!noAssert) checkOffset(offset, byteLength, this.length);
                         var val = this[offset];
                         var mul = 1;
                         var i = 0;
@@ -5654,13 +5654,13 @@
                             val += this[offset + i] * mul
                         }
                         mul *= 128;
-                        if (val >= mul)val -= Math.pow(2, 8 * byteLength);
+                        if (val >= mul) val -= Math.pow(2, 8 * byteLength);
                         return val
                     };
                     Buffer.prototype.readIntBE = function readIntBE(offset, byteLength, noAssert) {
                         offset = offset | 0;
                         byteLength = byteLength | 0;
-                        if (!noAssert)checkOffset(offset, byteLength, this.length);
+                        if (!noAssert) checkOffset(offset, byteLength, this.length);
                         var i = byteLength;
                         var mul = 1;
                         var val = this[offset + --i];
@@ -5668,46 +5668,46 @@
                             val += this[offset + --i] * mul
                         }
                         mul *= 128;
-                        if (val >= mul)val -= Math.pow(2, 8 * byteLength);
+                        if (val >= mul) val -= Math.pow(2, 8 * byteLength);
                         return val
                     };
                     Buffer.prototype.readInt8 = function readInt8(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 1, this.length);
+                        if (!noAssert) checkOffset(offset, 1, this.length);
                         if (!(this[offset] & 128))return this[offset];
                         return (255 - this[offset] + 1) * -1
                     };
                     Buffer.prototype.readInt16LE = function readInt16LE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 2, this.length);
+                        if (!noAssert) checkOffset(offset, 2, this.length);
                         var val = this[offset] | this[offset + 1] << 8;
                         return val & 32768 ? val | 4294901760 : val
                     };
                     Buffer.prototype.readInt16BE = function readInt16BE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 2, this.length);
+                        if (!noAssert) checkOffset(offset, 2, this.length);
                         var val = this[offset + 1] | this[offset] << 8;
                         return val & 32768 ? val | 4294901760 : val
                     };
                     Buffer.prototype.readInt32LE = function readInt32LE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return this[offset] | this[offset + 1] << 8 | this[offset + 2] << 16 | this[offset + 3] << 24
                     };
                     Buffer.prototype.readInt32BE = function readInt32BE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return this[offset] << 24 | this[offset + 1] << 16 | this[offset + 2] << 8 | this[offset + 3]
                     };
                     Buffer.prototype.readFloatLE = function readFloatLE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return ieee754.read(this, offset, true, 23, 4)
                     };
                     Buffer.prototype.readFloatBE = function readFloatBE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 4, this.length);
+                        if (!noAssert) checkOffset(offset, 4, this.length);
                         return ieee754.read(this, offset, false, 23, 4)
                     };
                     Buffer.prototype.readDoubleLE = function readDoubleLE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 8, this.length);
+                        if (!noAssert) checkOffset(offset, 8, this.length);
                         return ieee754.read(this, offset, true, 52, 8)
                     };
                     Buffer.prototype.readDoubleBE = function readDoubleBE(offset, noAssert) {
-                        if (!noAssert)checkOffset(offset, 8, this.length);
+                        if (!noAssert) checkOffset(offset, 8, this.length);
                         return ieee754.read(this, offset, false, 52, 8)
                     };
                     function checkInt(buf, value, offset, ext, max, min) {
@@ -5751,13 +5751,13 @@
                     Buffer.prototype.writeUInt8 = function writeUInt8(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 1, 255, 0);
-                        if (!Buffer.TYPED_ARRAY_SUPPORT)value = Math.floor(value);
+                        if (!noAssert) checkInt(this, value, offset, 1, 255, 0);
+                        if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
                         this[offset] = value & 255;
                         return offset + 1
                     };
                     function objectWriteUInt16(buf, value, offset, littleEndian) {
-                        if (value < 0)value = 65535 + value + 1;
+                        if (value < 0) value = 65535 + value + 1;
                         for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
                             buf[offset + i] = (value & 255 << 8 * (littleEndian ? i : 1 - i)) >>> (littleEndian ? i : 1 - i) * 8
                         }
@@ -5766,7 +5766,7 @@
                     Buffer.prototype.writeUInt16LE = function writeUInt16LE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 2, 65535, 0);
+                        if (!noAssert) checkInt(this, value, offset, 2, 65535, 0);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value & 255;
                             this[offset + 1] = value >>> 8
@@ -5778,7 +5778,7 @@
                     Buffer.prototype.writeUInt16BE = function writeUInt16BE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 2, 65535, 0);
+                        if (!noAssert) checkInt(this, value, offset, 2, 65535, 0);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value >>> 8;
                             this[offset + 1] = value & 255
@@ -5788,7 +5788,7 @@
                         return offset + 2
                     };
                     function objectWriteUInt32(buf, value, offset, littleEndian) {
-                        if (value < 0)value = 4294967295 + value + 1;
+                        if (value < 0) value = 4294967295 + value + 1;
                         for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
                             buf[offset + i] = value >>> (littleEndian ? i : 3 - i) * 8 & 255
                         }
@@ -5797,7 +5797,7 @@
                     Buffer.prototype.writeUInt32LE = function writeUInt32LE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 4, 4294967295, 0);
+                        if (!noAssert) checkInt(this, value, offset, 4, 4294967295, 0);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset + 3] = value >>> 24;
                             this[offset + 2] = value >>> 16;
@@ -5811,7 +5811,7 @@
                     Buffer.prototype.writeUInt32BE = function writeUInt32BE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 4, 4294967295, 0);
+                        if (!noAssert) checkInt(this, value, offset, 4, 4294967295, 0);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value >>> 24;
                             this[offset + 1] = value >>> 16;
@@ -5863,16 +5863,16 @@
                     Buffer.prototype.writeInt8 = function writeInt8(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 1, 127, -128);
-                        if (!Buffer.TYPED_ARRAY_SUPPORT)value = Math.floor(value);
-                        if (value < 0)value = 255 + value + 1;
+                        if (!noAssert) checkInt(this, value, offset, 1, 127, -128);
+                        if (!Buffer.TYPED_ARRAY_SUPPORT) value = Math.floor(value);
+                        if (value < 0) value = 255 + value + 1;
                         this[offset] = value & 255;
                         return offset + 1
                     };
                     Buffer.prototype.writeInt16LE = function writeInt16LE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 2, 32767, -32768);
+                        if (!noAssert) checkInt(this, value, offset, 2, 32767, -32768);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value & 255;
                             this[offset + 1] = value >>> 8
@@ -5884,7 +5884,7 @@
                     Buffer.prototype.writeInt16BE = function writeInt16BE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 2, 32767, -32768);
+                        if (!noAssert) checkInt(this, value, offset, 2, 32767, -32768);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value >>> 8;
                             this[offset + 1] = value & 255
@@ -5896,7 +5896,7 @@
                     Buffer.prototype.writeInt32LE = function writeInt32LE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 4, 2147483647, -2147483648);
+                        if (!noAssert) checkInt(this, value, offset, 4, 2147483647, -2147483648);
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value & 255;
                             this[offset + 1] = value >>> 8;
@@ -5910,8 +5910,8 @@
                     Buffer.prototype.writeInt32BE = function writeInt32BE(value, offset, noAssert) {
                         value = +value;
                         offset = offset | 0;
-                        if (!noAssert)checkInt(this, value, offset, 4, 2147483647, -2147483648);
-                        if (value < 0)value = 4294967295 + value + 1;
+                        if (!noAssert) checkInt(this, value, offset, 4, 2147483647, -2147483648);
+                        if (value < 0) value = 4294967295 + value + 1;
                         if (Buffer.TYPED_ARRAY_SUPPORT) {
                             this[offset] = value >>> 24;
                             this[offset + 1] = value >>> 16;
@@ -5956,11 +5956,11 @@
                         return writeDouble(this, value, offset, false, noAssert)
                     };
                     Buffer.prototype.copy = function copy(target, targetStart, start, end) {
-                        if (!start)start = 0;
-                        if (!end && end !== 0)end = this.length;
-                        if (targetStart >= target.length)targetStart = target.length;
-                        if (!targetStart)targetStart = 0;
-                        if (end > 0 && end < start)end = start;
+                        if (!start) start = 0;
+                        if (!end && end !== 0) end = this.length;
+                        if (targetStart >= target.length) targetStart = target.length;
+                        if (!targetStart) targetStart = 0;
+                        if (end > 0 && end < start) end = start;
                         if (end === start)return 0;
                         if (target.length === 0 || this.length === 0)return 0;
                         if (targetStart < 0) {
@@ -5968,7 +5968,7 @@
                         }
                         if (start < 0 || start >= this.length)throw new RangeError("sourceStart out of bounds");
                         if (end < 0)throw new RangeError("sourceEnd out of bounds");
-                        if (end > this.length)end = this.length;
+                        if (end > this.length) end = this.length;
                         if (target.length - targetStart < end - start) {
                             end = target.length - targetStart + start
                         }
@@ -6020,7 +6020,7 @@
                         }
                         start = start >>> 0;
                         end = end === undefined ? this.length : end >>> 0;
-                        if (!val)val = 0;
+                        if (!val) val = 0;
                         var i;
                         if (typeof val === "number") {
                             for (i = start; i < end; ++i) {
@@ -6067,23 +6067,23 @@
                             if (codePoint > 55295 && codePoint < 57344) {
                                 if (!leadSurrogate) {
                                     if (codePoint > 56319) {
-                                        if ((units -= 3) > -1)bytes.push(239, 191, 189);
+                                        if ((units -= 3) > -1) bytes.push(239, 191, 189);
                                         continue
                                     } else if (i + 1 === length) {
-                                        if ((units -= 3) > -1)bytes.push(239, 191, 189);
+                                        if ((units -= 3) > -1) bytes.push(239, 191, 189);
                                         continue
                                     }
                                     leadSurrogate = codePoint;
                                     continue
                                 }
                                 if (codePoint < 56320) {
-                                    if ((units -= 3) > -1)bytes.push(239, 191, 189);
+                                    if ((units -= 3) > -1) bytes.push(239, 191, 189);
                                     leadSurrogate = codePoint;
                                     continue
                                 }
                                 codePoint = (leadSurrogate - 55296 << 10 | codePoint - 56320) + 65536
                             } else if (leadSurrogate) {
-                                if ((units -= 3) > -1)bytes.push(239, 191, 189)
+                                if ((units -= 3) > -1) bytes.push(239, 191, 189)
                             }
                             leadSurrogate = null;
                             if (codePoint < 128) {
@@ -6305,18 +6305,18 @@
                     wbr: true
                 };
                 var render = module.exports = function (dom, opts) {
-                    if (!Array.isArray(dom) && !dom.cheerio)dom = [dom];
+                    if (!Array.isArray(dom) && !dom.cheerio) dom = [dom];
                     opts = opts || {};
                     var output = "";
                     for (var i = 0; i < dom.length; i++) {
                         var elem = dom[i];
-                        if (elem.type === "root")output += render(elem.children, opts); else if (ElementType.isTag(elem))output += renderTag(elem, opts); else if (elem.type === ElementType.Directive)output += renderDirective(elem); else if (elem.type === ElementType.Comment)output += renderComment(elem); else if (elem.type === ElementType.CDATA)output += renderCdata(elem); else output += renderText(elem, opts)
+                        if (elem.type === "root") output += render(elem.children, opts); else if (ElementType.isTag(elem)) output += renderTag(elem, opts); else if (elem.type === ElementType.Directive) output += renderDirective(elem); else if (elem.type === ElementType.Comment) output += renderComment(elem); else if (elem.type === ElementType.CDATA) output += renderCdata(elem); else output += renderText(elem, opts)
                     }
                     return output
                 };
 
                 function renderTag(elem, opts) {
-                    if (elem.name === "svg")opts = {decodeEntities: opts.decodeEntities, xmlMode: true};
+                    if (elem.name === "svg") opts = {decodeEntities: opts.decodeEntities, xmlMode: true};
                     var tag = "<" + elem.name, attribs = formatAttrs(elem.attribs, opts);
                     if (attribs) {
                         tag += " " + attribs
@@ -6430,7 +6430,7 @@
                 };
                 DomHandler.prototype.onclosetag = function () {
                     var elem = this._tagStack.pop();
-                    if (this._elementCB)this._elementCB(elem)
+                    if (this._elementCB) this._elementCB(elem)
                 };
                 DomHandler.prototype._addDomElement = function (element) {
                     var parent = this._tagStack[this._tagStack.length - 1];
@@ -6740,7 +6740,7 @@
                     return funcs.length === 0 ? [] : this.filter(funcs.reduce(combineFuncs), element, recurse, limit)
                 };
                 exports.getElementById = function (id, element, recurse) {
-                    if (!Array.isArray(element))element = [element];
+                    if (!Array.isArray(element)) element = [element];
                     return this.findOne(getAttribCheck("id", id), element, recurse !== false)
                 };
                 exports.getElementsByTagName = function (name, element, recurse, limit) {
@@ -6752,8 +6752,8 @@
             }, {domelementtype: 9}],
             16: [function (require, module, exports) {
                 exports.removeElement = function (elem) {
-                    if (elem.prev)elem.prev.next = elem.next;
-                    if (elem.next)elem.next.prev = elem.prev;
+                    if (elem.prev) elem.prev.next = elem.next;
+                    if (elem.next) elem.next.prev = elem.prev;
                     if (elem.parent) {
                         var childs = elem.parent.children;
                         childs.splice(childs.lastIndexOf(elem), 1)
@@ -6825,7 +6825,7 @@
                     findAll: findAll
                 };
                 function filter(test, element, recurse, limit) {
-                    if (!Array.isArray(element))element = [element];
+                    if (!Array.isArray(element)) element = [element];
                     if (typeof limit !== "number" || !isFinite(limit)) {
                         limit = Infinity
                     }
@@ -6884,7 +6884,7 @@
                     var result = [];
                     for (var i = 0, j = elems.length; i < j; i++) {
                         if (!isTag(elems[i]))continue;
-                        if (test(elems[i]))result.push(elems[i]);
+                        if (test(elems[i])) result.push(elems[i]);
                         if (elems[i].children.length > 0) {
                             result = result.concat(findAll(test, elems[i].children))
                         }
@@ -6974,7 +6974,7 @@
                     var re = new RegExp("&(?:" + keys.join("|") + "|#[xX][\\da-fA-F]+;?|#\\d+;?)", "g"), replace = getReplacer(entityMap);
 
                     function replacer(str) {
-                        if (str.substr(-1) !== ";")str += ";";
+                        if (str.substr(-1) !== ";") str += ";";
                         return replace(str)
                     }
 
@@ -9374,7 +9374,7 @@
                 };
                 EventEmitter.prototype.emit = function (type) {
                     var er, handler, len, args, i, listeners;
-                    if (!this._events)this._events = {};
+                    if (!this._events) this._events = {};
                     if (type === "error") {
                         if (!this._events.error || isObject(this._events.error) && !this._events.error.length) {
                             er = arguments[1];
@@ -9415,9 +9415,9 @@
                 EventEmitter.prototype.addListener = function (type, listener) {
                     var m;
                     if (!isFunction(listener))throw TypeError("listener must be a function");
-                    if (!this._events)this._events = {};
-                    if (this._events.newListener)this.emit("newListener", type, isFunction(listener.listener) ? listener.listener : listener);
-                    if (!this._events[type])this._events[type] = listener; else if (isObject(this._events[type]))this._events[type].push(listener); else this._events[type] = [this._events[type], listener];
+                    if (!this._events) this._events = {};
+                    if (this._events.newListener) this.emit("newListener", type, isFunction(listener.listener) ? listener.listener : listener);
+                    if (!this._events[type]) this._events[type] = listener; else if (isObject(this._events[type])) this._events[type].push(listener); else this._events[type] = [this._events[type], listener];
                     if (isObject(this._events[type]) && !this._events[type].warned) {
                         if (!isUndefined(this._maxListeners)) {
                             m = this._maxListeners
@@ -9460,7 +9460,7 @@
                     position = -1;
                     if (list === listener || isFunction(list.listener) && list.listener === listener) {
                         delete this._events[type];
-                        if (this._events.removeListener)this.emit("removeListener", type, listener)
+                        if (this._events.removeListener) this.emit("removeListener", type, listener)
                     } else if (isObject(list)) {
                         for (i = length; i-- > 0;) {
                             if (list[i] === listener || list[i].listener && list[i].listener === listener) {
@@ -9475,7 +9475,7 @@
                         } else {
                             list.splice(position, 1);
                         }
-                        if (this._events.removeListener)this.emit("removeListener", type, listener)
+                        if (this._events.removeListener) this.emit("removeListener", type, listener)
                     }
                     return this
                 };
@@ -9483,7 +9483,7 @@
                     var key, listeners;
                     if (!this._events)return this;
                     if (!this._events.removeListener) {
-                        if (arguments.length === 0)this._events = {}; else if (this._events[type])delete this._events[type];
+                        if (arguments.length === 0) this._events = {}; else if (this._events[type]) delete this._events[type];
                         return this
                     }
                     if (arguments.length === 0) {
@@ -9506,7 +9506,7 @@
                 };
                 EventEmitter.prototype.listeners = function (type) {
                     var ret;
-                    if (!this._events || !this._events[type])ret = []; else if (isFunction(this._events[type]))ret = [this._events[type]]; else ret = this._events[type].slice();
+                    if (!this._events || !this._events[type]) ret = []; else if (isFunction(this._events[type])) ret = [this._events[type]]; else ret = this._events[type].slice();
                     return ret
                 };
                 EventEmitter.prototype.listenerCount = function (type) {
@@ -9548,19 +9548,19 @@
                         name = "on" + name;
                         CollectingHandler.prototype[name] = function () {
                             this.events.push([name]);
-                            if (this._cbs[name])this._cbs[name]()
+                            if (this._cbs[name]) this._cbs[name]()
                         }
                     } else if (EVENTS[name] === 1) {
                         name = "on" + name;
                         CollectingHandler.prototype[name] = function (a) {
                             this.events.push([name, a]);
-                            if (this._cbs[name])this._cbs[name](a)
+                            if (this._cbs[name]) this._cbs[name](a)
                         }
                     } else if (EVENTS[name] === 2) {
                         name = "on" + name;
                         CollectingHandler.prototype[name] = function (a, b) {
                             this.events.push([name, a, b]);
-                            if (this._cbs[name])this._cbs[name](a, b)
+                            if (this._cbs[name]) this._cbs[name](a, b)
                         }
                     } else {
                         throw Error("wrong number of arguments")
@@ -9568,10 +9568,10 @@
                 });
                 CollectingHandler.prototype.onreset = function () {
                     this.events = [];
-                    if (this._cbs.onreset)this._cbs.onreset()
+                    if (this._cbs.onreset) this._cbs.onreset()
                 };
                 CollectingHandler.prototype.restart = function () {
-                    if (this._cbs.onreset)this._cbs.onreset();
+                    if (this._cbs.onreset) this._cbs.onreset();
                     for (var i = 0, len = this.events.length; i < len; i++) {
                         if (this._cbs[this.events[i][0]]) {
                             var num = this.events[i].length;
@@ -9609,7 +9609,7 @@
 
                 function addConditionally(obj, prop, what, where, recurse) {
                     var tmp = fetch(what, where, recurse);
-                    if (tmp)obj[prop] = tmp
+                    if (tmp) obj[prop] = tmp
                 }
 
                 var isValidFeed = function (value) {
@@ -9623,18 +9623,18 @@
                             feed.type = "atom";
                             addConditionally(feed, "id", "id", childs);
                             addConditionally(feed, "title", "title", childs);
-                            if ((tmp = getOneElement("link", childs)) && (tmp = tmp.attribs) && (tmp = tmp.href))feed.link = tmp;
+                            if ((tmp = getOneElement("link", childs)) && (tmp = tmp.attribs) && (tmp = tmp.href)) feed.link = tmp;
                             addConditionally(feed, "description", "subtitle", childs);
-                            if (tmp = fetch("updated", childs))feed.updated = new Date(tmp);
+                            if (tmp = fetch("updated", childs)) feed.updated = new Date(tmp);
                             addConditionally(feed, "author", "email", childs, true);
                             feed.items = getElements("entry", childs).map(function (item) {
                                 var entry = {}, tmp;
                                 item = item.children;
                                 addConditionally(entry, "id", "id", item);
                                 addConditionally(entry, "title", "title", item);
-                                if ((tmp = getOneElement("link", item)) && (tmp = tmp.attribs) && (tmp = tmp.href))entry.link = tmp;
-                                if (tmp = fetch("summary", item) || fetch("content", item))entry.description = tmp;
-                                if (tmp = fetch("updated", item))entry.pubDate = new Date(tmp);
+                                if ((tmp = getOneElement("link", item)) && (tmp = tmp.attribs) && (tmp = tmp.href)) entry.link = tmp;
+                                if (tmp = fetch("summary", item) || fetch("content", item)) entry.description = tmp;
+                                if (tmp = fetch("updated", item)) entry.pubDate = new Date(tmp);
                                 return entry
                             })
                         } else {
@@ -9644,7 +9644,7 @@
                             addConditionally(feed, "title", "title", childs);
                             addConditionally(feed, "link", "link", childs);
                             addConditionally(feed, "description", "description", childs);
-                            if (tmp = fetch("lastBuildDate", childs))feed.updated = new Date(tmp);
+                            if (tmp = fetch("lastBuildDate", childs)) feed.updated = new Date(tmp);
                             addConditionally(feed, "author", "managingEditor", childs, true);
                             feed.items = getElements("item", feedRoot.children).map(function (item) {
                                 var entry = {}, tmp;
@@ -9653,7 +9653,7 @@
                                 addConditionally(entry, "title", "title", item);
                                 addConditionally(entry, "link", "link", item);
                                 addConditionally(entry, "description", "description", item);
-                                if (tmp = fetch("pubDate", item))entry.pubDate = new Date(tmp);
+                                if (tmp = fetch("pubDate", item)) entry.pubDate = new Date(tmp);
                                 return entry
                             })
                         }
@@ -9745,7 +9745,7 @@
                         Tokenizer = this._options.Tokenizer
                     }
                     this._tokenizer = new Tokenizer(this._options, this);
-                    if (this._cbs.onparserinit)this._cbs.onparserinit(this)
+                    if (this._cbs.onparserinit) this._cbs.onparserinit(this)
                 }
 
                 require("inherits")(Parser, require("events").EventEmitter);
@@ -9762,7 +9762,7 @@
                 Parser.prototype.ontext = function (data) {
                     this._updatePosition(1);
                     this.endIndex--;
-                    if (this._cbs.ontext)this._cbs.ontext(data)
+                    if (this._cbs.ontext) this._cbs.ontext(data)
                 };
                 Parser.prototype.onopentagname = function (name) {
                     if (this._lowerCaseTagNames) {
@@ -9775,13 +9775,13 @@
                     if (this._options.xmlMode || !(name in voidElements)) {
                         this._stack.push(name)
                     }
-                    if (this._cbs.onopentagname)this._cbs.onopentagname(name);
-                    if (this._cbs.onopentag)this._attribs = {}
+                    if (this._cbs.onopentagname) this._cbs.onopentagname(name);
+                    if (this._cbs.onopentag) this._attribs = {}
                 };
                 Parser.prototype.onopentagend = function () {
                     this._updatePosition(1);
                     if (this._attribs) {
-                        if (this._cbs.onopentag)this._cbs.onopentag(this._tagname, this._attribs);
+                        if (this._cbs.onopentag) this._cbs.onopentag(this._tagname, this._attribs);
                         this._attribs = null
                     }
                     if (!this._options.xmlMode && this._cbs.onclosetag && this._tagname in voidElements) {
@@ -9837,7 +9837,7 @@
                     this._attribvalue += value
                 };
                 Parser.prototype.onattribend = function () {
-                    if (this._cbs.onattribute)this._cbs.onattribute(this._attribname, this._attribvalue);
+                    if (this._cbs.onattribute) this._cbs.onattribute(this._attribname, this._attribvalue);
                     if (this._attribs && !Object.prototype.hasOwnProperty.call(this._attribs, this._attribname)) {
                         this._attribs[this._attribname] = this._attribvalue
                     }
@@ -9865,36 +9865,36 @@
                 };
                 Parser.prototype.oncomment = function (value) {
                     this._updatePosition(4);
-                    if (this._cbs.oncomment)this._cbs.oncomment(value);
-                    if (this._cbs.oncommentend)this._cbs.oncommentend()
+                    if (this._cbs.oncomment) this._cbs.oncomment(value);
+                    if (this._cbs.oncommentend) this._cbs.oncommentend()
                 };
                 Parser.prototype.oncdata = function (value) {
                     this._updatePosition(1);
                     if (this._options.xmlMode || this._options.recognizeCDATA) {
-                        if (this._cbs.oncdatastart)this._cbs.oncdatastart();
-                        if (this._cbs.ontext)this._cbs.ontext(value);
-                        if (this._cbs.oncdataend)this._cbs.oncdataend()
+                        if (this._cbs.oncdatastart) this._cbs.oncdatastart();
+                        if (this._cbs.ontext) this._cbs.ontext(value);
+                        if (this._cbs.oncdataend) this._cbs.oncdataend()
                     } else {
                         this.oncomment("[CDATA[" + value + "]]")
                     }
                 };
                 Parser.prototype.onerror = function (err) {
-                    if (this._cbs.onerror)this._cbs.onerror(err)
+                    if (this._cbs.onerror) this._cbs.onerror(err)
                 };
                 Parser.prototype.onend = function () {
                     if (this._cbs.onclosetag) {
                         for (var i = this._stack.length; i > 0; this._cbs.onclosetag(this._stack[--i]));
                     }
-                    if (this._cbs.onend)this._cbs.onend()
+                    if (this._cbs.onend) this._cbs.onend()
                 };
                 Parser.prototype.reset = function () {
-                    if (this._cbs.onreset)this._cbs.onreset();
+                    if (this._cbs.onreset) this._cbs.onreset();
                     this._tokenizer.reset();
                     this._tagname = "";
                     this._attribname = "";
                     this._attribs = null;
                     this._stack = [];
-                    if (this._cbs.onparserinit)this._cbs.onparserinit(this)
+                    if (this._cbs.onparserinit) this._cbs.onparserinit(this)
                 };
                 Parser.prototype.parseComplete = function (data) {
                     this.reset();
@@ -9927,17 +9927,17 @@
                     if (EVENTS[name] === 0) {
                         name = "on" + name;
                         ProxyHandler.prototype[name] = function () {
-                            if (this._cbs[name])this._cbs[name]()
+                            if (this._cbs[name]) this._cbs[name]()
                         }
                     } else if (EVENTS[name] === 1) {
                         name = "on" + name;
                         ProxyHandler.prototype[name] = function (a) {
-                            if (this._cbs[name])this._cbs[name](a)
+                            if (this._cbs[name]) this._cbs[name](a)
                         }
                     } else if (EVENTS[name] === 2) {
                         name = "on" + name;
                         ProxyHandler.prototype[name] = function (a, b) {
-                            if (this._cbs[name])this._cbs[name](a, b)
+                            if (this._cbs[name]) this._cbs[name](a, b)
                         }
                     } else {
                         throw Error("wrong number of arguments")
@@ -9987,7 +9987,7 @@
 
                 function characterState(char, SUCCESS) {
                     return function (c) {
-                        if (c === char)this._state = SUCCESS
+                        if (c === char) this._state = SUCCESS
                     }
                 }
 
@@ -10230,7 +10230,7 @@
                     }
                 };
                 Tokenizer.prototype._stateInComment = function (c) {
-                    if (c === "-")this._state = AFTER_COMMENT_1
+                    if (c === "-") this._state = AFTER_COMMENT_1
                 };
                 Tokenizer.prototype._stateAfterComment1 = function (c) {
                     if (c === "-") {
@@ -10263,7 +10263,7 @@
                     }
                 };
                 Tokenizer.prototype._stateInCdata = function (c) {
-                    if (c === "]")this._state = AFTER_CDATA_1
+                    if (c === "]") this._state = AFTER_CDATA_1
                 };
                 Tokenizer.prototype._stateAfterCdata1 = characterState("]", AFTER_CDATA_2);
                 Tokenizer.prototype._stateAfterCdata2 = function (c) {
@@ -10349,7 +10349,7 @@
                 };
                 Tokenizer.prototype._parseLegacyEntity = function () {
                     var start = this._sectionStart + 1, limit = this._index - start;
-                    if (limit > 6)limit = 6;
+                    if (limit > 6) limit = 6;
                     while (limit >= 2) {
                         var entity = this._buffer.substr(start, limit);
                         if (legacyMap.hasOwnProperty(entity)) {
@@ -10444,7 +10444,7 @@
                     }
                 };
                 Tokenizer.prototype.write = function (chunk) {
-                    if (this._ended)this._cbs.onerror(Error(".write() after done!"));
+                    if (this._ended) this._cbs.onerror(Error(".write() after done!"));
                     this._buffer += chunk;
                     this._parse()
                 };
@@ -10581,10 +10581,10 @@
                     }
                 };
                 Tokenizer.prototype.end = function (chunk) {
-                    if (this._ended)this._cbs.onerror(Error(".end() after done!"));
-                    if (chunk)this.write(chunk);
+                    if (this._ended) this._cbs.onerror(Error(".end() after done!"));
+                    if (chunk) this.write(chunk);
                     this._ended = true;
-                    if (this._running)this._finish()
+                    if (this._running) this._finish()
                 };
                 Tokenizer.prototype._finish = function () {
                     if (this._sectionStart < this._index) {
@@ -10661,7 +10661,7 @@
 
                 require("inherits")(Stream, WritableStream);
                 WritableStream.prototype._write = function (chunk, encoding, cb) {
-                    if (chunk instanceof Buffer)chunk = this._decoder.write(chunk);
+                    if (chunk instanceof Buffer) chunk = this._decoder.write(chunk);
                     this._parser.write(chunk);
                     cb()
                 }
@@ -11092,16 +11092,16 @@
                 var keys = objectKeys(Writable.prototype);
                 for (var v = 0; v < keys.length; v++) {
                     var method = keys[v];
-                    if (!Duplex.prototype[method])Duplex.prototype[method] = Writable.prototype[method]
+                    if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method]
                 }
                 function Duplex(options) {
                     if (!(this instanceof Duplex))return new Duplex(options);
                     Readable.call(this, options);
                     Writable.call(this, options);
-                    if (options && options.readable === false)this.readable = false;
-                    if (options && options.writable === false)this.writable = false;
+                    if (options && options.readable === false) this.readable = false;
+                    if (options && options.writable === false) this.writable = false;
                     this.allowHalfOpen = true;
-                    if (options && options.allowHalfOpen === false)this.allowHalfOpen = false;
+                    if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
                     this.once("end", onend)
                 }
 
@@ -11159,7 +11159,7 @@
                             Stream = require("st" + "ream")
                         } catch (_) {
                         } finally {
-                            if (!Stream)Stream = require("events").EventEmitter
+                            if (!Stream) Stream = require("events").EventEmitter
                         }
                     })();
                     var Buffer = require("buffer").Buffer;
@@ -11181,7 +11181,7 @@
                         if (typeof emitter.prependListener === "function") {
                             return emitter.prependListener(event, fn)
                         } else {
-                            if (!emitter._events || !emitter._events[event])emitter.on(event, fn); else if (isArray(emitter._events[event]))emitter._events[event].unshift(fn); else emitter._events[event] = [fn, emitter._events[event]]
+                            if (!emitter._events || !emitter._events[event]) emitter.on(event, fn); else if (isArray(emitter._events[event])) emitter._events[event].unshift(fn); else emitter._events[event] = [fn, emitter._events[event]]
                         }
                     }
 
@@ -11191,7 +11191,7 @@
                         Duplex = Duplex || require("./_stream_duplex");
                         options = options || {};
                         this.objectMode = !!options.objectMode;
-                        if (stream instanceof Duplex)this.objectMode = this.objectMode || !!options.readableObjectMode;
+                        if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.readableObjectMode;
                         var hwm = options.highWaterMark;
                         var defaultHwm = this.objectMode ? 16 : 16 * 1024;
                         this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
@@ -11216,7 +11216,7 @@
                         this.decoder = null;
                         this.encoding = null;
                         if (options.encoding) {
-                            if (!StringDecoder)StringDecoder = require("string_decoder/").StringDecoder;
+                            if (!StringDecoder) StringDecoder = require("string_decoder/").StringDecoder;
                             this.decoder = new StringDecoder(options.encoding);
                             this.encoding = options.encoding
                         }
@@ -11229,7 +11229,7 @@
                         if (!(this instanceof Readable))return new Readable(options);
                         this._readableState = new ReadableState(options, this);
                         this.readable = true;
-                        if (options && typeof options.read === "function")this._read = options.read;
+                        if (options && typeof options.read === "function") this._read = options.read;
                         Stream.call(this)
                     }
 
@@ -11271,15 +11271,15 @@
                                     chunk = state.decoder.write(chunk);
                                     skipAdd = !state.objectMode && chunk.length === 0
                                 }
-                                if (!addToFront)state.reading = false;
+                                if (!addToFront) state.reading = false;
                                 if (!skipAdd) {
                                     if (state.flowing && state.length === 0 && !state.sync) {
                                         stream.emit("data", chunk);
                                         stream.read(0)
                                     } else {
                                         state.length += state.objectMode ? 1 : chunk.length;
-                                        if (addToFront)state.buffer.unshift(chunk); else state.buffer.push(chunk);
-                                        if (state.needReadable)emitReadable(stream)
+                                        if (addToFront) state.buffer.unshift(chunk); else state.buffer.push(chunk);
+                                        if (state.needReadable) emitReadable(stream)
                                     }
                                 }
                                 maybeReadMore(stream, state)
@@ -11295,7 +11295,7 @@
                     }
 
                     Readable.prototype.setEncoding = function (enc) {
-                        if (!StringDecoder)StringDecoder = require("string_decoder/").StringDecoder;
+                        if (!StringDecoder) StringDecoder = require("string_decoder/").StringDecoder;
                         this._readableState.decoder = new StringDecoder(enc);
                         this._readableState.encoding = enc;
                         return this
@@ -11323,7 +11323,7 @@
                         if (n !== n) {
                             if (state.flowing && state.length)return state.buffer.head.data.length; else return state.length
                         }
-                        if (n > state.highWaterMark)state.highWaterMark = computeNewHighWaterMark(n);
+                        if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
                         if (n <= state.length)return n;
                         if (!state.ended) {
                             state.needReadable = true;
@@ -11337,15 +11337,15 @@
                         n = parseInt(n, 10);
                         var state = this._readableState;
                         var nOrig = n;
-                        if (n !== 0)state.emittedReadable = false;
+                        if (n !== 0) state.emittedReadable = false;
                         if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
                             debug("read: emitReadable", state.length, state.ended);
-                            if (state.length === 0 && state.ended)endReadable(this); else emitReadable(this);
+                            if (state.length === 0 && state.ended) endReadable(this); else emitReadable(this);
                             return null
                         }
                         n = howMuchToRead(n, state);
                         if (n === 0 && state.ended) {
-                            if (state.length === 0)endReadable(this);
+                            if (state.length === 0) endReadable(this);
                             return null
                         }
                         var doRead = state.needReadable;
@@ -11361,13 +11361,13 @@
                             debug("do read");
                             state.reading = true;
                             state.sync = true;
-                            if (state.length === 0)state.needReadable = true;
+                            if (state.length === 0) state.needReadable = true;
                             this._read(state.highWaterMark);
                             state.sync = false;
-                            if (!state.reading)n = howMuchToRead(nOrig, state)
+                            if (!state.reading) n = howMuchToRead(nOrig, state)
                         }
                         var ret;
-                        if (n > 0)ret = fromList(n, state); else ret = null;
+                        if (n > 0) ret = fromList(n, state); else ret = null;
                         if (ret === null) {
                             state.needReadable = true;
                             n = 0
@@ -11375,10 +11375,10 @@
                             state.length -= n
                         }
                         if (state.length === 0) {
-                            if (!state.ended)state.needReadable = true;
-                            if (nOrig !== n && state.ended)endReadable(this)
+                            if (!state.ended) state.needReadable = true;
+                            if (nOrig !== n && state.ended) endReadable(this)
                         }
-                        if (ret !== null)this.emit("data", ret);
+                        if (ret !== null) this.emit("data", ret);
                         return ret
                     };
                     function chunkInvalid(state, chunk) {
@@ -11408,7 +11408,7 @@
                         if (!state.emittedReadable) {
                             debug("emitReadable", state.flowing);
                             state.emittedReadable = true;
-                            if (state.sync)processNextTick(emitReadable_, stream); else emitReadable_(stream)
+                            if (state.sync) processNextTick(emitReadable_, stream); else emitReadable_(stream)
                         }
                     }
 
@@ -11456,7 +11456,7 @@
                         debug("pipe count=%d opts=%j", state.pipesCount, pipeOpts);
                         var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
                         var endFn = doEnd ? onend : cleanup;
-                        if (state.endEmitted)processNextTick(endFn); else src.once("end", endFn);
+                        if (state.endEmitted) processNextTick(endFn); else src.once("end", endFn);
                         dest.on("unpipe", onunpipe);
                         function onunpipe(readable) {
                             debug("onunpipe");
@@ -11485,7 +11485,7 @@
                             src.removeListener("end", cleanup);
                             src.removeListener("data", ondata);
                             cleanedUp = true;
-                            if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain))ondrain()
+                            if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain()
                         }
 
                         var increasedAwaitDrain = false;
@@ -11508,7 +11508,7 @@
                             debug("onerror", er);
                             unpipe();
                             dest.removeListener("error", onerror);
-                            if (EElistenerCount(dest, "error") === 0)dest.emit("error", er)
+                            if (EElistenerCount(dest, "error") === 0) dest.emit("error", er)
                         }
 
                         prependListener(dest, "error", onerror);
@@ -11541,7 +11541,7 @@
                         return function () {
                             var state = src._readableState;
                             debug("pipeOnDrain", state.awaitDrain);
-                            if (state.awaitDrain)state.awaitDrain--;
+                            if (state.awaitDrain) state.awaitDrain--;
                             if (state.awaitDrain === 0 && EElistenerCount(src, "data")) {
                                 state.flowing = true;
                                 flow(src)
@@ -11554,11 +11554,11 @@
                         if (state.pipesCount === 0)return this;
                         if (state.pipesCount === 1) {
                             if (dest && dest !== state.pipes)return this;
-                            if (!dest)dest = state.pipes;
+                            if (!dest) dest = state.pipes;
                             state.pipes = null;
                             state.pipesCount = 0;
                             state.flowing = false;
-                            if (dest)dest.emit("unpipe", this);
+                            if (dest) dest.emit("unpipe", this);
                             return this
                         }
                         if (!dest) {
@@ -11576,14 +11576,14 @@
                         if (i === -1)return this;
                         state.pipes.splice(i, 1);
                         state.pipesCount -= 1;
-                        if (state.pipesCount === 1)state.pipes = state.pipes[0];
+                        if (state.pipesCount === 1) state.pipes = state.pipes[0];
                         dest.emit("unpipe", this);
                         return this
                     };
                     Readable.prototype.on = function (ev, fn) {
                         var res = Stream.prototype.on.call(this, ev, fn);
                         if (ev === "data") {
-                            if (this._readableState.flowing !== false)this.resume()
+                            if (this._readableState.flowing !== false) this.resume()
                         } else if (ev === "readable") {
                             var state = this._readableState;
                             if (!state.endEmitted && !state.readableListening) {
@@ -11629,7 +11629,7 @@
                         state.awaitDrain = 0;
                         stream.emit("resume");
                         flow(stream);
-                        if (state.flowing && !state.reading)stream.read(0)
+                        if (state.flowing && !state.reading) stream.read(0)
                     }
 
                     Readable.prototype.pause = function () {
@@ -11656,13 +11656,13 @@
                             debug("wrapped end");
                             if (state.decoder && !state.ended) {
                                 var chunk = state.decoder.end();
-                                if (chunk && chunk.length)self.push(chunk)
+                                if (chunk && chunk.length) self.push(chunk)
                             }
                             self.push(null)
                         });
                         stream.on("data", function (chunk) {
                             debug("wrapped data");
-                            if (state.decoder)chunk = state.decoder.write(chunk);
+                            if (state.decoder) chunk = state.decoder.write(chunk);
                             if (state.objectMode && (chunk === null || chunk === undefined))return; else if (!state.objectMode && (!chunk || !chunk.length))return;
                             var ret = self.push(chunk);
                             if (!ret) {
@@ -11696,8 +11696,8 @@
                     function fromList(n, state) {
                         if (state.length === 0)return null;
                         var ret;
-                        if (state.objectMode)ret = state.buffer.shift(); else if (!n || n >= state.length) {
-                            if (state.decoder)ret = state.buffer.join(""); else if (state.buffer.length === 1)ret = state.buffer.head.data; else ret = state.buffer.concat(state.length);
+                        if (state.objectMode) ret = state.buffer.shift(); else if (!n || n >= state.length) {
+                            if (state.decoder) ret = state.buffer.join(""); else if (state.buffer.length === 1) ret = state.buffer.head.data; else ret = state.buffer.concat(state.length);
                             state.buffer.clear()
                         } else {
                             ret = fromListPartial(n, state.buffer, state.decoder)
@@ -11726,12 +11726,12 @@
                         while (p = p.next) {
                             var str = p.data;
                             var nb = n > str.length ? str.length : n;
-                            if (nb === str.length)ret += str; else ret += str.slice(0, n);
+                            if (nb === str.length) ret += str; else ret += str.slice(0, n);
                             n -= nb;
                             if (n === 0) {
                                 if (nb === str.length) {
                                     ++c;
-                                    if (p.next)list.head = p.next; else list.head = list.tail = null
+                                    if (p.next) list.head = p.next; else list.head = list.tail = null
                                 } else {
                                     list.head = p;
                                     p.data = str.slice(nb)
@@ -11758,7 +11758,7 @@
                             if (n === 0) {
                                 if (nb === buf.length) {
                                     ++c;
-                                    if (p.next)list.head = p.next; else list.head = list.tail = null
+                                    if (p.next) list.head = p.next; else list.head = list.tail = null
                                 } else {
                                     list.head = p;
                                     p.data = buf.slice(nb)
@@ -11840,7 +11840,7 @@
                     if (!cb)return stream.emit("error", new Error("no writecb in Transform class"));
                     ts.writechunk = null;
                     ts.writecb = null;
-                    if (data !== null && data !== undefined)stream.push(data);
+                    if (data !== null && data !== undefined) stream.push(data);
                     cb(er);
                     var rs = stream._readableState;
                     rs.reading = false;
@@ -11857,11 +11857,11 @@
                     this._readableState.needReadable = true;
                     this._readableState.sync = false;
                     if (options) {
-                        if (typeof options.transform === "function")this._transform = options.transform;
-                        if (typeof options.flush === "function")this._flush = options.flush
+                        if (typeof options.transform === "function") this._transform = options.transform;
+                        if (typeof options.flush === "function") this._flush = options.flush
                     }
                     this.once("prefinish", function () {
-                        if (typeof this._flush === "function")this._flush(function (er) {
+                        if (typeof this._flush === "function") this._flush(function (er) {
                             done(stream, er)
                         }); else done(stream)
                     })
@@ -11881,7 +11881,7 @@
                     ts.writeencoding = encoding;
                     if (!ts.transforming) {
                         var rs = this._readableState;
-                        if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark)this._read(rs.highWaterMark)
+                        if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark)
                     }
                 };
                 Transform.prototype._read = function (n) {
@@ -11918,7 +11918,7 @@
                             Stream = require("st" + "ream")
                         } catch (_) {
                         } finally {
-                            if (!Stream)Stream = require("events").EventEmitter
+                            if (!Stream) Stream = require("events").EventEmitter
                         }
                     })();
                     var Buffer = require("buffer").Buffer;
@@ -11940,7 +11940,7 @@
                         Duplex = Duplex || require("./_stream_duplex");
                         options = options || {};
                         this.objectMode = !!options.objectMode;
-                        if (stream instanceof Duplex)this.objectMode = this.objectMode || !!options.writableObjectMode;
+                        if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.writableObjectMode;
                         var hwm = options.highWaterMark;
                         var defaultHwm = this.objectMode ? 16 : 16 * 1024;
                         this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
@@ -11998,8 +11998,8 @@
                         this._writableState = new WritableState(options, this);
                         this.writable = true;
                         if (options) {
-                            if (typeof options.write === "function")this._write = options.write;
-                            if (typeof options.writev === "function")this._writev = options.writev
+                            if (typeof options.write === "function") this._write = options.write;
+                            if (typeof options.writev === "function") this._writev = options.writev
                         }
                         Stream.call(this)
                     }
@@ -12036,9 +12036,9 @@
                             cb = encoding;
                             encoding = null
                         }
-                        if (Buffer.isBuffer(chunk))encoding = "buffer"; else if (!encoding)encoding = state.defaultEncoding;
-                        if (typeof cb !== "function")cb = nop;
-                        if (state.ended)writeAfterEnd(this, cb); else if (validChunk(this, state, chunk, cb)) {
+                        if (Buffer.isBuffer(chunk)) encoding = "buffer"; else if (!encoding) encoding = state.defaultEncoding;
+                        if (typeof cb !== "function") cb = nop;
+                        if (state.ended) writeAfterEnd(this, cb); else if (validChunk(this, state, chunk, cb)) {
                             state.pendingcb++;
                             ret = writeOrBuffer(this, state, chunk, encoding, cb)
                         }
@@ -12052,11 +12052,11 @@
                         var state = this._writableState;
                         if (state.corked) {
                             state.corked--;
-                            if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest)clearBuffer(this, state)
+                            if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state)
                         }
                     };
                     Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
-                        if (typeof encoding === "string")encoding = encoding.toLowerCase();
+                        if (typeof encoding === "string") encoding = encoding.toLowerCase();
                         if (!(["hex", "utf8", "utf-8", "ascii", "binary", "base64", "ucs2", "ucs-2", "utf16le", "utf-16le", "raw"].indexOf((encoding + "").toLowerCase()) > -1))throw new TypeError("Unknown encoding: " + encoding);
                         this._writableState.defaultEncoding = encoding;
                         return this
@@ -12070,11 +12070,11 @@
 
                     function writeOrBuffer(stream, state, chunk, encoding, cb) {
                         chunk = decodeChunk(state, chunk, encoding);
-                        if (Buffer.isBuffer(chunk))encoding = "buffer";
+                        if (Buffer.isBuffer(chunk)) encoding = "buffer";
                         var len = state.objectMode ? 1 : chunk.length;
                         state.length += len;
                         var ret = state.length < state.highWaterMark;
-                        if (!ret)state.needDrain = true;
+                        if (!ret) state.needDrain = true;
                         if (state.writing || state.corked) {
                             var last = state.lastBufferedRequest;
                             state.lastBufferedRequest = new WriteReq(chunk, encoding, cb);
@@ -12095,13 +12095,13 @@
                         state.writecb = cb;
                         state.writing = true;
                         state.sync = true;
-                        if (writev)stream._writev(chunk, state.onwrite); else stream._write(chunk, encoding, state.onwrite);
+                        if (writev) stream._writev(chunk, state.onwrite); else stream._write(chunk, encoding, state.onwrite);
                         state.sync = false
                     }
 
                     function onwriteError(stream, state, sync, er, cb) {
                         --state.pendingcb;
-                        if (sync)processNextTick(cb, er); else cb(er);
+                        if (sync) processNextTick(cb, er); else cb(er);
                         stream._writableState.errorEmitted = true;
                         stream.emit("error", er)
                     }
@@ -12118,7 +12118,7 @@
                         var sync = state.sync;
                         var cb = state.writecb;
                         onwriteStateUpdate(state);
-                        if (er)onwriteError(stream, state, sync, er, cb); else {
+                        if (er) onwriteError(stream, state, sync, er, cb); else {
                             var finished = needFinish(state);
                             if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
                                 clearBuffer(stream, state)
@@ -12132,7 +12132,7 @@
                     }
 
                     function afterWrite(stream, state, finished, cb) {
-                        if (!finished)onwriteDrain(stream, state);
+                        if (!finished) onwriteDrain(stream, state);
                         state.pendingcb--;
                         cb();
                         finishMaybe(stream, state)
@@ -12180,7 +12180,7 @@
                                     break
                                 }
                             }
-                            if (entry === null)state.lastBufferedRequest = null
+                            if (entry === null) state.lastBufferedRequest = null
                         }
                         state.bufferedRequestCount = 0;
                         state.bufferedRequest = entry;
@@ -12201,12 +12201,12 @@
                             cb = encoding;
                             encoding = null
                         }
-                        if (chunk !== null && chunk !== undefined)this.write(chunk, encoding);
+                        if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
                         if (state.corked) {
                             state.corked = 1;
                             this.uncork()
                         }
-                        if (!state.ending && !state.finished)endWritable(this, state, cb)
+                        if (!state.ending && !state.finished) endWritable(this, state, cb)
                     };
                     function needFinish(state) {
                         return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing
@@ -12237,7 +12237,7 @@
                         state.ending = true;
                         finishMaybe(stream, state);
                         if (cb) {
-                            if (state.finished)processNextTick(cb); else stream.once("finish", cb)
+                            if (state.finished) processNextTick(cb); else stream.once("finish", cb)
                         }
                         state.ended = true;
                         stream.writable = false
@@ -12288,20 +12288,20 @@
 
                 BufferList.prototype.push = function (v) {
                     var entry = {data: v, next: null};
-                    if (this.length > 0)this.tail.next = entry; else this.head = entry;
+                    if (this.length > 0) this.tail.next = entry; else this.head = entry;
                     this.tail = entry;
                     ++this.length
                 };
                 BufferList.prototype.unshift = function (v) {
                     var entry = {data: v, next: this.head};
-                    if (this.length === 0)this.tail = entry;
+                    if (this.length === 0) this.tail = entry;
                     this.head = entry;
                     ++this.length
                 };
                 BufferList.prototype.shift = function () {
                     if (this.length === 0)return;
                     var ret = this.head.data;
-                    if (this.length === 1)this.head = this.tail = null; else this.head = this.head.next;
+                    if (this.length === 1) this.head = this.tail = null; else this.head = this.head.next;
                     --this.length;
                     return ret
                 };
@@ -12422,7 +12422,7 @@
                     function onclose() {
                         if (didOnEnd)return;
                         didOnEnd = true;
-                        if (typeof dest.destroy === "function")dest.destroy()
+                        if (typeof dest.destroy === "function") dest.destroy()
                     }
 
                     function onerror(er) {
@@ -12575,7 +12575,7 @@
                 };
                 StringDecoder.prototype.end = function (buffer) {
                     var res = "";
-                    if (buffer && buffer.length)res = this.write(buffer);
+                    if (buffer && buffer.length) res = this.write(buffer);
                     if (this.charReceived) {
                         var cr = this.charReceived;
                         var buf = this.charBuffer;

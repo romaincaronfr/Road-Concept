@@ -193,7 +193,7 @@ public class MapService extends AbstractService {
             } else if (lanes > 1) {
                 return FeatureType.DOUBLE_ROAD;
             } else if (lanes == 1) {
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             }
         }
 
@@ -204,29 +204,29 @@ public class MapService extends AbstractService {
             case "trunk":
                 return FeatureType.DOUBLE_ROAD;
             case "primary":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "secondary":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "tertiary":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "residential":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "motorway_link":
                 return FeatureType.TRIPLE_ROAD;
             case "trunk_link":
                 return FeatureType.DOUBLE_ROAD;
             case "primary_link":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "secondary_link":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "tertiary_link":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             case "road":
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
             //case "traffic_signals":
             //    return FeatureType.RED_LIGHT;
             default:
-                return FeatureType.SINLGE_ROAD;
+                return FeatureType.SINGLE_ROAD;
         }
     }
 
@@ -281,7 +281,7 @@ public class MapService extends AbstractService {
         }
         if (getType(properties) != null) {
             switch (getType(properties)) {
-                case SINLGE_ROAD:
+                case SINGLE_ROAD:
                     return 50;
                 case DOUBLE_ROAD:
                     return 90;
