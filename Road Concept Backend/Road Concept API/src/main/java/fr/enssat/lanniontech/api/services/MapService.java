@@ -6,7 +6,6 @@ import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 import fr.enssat.lanniontech.api.entities.geojson.LineString;
-import fr.enssat.lanniontech.api.entities.geojson.Point;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
@@ -133,17 +132,17 @@ public class MapService extends AbstractService {
 
             // Delete all non 'LineString' features
             if (!(feature.getGeometry() instanceof LineString)) {
-                if (feature.getGeometry() instanceof Point) {
-                    Map tags = (LinkedHashMap) feature.getProperties().get("tags");
-                    String highway = (String) tags.get("highway");
-                    if (!"traffic_signals".equals(highway)) {
-                        iterator.remove();
-                    } else {
-                        computeProperties(feature);
-                    }
-                } else {
+//                if (feature.getGeometry() instanceof Point) {
+//                    Map tags = (LinkedHashMap) feature.getProperties().get("tags");
+//                    String highway = (String) tags.get("highway");
+//                    if (!"traffic_signals".equals(highway)) {
+//                        iterator.remove();
+//                    } else {
+//                        computeProperties(feature);
+//                    }
+//                } else {
                     iterator.remove();
-                }
+              //  }
             } else {
                 if (feature.getProperties().containsKey("tags")) {
                     Map tags = (LinkedHashMap) feature.getProperties().get("tags");
@@ -172,7 +171,7 @@ public class MapService extends AbstractService {
         newProperties.put("oneway", getOneWay(feature.getProperties()));
         newProperties.put("bridge", getBridge(feature.getProperties()));
         newProperties.put("maxspeed", getMaxSpeed(feature.getProperties()));
-        newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
+     //   newProperties.put("redlighttime", getRedLightTime(feature.getProperties()));
 
         feature.getProperties().clear();
         feature.getProperties().putAll(newProperties);
@@ -299,12 +298,12 @@ public class MapService extends AbstractService {
         return Integer.MIN_VALUE;
     }
 
-    private Integer getRedLightTime(Map<String, Object> properties) {
-        if (getType(properties) == FeatureType.RED_LIGHT) {
-            return 30; // Default value
-        }
-        return null;
-    }
+//    private Integer getRedLightTime(Map<String, Object> properties) {
+//        if (getType(properties) == FeatureType.RED_LIGHT) {
+//            return 30; // Default value
+//        }
+//        return null;
+//    }
 
     public void deleteFeature(int mapID, UUID featureUUID) {
         mapFeatureRepository.delete(mapID, featureUUID);
