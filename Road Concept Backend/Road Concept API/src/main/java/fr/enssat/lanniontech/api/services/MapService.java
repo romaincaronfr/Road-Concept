@@ -32,7 +32,7 @@ public class MapService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
 
-    private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road", "traffic_signals"};
+    private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road" /*, "traffic_signals"*/};
 
     private MapInfoRepository mapInfoRepository = new MapInfoRepository();
     private MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
@@ -223,8 +223,8 @@ public class MapService extends AbstractService {
                 return FeatureType.SINLGE_ROAD;
             case "road":
                 return FeatureType.SINLGE_ROAD;
-            case "traffic_signals":
-                return FeatureType.RED_LIGHT;
+            //case "traffic_signals":
+            //    return FeatureType.RED_LIGHT;
             default:
                 return FeatureType.SINLGE_ROAD;
         }
@@ -289,8 +289,8 @@ public class MapService extends AbstractService {
                     return 130;
                 case ROUNDABOUT:
                     return 40;
-                case RED_LIGHT:
-                    return 0;
+               // case RED_LIGHT:
+               //     return 0;
                 default:
                     break;
             }
