@@ -5470,8 +5470,7 @@ button.list-group-item-danger.active:focus {
  }
 .panel-body .alert-danger {
   margin-top: 15px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-radius: 10px;
 }
 .panel-body .help-block {
   margin-top: 0;
