@@ -11,6 +11,7 @@ import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
+import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
@@ -63,8 +64,8 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
-    public SimulationVehicleResult getVehicleStatistics(UUID simulationUUID, int vehicleID) {
-        return new SimulationVehicleResult(); //TODO
+    public SimulationVehicleStatistics getVehicleStatistics(UUID simulationUUID, int vehicleID) {
+        return simulationResultRepository.getStatistics(simulationUUID, vehicleID);
     }
 
     public int getExecutionProgress(UUID simulationUUID, List<Simulation> activesSimulations) {
@@ -111,9 +112,18 @@ public class SimulatorService extends AbstractService implements Observer {
             } else if (observable instanceof Simulator) {
                 Simulation simulation = get(simulationUUID);
                 simulationParametersRepository.updateFinish(simulation, true);
+                saveVehiclesStatistics(simulation);
                 simulation.setFinish(true);
                 simulation.setSimulator(null); // garbage collector
             }
+        }
+    }
+
+    private void saveVehiclesStatistics(Simulation simulation) {
+        int vehiclesCount = simulation.getSimulator().getVehicleManager().getVehiclesNumber();
+        for (int i = 0; i < vehiclesCount; i++) {
+            //TODO; Temporary code. Waiting for core.
+            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), i, (int) (Math.random() * 100), (int) (Math.random() * 300));
         }
     }
 
@@ -134,7 +144,7 @@ public class SimulatorService extends AbstractService implements Observer {
             if (feature.getGeometry() instanceof LineString) {
                 LineString road = (LineString) feature.getGeometry();
 
-                if(feature.isRoad()){
+                if (feature.isRoad()) {
                     Coordinates last = road.getCoordinates().get(0);
 
                     for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
@@ -157,9 +167,9 @@ public class SimulatorService extends AbstractService implements Observer {
                         last = coordinates;
                     }
 
-                }else if (feature.isRoundabout()) {
+                } else if (feature.isRoundabout()) {
                     List<Position> roundaboutPositions = new ArrayList<>();
-                    for (Coordinates C : road.getCoordinates()){
+                    for (Coordinates C : road.getCoordinates()) {
                         roundaboutPositions.add(simulation.getSimulator().getPositionManager().
                                 addPosition(C.getLongitude(), C.getLatitude()));
                     }
@@ -175,18 +185,11 @@ public class SimulatorService extends AbstractService implements Observer {
     }
 
     private boolean computeOneWayFromProperty(String property) {
-        if (property == null || "no".equals(property)) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(property == null || "no".equals(property));
     }
 
     private boolean isReverseDrawed(String property) {
-        if (property == null || !"-1".equals(property)) {
-            return false;
-        }
-        return true;
+        return !(property == null || !"-1".equals(property));
     }
 
     public Simulation get(UUID simulationUUID) {

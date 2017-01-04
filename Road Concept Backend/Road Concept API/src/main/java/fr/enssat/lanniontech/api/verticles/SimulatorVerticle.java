@@ -53,7 +53,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     private void processGetVehicleStatistics(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
-            int vehicleID = routingContext.request().getParam("vehicleID"));
+            int vehicleID = Integer.parseInt(routingContext.request().getParam("vehicleID"));
 
             SimulationVehicleStatistics statistics = simulatorService.getVehicleStatistics(simulationUUID, vehicleID);
 

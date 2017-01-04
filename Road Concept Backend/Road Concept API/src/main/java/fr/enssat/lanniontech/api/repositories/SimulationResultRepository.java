@@ -26,7 +26,7 @@ public class SimulationResultRepository extends SimulationRepository {
 
     private static final String INSERT_ROAD_METRIC = "INSERT INTO simulation_congestion(feature_uuid, congestion_percentage, simulation_uuid, timestamp_s) VALUES (?, ?, ?, ?)";
     private static final String INSERT_VEHICLE_POSITION = "INSERT INTO simulation_vehicle(simulation_uuid, vehicle_id, timestamp_s, longitude, latitude, angle, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
-   private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, delay_congestion, average_speed) VALUES (?,?,?,?)";
+    private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, delay_congestion, average_speed) VALUES (?,?,?,?)";
     private static final String SELECT_CONGESTION_AT = "SELECT  feature_uuid, congestion_percentage FROM simulation_congestion WHERE simulation_uuid = ? AND timestamp_s = ?";
     private static final String SELECT_VEHICLES_AT = "SELECT vehicle_id, longitude, latitude, angle, type FROM simulation_vehicle WHERE simulation_uuid = ? and timestamp_s = ?";
     private static final String SELECT_ITINERARY_FOR = "SELECT longitude, latitude, angle, timestamp_s, type FROM simulation_vehicle WHERE simulation_uuid = ? AND vehicle_id = ?";
