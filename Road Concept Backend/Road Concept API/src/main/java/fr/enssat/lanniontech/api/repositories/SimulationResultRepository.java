@@ -6,6 +6,7 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureType;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
+import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +26,14 @@ public class SimulationResultRepository extends SimulationRepository {
 
     private static final String INSERT_ROAD_METRIC = "INSERT INTO simulation_congestion(feature_uuid, congestion_percentage, simulation_uuid, timestamp_s) VALUES (?, ?, ?, ?)";
     private static final String INSERT_VEHICLE_POSITION = "INSERT INTO simulation_vehicle(simulation_uuid, vehicle_id, timestamp_s, longitude, latitude, angle, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
+   private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, delay_congestion, average_speed) VALUES (?,?,?,?)";
     private static final String SELECT_CONGESTION_AT = "SELECT  feature_uuid, congestion_percentage FROM simulation_congestion WHERE simulation_uuid = ? AND timestamp_s = ?";
     private static final String SELECT_VEHICLES_AT = "SELECT vehicle_id, longitude, latitude, angle, type FROM simulation_vehicle WHERE simulation_uuid = ? and timestamp_s = ?";
     private static final String SELECT_ITINERARY_FOR = "SELECT longitude, latitude, angle, timestamp_s, type FROM simulation_vehicle WHERE simulation_uuid = ? AND vehicle_id = ?";
+    private static final String SELECT_VEHICLE_STATISTICS = "SELECT average_speed, delay_congestion FROM simulation_vehicle_statistics WHERE simulation_uuid = ? AND vehicle_id = ?";
     private static final String DELETE_ROAD_METRICS = "DELETE FROM simulation_congestion WHERE simulation_uuid = ?";
     private static final String DELETE_VEHCILES_POSITIONS = "DELETE FROM simulation_vehicle WHERE simulation_uuid = ?";
+    private static final String DELETE_VEHICLE_STATISTICS = "DELETE FROM simulation_vehicle_statistics WHERE simulation_uuid = ?";
 
     // ==========
     // CONGESTION
@@ -84,7 +88,6 @@ public class SimulationResultRepository extends SimulationRepository {
     public void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
-
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, vehicleID);
                 statement.setInt(3, timestamp);
@@ -159,6 +162,56 @@ public class SimulationResultRepository extends SimulationRepository {
         }
     }
 
+    // ==========
+    // STATISTICS
+    // ==========
+
+    public SimulationVehicleStatistics getStatistics(UUID simulationUUID, int vehicleID) {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(SELECT_VEHICLE_STATISTICS)) {
+                statement.setString(1, simulationUUID.toString());
+                statement.setInt(2, vehicleID);
+
+                try (ResultSet result = statement.executeQuery()) {
+                    result.next(); // Has exactly one row
+                    SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
+                    statistics.setVehicleID(vehicleID);
+                    statistics.setAverageSpeed(result.getInt("average_speed"));
+                    statistics.setDelayDueToCongestionS(result.getInt("delay_congestion"));
+
+                    return statistics;
+                }
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, SimulationVehicleResult.class);
+        }
+    }
+
+    public SimulationVehicleStatistics addVehicleStatistics(UUID simulationUUID, int vehicleID, int averageSpeed, int delayDueToCongestionS) {
+        try (Connection connection = getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_STATISTICS)) {
+                statement.setString(1, simulationUUID.toString());
+                statement.setInt(2, vehicleID);
+                statement.setInt(3, delayDueToCongestionS);
+                statement.setInt(3, averageSpeed);
+
+                try {
+                    statement.execute();
+                    SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
+                    statistics.setVehicleID(vehicleID);
+                    statistics.setAverageSpeed(averageSpeed);
+                    statistics.setDelayDueToCongestionS(delayDueToCongestionS);
+                    return statistics;
+                } finally {
+                    statement.close();
+                }
+            }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, SimulationVehicleResult.class);
+        }
+    }
+
+
     // ======
     // COMMON
     // ======
@@ -169,6 +222,7 @@ public class SimulationResultRepository extends SimulationRepository {
     public void delete(UUID simulationUUID) {
         delete(simulationUUID, DELETE_ROAD_METRICS, SimulationCongestionResult.class);
         delete(simulationUUID, DELETE_VEHCILES_POSITIONS, SimulationVehicleResult.class);
+        delete(simulationUUID, DELETE_VEHICLE_STATISTICS, SimulationVehicleStatistics.class);
     }
 
     private void delete(UUID simulationUUID, String query, Class<? extends Entity> clazz) {

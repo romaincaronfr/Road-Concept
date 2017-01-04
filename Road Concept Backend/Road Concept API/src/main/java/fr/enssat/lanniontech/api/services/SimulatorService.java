@@ -63,6 +63,10 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
+    public SimulationVehicleResult getVehicleStatistics(UUID simulationUUID, int vehicleID) {
+        return new SimulationVehicleResult(); //TODO
+    }
+
     public int getExecutionProgress(UUID simulationUUID, List<Simulation> activesSimulations) {
         Simulation simulation = null;
         for (Simulation active : activesSimulations) {
