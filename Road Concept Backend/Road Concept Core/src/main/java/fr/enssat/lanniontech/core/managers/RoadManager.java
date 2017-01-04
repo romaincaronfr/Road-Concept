@@ -74,6 +74,7 @@ public class RoadManager {
             return null;
         }
         Road R;
+        oneWay = false;
         if(oneWay){
             R = roads.computeIfAbsent(id, k -> new OneWayRoad(id, maxSpeed));
             R.addSection(addOneWayRoadSection(A,B,R));
@@ -179,13 +180,11 @@ public class RoadManager {
         }
         LOGGER.info("roads transformed : " + i);
 
-        for (int j = 0; j < 3; j++) {
-            for (Position P : positions){
-                if(roadEdges.get(P).size() > 1 && !intersectionMap.containsKey(P)){
-                    createIntersection(P);
-                    if(!intersectionMap.get(P).isValid()){
-                        diagnoseIntersection(P);
-                    }
+        for (Position P : positions){
+            if(roadEdges.get(P).size() > 1 && !intersectionMap.containsKey(P)){
+                createIntersection(P);
+                if(!intersectionMap.get(P).isValid()){
+                    diagnoseIntersection(P);
                 }
             }
         }

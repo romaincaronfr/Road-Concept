@@ -79,23 +79,57 @@ public class TestRoadManager {
     }
 
     @Test
-    public void changeMiddleRoad(){
+    public void addRoundAbout2() {
         RoadManager RM = new RoadManager();
         Position P1 = new Position(1,0);
         Position P2 = new Position(0,1);
         Position P3 = new Position(-1,0);
         Position P4 = new Position(0,-1);
+        Position P0 = new Position(2,0);
+
+        List<Position> list = new ArrayList<>();
+        list.add(P1);
+        list.add(P2);
+        list.add(P3);
+        list.add(P4);
+        list.add(P1);
 
         UUID id1 = UUID.fromString("0-0-0-0-1");
         UUID id2 = UUID.fromString("0-0-0-0-2");
+
+        RM.addRoundAbout(list,id1);
+
+        RM.addRoadSectionToRoad(P0,P1,id2,50,true);
+
+        RM.closeRoads();
+
+        int integrity = RM.checkIntegrity();
+
+        Assert.assertEquals(0, integrity);
+    }
+
+    @Test
+    public void changeMiddleRoad(){
+        RoadManager RM = new RoadManager();
+        Position P1 = new Position(1,0);
+        Position P2 = new Position(0,1);
+        Position P22 = new Position(0,0.5);
+        Position P3 = new Position(-1,0);
+        Position P4 = new Position(0,-1);
+
+        UUID id1 = UUID.fromString("0-0-0-0-1");
+        UUID id2 = UUID.fromString("0-0-0-0-2");
+        UUID id22 = UUID.fromString("0-0-0-0-22");
         UUID id3 = UUID.fromString("0-0-0-0-3");
 
         RM.addRoadSectionToRoad(P1,P2,id1,50, false);
-        RM.addRoadSectionToRoad(P2,P3,id2,50,true);
+        RM.addRoadSectionToRoad(P2,P22,id2,50,true);
+        RM.addRoadSectionToRoad(P22,P3,id22,50,true);
         RM.addRoadSectionToRoad(P3,P4,id3,50, false);
 
         RM.closeRoads();
         Assert.assertEquals(0,RM.checkIntegrity());
+
     }
 
 }
