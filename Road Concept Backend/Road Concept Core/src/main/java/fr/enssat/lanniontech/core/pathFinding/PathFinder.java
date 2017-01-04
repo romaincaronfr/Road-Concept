@@ -87,10 +87,10 @@ public class PathFinder {
             //pour toute les tajectoire de ce node
             for (TrajectoryJunction tj : node.getTrajectory().getAllNext()) {
                 Trajectory t = tj.getDestination();
+                //calcul du cout du node
+                double cost = node.getCost() + t.getLength();
                 //on verifie que le node n'a pas deja été exploré
-                if(!closedNodes.keySet().contains(t)){
-                    //calcul du cout du node
-                    double cost = node.getCost() + t.getLength();
+                if(!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost){
                     //creation du node
                     Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()),
                             node, t);
@@ -115,7 +115,6 @@ public class PathFinder {
         }
 
         reconstructPath(myPath, finalNode);
-        //myPath.addToPath(destination);
 
         return myPath;
     }

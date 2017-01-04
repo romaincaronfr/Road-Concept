@@ -1,6 +1,7 @@
 import fr.enssat.lanniontech.core.managers.RoadManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import org.junit.Assert;
@@ -36,7 +37,7 @@ public class TestRoadManager {
         Position A = new Position(0, 0);
         Position B = new Position(1, 1);
         Position C = new Position(2, 2);
-        Road R = new OneWayRoad(UUID.randomUUID(), 50);
+        Road R = new DualWayRoad(UUID.randomUUID(), 50);
 
         DualWayRoadSection RS1 = (DualWayRoadSection) RM.addDualWayRoadSection(A, B, R);
         DualWayRoadSection RS2 = (DualWayRoadSection) RM.addDualWayRoadSection(C, A, R);
@@ -77,62 +78,24 @@ public class TestRoadManager {
         Assert.assertEquals(0, integrity);
     }
 
-/*  @Test
-    public void addRoads() {
+    @Test
+    public void changeMiddleRoad(){
         RoadManager RM = new RoadManager();
-        Position I = new Position(0, 0);
-        Position A = new Position(1, 0);
-        Position B = new Position(-1, 0);
-        Position C = new Position(0, 1);
-        Position D = new Position(0, -1);
-        Position E = new Position(1, 1);
+        Position P1 = new Position(1,0);
+        Position P2 = new Position(0,1);
+        Position P3 = new Position(-1,0);
+        Position P4 = new Position(0,-1);
 
-        Road R1 = RM.addRoadSectionToRoad(A, I, UUID.randomUUID());
-        Road R2 = RM.addRoadSectionToRoad(B, I, UUID.randomUUID());
+        UUID id1 = UUID.fromString("0-0-0-0-1");
+        UUID id2 = UUID.fromString("0-0-0-0-2");
+        UUID id3 = UUID.fromString("0-0-0-0-3");
 
-        Intersection Inter = RM.getIntersection(I);
+        RM.addRoadSectionToRoad(P1,P2,id1,50, false);
+        RM.addRoadSectionToRoad(P2,P3,id2,50,true);
+        RM.addRoadSectionToRoad(P3,P4,id3,50, false);
 
-        Assert.assertEquals(2,Inter.getRoadSectionsSize());
-        Assert.assertEquals(Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1),
-                Inter.getTrajectoriesSize());
-
-        Road R3 = RM.addRoadSectionToRoad(C, I, UUID.randomUUID());
-        Assert.assertEquals(3,Inter.getRoadSectionsSize());
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Road R4 = RM.addRoadSectionToRoad(D, I, UUID.randomUUID());
-        Assert.assertEquals(4,Inter.getRoadSectionsSize());
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
-        Road R5 = RM.addRoadSectionToRoad(E, I, UUID.randomUUID());
-        Assert.assertEquals(5,Inter.getRoadSectionsSize());
-        Assert.assertEquals(Inter.getTrajectoriesSize(),
-                Inter.getRoadSectionsSize() * (Inter.getRoadSectionsSize() - 1));
-
+        RM.closeRoads();
+        Assert.assertEquals(0,RM.checkIntegrity());
     }
 
-    @Test
-    public void testJoint(){
-        RoadManager RM = new RoadManager();
-        Position I1 = new Position(0, -1);
-        Position A = new Position(1, 0);
-        Position B = new Position(-1, 0);
-
-        Road R1 = RM.addRoadSectionToRoad(A, I1, UUID.randomUUID());
-        Road R2 = RM.addRoadSectionToRoad(B, I1, UUID.randomUUID());
-
-        Intersection Inter1 = RM.getIntersection(I1);
-
-        Assert.assertNull(R1.get(0).getLaneBA().getInsertTrajectory().getNext());
-        Assert.assertNull(R2.get(0).getLaneBA().getInsertTrajectory().getNext());
-        Assert.assertNotNull(R1.get(0).getLaneAB().getInsertTrajectory().getNext());
-        Assert.assertNotNull(R2.get(0).getLaneAB().getInsertTrajectory().getNext());
-
-        Assert.assertEquals(2,Inter1.getRoadSectionsSize());
-        Assert.assertEquals(Inter1.getRoadSectionsSize() * (Inter1.getRoadSectionsSize() - 1),
-                Inter1.getTrajectoriesSize());
-
-    }*/
 }

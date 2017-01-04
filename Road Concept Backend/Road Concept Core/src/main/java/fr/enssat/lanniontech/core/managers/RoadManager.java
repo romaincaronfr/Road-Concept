@@ -161,7 +161,7 @@ public class RoadManager {
             createRoundAbout(id);
         }
 
-        int i = 0;
+        int i;
         List<Position> positions = new ArrayList<>();
         for (Position P : roadEdges.keySet()) {
             positions.add(P);
@@ -179,11 +179,68 @@ public class RoadManager {
         }
         LOGGER.info("roads transformed : " + i);
 
+        for (Position P : positions){
+            if(roadEdges.get(P).size() > 1){
+                createIntersection(P);
+                if(!intersectionMap.get(P).isValid()){
+                    diagnoseIntersection(P);
+                }
+            }
+        }
+
         for (Position P : positions) {
             if (roadEdges.get(P).size() == 1) {
                 closeEdge(P);
-            }else{
-                createIntersection(P);
+            }
+        }
+
+        for (Intersection inter :intersectionMap.values()){
+            inter.assembleIntersection();
+        }
+    }
+
+    private void diagnoseIntersection(Position P) {
+        RoadSection RS1,RS2;
+        Intersection I1,I2;
+        I1 = intersectionMap.get(P);
+        List<UUID> ids = I1.getRoadsUUID();
+        for(UUID id : ids){
+            Road R = roads.get(id);
+            if(R instanceof OneWayRoad){
+
+                if (P == R.getA()){
+                    I2 = intersectionMap.get(R.getB());
+                    RS1 = R.get(0);
+                    RS2 = R.get(R.size()-1);
+                }else{
+                    I2 = intersectionMap.get(R.getB());
+                    RS1 = R.get(R.size()-1);
+                    RS2 = R.get(0);
+                }
+
+                if(I2 != null){
+                    I2.removeRoadSection(RS2);
+                }
+                I1.removeRoadSection(RS1);
+
+                transformAsDualWayRoad(R);
+                R = roads.get(id);
+
+                if (P == R.getA()){
+                    RS1 = R.get(0);
+                    RS2 = R.get(R.size()-1);
+                }else{
+                    RS1 = R.get(R.size()-1);
+                    RS2 = R.get(0);
+                }
+
+                I1.addRoadSection(RS1);
+                if(I2 != null){
+                    I2.addRoadSection(RS2);
+                    if (!I2.isValid()){
+                        diagnoseIntersection(I2.getP());
+                    }
+                }
             }
         }
     }
@@ -193,7 +250,6 @@ public class RoadManager {
         for (RoadSection section : roadEdges.get(P)) {
             intersection.addRoadSection(section);
         }
-        intersection.assembleIntersection();
         intersectionMap.put(P, intersection);
     }
 
@@ -242,9 +298,7 @@ public class RoadManager {
                 intersection.addRoadSection(sections.get(i));
                 intersection.addRoadSection(sections.get(j));
 
-                intersection.assembleIntersection();
                 intersectionMap.put(positions.get(i), intersection);
-
                 roadEdges.remove(positions.get(i));
             }else {
                 fuseOneWayRoadSection(sections.get(i),sections.get(j),positions.get(i));

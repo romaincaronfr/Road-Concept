@@ -23,10 +23,8 @@ public class RoundAboutIO extends Intersection {
         for (SimpleTrajectory source : incomingTrajectories) {
             //create the entry in the trajectories table
             Map<UUID, SimpleTrajectory> myTrajectories = new HashMap<>();
-            boolean valid = false;
             for (SimpleTrajectory destination : outgoingTrajectories) {
                 if (source.getRoadId() != destination.getRoadId() || source.getRoadId() == id) {
-                    valid = true;
                     myTrajectories.put(destination.getRoadId(), destination);
 
                     TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
@@ -37,8 +35,9 @@ public class RoundAboutIO extends Intersection {
                     destination.setSourceIntersection(this);
                 }
             }
-            this.valid &= valid;
             trajectories.put(source.getRoadId(), myTrajectories);
         }
     }
+
+
 }

@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ public class Intersection {
     protected List<SimpleTrajectory> incomingTrajectories;
     protected List<SimpleTrajectory> outgoingTrajectories;
     protected Map<UUID, Map<UUID, SimpleTrajectory>> trajectories;
-    protected boolean valid;
     //structure is <source ,<destination, destinationTrajectory>>
 
     public Intersection(Position P) {
@@ -26,7 +26,6 @@ public class Intersection {
         incomingTrajectories = new ArrayList<>();
         outgoingTrajectories = new ArrayList<>();
         trajectories = new HashMap<>();
-        valid = true;
     }
 
     /**
@@ -36,10 +35,8 @@ public class Intersection {
         for (SimpleTrajectory source : incomingTrajectories) {
             //create the entry in the trajectories table
             Map<UUID, SimpleTrajectory> myTrajectories = new HashMap<>();
-            boolean valid = false;
             for (SimpleTrajectory destination : outgoingTrajectories) {
                 if (source.getRoadId() != destination.getRoadId()) {
-                    valid = true;
                     myTrajectories.put(destination.getRoadId(), destination);
 
                     TrajectoryJunction junction = TrajectoryJunction.computeJunction(source, destination);
@@ -50,7 +47,6 @@ public class Intersection {
                     destination.setSourceIntersection(this);
                 }
             }
-            this.valid &= valid;
             trajectories.put(source.getRoadId(), myTrajectories);
         }
     }
@@ -71,6 +67,17 @@ public class Intersection {
             outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
         }
         return true;
+    }
+
+    public void removeRoadSection(RoadSection Rs){
+        Lane incomingLane = Rs.getOutputLane(P);
+        Lane outgoingLane = Rs.getInputLane(P);
+        if(incomingLane != null){
+            incomingTrajectories.remove(incomingLane.getInsertTrajectory());
+        }
+        if(outgoingLane != null){
+            outgoingTrajectories.remove(outgoingLane.getInsertTrajectory());
+        }
     }
 
     public int getIncommingSize() {
@@ -100,6 +107,46 @@ public class Intersection {
     }
 
     public boolean isValid(){
-        return valid;
+        if(incomingTrajectories.size()==0 || outgoingTrajectories.size()==0){
+            return false;
+        }
+
+        if(incomingTrajectories.size()==1){
+            UUID id = incomingTrajectories.get(0).getRoadId();
+            for (Trajectory t : outgoingTrajectories){
+                if(t.getRoadId()==id){
+                    return false;
+                }
+            }
+        }
+
+        if(outgoingTrajectories.size()==1){
+            UUID id = outgoingTrajectories.get(0).getRoadId();
+            for (Trajectory t : incomingTrajectories){
+                if(t.getRoadId()==id){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public List<UUID> getRoadsUUID(){
+        List<UUID> ids = new ArrayList<>();
+
+        for (Trajectory t : incomingTrajectories){
+            if(!ids.contains(t.getRoadId())){
+                ids.add(t.getRoadId());
+            }
+        }
+
+        for (Trajectory t : outgoingTrajectories){
+            if(!ids.contains(t.getRoadId())){
+                ids.add(t.getRoadId());
+            }
+        }
+
+        return ids;
     }
 }

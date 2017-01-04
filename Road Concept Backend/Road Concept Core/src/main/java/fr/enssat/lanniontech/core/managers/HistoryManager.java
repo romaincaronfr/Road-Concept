@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.managers;
 
+import fr.enssat.lanniontech.core.exceptions.OutOfBoundException;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class HistoryManager extends Observable {
 
     public void addPosition(SpaceTimePosition P) {
         if (!positionManager.isInRange(P)) {
-            LOGGER.debug("car out of bounds");
+            throw new OutOfBoundException();
         }
         currentPositionSample.add(P);
     }

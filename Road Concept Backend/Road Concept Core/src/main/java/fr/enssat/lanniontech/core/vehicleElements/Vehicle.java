@@ -57,7 +57,7 @@ public class Vehicle {
         // double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
         double nextCarDist = getAI().getFreeDistance() + 10;
 
-        double nextCarSpeed = 0;
+        double nextCarSpeed = AI.getSpeed();
         if (nextCarDist < getAI().getFreeDistance()) {
             nextCarSpeed = getFrontSide().getNextCarSpeed();
         }
