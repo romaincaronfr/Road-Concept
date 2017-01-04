@@ -87,24 +87,27 @@ public class PathFinder {
             //pour toute les tajectoire de ce node
             for (TrajectoryJunction tj : node.getTrajectory().getAllNext()) {
                 Trajectory t = tj.getDestination();
-                //calcul du cout du node
-                double cost = node.getCost() + t.getLength();
-                //on verifie que le node n'a pas deja été exploré
-                if(!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost){
-                    //creation du node
-                    Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()),
-                            node, t);
-                    //si la destination est la meme que la trajectoire
-                    if(t==goal){
-                        finalNode = newNode;
-                    }else{
-                        int pos = 0;
-                        while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
-                            pos++;
+                if (t != null){
+                    //calcul du cout du node
+                    double cost = node.getCost() + t.getLength();
+                    //on verifie que le node n'a pas deja été exploré
+                    if(!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost){
+                        //creation du node
+                        Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()),
+                                node, t);
+                        //si la destination est la meme que la trajectoire
+                        if(t==goal){
+                            finalNode = newNode;
+                        }else{
+                            int pos = 0;
+                            while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
+                                pos++;
+                            }
+                            openNodes.add(pos, newNode);
                         }
-                        openNodes.add(pos, newNode);
                     }
                 }
+
             }
             closedNodes.put(node.getTrajectory(),node);
         }

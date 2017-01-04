@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.roadElements;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 
@@ -15,14 +16,18 @@ public class Lane {
 
     public Lane(RoadSection myRoadSection, double length) {
         this.length = Math.abs(length);
-        width = 3.5;
+        if(myRoadSection instanceof DualWayRoadSection){
+            width = 3.5;
+        }else{
+            width = 0;
+        }
         trajectories = new ArrayList<>();
         if (length > 0) {
             trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2,
-                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB())));
+                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB()),myRoadSection.getMyRoad().getMaxSpeed()));
         } else {
             trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2,
-                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB())));
+                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB()),myRoadSection.getMyRoad().getMaxSpeed()));
         }
     }
 

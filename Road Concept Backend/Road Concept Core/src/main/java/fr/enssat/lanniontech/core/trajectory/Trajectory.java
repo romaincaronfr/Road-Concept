@@ -12,18 +12,20 @@ import java.util.UUID;
 public abstract class Trajectory {
 
     protected List<Side> vehiclesSides;
+    private double speed;
     private Position position;
     protected double length;
     protected double notFreeSpace;
     private List<Integer> loggedVehicles;
     protected UUID roadId;
 
-    public Trajectory(UUID roadId,Position position) {
+    public Trajectory(UUID roadId,Position position,double speed) {
         loggedVehicles = new ArrayList<>();
         notFreeSpace = 0;
         this.roadId = roadId;
         this.vehiclesSides = new ArrayList<>();
         this.position = position;
+        this.speed = speed;
     }
 
     public Position getPosition() {
@@ -154,4 +156,7 @@ public abstract class Trajectory {
      */
     public abstract Intersection getNextIntersection();
 
+    public double getSpeed() {
+        return speed;
+    }
 }

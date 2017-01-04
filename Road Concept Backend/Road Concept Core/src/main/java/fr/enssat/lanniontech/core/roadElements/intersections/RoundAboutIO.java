@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.core.roadElements.intersections;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.roads.RoundAbout;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
 import java.util.HashMap;
@@ -39,5 +40,22 @@ public class RoundAboutIO extends Intersection {
         }
     }
 
+    @Override
+    public boolean isValid() {
+        boolean res1,res2;
+        res1 = false;
+        for (Trajectory t : outgoingTrajectories){
+            if(t.getRoadId()==id){
+                res1 = true;
+            }
+        }
+        res2 = false;
+        for (Trajectory t : incomingTrajectories){
+            if(t.getRoadId()==id){
+                res2 = true;
+            }
+        }
 
+        return res1&res2;
+    }
 }

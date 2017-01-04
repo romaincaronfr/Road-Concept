@@ -12,10 +12,7 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
-import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
-import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
-import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
-import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
+import fr.enssat.lanniontech.api.exceptions.*;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
@@ -180,9 +177,9 @@ public class SimulatorService extends AbstractService implements Observer {
             }
         }
         simulation.getSimulator().getRoadManager().closeRoads();
- //       if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
-//            throw new RoadConceptUnexpectedException("Simulator check integrity failed");
- //       }
+        if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
+            throw new RoadConceptUnexpectedException("Simulator check integrity failed");
+        }
     }
 
     private boolean computeOneWayFromProperty(String property) {

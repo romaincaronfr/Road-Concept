@@ -28,8 +28,8 @@ public class SimpleTrajectory extends Trajectory {
     private Intersection destIntersection;
 
 
-    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId,Position position) {
-        super(roadId,position);
+    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId,Position position,double speed) {
+        super(roadId,position,speed);
         sourcesTrajectories = new HashMap<>();
         destinationsTrajectories = new HashMap<>();
         sourceType = TrajectoryEndType.UNDEFINED;

@@ -16,7 +16,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 0, UUID.randomUUID(),null);
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 0, UUID.randomUUID(),null,50);
 
         Assert.assertFalse(sT.isInverted());
 
@@ -34,7 +34,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 0, UUID.randomUUID(),null);
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 0, UUID.randomUUID(),null,50);
 
         Assert.assertTrue(sT.isInverted());
 
@@ -52,7 +52,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 10, UUID.randomUUID(),null);
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 0, 2000, 10, UUID.randomUUID(),null,50);
 
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 
@@ -68,7 +68,7 @@ public class testSimpleTrajectory {
 
         PosFunction pF = new PosFunction(A, B);
 
-        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 10, UUID.randomUUID(),null);
+        SimpleTrajectory sT = new SimpleTrajectory(pF, 2000, 0, 10, UUID.randomUUID(),null,50);
 
         Assert.assertEquals(2000, sT.getLength(), 0.0001);
 

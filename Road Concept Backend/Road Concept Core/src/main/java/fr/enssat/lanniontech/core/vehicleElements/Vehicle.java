@@ -46,10 +46,6 @@ public class Vehicle {
         this.setAI(AI);
     }
 
-    public static Logger getLOGGER() {
-        return LOGGER;
-    }
-
     /**
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
@@ -65,8 +61,7 @@ public class Vehicle {
     }
 
     private double roadMaxSpeed() {
-        return Tools.kphToMph(90);
-        //todo get the max speed of the current road
+        return Tools.kphToMph(frontSide.getMaxSpeed());
     }
 
     /**
