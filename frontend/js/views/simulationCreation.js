@@ -741,14 +741,14 @@ app.simulationCreationView = Backbone.View.extend({
                 if (parseInt(data) < 100) {
                     //$('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
                     $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').prop('style','width:'+data+'%');
-                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').val(data+'%');
+                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').html(data+'%');
                     setTimeout(function () {
                         self.getProgressSimu(id);
                     }, 1000);
                 } else {
                     //$('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
                     $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').prop('style','width:'+data+'%');
-                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').val(data+'%');
+                    $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').html(data+'%');
                     setTimeout(function () {
                         $('#modalStartSim').modal('hide');
                         $('.modal-backdrop').remove();
