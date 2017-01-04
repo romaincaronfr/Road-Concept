@@ -50,10 +50,10 @@ public class Vehicle {
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        // double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
-        double nextCarDist = getAI().getFreeDistance() + 10;
+        double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
+        //double nextCarDist = getAI().getFreeDistance() + 10;
 
-        double nextCarSpeed = AI.getSpeed();
+        double nextCarSpeed = roadMaxSpeed();
         if (nextCarDist < getAI().getFreeDistance()) {
             nextCarSpeed = getFrontSide().getNextCarSpeed();
         }
@@ -96,7 +96,7 @@ public class Vehicle {
 
     public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 3.5;
-        VehicleAI AI = new VehicleAI(3, 1.5, 4);
+        VehicleAI AI = new VehicleAI(1, 4, 4);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.setType(VehicleType.CAR);
         return V;
@@ -104,7 +104,7 @@ public class Vehicle {
 
     public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 15;
-        VehicleAI AI = new VehicleAI(2, 1, 10);
+        VehicleAI AI = new VehicleAI(0.5, 2, 10);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.setType(VehicleType.TRUCK);
         return V;

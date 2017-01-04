@@ -129,7 +129,7 @@ public class SimpleTrajectory extends Trajectory {
     public double getDistanceToFirst(double freeDistance) {
         if (vehiclesSides.isEmpty()) {
             if (freeDistance - length > 0) {
-                return length + getNext().getDestination().getDistanceToFirst(freeDistance);
+                return length + getNext().getDestination().getDistanceToFirst(freeDistance-length);
             } else {
                 return length;
             }

@@ -134,7 +134,7 @@ public class SimulatorService extends AbstractService implements Observer {
 
         simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
 
-        return simulation.getSimulator().launchSimulation(86400, 0.1, 10 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
+        return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
 
     private void sendFeatures(Simulation simulation, FeatureCollection features) {
