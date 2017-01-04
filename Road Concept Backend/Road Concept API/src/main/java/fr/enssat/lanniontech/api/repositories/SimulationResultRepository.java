@@ -193,7 +193,7 @@ public class SimulationResultRepository extends SimulationRepository {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, vehicleID);
                 statement.setInt(3, delayDueToCongestionS);
-                statement.setInt(3, averageSpeed);
+                statement.setInt(4, averageSpeed);
 
                 try {
                     statement.execute();

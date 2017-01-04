@@ -1,4 +1,3 @@
-
 -- ==============================================================================
 -- USERS
 -- ==============================================================================
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS "simulation_congestion" (
 
 CREATE TABLE IF NOT EXISTS "simulation_vehicle_statistics" (
   "simulation_uuid"  VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
-  "vehicle_id"       VARCHAR(40) NOT NULL,
+  "vehicle_id"       INTEGER     NOT NULL,
   "delay_congestion" INTEGER     NOT NULL,
   "average_speed"    INTEGER     NOT NULL,
   PRIMARY KEY (simulation_uuid, vehicle_id)

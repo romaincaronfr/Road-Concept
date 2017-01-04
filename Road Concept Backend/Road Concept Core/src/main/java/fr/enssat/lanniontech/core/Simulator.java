@@ -7,7 +7,6 @@ import fr.enssat.lanniontech.core.managers.VehicleManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Observable;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -55,11 +54,11 @@ public class Simulator extends Observable implements Runnable {
         if (simulatorThread.isAlive()) {
             return false;
         } else {
-            UncaughtExceptionHandler h = (th, ex) -> {
-                LOGGER.error("Exception in child thread");
-                ex.printStackTrace();
-            };
-            simulatorThread.setUncaughtExceptionHandler(h);
+          //  UncaughtExceptionHandler h = (Thread th, Throwable ex) -> {
+          //      LOGGER.error("Exception in child thread");
+          //      ex.printStackTrace();
+          //  };
+         //   simulatorThread.setUncaughtExceptionHandler(h);
             this.samplingRate = samplingRate;
             this.length = length;
             this.precision = precision;
