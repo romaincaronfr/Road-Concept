@@ -51,7 +51,7 @@ app.mapCarSimulationView = Backbone.View.extend({
 
     render: function () {
         var self = this;
-        //Supression du content
+        //Suppression du content
         this.mapDetailsCollectionSimulation.reset();
         $('#content').empty();
         if (this.vectorSource) {
