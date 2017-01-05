@@ -16,7 +16,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity{
 
     private static final String TAG = "LoginActivity";
     @Override
@@ -26,12 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         Login login = new Login();
         login.setEmail("admin@enssat.fr");
         login.setPassword("admin");
-        Retrofit retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(Constants.SERVER_URL)
-                .build();
-        RoadConceptService roadConceptService = retrofit.create(RoadConceptService.class);
+        RoadConceptService roadConceptService = getRetrofit().create(RoadConceptService.class);
         Observable<Response<Login>> responseObservable = roadConceptService.postLogin(login);
         responseObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

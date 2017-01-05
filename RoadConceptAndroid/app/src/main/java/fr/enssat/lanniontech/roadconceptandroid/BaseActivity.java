@@ -1,10 +1,17 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.AddCookiesInterceptor;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.ReceivedCookiesInterceptor;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Romain on 05/01/2017.
@@ -18,7 +25,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.interceptors().add(new AddCookiesInterceptor());
-        okHttpClient.interceptors().add(new ReceivedCookiesInterceptor());
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.addInterceptor(new AddCookiesInterceptor(this)); // VERY VERY IMPORTANT
+        builder.addInterceptor(new ReceivedCookiesInterceptor(this)); // VERY VERY IMPORTANT
+        okHttpClient = builder.build();
+        mRetrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.SERVER_URL)
+                .client(okHttpClient)
+                .build();
+    }
+
+    public Retrofit getRetrofit() {
+        return mRetrofit;
     }
 }
