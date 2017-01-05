@@ -68,7 +68,7 @@ public class UserService extends AbstractService {
         }
         if (!user.getEmail().equals(current.getEmail())) {
             repository.updateEmail(user, user.getEmail());
-            current.setLastName(user.getEmail());
+            current.setEmail(user.getEmail());
         }
         if (!user.getType().equals(current.getType())) {
             repository.updateType(user, user.getType());
