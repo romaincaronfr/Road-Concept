@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid.utilities;
+package fr.enssat.lanniontech.roadconceptandroid.Utilities;
 
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Entity;
 

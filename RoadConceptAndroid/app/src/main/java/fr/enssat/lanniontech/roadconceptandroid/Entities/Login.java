@@ -1,21 +1,30 @@
 package fr.enssat.lanniontech.roadconceptandroid.Entities;
 
-/**
- * Created by Romain on 09/12/2016.
- */
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class Login implements Entity {
-    private String Cookie;
+public class Login {
 
-    public Login(String cookie) {
-        Cookie = cookie;
+    @SerializedName("email")
+    @Expose
+    private String email;
+    @SerializedName("password")
+    @Expose
+    private String password;
+
+    public String getEmail() {
+        return email;
     }
 
-    public String getCookie() {
-        return Cookie;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setCookie(String cookie) {
-        Cookie = cookie;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
