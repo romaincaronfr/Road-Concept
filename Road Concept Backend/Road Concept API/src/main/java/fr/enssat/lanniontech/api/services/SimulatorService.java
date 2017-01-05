@@ -12,7 +12,11 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
-import fr.enssat.lanniontech.api.exceptions.*;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
+import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
+import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
@@ -25,6 +29,7 @@ import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,11 +41,21 @@ public class SimulatorService extends AbstractService implements Observer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulatorService.class);
 
-    private SimulationRepository simulationGlobalRepository = new SimulationRepository();
-    private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
-    private SimulationResultRepository simulationResultRepository = new SimulationResultRepository();
+    private SimulationRepository simulationGlobalRepository;
+    private SimulationParametersRepository simulationParametersRepository;
+    private SimulationResultRepository simulationResultRepository;
 
     private MapService mapService = new MapService();
+
+    public SimulatorService() {
+        try {
+            this.simulationGlobalRepository = new SimulationRepository();
+            this.simulationParametersRepository = new SimulationParametersRepository();
+            this.simulationResultRepository = new SimulationResultRepository();
+        } catch (SQLException e) {
+            throw new RoadConceptUnexpectedException(e);
+        }
+    }
 
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         try {
@@ -106,11 +121,16 @@ public class SimulatorService extends AbstractService implements Observer {
                 }
                 historyManager.removeSamples();
             } else if (observable instanceof Simulator) {
-                Simulation simulation = get(simulationUUID);
-                simulationParametersRepository.updateFinish(simulation, true);
-                saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
-                simulation.setFinish(true);
-                simulation.setSimulator(null); // garbage collector
+                try {
+                    Simulation simulation = get(simulationUUID);
+                    simulationParametersRepository.updateFinish(simulation, true);
+                    saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
+                    simulationResultRepository.getSQLContext().commit();
+                    simulation.setFinish(true);
+                    simulation.setSimulator(null); // garbage collector
+                } catch (Exception e) {
+                    throw new RoadConceptUnexpectedException(e);
+                }
             }
         }
     }

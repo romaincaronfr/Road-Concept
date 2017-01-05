@@ -25,6 +25,7 @@ public final class Constants {
     public static final String POSTGRESQL_SERVER_HOST = "localhost";
 
     public static final int POSTGRESQL_MAX_CONNECTIONS = 100;
+    public static final int QUERY_PER_SQL_COMMIT = 30;
 
     // ERROR CODES
     // -----------

@@ -23,6 +23,7 @@ public class SimulationRepository extends AbstractRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationRepository.class);
 
+
     public void duplicateFeatures(Simulation simulation) {
         MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
         FeatureCollection features = mapFeatureRepository.getAll(simulation.getMapID());
@@ -49,7 +50,6 @@ public class SimulationRepository extends AbstractRepository {
             collection.insertMany(documents);
         }
     }
-
 
     public FeatureCollection getFeatures(UUID simulationUUID) {
         try (MongoClient client = DatabaseConnector.getMongoDBClient()) {
