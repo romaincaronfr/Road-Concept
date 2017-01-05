@@ -27,7 +27,7 @@ public class SQLContext {
     public void addRequest() throws SQLException {
         uncommitedRequestCount++;
         if (uncommitedRequestCount >= Constants.QUERY_PER_SQL_COMMIT) {
-commit();
+            commit();
         }
     }
 
