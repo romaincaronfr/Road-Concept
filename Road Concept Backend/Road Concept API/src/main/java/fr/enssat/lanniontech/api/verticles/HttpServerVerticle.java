@@ -37,7 +37,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         configureGlobalHandlers(router);
 
-        vertx.deployVerticle(new APIDocVerticle(router));
+        vertx.deployVerticle(new DocumentationVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
         vertx.deployVerticle(new MapsVerticle(router));
         vertx.deployVerticle(new SimulatorVerticle(router));

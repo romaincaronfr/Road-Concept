@@ -11,7 +11,7 @@ import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.repositories.MapFeatureRepository;
 import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.utilities.GlobalUtils;
-import fr.enssat.lanniontech.api.utilities.IntersectionsSplitter;
+import fr.enssat.lanniontech.api.utilities.IntersectionSplitter;
 import fr.enssat.lanniontech.api.utilities.JSONUtils;
 import fr.enssat.lanniontech.api.utilities.MathsUtils;
 import org.slf4j.Logger;
@@ -98,7 +98,7 @@ public class MapService extends AbstractService {
 
         FeatureCollection importedFeatures = JSONUtils.fromJSON(fileData, FeatureCollection.class);
         fromOSMAdaptation(importedFeatures);
-        importedFeatures = IntersectionsSplitter.process(importedFeatures);
+        importedFeatures = IntersectionSplitter.process(importedFeatures);
 
         FeatureCollection toAdd = new FeatureCollection();
         FeatureCollection existingFeatures = mapFeatureRepository.getAll(mapID);
@@ -371,7 +371,7 @@ public class MapService extends AbstractService {
                 featureCollection.getFeatures().add(entry.getValue());
                 mapFeatureRepository.delete(mapID, entry.getKey());
             }
-            featureCollection = IntersectionsSplitter.process(featureCollection);
+            featureCollection = IntersectionSplitter.process(featureCollection);
             mapFeatureRepository.createAll(mapID, featureCollection);
         } else {
             mapFeatureRepository.create(mapID, feature);

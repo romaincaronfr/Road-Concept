@@ -20,6 +20,10 @@ public class UserService extends AbstractService {
 
     private UserRepository repository = new UserRepository();
 
+    // ======
+    // CREATE
+    // ======
+
     public User create(String email, String password, String lastName, String firstName, UserType type) {
         if (!isValidEmailAddress(email)) {
             throw new InvalidParameterException("The email parameter has an incorrect format.");
@@ -30,12 +34,9 @@ public class UserService extends AbstractService {
         return user;
     }
 
-    private boolean isValidEmailAddress(String email) {
-        String format = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        Pattern pattern = Pattern.compile(format);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
+    // ===
+    // GET
+    // ===
 
     public User get(int id) {
         User user = repository.getFromId(id);
@@ -45,13 +46,13 @@ public class UserService extends AbstractService {
         return user;
     }
 
-    private User get(String email) {
-        User user = repository.getFromEmail(email);
-        if (user == null) {
-            throw new EntityNotExistingException(User.class);
-        }
-        return user;
+    public List<User> getAll() {
+        return repository.getAll();
     }
+
+    // ======
+    // UPDATE
+    // ======
 
     public User update(User user) {
         User current = repository.getFromId(user.getId());
@@ -77,6 +78,10 @@ public class UserService extends AbstractService {
         return current;
     }
 
+    // ======
+    // DELETE
+    // ======
+
     public boolean delete(int id) {
         User user = new User();
         user.setId(id);
@@ -91,7 +96,15 @@ public class UserService extends AbstractService {
         return count == 1; // If false, something goes wrong (0 or more than 1 rows deleted)
     }
 
-    public List<User> getAll() {
-        return repository.getAll();
+    // =========
+    // UTILITIES
+    // =========
+
+    private boolean isValidEmailAddress(String email) {
+        String format = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        Pattern pattern = Pattern.compile(format);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
+
 }

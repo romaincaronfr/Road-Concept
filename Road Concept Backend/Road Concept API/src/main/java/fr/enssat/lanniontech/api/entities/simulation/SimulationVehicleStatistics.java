@@ -8,6 +8,12 @@ public class SimulationVehicleStatistics implements Entity {
     private int averageSpeed;
     private int delayDueToCongestionS;
 
+    public SimulationVehicleStatistics(int vehicleID, int averageSpeed, int delayDueToCongestionS) {
+        this.vehicleID = vehicleID;
+        this.averageSpeed = averageSpeed;
+        this.delayDueToCongestionS = delayDueToCongestionS;
+    }
+
     public int getAverageSpeed() {
         return averageSpeed;
     }

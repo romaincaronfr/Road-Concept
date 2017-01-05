@@ -8,7 +8,6 @@ import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
-import fr.enssat.lanniontech.api.repositories.connectors.SQLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,47 +34,23 @@ public class SimulationResultRepository extends SimulationRepository {
     private static final String DELETE_VEHCILES_POSITIONS = "DELETE FROM simulation_vehicle WHERE simulation_uuid = ?";
     private static final String DELETE_VEHICLE_STATISTICS = "DELETE FROM simulation_vehicle_statistics WHERE simulation_uuid = ?";
 
-    private SQLContext sqlContext;
-
-    public SimulationResultRepository() throws SQLException {
-        super();
-        this.sqlContext = new SQLContext(DatabaseConnector.getConnection());
-    }
-
     // ==========
     // CONGESTION
     // ==========
 
-    private void addRoadMetric(UUID simulationUUID, UUID featureUUID, int congestion, int timestamp) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
-
-            statement.setString(1, featureUUID.toString());
-            statement.setInt(2, congestion);
-            statement.setString(3, simulationUUID.toString());
-            statement.setInt(4, timestamp);
-            try {
-                statement.execute();
-            } finally {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            throw processBasicSQLException(e, Simulation.class);
-        }
-    }
-
     public void addRoadMetric(UUID simulationUUID, List<SimulationCongestionResult> data) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
-            for (SimulationCongestionResult item : data) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
+                for (SimulationCongestionResult item : data) {
 
-                statement.setString(1, item.getFeatureUUID().toString());
-                statement.setInt(2, item.getCongestionPercentage());
-                statement.setString(3, simulationUUID.toString());
-                statement.setInt(4, item.getTimestamp());
-                statement.addBatch();
+                    statement.setString(1, item.getFeatureUUID().toString());
+                    statement.setInt(2, item.getCongestionPercentage());
+                    statement.setString(3, simulationUUID.toString());
+                    statement.setInt(4, item.getTimestamp());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
             }
-            statement.executeBatch();
         } catch (SQLException e) {
             throw processBasicSQLException(e, Simulation.class);
         }
@@ -88,7 +63,6 @@ public class SimulationResultRepository extends SimulationRepository {
                 statement.setInt(2, timestamp);
 
                 try (ResultSet result = statement.executeQuery()) {
-                    sqlContext.addRequest();
 
                     List<SimulationCongestionResult> congestions = new ArrayList<>();
                     while (result.next()) {
@@ -110,41 +84,21 @@ public class SimulationResultRepository extends SimulationRepository {
     // VEHICLES
     // ========
 
-    private void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
-            statement.setString(1, simulationUUID.toString());
-            statement.setInt(2, vehicleID);
-            statement.setInt(3, timestamp);
-            statement.setDouble(4, coordinate.getLongitude());
-            statement.setDouble(5, coordinate.getLatitude());
-            statement.setDouble(6, angle);
-            statement.setInt(7, type.getJsonID());
-            try {
-                statement.execute();
-                sqlContext.addRequest();
-            } finally {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            throw processBasicSQLException(e, SimulationVehicleResult.class);
-        }
-    }
-
     public void addVehicleInfo(UUID simulationUUID, List<SimulationVehicleResult> data) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
-            for (SimulationVehicleResult item : data) {
-                statement.setString(1, simulationUUID.toString());
-                statement.setInt(2, item.getVehicleID());
-                statement.setInt(3, item.getTimestamp());
-                statement.setDouble(4, item.getCoordinates().getLongitude());
-                statement.setDouble(5, item.getCoordinates().getLatitude());
-                statement.setDouble(6, item.getAngle());
-                statement.setInt(7, item.getType().getJsonID());
-                statement.addBatch();
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
+                for (SimulationVehicleResult item : data) {
+                    statement.setString(1, simulationUUID.toString());
+                    statement.setInt(2, item.getVehicleID());
+                    statement.setInt(3, item.getTimestamp());
+                    statement.setDouble(4, item.getCoordinates().getLongitude());
+                    statement.setDouble(5, item.getCoordinates().getLatitude());
+                    statement.setDouble(6, item.getAngle());
+                    statement.setInt(7, item.getType().getJsonID());
+                    statement.addBatch();
+                }
+                statement.executeBatch();
             }
-            statement.executeBatch();
         } catch (SQLException e) {
             throw processBasicSQLException(e, SimulationVehicleResult.class);
         }
@@ -157,7 +111,6 @@ public class SimulationResultRepository extends SimulationRepository {
                 statement.setInt(2, vehicleID);
 
                 try (ResultSet result = statement.executeQuery()) {
-                    sqlContext.addRequest();
 
                     List<SimulationVehicleResult> itinerary = new ArrayList<>();
                     while (result.next()) {
@@ -187,7 +140,6 @@ public class SimulationResultRepository extends SimulationRepository {
                 statement.setInt(2, timestamp);
 
                 try (ResultSet result = statement.executeQuery()) {
-                    sqlContext.addRequest();
 
                     List<SimulationVehicleResult> itinerary = new ArrayList<>();
                     while (result.next()) {
@@ -221,7 +173,6 @@ public class SimulationResultRepository extends SimulationRepository {
                 statement.setInt(2, vehicleID);
 
                 try (ResultSet result = statement.executeQuery()) {
-                    sqlContext.addRequest();
 
                     result.next(); // Has exactly one row
                     SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
@@ -237,27 +188,19 @@ public class SimulationResultRepository extends SimulationRepository {
         }
     }
 
-    public SimulationVehicleStatistics addVehicleStatistics(UUID simulationUUID, int vehicleID, int averageSpeed, int delayDueToCongestionS) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_STATISTICS)) {
-            statement.setString(1, simulationUUID.toString());
-            statement.setInt(2, vehicleID);
-            statement.setInt(3, delayDueToCongestionS);
-            statement.setInt(4, averageSpeed);
+    public void addVehicleStatistics(UUID simulationUUID, List<SimulationVehicleStatistics> data) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_STATISTICS)) {
+                for (SimulationVehicleStatistics item : data) {
+                    statement.setString(1, simulationUUID.toString());
+                    statement.setInt(2, item.getVehicleID());
+                    statement.setInt(3, item.getDelayDueToCongestionS());
+                    statement.setInt(4, item.getAverageSpeed());
 
-            try {
-                statement.execute();
-                sqlContext.addRequest();
-
-                SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
-                statistics.setVehicleID(vehicleID);
-                statistics.setAverageSpeed(averageSpeed);
-                statistics.setDelayDueToCongestionS(delayDueToCongestionS);
-                return statistics;
-            } finally {
-                statement.close();
+                    statement.addBatch();
+                }
+                statement.executeBatch();
             }
-
         } catch (SQLException e) {
             throw processBasicSQLException(e, SimulationVehicleResult.class);
         }
@@ -277,18 +220,13 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     private void delete(UUID simulationUUID, String query, Class<? extends Entity> clazz) {
-        Connection connection = sqlContext.getConnection();
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, simulationUUID.toString());
-            statement.executeUpdate();
-            sqlContext.addRequest();
-
+        try (Connection connection = DatabaseConnector.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, simulationUUID.toString());
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             throw processBasicSQLException(e, clazz);
         }
-    }
-
-    public SQLContext getSQLContext() {
-        return sqlContext;
     }
 }

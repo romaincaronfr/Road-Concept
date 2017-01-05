@@ -22,17 +22,13 @@ public class SimulationParametersRepository extends SimulationRepository {
     private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_map = ? AND id_user = ?";
-    private static final String UPDATE_FINISH = "UPDATE simulation SET finish = ? WHERE uuid = ? AND id_user = ?";
+    private static final String UPDATE_FINISH = "UPDATE simulation SET finish = true WHERE uuid = ? AND id_user = ?";
     private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
-
-    public SimulationParametersRepository() throws SQLException {
-        super();
-    }
 
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) { //NOSONAR: Parameters count
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -186,12 +182,11 @@ public class SimulationParametersRepository extends SimulationRepository {
     // UPDATE
     // ======
 
-    public void updateFinish(Simulation simulation, boolean newValue) {
+    public void finish(Simulation simulation) {
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE_FINISH)) {
-                statement.setBoolean(1, newValue);
-                statement.setString(2, simulation.getUuid().toString());
-                statement.setInt(3, simulation.getCreatorID());
+                statement.setString(1, simulation.getUuid().toString());
+                statement.setInt(2, simulation.getCreatorID());
 
                 statement.executeUpdate();
             }
