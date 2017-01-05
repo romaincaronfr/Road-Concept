@@ -1,14 +1,3 @@
--- ******************************************************************************
--- ** ROADCONCEPTDB.SQL                                                        **
--- ******************************************************************************
--- ** product: Road Concept                                                    **
--- ** 	module: Road Concept API                                               **
--- ** version: 0.1-SNAPSHOT                                                    **
--- ** 	creationDate: 23/11/2016                                               **
--- ** file: src/main/resources/roadConceptDB.sql                               **
--- ** author: Maëlig NANTEL						                                         **
--- ******************************************************************************
-
 -- ==============================================================================
 -- USERS
 -- ==============================================================================
@@ -58,7 +47,7 @@ CREATE TABLE IF NOT EXISTS "simulation" (
 -- SIMULATION RESULTS
 -- ==============================================================================
 
-CREATE TABLE IF NOT EXISTS "simulation_vehicle" (
+CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_vehicle" (
   "simulation_uuid" VARCHAR(40)      NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
   "vehicle_id"      INTEGER          NOT NULL,
   "timestamp_s"     INTEGER          NOT NULL,
@@ -69,10 +58,18 @@ CREATE TABLE IF NOT EXISTS "simulation_vehicle" (
   PRIMARY KEY (simulation_uuid, vehicle_id, timestamp_s)
 );
 
-CREATE TABLE IF NOT EXISTS "simulation_congestion" (
+CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_congestion" (
   "simulation_uuid"       VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
   "feature_uuid"          VARCHAR(40) NOT NULL,
   "congestion_percentage" INTEGER     NOT NULL,
   "timestamp_s"           INTEGER     NOT NULL,
   PRIMARY KEY (feature_uuid, simulation_uuid, timestamp_s)
+);
+
+CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_vehicle_statistics" (
+  "simulation_uuid"  VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
+  "vehicle_id"       INTEGER     NOT NULL,
+  "delay_congestion" INTEGER     NOT NULL,
+  "average_speed"    INTEGER     NOT NULL,
+  PRIMARY KEY (simulation_uuid, vehicle_id)
 );

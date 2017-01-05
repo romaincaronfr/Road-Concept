@@ -46,7 +46,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // CONGESTION
     // ==========
 
-    public void addRoadMetric(UUID simulationUUID, UUID featureUUID, int congestion, int timestamp) {
+    private void addRoadMetric(UUID simulationUUID, UUID featureUUID, int congestion, int timestamp) {
         Connection connection = sqlContext.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
 
@@ -56,12 +56,26 @@ public class SimulationResultRepository extends SimulationRepository {
             statement.setInt(4, timestamp);
             try {
                 statement.execute();
-
             } finally {
                 statement.close();
             }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, Simulation.class);
+        }
+    }
 
+    public void addRoadMetric(UUID simulationUUID, List<SimulationCongestionResult> data) {
+        Connection connection = sqlContext.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
+            for (SimulationCongestionResult item : data) {
 
+                statement.setString(1, item.getFeatureUUID().toString());
+                statement.setInt(2, item.getCongestionPercentage());
+                statement.setString(3, simulationUUID.toString());
+                statement.setInt(4, item.getTimestamp());
+                statement.addBatch();
+            }
+            statement.executeBatch();
         } catch (SQLException e) {
             throw processBasicSQLException(e, Simulation.class);
         }
@@ -96,7 +110,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // VEHICLES
     // ========
 
-    public void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
+    private void addVehicleInfo(UUID simulationUUID, int vehicleID, int timestamp, Coordinates coordinate, double angle, FeatureType type) {
         Connection connection = sqlContext.getConnection();
         try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
             statement.setString(1, simulationUUID.toString());
@@ -111,8 +125,26 @@ public class SimulationResultRepository extends SimulationRepository {
                 sqlContext.addRequest();
             } finally {
                 statement.close();
-
             }
+        } catch (SQLException e) {
+            throw processBasicSQLException(e, SimulationVehicleResult.class);
+        }
+    }
+
+    public void addVehicleInfo(UUID simulationUUID, List<SimulationVehicleResult> data) {
+        Connection connection = sqlContext.getConnection();
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
+            for (SimulationVehicleResult item : data) {
+                statement.setString(1, simulationUUID.toString());
+                statement.setInt(2, item.getVehicleID());
+                statement.setInt(3, item.getTimestamp());
+                statement.setDouble(4, item.getCoordinates().getLongitude());
+                statement.setDouble(5, item.getCoordinates().getLatitude());
+                statement.setDouble(6, item.getAngle());
+                statement.setInt(7, item.getType().getJsonID());
+                statement.addBatch();
+            }
+            statement.executeBatch();
         } catch (SQLException e) {
             throw processBasicSQLException(e, SimulationVehicleResult.class);
         }

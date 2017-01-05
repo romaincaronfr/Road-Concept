@@ -102,6 +102,7 @@ public class SimulatorService extends AbstractService implements Observer {
                 HistoryManager historyManager = (HistoryManager) observable;
 
                 List<SpaceTimePosition> positions = historyManager.getPositionSample();
+                List<SimulationVehicleResult> vehicles = new ArrayList<>();
                 for (SpaceTimePosition vehicle : positions) {
                     FeatureType type;
                     if (vehicle.getType() == VehicleType.CAR) {
@@ -109,16 +110,22 @@ public class SimulatorService extends AbstractService implements Observer {
                     } else {
                         type = FeatureType.TRUCK;
                     }
-                    simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
+
+                    SimulationVehicleResult vehicleData = new SimulationVehicleResult(vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
+                    vehicles.add(vehicleData);
                 }
+                simulationResultRepository.addVehicleInfo(simulationUUID, vehicles);
 
                 List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
+                List<SimulationCongestionResult> congestions = new ArrayList<>();
                 for (RoadMetrics metric : roadMetrics) {
                     if (metric.getCongestion() != 0) {
                         //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
-                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
+                        SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
+                        congestions.add(congestion);
                     }
                 }
+                simulationResultRepository.addRoadMetric(simulationUUID, congestions);
                 historyManager.removeSamples();
             } else if (observable instanceof Simulator) {
                 try {

@@ -12,6 +12,18 @@ public class SimulationVehicleResult implements Entity {
     private double angle;
     private FeatureType type;
 
+    public SimulationVehicleResult(int vehicleID, int timestamp, Coordinates coordinates, double angle, FeatureType type) {
+        this.vehicleID = vehicleID;
+        this.timestamp = timestamp;
+        this.coordinates = coordinates;
+        this.angle = angle;
+        this.type = type;
+    }
+
+    public SimulationVehicleResult() {
+
+    }
+
     public int getVehicleID() {
         return vehicleID;
     }
