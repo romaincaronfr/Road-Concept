@@ -1,6 +1,9 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +39,25 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .build();
     }
 
-    public Retrofit getRetrofit() {
+    protected Retrofit getRetrofit() {
         return mRetrofit;
+    }
+
+    protected <T> T getRetrofitService(Class<T> serviceClass){
+        return mRetrofit.create(serviceClass);
+    }
+
+    protected void displayNetworkErrorDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.message_no_network);
+        builder.setTitle(R.string.sorry);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

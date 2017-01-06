@@ -1,9 +1,10 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,21 +12,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import java.util.Objects;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptService;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptRetrofitInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity{
 
@@ -82,6 +76,53 @@ public class LoginActivity extends BaseActivity{
         progressDialog.setMessage(getString(R.string.authent_in_progress));
         progressDialog.setCancelable(false);
         progressDialog.show();
+        RoadConceptRetrofitInterface roadConceptRetrofitInterface = getRetrofitService(RoadConceptRetrofitInterface.class);
+        String email = mEmailText.getText().toString();
+        String password = mPasswordText.getText().toString();
+        Call<Login> loginCall = roadConceptRetrofitInterface.postLogin(new Login(email,password));
+        loginCall.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login> call, Response<Login> response) {
+                if (response.isSuccessful()){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+
+                    builder.setMessage("Login OK");
+                    builder.setTitle(R.string.sorry);
+                    final AlertDialog alertDialog = builder.create();
+                    alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                } else {
+                    if (response.code() >= 500){
+                        displayNetworkErrorDialog();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        builder.setMessage(R.string.error_login_email_or_password);
+                        builder.setTitle(R.string.sorry);
+                        final AlertDialog alertDialog = builder.create();
+                        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                    }
+                }
+
+                progressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<Login> call, Throwable t) {
+                displayNetworkErrorDialog();
+                progressDialog.dismiss();
+            }
+        });
     }
 
     private void saveID(){
@@ -116,7 +157,7 @@ public class LoginActivity extends BaseActivity{
 /*Login login = new Login();
         login.setEmail("admin@enssat.fr");
         login.setPassword("admin");
-        RoadConceptService roadConceptService = getRetrofit().create(RoadConceptService.class);
+        RoadConceptRetrofitInterface roadConceptService = getRetrofit().create(RoadConceptRetrofitInterface.class);
         Observable<Response<Login>> responseObservable = roadConceptService.postLogin(login);
         responseObservable.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
