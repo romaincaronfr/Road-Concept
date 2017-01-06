@@ -3,4 +3,8 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Se connecter</string>
+    <string name="error_please_valide_msg">Merci d\'entre un email valide</string>
+    <string name="please_valid_password">Le champs mot de passe doit être remplis</string>
+    <string name="rester_connect">Rester connecté</string>
+    <string name="authent_in_progress">Authentification en cours...</string>
 </resources>

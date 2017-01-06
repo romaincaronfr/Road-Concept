@@ -24,11 +24,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OkHttpClient okHttpClient = new OkHttpClient();
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.addInterceptor(new AddCookiesInterceptor(this)); // VERY VERY IMPORTANT
-        builder.addInterceptor(new ReceivedCookiesInterceptor(this)); // VERY VERY IMPORTANT
-        okHttpClient = builder.build();
+        builder.addInterceptor(new AddCookiesInterceptor(this));
+        builder.addInterceptor(new ReceivedCookiesInterceptor(this));
+        OkHttpClient okHttpClient = builder.build();
         mRetrofit = new Retrofit.Builder()
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

@@ -11,15 +11,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:gravity="center">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
         android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:layout_alignParentStart="true">
+        android:paddingRight="24dp">
 
         <ImageView
             android:layout_width="90dp"
@@ -37,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
                 android:id="@+id/email_login"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                android:inputType="textEmailAddress" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -49,8 +54,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                android:id="@+id/password_login" />
+                android:id="@+id/password_login"
+                android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:text="@string/rester_connect"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/checkBoxStayConnect"
+            android:layout_weight="1" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_login"
@@ -60,7 +73,9 @@
             android:layout_marginBottom="24dp"
             android:padding="12dp"
             android:text="@string/login"
-            android:background="@color/colorLoginButton" />
+            android:background="@color/colorLoginButton"
+            android:textColor="@color/colorTextLoginBtn" />
 
     </LinearLayout>
+    </ScrollView>
 </RelativeLayout>
