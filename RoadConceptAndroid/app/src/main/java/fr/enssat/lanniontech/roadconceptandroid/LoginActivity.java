@@ -153,29 +153,3 @@ public class LoginActivity extends BaseActivity{
     }
 
 }
-
-/*Login login = new Login();
-        login.setEmail("admin@enssat.fr");
-        login.setPassword("admin");
-        RoadConceptRetrofitInterface roadConceptService = getRetrofit().create(RoadConceptRetrofitInterface.class);
-        Observable<Response<Login>> responseObservable = roadConceptService.postLogin(login);
-        responseObservable.subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Response<Login>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(Response<Login> response) {
-                        Log.d("Response code", String.valueOf(response.code()));
-                    }
-                });
-
-    */
