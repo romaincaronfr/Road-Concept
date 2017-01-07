@@ -26,7 +26,7 @@ public abstract class AuthentActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
         String strusername = sharedPreferences.getString(Constants.SHARE_USERNAME, "");
         String strpassword = sharedPreferences.getString(Constants.SHARE_PASSWORD, "");
-        if (strusername.equals("") || !strpassword.equals("")){
+        if (strusername.equals("") || strpassword.equals("")){
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(Constants.SHARE_USER_EMAIL);
             editor.remove(Constants.SHARE_USER_NAME);

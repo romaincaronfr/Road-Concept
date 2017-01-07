@@ -11,4 +11,10 @@
     <string name="sorry">Désolé</string>
     <string name="error_login_email_or_password">Votre email et/ou votre mot de passe sont incorrectes.</string>
     <string name="load_information">Chargement des informations...</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
