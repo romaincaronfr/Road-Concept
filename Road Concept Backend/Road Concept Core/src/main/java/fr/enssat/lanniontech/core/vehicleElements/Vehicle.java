@@ -22,6 +22,7 @@ public class Vehicle {
     private Path myPath;
     private VehicleType type;
     private VehicleAI AI;
+    private double timeAlive;
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
@@ -38,12 +39,13 @@ public class Vehicle {
     private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath, VehicleAI AI) {
         this.setID(ID);
         this.length = length;
-        this.setDistanceDone(0);
+        distanceDone = 0;
         this.setMyPath(myPath);
         this.setFrontSide(new Side(length + startPos, this, start, -length));
         this.setBackSide(new Side(startPos, this, start, length));
         this.setHistoryManager(historyManager);
         this.setAI(AI);
+        timeAlive = 0;
     }
 
     /**
@@ -68,6 +70,7 @@ public class Vehicle {
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
      */
     public void updatePos(double time) {
+        timeAlive += time;
         double dDone = getAI().getDistanceDone(time);
         this.setDistanceDone(getDistanceDone() + dDone);
         getBackSide().moveOnPath(dDone);
@@ -181,5 +184,11 @@ public class Vehicle {
 
     public void setAI(VehicleAI AI) {
         this.AI = AI;
+    }
+
+    public VehicleStats getStats() {
+        double AvgSpeed = distanceDone/timeAlive;
+        VehicleStats stats = new VehicleStats(this.ID,(int)AvgSpeed,(int)timeAlive,(int)distanceDone);
+        return stats;
     }
 }

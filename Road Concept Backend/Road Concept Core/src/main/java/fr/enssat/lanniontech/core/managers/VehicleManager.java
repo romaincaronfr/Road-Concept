@@ -12,6 +12,7 @@ import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
+import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 
 import java.util.ArrayList;
@@ -151,5 +152,13 @@ public class VehicleManager {
 
     public int getVehiclesNumber() {
         return activeVehicles.size();
+    }
+
+    public List<VehicleStats> getStatistics(){
+        List<VehicleStats> stats = new ArrayList<>();
+        for (Vehicle V : vehicles){
+            stats.add(V.getStats());
+        }
+        return stats;
     }
 }
