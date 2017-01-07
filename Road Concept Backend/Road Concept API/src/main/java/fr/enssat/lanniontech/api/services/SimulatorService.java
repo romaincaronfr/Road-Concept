@@ -46,6 +46,10 @@ public class SimulatorService extends AbstractService implements Observer {
 
     private MapService mapService = new MapService();
 
+    // ======
+    // CREATE
+    // ======
+
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         try {
             Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
@@ -62,83 +66,6 @@ public class SimulatorService extends AbstractService implements Observer {
         } catch (EntityStillInUseException e) { //FIXME: The repository should not throw an EntityStillInUseException if the map does not exist
             throw new EntityNotExistingException(Map.class);
         }
-    }
-
-    public SimulationVehicleStatistics getVehicleStatistics(UUID simulationUUID, int vehicleID) {
-        return simulationResultRepository.getStatistics(simulationUUID, vehicleID);
-    }
-
-    public int getExecutionProgress(UUID simulationUUID, List<Simulation> activesSimulations) {
-        Simulation simulation = null;
-        for (Simulation active : activesSimulations) {
-            if (active.getUuid().equals(simulationUUID)) {
-                simulation = active;
-                break;
-            }
-        }
-        if (simulation == null || simulation.getSimulator() == null) {
-            throw new ProgressUnavailableException();
-        }
-        return (int) (Math.round(simulation.getSimulator().getProgress() * 100));
-    }
-
-    @Override
-    public void update(Observable observable, Object argument) {
-        if (argument != null && argument instanceof UUID) {
-            UUID simulationUUID = (UUID) argument;
-
-            if (observable instanceof HistoryManager) {
-                HistoryManager historyManager = (HistoryManager) observable;
-
-                List<SpaceTimePosition> positions = historyManager.getPositionSample();
-                List<SimulationVehicleResult> vehicles = new ArrayList<>();
-                for (SpaceTimePosition vehicle : positions) {
-                    FeatureType type;
-                    if (vehicle.getType() == VehicleType.CAR) {
-                        type = FeatureType.CAR;
-                    } else {
-                        type = FeatureType.TRUCK;
-                    }
-
-                    SimulationVehicleResult vehicleData = new SimulationVehicleResult(vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
-                    vehicles.add(vehicleData);
-                }
-                simulationResultRepository.addVehicleInfo(simulationUUID, vehicles);
-
-                List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
-                List<SimulationCongestionResult> congestions = new ArrayList<>();
-                for (RoadMetrics metric : roadMetrics) {
-                    if (metric.getCongestion() != 0) {
-                        //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
-                        SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
-                        congestions.add(congestion);
-                    }
-                }
-                simulationResultRepository.addRoadMetric(simulationUUID, congestions);
-                historyManager.removeSamples();
-            } else if (observable instanceof Simulator) {
-                try {
-                    Simulation simulation = get(simulationUUID);
-                    simulationParametersRepository.finish(simulation);
-                    saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
-                    simulation.setFinish(true);
-                    simulation.setSimulator(null); // garbage collector
-                } catch (Exception e) {
-                    throw new RoadConceptUnexpectedException(e);
-                }
-            }
-        }
-    }
-
-    private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
-        int vehiclesCount = 10;
-        List<SimulationVehicleStatistics> statistics = new ArrayList<>();
-        for (int i = 0; i < vehiclesCount; i++) {
-            //TODO; Temporary code. Waiting for core.
-            SimulationVehicleStatistics statistic = new SimulationVehicleStatistics(i, 50, 300);
-            statistics.add(statistic);
-        }
-        simulationResultRepository.addVehicleStatistics(simulation.getUuid(), statistics);
     }
 
     private boolean start(Simulation simulation) {
@@ -174,8 +101,7 @@ public class SimulatorService extends AbstractService implements Observer {
     private void sendRoundabout(Simulation simulation, Feature feature, LineString road) {
         List<Position> roundaboutPositions = new ArrayList<>();
         for (Coordinates C : road.getCoordinates()) {
-            roundaboutPositions.add(simulation.getSimulator().getPositionManager().
-                    addPosition(C.getLongitude(), C.getLatitude()));
+            roundaboutPositions.add(simulation.getSimulator().getPositionManager().addPosition(C.getLongitude(), C.getLatitude()));
         }
         simulation.getSimulator().getRoadManager().addRoundAbout(roundaboutPositions, feature.getUuid());
     }
@@ -185,10 +111,8 @@ public class SimulatorService extends AbstractService implements Observer {
 
         for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
             Coordinates coordinates = road.getCoordinates().get(i);
-            Position A = simulation.getSimulator().getPositionManager().
-                    addPosition(last.getLongitude(), last.getLatitude());
-            Position B = simulation.getSimulator().getPositionManager().
-                    addPosition(coordinates.getLongitude(), coordinates.getLatitude());
+            Position A = simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude());
+            Position B = simulation.getSimulator().getPositionManager().addPosition(coordinates.getLongitude(), coordinates.getLatitude());
 
             int maxSpeed = (int) feature.getProperties().get("maxspeed");
             boolean oneWay = computeOneWayFromProperty((String) feature.getProperties().get("oneway"));
@@ -197,35 +121,92 @@ public class SimulatorService extends AbstractService implements Observer {
                 Collections.reverse(road.getCoordinates());
             }
 
-            simulation.getSimulator().getRoadManager().
-                    addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
+            simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
 
             last = coordinates;
         }
     }
 
-    private boolean computeOneWayFromProperty(String property) {
-        return !(property == null || "no".equals(property));
-    }
+    // =========
+    // EXECUTION
+    // =========
 
-    private boolean isReverseDrawed(String property) {
-        return !(property == null || !"-1".equals(property));
-    }
-
-    public Simulation get(UUID simulationUUID) {
-        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
-        if (simulation == null) {
-            throw new EntityNotExistingException(Simulation.class);
+    public int getExecutionProgress(UUID simulationUUID, List<Simulation> activesSimulations) {
+        Simulation simulation = null;
+        for (Simulation active : activesSimulations) {
+            if (active.getUuid().equals(simulationUUID)) {
+                simulation = active;
+                break;
+            }
         }
-        return simulation;
+        if (simulation == null || simulation.getSimulator() == null) {
+            throw new ProgressUnavailableException();
+        }
+        return (int) (Math.round(simulation.getSimulator().getProgress() * 100));
     }
 
-    public List<Simulation> getAll(User user, int mapID) {
-        return simulationParametersRepository.getAllFromMap(user, mapID);
+    @Override
+    public void update(Observable observable, Object argument) {
+        if (argument != null && argument instanceof UUID) {
+            UUID simulationUUID = (UUID) argument;
+
+            if (observable instanceof HistoryManager) {
+                HistoryManager historyManager = (HistoryManager) observable;
+                saveVehiclesPosition(simulationUUID, historyManager);
+                saveRoadMetrics(simulationUUID, historyManager);
+                historyManager.removeSamples();
+            } else if (observable instanceof Simulator) {
+                    Simulation simulation = get(simulationUUID);
+                    simulationParametersRepository.finish(simulation);
+                    saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
+                    simulation.setFinish(true);
+                    simulation.setSimulator(null); // garbage collector
+            }
+        }
     }
 
-    public List<Simulation> getAll(int userID) {
-        return simulationParametersRepository.getAll(userID);
+    private void saveRoadMetrics(UUID simulationUUID, HistoryManager historyManager) {
+        List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
+        List<SimulationCongestionResult> congestions = new ArrayList<>();
+        for (RoadMetrics metric : roadMetrics) {
+            if (metric.getCongestion() != 0) {
+                //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
+                SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
+                congestions.add(congestion);
+            }
+        }
+        simulationResultRepository.addRoadMetric(simulationUUID, congestions);
+    }
+
+    private void saveVehiclesPosition(UUID simulationUUID, HistoryManager historyManager) {
+        List<SpaceTimePosition> positions = historyManager.getPositionSample();
+        List<SimulationVehicleResult> vehicles = new ArrayList<>();
+        for (SpaceTimePosition vehicle : positions) {
+            FeatureType type = computeVehicleTypeFromCore(vehicle);
+
+            SimulationVehicleResult vehicleData = new SimulationVehicleResult(vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
+            vehicles.add(vehicleData);
+        }
+        simulationResultRepository.addVehicleInfo(simulationUUID, vehicles);
+    }
+
+    private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
+        int vehiclesCount = 10;
+        List<SimulationVehicleStatistics> statistics = new ArrayList<>();
+        for (int i = 0; i < vehiclesCount; i++) {
+            //TODO; Temporary code. Waiting for core.
+            SimulationVehicleStatistics statistic = new SimulationVehicleStatistics(i, 50, 300);
+            statistics.add(statistic);
+        }
+        simulationResultRepository.addVehicleStatistics(simulation.getUuid(), statistics);
+    }
+
+    // =======
+    // RESULTS
+    // =======
+
+    public SimulationVehicleStatistics getVehicleStatistics(UUID simulationUUID, int vehicleID) {
+        return simulationResultRepository.getStatistics(simulationUUID, vehicleID);
     }
 
     public FeatureCollection getResultAt(UUID simulationUUID, int timestamp) {
@@ -259,20 +240,15 @@ public class SimulatorService extends AbstractService implements Observer {
                 }
             }
         }
+        addMissingCongestions(features);
+    }
 
+    private void addMissingCongestions(FeatureCollection features) {
         // Congestion is stored as a sparse matrix, so we need to set default congestion congestion value
         for (Feature feature : features) {
             if (!feature.getProperties().containsKey("congestion")) {
                 feature.getProperties().put("congestion", 0);
             }
-        }
-    }
-
-    private void checkTimestampValue(int timestamp, Simulation simulation) {
-        if (timestamp < 0 || timestamp >= 86400) {
-            throw new InvalidParameterException("Invalid timestamp (min value = 0 | max value = 86399)");
-        } else if (timestamp % simulation.getSamplingRate() != 0) {
-            throw new InvalidParameterException("Timestamp must be consistent with the simulation sampling rate.");
         }
     }
 
@@ -294,6 +270,30 @@ public class SimulatorService extends AbstractService implements Observer {
         return features;
     }
 
+    // ===
+    // GET
+    // ===
+
+    public Simulation get(UUID simulationUUID) {
+        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
+        if (simulation == null) {
+            throw new EntityNotExistingException(Simulation.class);
+        }
+        return simulation;
+    }
+
+    public List<Simulation> getAll(User user, int mapID) {
+        return simulationParametersRepository.getAllFromMap(user, mapID);
+    }
+
+    public List<Simulation> getAll(int userID) {
+        return simulationParametersRepository.getAll(userID);
+    }
+
+    // ======
+    // DELETE
+    // ======
+
     public void delete(UUID simulationUUID) {
         Simulation simulation = new Simulation();
         simulation.setUuid(simulationUUID);
@@ -303,4 +303,35 @@ public class SimulatorService extends AbstractService implements Observer {
         // Delete duplicated features
         simulationGlobalRepository.deleteAssociatedFeatures(simulationUUID);
     }
+
+    // =========
+    // UTILITIES
+    // =========
+
+    private boolean computeOneWayFromProperty(String property) {
+        return !(property == null || "no".equals(property));
+    }
+
+    private boolean isReverseDrawed(String property) {
+        return !(property == null || !"-1".equals(property));
+    }
+
+    private void checkTimestampValue(int timestamp, Simulation simulation) {
+        if (timestamp < 0 || timestamp >= 86400) {
+            throw new InvalidParameterException("Invalid timestamp (min value = 0 | max value = 86399)");
+        } else if (timestamp % simulation.getSamplingRate() != 0) {
+            throw new InvalidParameterException("Timestamp must be consistent with the simulation sampling rate.");
+        }
+    }
+
+    private FeatureType computeVehicleTypeFromCore(SpaceTimePosition vehicle) {
+        FeatureType type;
+        if (vehicle.getType() == VehicleType.CAR) {
+            type = FeatureType.CAR;
+        } else {
+            type = FeatureType.TRUCK;
+        }
+        return type;
+    }
+
 }
