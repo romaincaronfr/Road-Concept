@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -10,6 +11,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 
 /**
  * Created by Romain on 07/01/2017.
@@ -17,15 +24,24 @@ import android.view.MenuItem;
 
 public abstract class NavigationDrawerActivity extends AuthentActivity implements NavigationView.OnNavigationItemSelectedListener{
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG,"superOncreate");
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        TextView emailUserTextView = (TextView) headerView.findViewById(R.id.textViewEmailUser);
+        TextView nameUserTextView = (TextView) headerView.findViewById(R.id.textViewNameUser);
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
+        String strusername = sharedPreferences.getString(Constants.SHARE_USER_NAME, "");
+        String stremail = sharedPreferences.getString(Constants.SHARE_USER_EMAIL, "");
+        emailUserTextView.setText(stremail);
+        nameUserTextView.setText(strusername);
         initMenu();
     }
 
@@ -65,14 +81,13 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
     }
 
     private void initMenu(){
-        Log.d(TAG,"initMenu");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
