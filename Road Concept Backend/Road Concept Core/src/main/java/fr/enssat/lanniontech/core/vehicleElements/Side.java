@@ -117,4 +117,8 @@ public class Side {
     public UUID getNextRoad() {
         return nextRoad;
     }
+
+    public void removeFromRoad() {
+        myTrajectory.getOut(this);
+    }
 }

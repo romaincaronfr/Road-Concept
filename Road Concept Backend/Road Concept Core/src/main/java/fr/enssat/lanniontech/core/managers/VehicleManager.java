@@ -140,6 +140,7 @@ public class VehicleManager {
         int i = 0;
         while (i < activeVehicles.size()) {
             if (activeVehicles.get(i).isArrived()) {
+                activeVehicles.get(i).removeVehicle();
                 activeVehicles.remove(i);
             } else {
                 i++;
