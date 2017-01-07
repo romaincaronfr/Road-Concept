@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -155,6 +156,9 @@ public class LoginActivity extends BaseActivity{
                     editor.putString(Constants.SHARE_USER_NAME, userName);
                     editor.putString(Constants.SHARE_USER_EMAIL, email);
                     editor.apply();
+                    Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                    startActivity(intent);
+
                 } else {
                     displayNetworkErrorDialog();
                     progressDialog.dismiss();
