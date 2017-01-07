@@ -26,11 +26,11 @@ public class SimulationResultRepository extends SimulationRepository {
 
     private static final String INSERT_ROAD_METRIC = "INSERT INTO simulation_congestion(feature_uuid, congestion_percentage, simulation_uuid, timestamp_s) VALUES (?, ?, ?, ?)";
     private static final String INSERT_VEHICLE_POSITION = "INSERT INTO simulation_vehicle(simulation_uuid, vehicle_id, timestamp_s, longitude, latitude, angle, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, delay_congestion, average_speed) VALUES (?,?,?,?)";
+    private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, time, distance, average_speed) VALUES (?,?,?,?,?)";
     private static final String SELECT_CONGESTION_AT = "SELECT  feature_uuid, congestion_percentage FROM simulation_congestion WHERE simulation_uuid = ? AND timestamp_s = ?";
     private static final String SELECT_VEHICLES_AT = "SELECT vehicle_id, longitude, latitude, angle, type FROM simulation_vehicle WHERE simulation_uuid = ? and timestamp_s = ?";
     private static final String SELECT_ITINERARY_FOR = "SELECT longitude, latitude, angle, timestamp_s, type FROM simulation_vehicle WHERE simulation_uuid = ? AND vehicle_id = ?";
-    private static final String SELECT_VEHICLE_STATISTICS = "SELECT average_speed, delay_congestion FROM simulation_vehicle_statistics WHERE simulation_uuid = ? AND vehicle_id = ?";
+    private static final String SELECT_VEHICLE_STATISTICS = "SELECT average_speed, time, distance FROM simulation_vehicle_statistics WHERE simulation_uuid = ? AND vehicle_id = ?";
     private static final String DELETE_ROAD_METRICS = "DELETE FROM simulation_congestion WHERE simulation_uuid = ?";
     private static final String DELETE_VEHCILES_POSITIONS = "DELETE FROM simulation_vehicle WHERE simulation_uuid = ?";
     private static final String DELETE_VEHICLE_STATISTICS = "DELETE FROM simulation_vehicle_statistics WHERE simulation_uuid = ?";
@@ -177,7 +177,8 @@ public class SimulationResultRepository extends SimulationRepository {
                     SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
                     statistics.setVehicleID(vehicleID);
                     statistics.setAverageSpeed(result.getInt("average_speed"));
-                    statistics.setDelayDueToCongestionS(result.getInt("delay_congestion"));
+                    statistics.setDistanceDone(result.getInt("distance"));
+                    statistics.setDuration(result.getInt("time"));
 
                     return statistics;
                 }
@@ -187,20 +188,22 @@ public class SimulationResultRepository extends SimulationRepository {
         }
     }
 
-    public SimulationVehicleStatistics addVehicleStatistics(UUID simulationUUID, int vehicleID, int averageSpeed, int delayDueToCongestionS) {
+    public SimulationVehicleStatistics addVehicleStatistics(UUID simulationUUID, int vehicleID, int averageSpeed, int time, int distance) {
         try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_STATISTICS)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, vehicleID);
-                statement.setInt(3, delayDueToCongestionS);
-                statement.setInt(4, averageSpeed);
+                statement.setInt(3, time);
+                statement.setInt(4, distance);
+                statement.setInt(5, averageSpeed);
 
                 try {
                     statement.execute();
                     SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
                     statistics.setVehicleID(vehicleID);
                     statistics.setAverageSpeed(averageSpeed);
-                    statistics.setDelayDueToCongestionS(delayDueToCongestionS);
+                    statistics.setDistanceDone(distance);
+                    statistics.setDuration(time);
                     return statistics;
                 } finally {
                     statement.close();

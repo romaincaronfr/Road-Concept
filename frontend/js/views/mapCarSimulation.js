@@ -177,27 +177,26 @@ app.mapCarSimulationView = Backbone.View.extend({
                 console.log(self.carStats.attributes);
 
                 var averageSpeed = self.carStats.attributes.averageSpeed;
-                var delay = self.carStats.attributes.delayDueToCongestionS;
+                var distanceDone = self.carStats.attributes.distanceDone;
+                var duration = self.carStats.attributes.duration;
 
-                var hours   = Math.floor(delay / 3600);
-                var minutes = Math.floor((delay - (hours * 3600)) / 60);
-                var seconds = delay - (hours * 3600) - (minutes * 60);
+                var hours   = Math.floor(duration / 3600);
+                var minutes = Math.floor((duration - (hours * 3600)) / 60);
+                var seconds = duration - (hours * 3600) - (minutes * 60);
 
                 if (hours   < 10) {hours   = "0"+hours;}
                 if (minutes < 10) {minutes = "0"+minutes;}
                 if (seconds < 10) {seconds = "0"+seconds;}
 
                 $("#averageSpeed").html(averageSpeed + " Km/h");
+                $("#distanceDone").html(distanceDone/1000 + " Km");
                 if (hours == 0 && minutes == 0) {
-                    $("#delay").html(seconds + "s");
+                    $("#duration").html(seconds + "s");
                 } else if (hours == 0) {
-                    $("#delay").html(minutes + "m" + seconds + "s");
+                    $("#duration").html(minutes + "m" + seconds + "s");
                 } else {
-                    $("#delay").html(hours + "h" + minutes + "m" + seconds + "s");
+                    $("#duration").html(hours + "h" + minutes + "m" + seconds + "s");
                 }
-
-
-                //console.log("averageSpeed : " + averageSpeed + "\ndelay : " + delay + "\nsecond : " + second);
 
                 $("#waitIcon").hide();
                 $("#listInfoMap").show();

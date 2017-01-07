@@ -6,7 +6,8 @@ public class SimulationVehicleStatistics implements Entity {
 
     private int vehicleID;
     private int averageSpeed;
-    private int delayDueToCongestionS;
+    private int distanceDone;
+    private int duration;
 
     public int getAverageSpeed() {
         return averageSpeed;
@@ -16,12 +17,20 @@ public class SimulationVehicleStatistics implements Entity {
         this.averageSpeed = averageSpeed;
     }
 
-    public int getDelayDueToCongestionS() {
-        return delayDueToCongestionS;
+    public int getDistanceDone() {
+        return distanceDone;
     }
 
-    public void setDelayDueToCongestionS(int delayDueToCongestionS) {
-        this.delayDueToCongestionS = delayDueToCongestionS;
+    public void setDistanceDone(int distanceDone) {
+        this.distanceDone = distanceDone;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public int getVehicleID() {

@@ -12,7 +12,11 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
-import fr.enssat.lanniontech.api.exceptions.*;
+import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
+import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
+import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
+import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
@@ -21,6 +25,7 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
+import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,12 +121,8 @@ public class SimulatorService extends AbstractService implements Observer {
     }
 
     private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
-        //int vehiclesCount = simulator.getVehicleManager().getVehiclesNumber();
-        int vehiclesCount = 10;
-
-        for (int i = 0; i < vehiclesCount; i++) {
-            //TODO; Temporary code. Waiting for core.
-            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), i, (int) (Math.random() * 100), (int) (Math.random() * 300));
+        for (VehicleStats stat : simulator.getVehicleManager().getStatistics()) {
+            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone());
         }
     }
 
