@@ -36,7 +36,6 @@ public class LoginActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        Log.d(TAG,getApplicationContext().toString());
         fillForm();
         roadConceptUserInterface = getRetrofitService(RoadConceptUserInterface.class);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +142,6 @@ public class LoginActivity extends BaseActivity{
     }
 
     private void loadUserInformations(final ProgressDialog progressDialog){
-        Log.d(TAG,"loadUserInformations");
         Call<Me> meCall = roadConceptUserInterface.getMe();
         meCall.enqueue(new Callback<Me>() {
             @Override
@@ -157,10 +155,7 @@ public class LoginActivity extends BaseActivity{
                     editor.putString(Constants.SHARE_USER_NAME, userName);
                     editor.putString(Constants.SHARE_USER_EMAIL, email);
                     editor.apply();
-                    Log.d(TAG,me.toString());
                 } else {
-                    Log.d(TAG,"onResponse else");
-                    Log.d(TAG, String.valueOf(response.code()));
                     displayNetworkErrorDialog();
                     progressDialog.dismiss();
                 }
@@ -168,8 +163,6 @@ public class LoginActivity extends BaseActivity{
 
             @Override
             public void onFailure(Call<Me> call, Throwable t) {
-                Log.d(TAG,"onFailure");
-                Log.d(TAG,t.getMessage());
                 displayNetworkErrorDialog();
                 progressDialog.dismiss();
             }
