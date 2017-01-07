@@ -15,20 +15,21 @@ import android.widget.EditText;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Me;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptRetrofitInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends BaseActivity{
 
-    private static final String TAG = "LoginActivity";
 
     @BindView(R.id.email_login) EditText mEmailText;
     @BindView(R.id.password_login) EditText mPasswordText;
     @BindView(R.id.btn_login) Button mLoginButton;
     @BindView(R.id.checkBoxStayConnect) CheckBox mLoginCheckbox;
+    RoadConceptUserInterface roadConceptUserInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class LoginActivity extends BaseActivity{
         ButterKnife.bind(this);
         Log.d(TAG,getApplicationContext().toString());
         fillForm();
+        roadConceptUserInterface = getRetrofitService(RoadConceptUserInterface.class);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,26 +78,15 @@ public class LoginActivity extends BaseActivity{
         progressDialog.setMessage(getString(R.string.authent_in_progress));
         progressDialog.setCancelable(false);
         progressDialog.show();
-        RoadConceptRetrofitInterface roadConceptRetrofitInterface = getRetrofitService(RoadConceptRetrofitInterface.class);
         String email = mEmailText.getText().toString();
         String password = mPasswordText.getText().toString();
-        Call<Login> loginCall = roadConceptRetrofitInterface.postLogin(new Login(email,password));
+        Call<Login> loginCall = roadConceptUserInterface.postLogin(new Login(email,password));
         loginCall.enqueue(new Callback<Login>() {
             @Override
             public void onResponse(Call<Login> call, Response<Login> response) {
                 if (response.isSuccessful()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-
-                    builder.setMessage("Login OK");
-                    builder.setTitle(R.string.sorry);
-                    final AlertDialog alertDialog = builder.create();
-                    alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.show();
+                    progressDialog.setMessage(getString(R.string.load_information));
+                    loadUserInformations(progressDialog);
                 } else {
                     if (response.code() >= 500){
                         displayNetworkErrorDialog();
@@ -111,10 +102,9 @@ public class LoginActivity extends BaseActivity{
                             }
                         });
                         alertDialog.show();
+                        progressDialog.dismiss();
                     }
                 }
-
-                progressDialog.dismiss();
             }
 
             @Override
@@ -150,6 +140,40 @@ public class LoginActivity extends BaseActivity{
             mPasswordText.setText(strpassword);
             mLoginCheckbox.setChecked(true);
         }
+    }
+
+    private void loadUserInformations(final ProgressDialog progressDialog){
+        Log.d(TAG,"loadUserInformations");
+        Call<Me> meCall = roadConceptUserInterface.getMe();
+        meCall.enqueue(new Callback<Me>() {
+            @Override
+            public void onResponse(Call<Me> call, Response<Me> response) {
+                if (response.isSuccessful()){
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    Me me = response.body();
+                    String userName = me.getFirstName()+" "+me.getLastName();
+                    String email = me.getEmail();
+                    editor.putString(Constants.SHARE_USER_NAME, userName);
+                    editor.putString(Constants.SHARE_USER_EMAIL, email);
+                    editor.apply();
+                    Log.d(TAG,me.toString());
+                } else {
+                    Log.d(TAG,"onResponse else");
+                    Log.d(TAG, String.valueOf(response.code()));
+                    displayNetworkErrorDialog();
+                    progressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Me> call, Throwable t) {
+                Log.d(TAG,"onFailure");
+                Log.d(TAG,t.getMessage());
+                displayNetworkErrorDialog();
+                progressDialog.dismiss();
+            }
+        });
     }
 
 }

@@ -23,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Retrofit mRetrofit;
+    protected final String TAG = getClass().getCanonicalName();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

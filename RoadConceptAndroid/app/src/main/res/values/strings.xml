@@ -10,4 +10,5 @@
     <string name="message_no_network">Désolé, une erreur réseau/serveur s\'est produite. Merci de vérifier que votre appareil dispose bien d\'un accès à internet. Réessayer ultérieurement.</string>
     <string name="sorry">Désolé</string>
     <string name="error_login_email_or_password">Votre email et/ou votre mot de passe sont incorrectes.</string>
+    <string name="load_information">Chargement des informations...</string>
 </resources>
