@@ -63,7 +63,11 @@ public class Vehicle {
     }
 
     private double roadMaxSpeed() {
-        return Tools.kphToMph(frontSide.getMaxSpeed());
+        double maxSpeed = frontSide.getMaxSpeed();
+        if(type == VehicleType.TRUCK){
+            maxSpeed = maxSpeed - 10;
+        }
+        return Tools.kphToMph(maxSpeed);
     }
 
     /**
@@ -187,7 +191,7 @@ public class Vehicle {
     }
 
     public VehicleStats getStats() {
-        double AvgSpeed = distanceDone/timeAlive;
+        double AvgSpeed = Tools.mpsToKph(distanceDone/timeAlive);
         VehicleStats stats = new VehicleStats(this.ID,(int)AvgSpeed,(int)timeAlive,(int)distanceDone);
         return stats;
     }
