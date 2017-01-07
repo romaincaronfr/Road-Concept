@@ -19,6 +19,7 @@ app.mapCarSimulationView = Backbone.View.extend({
     stepSeconds: 60, // On veut un step sur le slider de 60 s
     timeSimulation: null,
     mapID: null,
+    carStats: null,
 
     events: {
         'change #osmOppacity': 'clickOnOSM',
@@ -36,6 +37,10 @@ app.mapCarSimulationView = Backbone.View.extend({
             id: this.idSimu,
             vehicle_id: this.id
         });
+        this.carStats = new app.models.carSimulationStats({
+            id: this.idSimu,
+            vehicle_id: this.id
+        });
         this.render();
     },
 
@@ -47,6 +52,8 @@ app.mapCarSimulationView = Backbone.View.extend({
         this.simTime = simTime;
         this.mapDetailsCollectionSimulation.id = idSimu;
         this.mapDetailsCollectionSimulation.vehicle_id = idCar;
+        this.carStats.id = idSimu;
+        this.carStats.vehicle_id = idCar;
     },
 
     render: function () {
@@ -134,6 +141,9 @@ app.mapCarSimulationView = Backbone.View.extend({
         });
         $('[data-toggle="tooltip"]').tooltip();
 
+        $("#listInfoMap").hide();
+        $("#waitIcon").show();
+
         return this;
     },
 
@@ -162,6 +172,37 @@ app.mapCarSimulationView = Backbone.View.extend({
                 }
             }
         });
+        this.carStats.fetch({
+            success: function () {
+                console.log(self.carStats.attributes);
+
+                var averageSpeed = self.carStats.attributes.averageSpeed;
+                var delay = self.carStats.attributes.delayDueToCongestionS;
+
+                var hours   = Math.floor(delay / 3600);
+                var minutes = Math.floor((delay - (hours * 3600)) / 60);
+                var seconds = delay - (hours * 3600) - (minutes * 60);
+
+                if (hours   < 10) {hours   = "0"+hours;}
+                if (minutes < 10) {minutes = "0"+minutes;}
+                if (seconds < 10) {seconds = "0"+seconds;}
+
+                $("#averageSpeed").html(averageSpeed + " Km/h");
+                if (hours == 0 && minutes == 0) {
+                    $("#delay").html(seconds + "s");
+                } else if (hours == 0) {
+                    $("#delay").html(minutes + "m" + seconds + "s");
+                } else {
+                    $("#delay").html(hours + "h" + minutes + "m" + seconds + "s");
+                }
+
+
+                //console.log("averageSpeed : " + averageSpeed + "\ndelay : " + delay + "\nsecond : " + second);
+
+                $("#waitIcon").hide();
+                $("#listInfoMap").show();
+            }
+        });
     },
     clickOnOSM: function () {
         this.tile.setOpacity($('#osmOppacity').val());
@@ -174,7 +215,7 @@ app.mapCarSimulationView = Backbone.View.extend({
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
         }
-        console.log("generateStyle");
+        //console.log("generateStyle");
 
         switch (type) {
             case 1:
@@ -270,7 +311,7 @@ app.mapCarSimulationView = Backbone.View.extend({
                 break;
             case 7:
                 //TRUCK
-                console.log("case camion");
+                //console.log("case camion");
                 var url = 'assets/img/truck.png';
                 var angle = feature.getProperties().angle;
                 var style = new ol.style.Style({

@@ -18,12 +18,15 @@
             <div class="panel-heading"><h4>Statistiques du véhicule</h4>
                 <!--<p class="close close_map_info"aria-label="close" title="close">×</p>-->
             </div>
+            <div id="waitIcon" hidden>
+                <img src="assets/svg/wait.svg" style="display:block; margin:auto; width: 30%; height: 30%"/>
+            </div>
             <div class="panel-body">
                 <div class="list-group" id="listInfoMap">
                     <h4 class="list-group-item list-group-item-info">Vitesse moyenne</h4>
-                    <p class="list-group-item">50 Km/h</p>
+                    <p class="list-group-item" id="averageSpeed">50 Km/h</p>
                     <h4 class="list-group-item list-group-item-info">Retard dû à la congestion</h4>
-                    <p class="list-group-item">30 min</p>
+                    <p class="list-group-item" id="delay">30 min</p>
                 </div>
             </div>
         </div>
