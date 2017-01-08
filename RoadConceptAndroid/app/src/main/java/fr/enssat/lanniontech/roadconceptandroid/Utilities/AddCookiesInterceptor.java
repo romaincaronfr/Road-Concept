@@ -29,6 +29,7 @@ public class AddCookiesInterceptor implements Interceptor {
         Request.Builder builder = chain.request().newBuilder();
 
         HashSet<String> preferences = (HashSet<String>) context.getSharedPreferences(Constants.SHARE_PREF_NAME, Context.MODE_PRIVATE).getStringSet(Constants.SHARE_COOKIE, new HashSet<String>());
+        Log.d("AddCookies",chain.request().url().toString());
         Log.d("AddCookies",preferences.toString());
         for (String cookie : preferences) {
             builder.addHeader("Cookie", cookie);

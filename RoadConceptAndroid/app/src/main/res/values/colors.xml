@@ -7,4 +7,5 @@
     <color name="colorLoginButton">#f1494c</color>
     <color name="colorAccentLogin">#f1494c</color>
     <color name="colorTextLoginBtn">#ffffff</color>
+    <color name="backgrounGris">#f1f1f3</color>
 </resources>
