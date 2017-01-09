@@ -7,7 +7,7 @@
     <groupId>fr.enssat.lanniontech</groupId>
     <artifactId>road-concept</artifactId>
     <packaging>pom</packaging>
-    <version>0.6-SNAPSHOT</version>
+    <version>1.0-RELEASE</version>
 
     <modules>
         <module>Road Concept API</module>
