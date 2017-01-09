@@ -1,6 +1,8 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.HomeComponents.MapAdapter;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
 import retrofit2.Call;
@@ -39,12 +42,12 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         roadConceptMapInterface = getRetrofitService(RoadConceptMapInterface.class);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        recyclerView.setLayoutManager(getLayoutManager(false));
         List<Map> test = new ArrayList<>();
         mapAdapter = new MapAdapter(test);
         recyclerView.setAdapter(mapAdapter);
         setTitle("Mes cartes");
-        //refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
         refreshLayout.setOnRefreshListener(this);
     }
 
@@ -58,6 +61,11 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+        if (!getDispositionPref()){
+            menu.findItem(R.id.action_disposition).setIcon(R.drawable.ic_view_module_white);
+        } else {
+            menu.findItem(R.id.action_disposition).setIcon(R.drawable.ic_view_stream_white);
+        }
         return true;
     }
 
@@ -69,8 +77,16 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+        if (id == R.id.action_disposition) {
+            GridLayoutManager gridLayoutManager = getLayoutManager(true);
+            int size = gridLayoutManager.getSpanCount();
+            recyclerView.setLayoutManager(gridLayoutManager);
+            Log.d(TAG, String.valueOf(size));
+            if (size == 1){
+                item.setIcon(R.drawable.ic_view_module_white);
+            } else {
+                item.setIcon(R.drawable.ic_view_stream_white);
+            }
             return true;
         }
 
@@ -131,5 +147,28 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     public void onRefresh() {
         Log.d(TAG,"onRefresh");
         getMapList();
+    }
+
+    private GridLayoutManager getLayoutManager(Boolean changePref){
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
+        Boolean dispo = sharedPreferences.getBoolean(Constants.SHARE_DISPOSITION, false);
+        if (changePref){
+            dispo = !dispo;
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Constants.SHARE_DISPOSITION,dispo);
+            editor.apply();
+        }
+        int size;
+        if (!dispo){
+            size = 1;
+        } else {
+            size = 2;
+        }
+        return new GridLayoutManager(this,size);
+    }
+
+    private Boolean getDispositionPref(){
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
+        return sharedPreferences.getBoolean(Constants.SHARE_DISPOSITION, false);
     }
 }

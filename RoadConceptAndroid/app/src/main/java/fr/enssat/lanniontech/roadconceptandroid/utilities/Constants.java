@@ -24,6 +24,7 @@ public class Constants {
     public static final String SHARE_COOKIE = "RoadConcept_Cookie";
     public static final String SHARE_USER_NAME = "RoadConcept_User_Name";
     public static final String SHARE_USER_EMAIL = "RoadConcept_User_Email";
+    public static final String SHARE_DISPOSITION = "RoadConcept_Disposition";
 
     // ====================
     // SINGLETON MANAGEMENT
