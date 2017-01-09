@@ -1,11 +1,9 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -18,20 +16,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.HomeComponents.MapAdapter;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener {
+public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int GET_MAP_LIST_REQUEST_CODE = 1500;
 
     //@BindView(R.id.swipeRefreshLayoutHome) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.itemsRecyclerViewHome) RecyclerView recyclerView;
+    @BindView(R.id.swiperefreshHome) SwipeRefreshLayout refreshLayout;
     RoadConceptMapInterface roadConceptMapInterface;
+    MapAdapter mapAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +39,19 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
         roadConceptMapInterface = getRetrofitService(RoadConceptMapInterface.class);
-        //swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.colorPrimary));
-        //swipeRefreshLayout.setEnabled(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
         List<Map> test = new ArrayList<>();
-        recyclerView.setAdapter(new MapAdapter(test));
+        mapAdapter = new MapAdapter(test);
+        recyclerView.setAdapter(mapAdapter);
         setTitle("Mes cartes");
-        getMapList();
+        //refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        refreshLayout.setOnRefreshListener(this);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getMapList();
     }
 
     @Override
@@ -74,6 +78,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     }
 
     private void getMapList(){
+        refreshLayout.setRefreshing(true);
         Call<List<Map>> mapList = roadConceptMapInterface.getMapList();
         mapList.enqueue(new Callback<List<Map>>() {
             @Override
@@ -83,7 +88,9 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                          response.body()) {
                         Log.d(TAG,map.toString());
                     }
-                    recyclerView.swapAdapter(new MapAdapter(response.body()),false);
+                    mapAdapter.setMapList(response.body());
+                    //mapAdapter.notifyDataSetChanged();
+                    //recyclerView.swapAdapter(new MapAdapter(response.body()),false);
                 } else {
                     if (response.code() == 401){
                         Log.d(TAG,"401,try");
@@ -92,10 +99,12 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                         displayNetworkErrorDialog();
                     }
                 }
+                refreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<List<Map>> call, Throwable t) {
+                refreshLayout.setRefreshing(false);
                 displayNetworkErrorDialog();
             }
         });
@@ -116,5 +125,11 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                     finish();
                 }
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.d(TAG,"onRefresh");
+        getMapList();
     }
 }

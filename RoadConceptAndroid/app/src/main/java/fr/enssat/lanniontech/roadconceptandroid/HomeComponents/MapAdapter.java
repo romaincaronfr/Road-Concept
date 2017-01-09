@@ -38,4 +38,13 @@ public class MapAdapter extends RecyclerView.Adapter<MapCardHolder> {
     public int getItemCount() {
         return mapList.size();
     }
+
+    public List<Map> getMapList() {
+        return mapList;
+    }
+
+    public void setMapList(List<Map> mapList) {
+        this.mapList = mapList;
+        notifyDataSetChanged();
+    }
 }
