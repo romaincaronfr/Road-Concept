@@ -10,8 +10,8 @@
     <version>1.0-RELEASE</version>
 
     <modules>
-        <module>Road Concept API</module>
         <module>Road Concept Core</module>
+        <module>Road Concept API</module>
     </modules>
 
     <properties>
