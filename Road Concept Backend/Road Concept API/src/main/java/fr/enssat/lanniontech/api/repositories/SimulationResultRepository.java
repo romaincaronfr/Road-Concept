@@ -197,9 +197,9 @@ public class SimulationResultRepository extends SimulationRepository {
                 for (SimulationVehicleStatistics item : data) {
                     statement.setString(1, simulationUUID.toString());
                     statement.setInt(2, item.getVehicleID());
-                    statement.setInt(3, item.getTime());
-                    statement.setInt(3, item.getAverageSpeed());
-                    statement.setInt(4, item.getAverageSpeed());
+                    statement.setInt(3, item.getDuration());
+                    statement.setInt(4, item.getDistanceDone());
+                    statement.setInt(5, item.getAverageSpeed());
 
                     statement.addBatch();
                 }

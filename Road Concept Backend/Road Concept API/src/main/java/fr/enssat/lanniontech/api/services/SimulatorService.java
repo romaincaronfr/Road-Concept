@@ -192,14 +192,9 @@ public class SimulatorService extends AbstractService implements Observer {
     }
 
     private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
-        int vehiclesCount = 10;
         List<SimulationVehicleStatistics> statistics = new ArrayList<>();
-        for (int i = 0; i < vehiclesCount; i++) {
-            //TODO; Temporary code. Waiting for core.
-            SimulationVehicleStatistics statistic = new SimulationVehicleStatistics(i, 50, 300);
-            statistics.add(statistic);
         for (VehicleStats stat : simulator.getVehicleManager().getStatistics()) {
-            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone());
+            statistics.add(new SimulationVehicleStatistics(stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone()));
         }
         simulationResultRepository.addVehicleStatistics(simulation.getUuid(), statistics);
     }
