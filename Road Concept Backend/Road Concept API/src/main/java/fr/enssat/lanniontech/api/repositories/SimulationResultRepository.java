@@ -19,17 +19,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
+
 public class SimulationResultRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationResultRepository.class);
 
     private static final String INSERT_ROAD_METRIC = "INSERT INTO simulation_congestion(feature_uuid, congestion_percentage, simulation_uuid, timestamp_s) VALUES (?, ?, ?, ?)";
     private static final String INSERT_VEHICLE_POSITION = "INSERT INTO simulation_vehicle(simulation_uuid, vehicle_id, timestamp_s, longitude, latitude, angle, type) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, delay_congestion, average_speed) VALUES (?,?,?,?)";
+    private static final String INSERT_VEHICLE_STATISTICS = "INSERT INTO simulation_vehicle_statistics(simulation_uuid, vehicle_id, time, distance, average_speed) VALUES (?,?,?,?,?)";
     private static final String SELECT_CONGESTION_AT = "SELECT  feature_uuid, congestion_percentage FROM simulation_congestion WHERE simulation_uuid = ? AND timestamp_s = ?";
     private static final String SELECT_VEHICLES_AT = "SELECT vehicle_id, longitude, latitude, angle, type FROM simulation_vehicle WHERE simulation_uuid = ? and timestamp_s = ?";
     private static final String SELECT_ITINERARY_FOR = "SELECT longitude, latitude, angle, timestamp_s, type FROM simulation_vehicle WHERE simulation_uuid = ? AND vehicle_id = ?";
-    private static final String SELECT_VEHICLE_STATISTICS = "SELECT average_speed, delay_congestion FROM simulation_vehicle_statistics WHERE simulation_uuid = ? AND vehicle_id = ?";
+    private static final String SELECT_VEHICLE_STATISTICS = "SELECT average_speed, time, distance FROM simulation_vehicle_statistics WHERE simulation_uuid = ? AND vehicle_id = ?";
     private static final String DELETE_ROAD_METRICS = "DELETE FROM simulation_congestion WHERE simulation_uuid = ?";
     private static final String DELETE_VEHCILES_POSITIONS = "DELETE FROM simulation_vehicle WHERE simulation_uuid = ?";
     private static final String DELETE_VEHICLE_STATISTICS = "DELETE FROM simulation_vehicle_statistics WHERE simulation_uuid = ?";
@@ -178,7 +180,8 @@ public class SimulationResultRepository extends SimulationRepository {
                     SimulationVehicleStatistics statistics = new SimulationVehicleStatistics();
                     statistics.setVehicleID(vehicleID);
                     statistics.setAverageSpeed(result.getInt("average_speed"));
-                    statistics.setDelayDueToCongestionS(result.getInt("delay_congestion"));
+                    statistics.setDistanceDone(result.getInt("distance"));
+                    statistics.setDuration(result.getInt("time"));
 
                     return statistics;
                 }
@@ -194,7 +197,8 @@ public class SimulationResultRepository extends SimulationRepository {
                 for (SimulationVehicleStatistics item : data) {
                     statement.setString(1, simulationUUID.toString());
                     statement.setInt(2, item.getVehicleID());
-                    statement.setInt(3, item.getDelayDueToCongestionS());
+                    statement.setInt(3, item.getTime());
+                    statement.setInt(3, item.getAverageSpeed());
                     statement.setInt(4, item.getAverageSpeed());
 
                     statement.addBatch();

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>road-concept</artifactId>
         <groupId>fr.enssat.lanniontech</groupId>
-        <version>0.6-SNAPSHOT</version>
+        <version>1.0-RELEASE</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,7 +23,6 @@
         <postgresql.version>9.4.1211.jre7</postgresql.version>
         <dbcp.version>2.1.1</dbcp.version>
         <jBCrypt.version>0.4.1</jBCrypt.version>
-        <!--<jersey-common.version>2.23.2</jersey-common.version>-->
         <cloning.version>1.9.2</cloning.version>
     </properties>
 
@@ -102,12 +101,6 @@
             <artifactId>cloning</artifactId>
             <version>${cloning.version}</version>
         </dependency>
-
-        <!--<dependency> &lt;!&ndash; Used when a JSON field is missing or not set... &ndash;&gt;-->
-        <!--<groupId>org.glassfish.jersey.core</groupId>-->
-        <!--<artifactId>jersey-common</artifactId>-->
-        <!--<version>${jersey-common.version}</version>-->
-        <!--</dependency>-->
 
         <!-- TEST DEPENDENCIES -->
         <dependency>

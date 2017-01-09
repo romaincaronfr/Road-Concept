@@ -25,6 +25,7 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.RoadMetrics;
+import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,6 +198,8 @@ public class SimulatorService extends AbstractService implements Observer {
             //TODO; Temporary code. Waiting for core.
             SimulationVehicleStatistics statistic = new SimulationVehicleStatistics(i, 50, 300);
             statistics.add(statistic);
+        for (VehicleStats stat : simulator.getVehicleManager().getStatistics()) {
+            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone());
         }
         simulationResultRepository.addVehicleStatistics(simulation.getUuid(), statistics);
     }

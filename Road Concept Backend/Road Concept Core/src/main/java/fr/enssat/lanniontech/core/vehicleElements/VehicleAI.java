@@ -2,6 +2,9 @@ package fr.enssat.lanniontech.core.vehicleElements;
 
 import fr.enssat.lanniontech.core.Tools;
 
+import java.lang.reflect.MalformedParameterizedTypeException;
+import java.util.Map;
+
 public class VehicleAI {
     private final double a;           //max acceleration
     private final double b;           //deceleration
@@ -18,14 +21,26 @@ public class VehicleAI {
         T = t;
     }
 
+    /**
+     *
+     * @param distanceToNext distance to next car in m
+     * @param speedOfNext speed of the next car in m/s
+     * @param v0 desired speed in m/s
+     */
     public void updateAcceleration(double distanceToNext, double speedOfNext, double v0) {
+        double deltaSpeed = Va - speedOfNext;
+        double freeRoadCoeff = Math.pow(Va/v0, 4);
+        double timeGap = Va * T;
+        double breakGap = Va * deltaSpeed / (2 * Math.sqrt( a * b));
+        double safeDistance = s0 + timeGap + breakGap;
+        double busyRoadCoeff = Math.pow(safeDistance / distanceToNext,2);
+        double coeff = 1 - freeRoadCoeff - busyRoadCoeff;
+        A = a * coeff;/*
         double Sprime = s0 + Va * T + (Va * (Va - speedOfNext)) / (2 * Math.sqrt(a * b));
         A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / distanceToNext, 2));
-        A=0;//fixme find why the idm is broken
-        Va = v0;
-        if(Math.abs(A)>a){
-            System.out.print("fixme");
-        }
+        if(A > a || A < -b){
+            System.out.print("bug");
+        }*/
     }
 
     public double getDistanceDone(double time) {
@@ -38,7 +53,7 @@ public class VehicleAI {
         return Va;
     }
 
-    public double getFreeDistance() {
-        return Math.max(Va * T * 2,s0*10);
+    public double getFreeDistance(double maxSpeed) {
+        return maxSpeed * T * 5;
     }
 }

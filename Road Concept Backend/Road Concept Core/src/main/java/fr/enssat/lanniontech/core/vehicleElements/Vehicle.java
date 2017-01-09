@@ -22,6 +22,7 @@ public class Vehicle {
     private Path myPath;
     private VehicleType type;
     private VehicleAI AI;
+    private double timeAlive;
 
     /**
      * constructor of a vehicle, place the newly created vehicle on the desired lane
@@ -38,36 +39,42 @@ public class Vehicle {
     private Vehicle(int ID, Lane start, double startPos, double length, HistoryManager historyManager, Path myPath, VehicleAI AI) {
         this.setID(ID);
         this.length = length;
-        this.setDistanceDone(0);
+        distanceDone = 0;
         this.setMyPath(myPath);
         this.setFrontSide(new Side(length + startPos, this, start, -length));
         this.setBackSide(new Side(startPos, this, start, length));
         this.setHistoryManager(historyManager);
         this.setAI(AI);
+        timeAlive = 0;
     }
 
     /**
      * this method will actualise the acceleration of the vehicle accordingly to it's environment and parameters
      */
     public void updateAcceleration() {
-        double nextCarDist = frontSide.getDistanceToNextCar(AI.getFreeDistance());
-        //double nextCarDist = getAI().getFreeDistance() + 10;
+        double freeDistance = AI.getFreeDistance(roadMaxSpeed());
+        double nextCarDist = frontSide.getDistanceToNextCar(freeDistance);
 
-        double nextCarSpeed = roadMaxSpeed();
-        if (nextCarDist < getAI().getFreeDistance()) {
+        double nextCarSpeed = AI.getSpeed();
+        if (nextCarDist < freeDistance) {
             nextCarSpeed = getFrontSide().getNextCarSpeed();
         }
         getAI().updateAcceleration(nextCarDist, nextCarSpeed, roadMaxSpeed());
     }
 
     private double roadMaxSpeed() {
-        return Tools.kphToMph(frontSide.getMaxSpeed());
+        double maxSpeed = frontSide.getMaxSpeed();
+        if(type == VehicleType.TRUCK){
+            maxSpeed = maxSpeed - 10;
+        }
+        return Tools.kphToMph(maxSpeed);
     }
 
     /**
      * actualize the position with the speed of the vehicle, then actualize it's speed for the next cycle
      */
     public void updatePos(double time) {
+        timeAlive += time;
         double dDone = getAI().getDistanceDone(time);
         this.setDistanceDone(getDistanceDone() + dDone);
         getBackSide().moveOnPath(dDone);
@@ -94,6 +101,11 @@ public class Vehicle {
         return getBackSide().getNextRoad() == null;
     }
 
+    public void removeVehicle(){
+        frontSide.removeFromRoad();
+        backSide.removeFromRoad();
+    }
+
     public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 3.5;
         VehicleAI AI = new VehicleAI(1, 4, 4);
@@ -103,7 +115,7 @@ public class Vehicle {
     }
 
     public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
-        double length = 15;
+        double length = 5;
         VehicleAI AI = new VehicleAI(0.5, 2, 10);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.setType(VehicleType.TRUCK);
@@ -176,5 +188,11 @@ public class Vehicle {
 
     public void setAI(VehicleAI AI) {
         this.AI = AI;
+    }
+
+    public VehicleStats getStats() {
+        double AvgSpeed = Tools.mpsToKph(distanceDone/timeAlive);
+        VehicleStats stats = new VehicleStats(this.ID,(int)AvgSpeed,(int)timeAlive,(int)distanceDone);
+        return stats;
     }
 }

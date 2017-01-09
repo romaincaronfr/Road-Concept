@@ -5971,6 +5971,9 @@ button.close {
   position: relative;
   padding: 20px;
 }
+.modal-body p {
+  text-align: justify;
+}
 .modal-footer {
   padding: 20px;
   text-align: right;

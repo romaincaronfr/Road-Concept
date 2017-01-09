@@ -500,4 +500,5 @@ public class RoadManager {
             historyManager.addRoadMetric(road.getMetrics(timestamp));
         }
     }
+
 }
