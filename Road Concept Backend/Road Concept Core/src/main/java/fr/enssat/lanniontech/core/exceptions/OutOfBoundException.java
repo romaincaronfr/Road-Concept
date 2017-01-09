@@ -1,6 +1,6 @@
 package fr.enssat.lanniontech.core.exceptions;
 
-public class OutOfBoundException extends RuntimeException{
+public class OutOfBoundException extends RuntimeException {
     /**
      * Constructs a new OutOfBoundException with default message.
      */

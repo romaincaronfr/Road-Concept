@@ -7,7 +7,11 @@ import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class SimpleTrajectory extends Trajectory {
 
@@ -28,8 +32,8 @@ public class SimpleTrajectory extends Trajectory {
     private Intersection destIntersection;
 
 
-    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId,Position position,double speed) {
-        super(roadId,position,speed);
+    public SimpleTrajectory(PosFunction pF, double start, double stop, double width, UUID roadId, Position position, double speed) {
+        super(roadId, position, speed);
         sourcesTrajectories = new HashMap<>();
         destinationsTrajectories = new HashMap<>();
         sourceType = TrajectoryEndType.UNDEFINED;
@@ -129,7 +133,7 @@ public class SimpleTrajectory extends Trajectory {
     public double getDistanceToFirst(double freeDistance) {
         if (vehiclesSides.isEmpty()) {
             if (freeDistance - length > 0) {
-                return length + getNext().getDestination().getDistanceToFirst(freeDistance-length);
+                return length + getNext().getDestination().getDistanceToFirst(freeDistance - length);
             } else {
                 return length;
             }
@@ -146,8 +150,8 @@ public class SimpleTrajectory extends Trajectory {
             } else {
                 return length;
             }
-        }else{
-            return length - vehiclesSides.get(vehiclesSides.size()-1).getPos();
+        } else {
+            return length - vehiclesSides.get(vehiclesSides.size() - 1).getPos();
         }
     }
 
@@ -237,7 +241,7 @@ public class SimpleTrajectory extends Trajectory {
     @Override
     public List<TrajectoryJunction> getAllNext() {
         List<TrajectoryJunction> destinations = new ArrayList<>();
-        for (TrajectoryJunction junction : destinationsTrajectories.values()){
+        for (TrajectoryJunction junction : destinationsTrajectories.values()) {
             destinations.add(junction);
         }
         return destinations;

@@ -16,7 +16,7 @@ public class EndRoadTrajectory extends Trajectory {
     private PosFunction pf;
 
     public EndRoadTrajectory(SimpleTrajectory source, SimpleTrajectory destination, UUID roadId) {
-        super(roadId,Position.getMean(source.getGPS(source.getStop()),destination.getGPS(0)),source.getSpeed());
+        super(roadId, Position.getMean(source.getGPS(source.getStop()), destination.getGPS(0)), source.getSpeed());
 
         Position A = source.getGPS(source.getStop());
         Position B = destination.getGPS(0);
@@ -77,8 +77,8 @@ public class EndRoadTrajectory extends Trajectory {
             } else {
                 return length;
             }
-        }else{
-            return length - vehiclesSides.get(vehiclesSides.size()-1).getPos();
+        } else {
+            return length - vehiclesSides.get(vehiclesSides.size() - 1).getPos();
         }
     }
 

@@ -8,9 +8,9 @@ public class OneWayRoadSection extends RoadSection {
 
     private Lane lane;
 
-    public OneWayRoadSection(Position A, Position B, Road myRoad){
+    public OneWayRoadSection(Position A, Position B, Road myRoad) {
         super(A, B, myRoad);
-        lane = new Lane(this,length);
+        lane = new Lane(this, length);
     }
 
     public Lane getLane() {
@@ -19,7 +19,7 @@ public class OneWayRoadSection extends RoadSection {
 
     @Override
     public Lane getInputLane(Position P) {
-        if(P == A){
+        if (P == A) {
             return lane;
         }
         return null;
@@ -27,7 +27,7 @@ public class OneWayRoadSection extends RoadSection {
 
     @Override
     public Lane getOutputLane(Position P) {
-        if(P == B){
+        if (P == B) {
             return lane;
         }
         return null;

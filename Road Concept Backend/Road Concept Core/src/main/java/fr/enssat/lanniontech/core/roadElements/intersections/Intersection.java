@@ -60,22 +60,22 @@ public class Intersection {
         }
         Lane incomingLane = Rs.getOutputLane(P);
         Lane outgoingLane = Rs.getInputLane(P);
-        if(incomingLane != null){
+        if (incomingLane != null) {
             incomingTrajectories.add(incomingLane.getInsertTrajectory());
         }
-        if(outgoingLane != null){
+        if (outgoingLane != null) {
             outgoingTrajectories.add(outgoingLane.getInsertTrajectory());
         }
         return true;
     }
 
-    public void removeRoadSection(RoadSection Rs){
+    public void removeRoadSection(RoadSection Rs) {
         Lane incomingLane = Rs.getOutputLane(P);
         Lane outgoingLane = Rs.getInputLane(P);
-        if(incomingLane != null){
+        if (incomingLane != null) {
             incomingTrajectories.remove(incomingLane.getInsertTrajectory());
         }
-        if(outgoingLane != null){
+        if (outgoingLane != null) {
             outgoingTrajectories.remove(outgoingLane.getInsertTrajectory());
         }
     }
@@ -84,7 +84,7 @@ public class Intersection {
         return incomingTrajectories.size();
     }
 
-    public int getOutgoingSize(){
+    public int getOutgoingSize() {
         return outgoingTrajectories.size();
     }
 
@@ -106,24 +106,24 @@ public class Intersection {
         return P;
     }
 
-    public boolean isValid(){
-        if(incomingTrajectories.size()==0 || outgoingTrajectories.size()==0){
+    public boolean isValid() {
+        if (incomingTrajectories.size() == 0 || outgoingTrajectories.size() == 0) {
             return false;
         }
 
-        if(incomingTrajectories.size()==1){
+        if (incomingTrajectories.size() == 1) {
             UUID id = incomingTrajectories.get(0).getRoadId();
-            for (Trajectory t : outgoingTrajectories){
-                if(t.getRoadId()==id){
+            for (Trajectory t : outgoingTrajectories) {
+                if (t.getRoadId() == id) {
                     return false;
                 }
             }
         }
 
-        if(outgoingTrajectories.size()==1){
+        if (outgoingTrajectories.size() == 1) {
             UUID id = outgoingTrajectories.get(0).getRoadId();
-            for (Trajectory t : incomingTrajectories){
-                if(t.getRoadId()==id){
+            for (Trajectory t : incomingTrajectories) {
+                if (t.getRoadId() == id) {
                     return false;
                 }
             }
@@ -132,17 +132,17 @@ public class Intersection {
         return true;
     }
 
-    public List<UUID> getRoadsUUID(){
+    public List<UUID> getRoadsUUID() {
         List<UUID> ids = new ArrayList<>();
 
-        for (Trajectory t : incomingTrajectories){
-            if(!ids.contains(t.getRoadId())){
+        for (Trajectory t : incomingTrajectories) {
+            if (!ids.contains(t.getRoadId())) {
                 ids.add(t.getRoadId());
             }
         }
 
-        for (Trajectory t : outgoingTrajectories){
-            if(!ids.contains(t.getRoadId())){
+        for (Trajectory t : outgoingTrajectories) {
+            if (!ids.contains(t.getRoadId())) {
                 ids.add(t.getRoadId());
             }
         }

@@ -19,7 +19,7 @@ public abstract class Trajectory {
     private List<Integer> loggedVehicles;
     protected UUID roadId;
 
-    public Trajectory(UUID roadId,Position position,double speed) {
+    public Trajectory(UUID roadId, Position position, double speed) {
         loggedVehicles = new ArrayList<>();
         notFreeSpace = 0;
         this.roadId = roadId;
@@ -64,24 +64,24 @@ public abstract class Trajectory {
     /**
      * return true if the range between start and stop is free
      */
-    public boolean rangeIsFree(double pos, double before,double behind) {
+    public boolean rangeIsFree(double pos, double before, double behind) {
         boolean res = true;
         double dist = getNext().getDestinationPos() - (pos + before);
-        if(dist > 0){
+        if (dist > 0) {
             res &= true;
-        }else{
-            res &= getNext().getDestination().getDistanceToFirst(dist)>dist;
+        } else {
+            res &= getNext().getDestination().getDistanceToFirst(dist) > dist;
         }
 
         dist = getPrev().getDestinationPos() + pos - behind;
-        if(dist > 0){
+        if (dist > 0) {
             res &= true;
-        }else{
-            res &= getPrev().getSource().getDistanceToLast(dist)>dist;
+        } else {
+            res &= getPrev().getSource().getDistanceToLast(dist) > dist;
         }
 
-        for(Side s :vehiclesSides){
-            if(s.getPos()>pos-behind && s.getPos()<pos+before){
+        for (Side s : vehiclesSides) {
+            if (s.getPos() > pos - behind && s.getPos() < pos + before) {
                 res &= false;
             }
         }

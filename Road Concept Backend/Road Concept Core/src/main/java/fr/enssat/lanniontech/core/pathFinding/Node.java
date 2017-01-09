@@ -2,8 +2,6 @@ package fr.enssat.lanniontech.core.pathFinding;
 
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 
-import java.util.UUID;
-
 public class Node {
     private double heuristic;
     private double cost;

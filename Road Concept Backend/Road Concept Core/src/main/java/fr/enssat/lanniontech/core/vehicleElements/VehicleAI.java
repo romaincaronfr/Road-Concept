@@ -1,10 +1,5 @@
 package fr.enssat.lanniontech.core.vehicleElements;
 
-import fr.enssat.lanniontech.core.Tools;
-
-import java.lang.reflect.MalformedParameterizedTypeException;
-import java.util.Map;
-
 public class VehicleAI {
     private final double a;           //max acceleration
     private final double b;           //deceleration
@@ -22,18 +17,20 @@ public class VehicleAI {
     }
 
     /**
-     *
-     * @param distanceToNext distance to next car in m
-     * @param speedOfNext speed of the next car in m/s
-     * @param v0 desired speed in m/s
+     * @param distanceToNext
+     *         distance to next car in m
+     * @param speedOfNext
+     *         speed of the next car in m/s
+     * @param v0
+     *         desired speed in m/s
      */
     public void updateAcceleration(double distanceToNext, double speedOfNext, double v0) {
         double deltaSpeed = Va - speedOfNext;
-        double freeRoadCoeff = Math.pow(Va/v0, 4);
+        double freeRoadCoeff = Math.pow(Va / v0, 4);
         double timeGap = Va * T;
-        double breakGap = Va * deltaSpeed / (2 * Math.sqrt( a * b));
+        double breakGap = Va * deltaSpeed / (2 * Math.sqrt(a * b));
         double safeDistance = s0 + timeGap + breakGap;
-        double busyRoadCoeff = Math.pow(safeDistance / distanceToNext,2);
+        double busyRoadCoeff = Math.pow(safeDistance / distanceToNext, 2);
         double coeff = 1 - freeRoadCoeff - busyRoadCoeff;
         A = a * coeff;/*
         double Sprime = s0 + Va * T + (Va * (Va - speedOfNext)) / (2 * Math.sqrt(a * b));

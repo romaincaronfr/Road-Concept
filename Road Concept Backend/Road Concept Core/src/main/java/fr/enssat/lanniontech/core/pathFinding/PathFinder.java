@@ -8,7 +8,6 @@ import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
-import fr.enssat.lanniontech.core.roadElements.roads.OneWayRoad;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.trajectory.SimpleTrajectory;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
@@ -16,7 +15,12 @@ import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class PathFinder {
 
@@ -61,14 +65,14 @@ public class PathFinder {
         Trajectory goal;
 
         Road destinationRoad = roadManager.getRoad(destination);
-        RoadSection roadSection = destinationRoad.get(destinationRoad.size()/2);
-        if(roadSection instanceof OneWayRoadSection){
-            goal = ((OneWayRoadSection)roadSection).getLane().getInsertTrajectory();
-        }else {
-            if(reverse){
-                goal = ((DualWayRoadSection)roadSection).getLaneBA().getInsertTrajectory();
-            }else {
-                goal = ((DualWayRoadSection)roadSection).getLaneAB().getInsertTrajectory();
+        RoadSection roadSection = destinationRoad.get(destinationRoad.size() / 2);
+        if (roadSection instanceof OneWayRoadSection) {
+            goal = ((OneWayRoadSection) roadSection).getLane().getInsertTrajectory();
+        } else {
+            if (reverse) {
+                goal = ((DualWayRoadSection) roadSection).getLaneBA().getInsertTrajectory();
+            } else {
+                goal = ((DualWayRoadSection) roadSection).getLaneAB().getInsertTrajectory();
             }
         }
 
@@ -76,8 +80,7 @@ public class PathFinder {
         Map<Trajectory, Node> closedNodes = new HashMap<>();
         Node finalNode = null;
 
-        Node node = new Node(0, Position.length(source.getPosition(), goal.getPosition()),
-                null,source);
+        Node node = new Node(0, Position.length(source.getPosition(), goal.getPosition()), null, source);
         openNodes.add(node);
 
         while (!openNodes.isEmpty() && finalNode == null) {
@@ -87,18 +90,17 @@ public class PathFinder {
             //pour toute les tajectoire de ce node
             for (TrajectoryJunction tj : node.getTrajectory().getAllNext()) {
                 Trajectory t = tj.getDestination();
-                if (t != null){
+                if (t != null) {
                     //calcul du cout du node
                     double cost = node.getCost() + t.getLength();
                     //on verifie que le node n'a pas deja été exploré
-                    if(!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost){
+                    if (!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost) {
                         //creation du node
-                        Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()),
-                                node, t);
+                        Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()), node, t);
                         //si la destination est la meme que la trajectoire
-                        if(t==goal){
+                        if (t == goal) {
                             finalNode = newNode;
-                        }else{
+                        } else {
                             int pos = 0;
                             while (pos < openNodes.size() && !newNode.betterThan(openNodes.get(pos))) {
                                 pos++;
@@ -109,7 +111,7 @@ public class PathFinder {
                 }
 
             }
-            closedNodes.put(node.getTrajectory(),node);
+            closedNodes.put(node.getTrajectory(), node);
         }
 
         if (finalNode == null) {

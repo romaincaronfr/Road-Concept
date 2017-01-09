@@ -37,7 +37,7 @@ public class Side {
         }
     }
 
-    public double getMaxSpeed(){
+    public double getMaxSpeed() {
         return myTrajectory.getSpeed();
     }
 

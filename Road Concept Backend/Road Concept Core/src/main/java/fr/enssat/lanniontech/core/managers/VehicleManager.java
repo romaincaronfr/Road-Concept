@@ -8,9 +8,8 @@ import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
-import fr.enssat.lanniontech.core.roadElements.roads.DualWayRoad;
-import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
+import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
@@ -94,19 +93,19 @@ public class VehicleManager {
     private boolean addVehicle(VehicleKernel kernel, Road start, Road stop) {
         RoadSection Rs = start.get(gen.nextInt(start.size()));
         Lane startingLane;
-        if(Rs instanceof DualWayRoadSection) {
+        if (Rs instanceof DualWayRoadSection) {
             if (gen.nextBoolean()) {
-                startingLane = ((DualWayRoadSection)Rs).getLaneAB();
+                startingLane = ((DualWayRoadSection) Rs).getLaneAB();
             } else {
-                startingLane = ((DualWayRoadSection)Rs).getLaneBA();
+                startingLane = ((DualWayRoadSection) Rs).getLaneBA();
             }
-        }else{
-            startingLane = ((OneWayRoadSection)Rs).getLane();
+        } else {
+            startingLane = ((OneWayRoadSection) Rs).getLane();
         }
 
         double startingPos = gen.nextInt((int) startingLane.getLength());
 
-        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos,10,20)) {
+        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 10, 20)) {
             return false;
         }
 
@@ -153,9 +152,9 @@ public class VehicleManager {
         return activeVehicles.size();
     }
 
-    public List<VehicleStats> getStatistics(){
+    public List<VehicleStats> getStatistics() {
         List<VehicleStats> stats = new ArrayList<>();
-        for (Vehicle V : vehicles){
+        for (Vehicle V : vehicles) {
             stats.add(V.getStats());
         }
         return stats;

@@ -37,11 +37,11 @@ public class Position {
     }
 
     public boolean equals(Position pos) {
-        return Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude-pos.getLongitude())<E;
+        return Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude - pos.getLongitude()) < E;
     }
 
-    public static Position getMean(Position P1,Position P2){
-        return new Position((P1.getLongitude()+P2.getLongitude())/2,(P1.getLatitude()+P2.getLatitude())/2);
+    public static Position getMean(Position P1, Position P2) {
+        return new Position((P1.getLongitude() + P2.getLongitude()) / 2, (P1.getLatitude() + P2.getLatitude()) / 2);
     }
 
     @Override

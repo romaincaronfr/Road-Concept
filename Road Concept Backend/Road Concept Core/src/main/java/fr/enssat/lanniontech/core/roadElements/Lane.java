@@ -16,18 +16,16 @@ public class Lane {
 
     public Lane(RoadSection myRoadSection, double length) {
         this.length = Math.abs(length);
-        if(myRoadSection instanceof DualWayRoadSection){
+        if (myRoadSection instanceof DualWayRoadSection) {
             width = 3.5;
-        }else{
+        } else {
             width = 0;
         }
         trajectories = new ArrayList<>();
         if (length > 0) {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2,
-                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB()),myRoadSection.getMyRoad().getMaxSpeed()));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), 0, this.length, width / 2, myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(), myRoadSection.getB()), myRoadSection.getMyRoad().getMaxSpeed()));
         } else {
-            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2,
-                    myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(),myRoadSection.getB()),myRoadSection.getMyRoad().getMaxSpeed()));
+            trajectories.add(new SimpleTrajectory(myRoadSection.getFunction(), this.length, 0, width / 2, myRoadSection.getMyRoad().getId(), Position.getMean(myRoadSection.getA(), myRoadSection.getB()), myRoadSection.getMyRoad().getMaxSpeed()));
         }
     }
 

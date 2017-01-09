@@ -12,7 +12,7 @@ public class Path {
     }
 
     public void addToPath(UUID dest) {
-        if(path.isEmpty() || path.get(path.size()-1)!=dest){
+        if (path.isEmpty() || path.get(path.size() - 1) != dest) {
             path.add(dest);
         }
     }
