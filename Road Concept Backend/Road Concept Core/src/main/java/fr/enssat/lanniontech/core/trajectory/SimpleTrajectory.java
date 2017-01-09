@@ -139,6 +139,19 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     @Override
+    protected double getDistanceToLast(double freeDistance) {
+        if (vehiclesSides.isEmpty()) {
+            if (freeDistance - length > 0) {
+                return length + getPrev().getSource().getDistanceToLast(freeDistance - length);
+            } else {
+                return length;
+            }
+        }else{
+            return length - vehiclesSides.get(vehiclesSides.size()-1).getPos();
+        }
+    }
+
+    @Override
     public double getDistanceToNext(Side side, double freeDistance) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -228,5 +241,10 @@ public class SimpleTrajectory extends Trajectory {
             destinations.add(junction);
         }
         return destinations;
+    }
+
+    @Override
+    public TrajectoryJunction getPrev() {
+        return defaultIn;
     }
 }

@@ -70,6 +70,19 @@ public class EndRoadTrajectory extends Trajectory {
     }
 
     @Override
+    protected double getDistanceToLast(double freeDistance) {
+        if (vehiclesSides.isEmpty()) {
+            if (freeDistance - length > 0) {
+                return length + source.getSource().getDistanceToLast(freeDistance - length);
+            } else {
+                return length;
+            }
+        }else{
+            return length - vehiclesSides.get(vehiclesSides.size()-1).getPos();
+        }
+    }
+
+    @Override
     public double getDistanceToNext(Side side, double freeDistance) {
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
@@ -124,5 +137,9 @@ public class EndRoadTrajectory extends Trajectory {
         List<TrajectoryJunction> l = new ArrayList<>();
         l.add(destination);
         return l;
+    }
+
+    public TrajectoryJunction getPrev() {
+        return source;
     }
 }

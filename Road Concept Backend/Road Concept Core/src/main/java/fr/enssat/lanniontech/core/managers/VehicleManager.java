@@ -106,11 +106,10 @@ public class VehicleManager {
 
         double startingPos = gen.nextInt((int) startingLane.getLength());
 
-        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos - 3, startingPos + 3)) {
+        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos,10,20)) {
             return false;
         }
 
-        //Path myPath = pathFinder.getRandomPath(startingLane.getInsertTrajectory(), 10);
         Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
         Vehicle V;
         if (kernel.getType() == VehicleType.CAR) {

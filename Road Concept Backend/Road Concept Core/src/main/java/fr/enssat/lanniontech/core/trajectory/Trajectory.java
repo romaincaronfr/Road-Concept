@@ -64,20 +64,31 @@ public abstract class Trajectory {
     /**
      * return true if the range between start and stop is free
      */
-    public boolean rangeIsFree(double start, double end) {
-        int i = 0;
-        double pos;
-        while (i < vehiclesSides.size()) {
-            pos = vehiclesSides.get(i).getPos();
-            if (pos >= start && pos <= end) {
-                return false;
-            } else if (pos > end) {
-                return true;
-            }
-            i++;
+    public boolean rangeIsFree(double pos, double before,double behind) {
+        boolean res = true;
+        double dist = getNext().getDestinationPos() - (pos + before);
+        if(dist > 0){
+            res &= true;
+        }else{
+            res &= getNext().getDestination().getDistanceToFirst(dist)>dist;
         }
-        return true;
+
+        dist = getPrev().getDestinationPos() + pos - behind;
+        if(dist > 0){
+            res &= true;
+        }else{
+            res &= getPrev().getSource().getDistanceToLast(dist)>dist;
+        }
+
+        for(Side s :vehiclesSides){
+            if(s.getPos()>pos-behind && s.getPos()<pos+before){
+                res &= false;
+            }
+        }
+        return res;
     }
+
+    protected abstract double getDistanceToLast(double freeDistance);
 
     public void addCar(double space, int carId) {
         if (!loggedVehicles.contains(carId)) {
@@ -115,6 +126,12 @@ public abstract class Trajectory {
      * return the next default trajectory
      */
     public abstract TrajectoryJunction getNext();
+
+
+    /**
+     * return previous trajectory
+     */
+    public abstract TrajectoryJunction getPrev();
 
     /**
      * return the next trajectory to the road
