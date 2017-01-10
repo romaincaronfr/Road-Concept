@@ -17,6 +17,7 @@ import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
+import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
@@ -44,6 +45,7 @@ public class SimulatorService extends AbstractService implements Observer {
     private SimulationRepository simulationGlobalRepository = new SimulationRepository();
     private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
     private SimulationResultRepository simulationResultRepository = new SimulationResultRepository();
+    private MapInfoRepository mapRepository = new MapInfoRepository();
 
     private MapService mapService = new MapService();
 
@@ -157,11 +159,11 @@ public class SimulatorService extends AbstractService implements Observer {
                 saveRoadMetrics(simulationUUID, historyManager);
                 historyManager.removeSamples();
             } else if (observable instanceof Simulator) {
-                    Simulation simulation = get(simulationUUID);
-                    simulationParametersRepository.finish(simulation);
-                    saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
-                    simulation.setFinish(true);
-                    simulation.setSimulator(null); // garbage collector
+                Simulation simulation = get(simulationUUID);
+                simulationParametersRepository.finish(simulation);
+                saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
+                simulation.setFinish(true);
+                simulation.setSimulator(null); // garbage collector
             }
         }
     }
@@ -281,11 +283,21 @@ public class SimulatorService extends AbstractService implements Observer {
     }
 
     public List<Simulation> getAll(User user, int mapID) {
-        return simulationParametersRepository.getAllFromMap(user, mapID);
+        List<Simulation> simulations = simulationParametersRepository.getAllFromMap(user, mapID);
+        getMapInfos(simulations);
+        return simulations;
     }
 
     public List<Simulation> getAll(int userID) {
-        return simulationParametersRepository.getAll(userID);
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+        return simulations;
+    }
+
+    private void getMapInfos(List<Simulation> simulations) {
+        for(Simulation simulation : simulations) {
+            simulation.setMapInfo(mapRepository.get(simulation.getMapID()));
+        }
     }
 
     // ======
