@@ -37,7 +37,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         configureGlobalHandlers(router);
 
-        vertx.deployVerticle(new APIDocVerticle(router));
+        vertx.deployVerticle(new DocumentationVerticle(router));
         vertx.deployVerticle(new AuthenticationVerticle(router));
         vertx.deployVerticle(new MapsVerticle(router));
         vertx.deployVerticle(new SimulatorVerticle(router));
@@ -87,9 +87,14 @@ public class HttpServerVerticle extends AbstractVerticle {
         corsHandler.allowCredentials(true);
     }
 
+    //TODO: Pas idéal d'instancier un repository dans les verticles
     private void cleanUpData() {
-        SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
-        simulationParametersRepository.deleteUnfinished();
+        try {
+            SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
+            simulationParametersRepository.deleteUnfinished();
+        } catch (Exception e) {
+            LOGGER.error("Cannot clean up data [ " + e.getClass() + " ]");
+        }
     }
 
     private void checkActivesSimulations(RoutingContext routingContext) {

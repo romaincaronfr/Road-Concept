@@ -9,6 +9,24 @@ public class SimulationVehicleStatistics implements Entity {
     private int distanceDone;
     private int duration;
 
+    public SimulationVehicleStatistics(int vehicleID, int averageSpeed, int duration, int distanceDone) {
+        this.vehicleID = vehicleID;
+        this.averageSpeed = averageSpeed;
+        this.distanceDone = distanceDone;
+        this.duration = duration;
+    }
+
+    public SimulationVehicleStatistics() {
+    }
+
+    public int getVehicleID() {
+        return vehicleID;
+    }
+
+    public void setVehicleID(int vehicleID) {
+        this.vehicleID = vehicleID;
+    }
+
     public int getAverageSpeed() {
         return averageSpeed;
     }
@@ -32,13 +50,4 @@ public class SimulationVehicleStatistics implements Entity {
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
-    public int getVehicleID() {
-        return vehicleID;
-    }
-
-    public void setVehicleID(int vehicleID) {
-        this.vehicleID = vehicleID;
-    }
-
 }

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">RoadConceptAndroid</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Se connecter</string>
+    <string name="error_please_valide_msg">Merci d\'entrer un email valide</string>
+    <string name="please_valid_password">Le champs mot de passe doit être remplis</string>
+    <string name="rester_connect">Rester connecté</string>
+    <string name="authent_in_progress">Authentification en cours...</string>
+    <string name="message_no_network">Désolé, une erreur réseau/serveur s\'est produite. Merci de vérifier que votre appareil dispose bien d\'un accès à internet. Réessayer ultérieurement.</string>
+    <string name="sorry">Désolé</string>
+    <string name="error_login_email_or_password">Votre email et/ou votre mot de passe sont incorrectes.</string>
+    <string name="load_information">Chargement des informations...</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="name">Name</string>
+    <string name="em_il">em@il</string>
+    <string name="description">Description</string>
+    <string name="modifier_la_disposition">Modifier la disposition</string>
+</resources>

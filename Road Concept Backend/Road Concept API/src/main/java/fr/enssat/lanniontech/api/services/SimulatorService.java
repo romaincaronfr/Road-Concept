@@ -17,6 +17,7 @@ import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
 import fr.enssat.lanniontech.api.exceptions.RoadConceptUnexpectedException;
+import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
@@ -44,8 +45,13 @@ public class SimulatorService extends AbstractService implements Observer {
     private SimulationRepository simulationGlobalRepository = new SimulationRepository();
     private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
     private SimulationResultRepository simulationResultRepository = new SimulationResultRepository();
+    private MapInfoRepository mapRepository = new MapInfoRepository();
 
     private MapService mapService = new MapService();
+
+    // ======
+    // CREATE
+    // ======
 
     public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         try {
@@ -65,9 +71,68 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
-    public SimulationVehicleStatistics getVehicleStatistics(UUID simulationUUID, int vehicleID) {
-        return simulationResultRepository.getStatistics(simulationUUID, vehicleID);
+    private boolean start(Simulation simulation) {
+        Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
+        sendFeatures(simulation, map.getFeatures());
+
+        simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
+        simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
+
+        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
+
+        return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
+
+    private void sendFeatures(Simulation simulation, FeatureCollection features) {
+        for (Feature feature : features) {
+            if (feature.getGeometry() instanceof LineString) {
+                LineString geometry = (LineString) feature.getGeometry();
+
+                if (feature.isRoad()) {
+                    sendRoads(simulation, feature, geometry);
+                } else if (feature.isRoundabout()) {
+                    sendRoundabout(simulation, feature, geometry);
+                }
+            }
+        }
+        simulation.getSimulator().getRoadManager().closeRoads();
+        if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
+            throw new RoadConceptUnexpectedException("Simulator check integrity failed");
+        }
+    }
+
+    private void sendRoundabout(Simulation simulation, Feature feature, LineString road) {
+        List<Position> roundaboutPositions = new ArrayList<>();
+        for (Coordinates C : road.getCoordinates()) {
+            roundaboutPositions.add(simulation.getSimulator().getPositionManager().addPosition(C.getLongitude(), C.getLatitude()));
+        }
+        simulation.getSimulator().getRoadManager().addRoundAbout(roundaboutPositions, feature.getUuid());
+    }
+
+    private void sendRoads(Simulation simulation, Feature feature, LineString road) {
+        Coordinates last = road.getCoordinates().get(0);
+
+        for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
+            Coordinates coordinates = road.getCoordinates().get(i);
+            Position A = simulation.getSimulator().getPositionManager().addPosition(last.getLongitude(), last.getLatitude());
+            Position B = simulation.getSimulator().getPositionManager().addPosition(coordinates.getLongitude(), coordinates.getLatitude());
+
+            int maxSpeed = (int) feature.getProperties().get("maxspeed");
+            boolean oneWay = computeOneWayFromProperty((String) feature.getProperties().get("oneway"));
+
+            if (isReverseDrawed((String) feature.getProperties().get("oneway"))) {
+                Collections.reverse(road.getCoordinates());
+            }
+
+            simulation.getSimulator().getRoadManager().addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
+
+            last = coordinates;
+        }
+    }
+
+    // =========
+    // EXECUTION
+    // =========
 
     public int getExecutionProgress(UUID simulationUUID, List<Simulation> activesSimulations) {
         Simulation simulation = null;
@@ -90,29 +155,12 @@ public class SimulatorService extends AbstractService implements Observer {
 
             if (observable instanceof HistoryManager) {
                 HistoryManager historyManager = (HistoryManager) observable;
-
-                List<SpaceTimePosition> positions = historyManager.getPositionSample();
-                for (SpaceTimePosition vehicle : positions) {
-                    FeatureType type;
-                    if (vehicle.getType() == VehicleType.CAR) {
-                        type = FeatureType.CAR;
-                    } else {
-                        type = FeatureType.TRUCK;
-                    }
-                    simulationResultRepository.addVehicleInfo(simulationUUID, vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
-                }
-
-                List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
-                for (RoadMetrics metric : roadMetrics) {
-                    if (metric.getCongestion() != 0) {
-                        //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
-                        simulationResultRepository.addRoadMetric(simulationUUID, metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
-                    }
-                }
+                saveVehiclesPosition(simulationUUID, historyManager);
+                saveRoadMetrics(simulationUUID, historyManager);
                 historyManager.removeSamples();
             } else if (observable instanceof Simulator) {
                 Simulation simulation = get(simulationUUID);
-                simulationParametersRepository.updateFinish(simulation, true);
+                simulationParametersRepository.finish(simulation);
                 saveVehiclesStatistics(simulation, (Simulator) observable); // Needed cause 'simulator' is null in the given simulation
                 simulation.setFinish(true);
                 simulation.setSimulator(null); // garbage collector
@@ -120,120 +168,58 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
-    private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
-        for (VehicleStats stat : simulator.getVehicleManager().getStatistics()) {
-            simulationResultRepository.addVehicleStatistics(simulation.getUuid(), stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone());
-        }
-    }
-
-    private boolean start(Simulation simulation) {
-        Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
-        sendFeatures(simulation, map.getFeatures());
-
-        simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
-        simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
-
-        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
-
-        return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
-    }
-
-    private void sendFeatures(Simulation simulation, FeatureCollection features) {
-        for (Feature feature : features) {
-            if (feature.getGeometry() instanceof LineString) {
-                LineString road = (LineString) feature.getGeometry();
-
-                if (feature.isRoad()) {
-                    Coordinates last = road.getCoordinates().get(0);
-
-                    for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
-                        Coordinates coordinates = road.getCoordinates().get(i);
-                        Position A = simulation.getSimulator().getPositionManager().
-                                addPosition(last.getLongitude(), last.getLatitude());
-                        Position B = simulation.getSimulator().getPositionManager().
-                                addPosition(coordinates.getLongitude(), coordinates.getLatitude());
-
-                        int maxSpeed = (int) feature.getProperties().get("maxspeed");
-                        boolean oneWay = computeOneWayFromProperty((String) feature.getProperties().get("oneway"));
-
-                        if (isReverseDrawed((String) feature.getProperties().get("oneway"))) {
-                            Collections.reverse(road.getCoordinates());
-                        }
-
-                        simulation.getSimulator().getRoadManager().
-                                addRoadSectionToRoad(A, B, feature.getUuid(), maxSpeed, oneWay);
-
-                        last = coordinates;
-                    }
-
-                } else if (feature.isRoundabout()) {
-                    List<Position> roundaboutPositions = new ArrayList<>();
-                    for (Coordinates C : road.getCoordinates()) {
-                        roundaboutPositions.add(simulation.getSimulator().getPositionManager().
-                                addPosition(C.getLongitude(), C.getLatitude()));
-                    }
-                    simulation.getSimulator().getRoadManager().addRoundAbout(roundaboutPositions, feature.getUuid());
-                }
-
+    private void saveRoadMetrics(UUID simulationUUID, HistoryManager historyManager) {
+        List<RoadMetrics> roadMetrics = historyManager.getRoadMetricsSample();
+        List<SimulationCongestionResult> congestions = new ArrayList<>();
+        for (RoadMetrics metric : roadMetrics) {
+            if (metric.getCongestion() != 0) {
+                //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
+                SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
+                congestions.add(congestion);
             }
         }
-        simulation.getSimulator().getRoadManager().closeRoads();
-        if (simulation.getSimulator().getRoadManager().checkIntegrity() != 0) {
-            throw new RoadConceptUnexpectedException("Simulator check integrity failed");
+        simulationResultRepository.addRoadMetric(simulationUUID, congestions);
+    }
+
+    private void saveVehiclesPosition(UUID simulationUUID, HistoryManager historyManager) {
+        List<SpaceTimePosition> positions = historyManager.getPositionSample();
+        List<SimulationVehicleResult> vehicles = new ArrayList<>();
+        for (SpaceTimePosition vehicle : positions) {
+            FeatureType type = computeVehicleTypeFromCore(vehicle);
+
+            SimulationVehicleResult vehicleData = new SimulationVehicleResult(vehicle.getId(), vehicle.getTime(), new Coordinates(vehicle.getLongitude(), vehicle.getLatitude()), vehicle.getAngle(), type);
+            vehicles.add(vehicleData);
         }
+        simulationResultRepository.addVehicleInfo(simulationUUID, vehicles);
     }
 
-    private boolean computeOneWayFromProperty(String property) {
-        return !(property == null || "no".equals(property));
-    }
-
-    private boolean isReverseDrawed(String property) {
-        return !(property == null || !"-1".equals(property));
-    }
-
-    public Simulation get(UUID simulationUUID) {
-        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
-        if (simulation == null) {
-            throw new EntityNotExistingException(Simulation.class);
+    private void saveVehiclesStatistics(Simulation simulation, Simulator simulator) {
+        List<SimulationVehicleStatistics> statistics = new ArrayList<>();
+        for (VehicleStats stat : simulator.getVehicleManager().getStatistics()) {
+            statistics.add(new SimulationVehicleStatistics(stat.getId(), stat.getAverageSpeed(), stat.getElapsedTime(), stat.getDistanceDone()));
         }
-        return simulation;
+        simulationResultRepository.addVehicleStatistics(simulation.getUuid(), statistics);
     }
 
-    public List<Simulation> getAll(User user, int mapID) {
-        return simulationParametersRepository.getAllFromMap(user, mapID);
-    }
+    // =======
+    // RESULTS
+    // =======
 
-    public List<Simulation> getAll(int userID) {
-        return simulationParametersRepository.getAll(userID);
+    public SimulationVehicleStatistics getVehicleStatistics(UUID simulationUUID, int vehicleID) {
+        return simulationResultRepository.getStatistics(simulationUUID, vehicleID);
     }
 
     public FeatureCollection getResultAt(UUID simulationUUID, int timestamp) {
         Simulation simulation = get(simulationUUID);
-
-        if (timestamp < 0 || timestamp >= 86400) {
-            throw new InvalidParameterException("Invalid timestamp (min value = 0 | max value = 86399)");
-        } else if (timestamp % simulation.getSamplingRate() != 0) {
-            throw new InvalidParameterException("Timestamp must be consistent with the simulation sampling rate.");
-        }
+        checkTimestampValue(timestamp, simulation);
 
         FeatureCollection features = simulationGlobalRepository.getFeatures(simulationUUID);
+        fillCongestions(simulationUUID, timestamp, features);
+        fillVehicles(simulationUUID, timestamp, features);
+        return features;
+    }
 
-        List<SimulationCongestionResult> congestions = simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
-        for (Feature feature : features) {
-            for (SimulationCongestionResult congestion : congestions) {
-                if (feature.getUuid().equals(congestion.getFeatureUUID())) {
-                    feature.getProperties().put("congestion", congestion.getCongestionPercentage());
-                }
-            }
-        }
-
-        // Congestion is stored as a sparse matrix, so we need to set default congestion congestion value
-        for (Feature feature : features) {
-            if (!feature.getProperties().containsKey("congestion")) {
-                feature.getProperties().put("congestion", 0);
-            }
-        }
-
+    private void fillVehicles(UUID simulationUUID, int timestamp, FeatureCollection features) {
         List<SimulationVehicleResult> vehicles = simulationResultRepository.getVehiclesAt(simulationUUID, timestamp);
         for (SimulationVehicleResult vehicle : vehicles) {
             Feature feature = new Feature(); // Vehicle ID is set from the simulator. We don't use the generated one.
@@ -243,7 +229,27 @@ public class SimulatorService extends AbstractService implements Observer {
             feature.getProperties().put("angle", vehicle.getAngle());
             features.getFeatures().add(feature);
         }
-        return features;
+    }
+
+    private void fillCongestions(UUID simulationUUID, int timestamp, FeatureCollection features) {
+        List<SimulationCongestionResult> congestions = simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
+        for (Feature feature : features) {
+            for (SimulationCongestionResult congestion : congestions) {
+                if (feature.getUuid().equals(congestion.getFeatureUUID())) {
+                    feature.getProperties().put("congestion", congestion.getCongestionPercentage());
+                }
+            }
+        }
+        addMissingCongestions(features);
+    }
+
+    private void addMissingCongestions(FeatureCollection features) {
+        // Congestion is stored as a sparse matrix, so we need to set default congestion congestion value
+        for (Feature feature : features) {
+            if (!feature.getProperties().containsKey("congestion")) {
+                feature.getProperties().put("congestion", 0);
+            }
+        }
     }
 
     public FeatureCollection getVehiculePositionsHistory(UUID simulationUUID, int vehicleID) {
@@ -264,6 +270,40 @@ public class SimulatorService extends AbstractService implements Observer {
         return features;
     }
 
+    // ===
+    // GET
+    // ===
+
+    public Simulation get(UUID simulationUUID) {
+        Simulation simulation = simulationParametersRepository.getFromUUID(simulationUUID);
+        if (simulation == null) {
+            throw new EntityNotExistingException(Simulation.class);
+        }
+        return simulation;
+    }
+
+    public List<Simulation> getAll(User user, int mapID) {
+        List<Simulation> simulations = simulationParametersRepository.getAllFromMap(user, mapID);
+        getMapInfos(simulations);
+        return simulations;
+    }
+
+    public List<Simulation> getAll(int userID) {
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+        return simulations;
+    }
+
+    private void getMapInfos(List<Simulation> simulations) {
+        for(Simulation simulation : simulations) {
+            simulation.setMapInfo(mapRepository.get(simulation.getMapID()));
+        }
+    }
+
+    // ======
+    // DELETE
+    // ======
+
     public void delete(UUID simulationUUID) {
         Simulation simulation = new Simulation();
         simulation.setUuid(simulationUUID);
@@ -273,4 +313,35 @@ public class SimulatorService extends AbstractService implements Observer {
         // Delete duplicated features
         simulationGlobalRepository.deleteAssociatedFeatures(simulationUUID);
     }
+
+    // =========
+    // UTILITIES
+    // =========
+
+    private boolean computeOneWayFromProperty(String property) {
+        return !(property == null || "no".equals(property));
+    }
+
+    private boolean isReverseDrawed(String property) {
+        return !(property == null || !"-1".equals(property));
+    }
+
+    private void checkTimestampValue(int timestamp, Simulation simulation) {
+        if (timestamp < 0 || timestamp >= 86400) {
+            throw new InvalidParameterException("Invalid timestamp (min value = 0 | max value = 86399)");
+        } else if (timestamp % simulation.getSamplingRate() != 0) {
+            throw new InvalidParameterException("Timestamp must be consistent with the simulation sampling rate.");
+        }
+    }
+
+    private FeatureType computeVehicleTypeFromCore(SpaceTimePosition vehicle) {
+        FeatureType type;
+        if (vehicle.getType() == VehicleType.CAR) {
+            type = FeatureType.CAR;
+        } else {
+            type = FeatureType.TRUCK;
+        }
+        return type;
+    }
+
 }

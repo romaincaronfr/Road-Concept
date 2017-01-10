@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.entities.simulation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import fr.enssat.lanniontech.api.entities.SQLEntity;
+import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.SimulatorUnavailableException;
 import fr.enssat.lanniontech.core.Simulator;
 
@@ -17,7 +18,8 @@ public class Simulation implements SQLEntity {
     private UUID uuid = UUID.randomUUID();
     private String name;
     private int creatorID;
-    private int mapID;
+    private int mapID; //TODO: Remove it when the FrontEnd is ready to change...
+    private MapInfo mapInfo;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int samplingRate;
     private boolean finish;
@@ -122,6 +124,14 @@ public class Simulation implements SQLEntity {
 
     public void setCarPercentage(int carPercentage) {
         this.carPercentage = carPercentage;
+    }
+
+    public MapInfo getMapInfo() {
+        return mapInfo;
+    }
+
+    public void setMapInfo(MapInfo mapInfo) {
+        this.mapInfo = mapInfo;
     }
 
     public Simulator getSimulator() {

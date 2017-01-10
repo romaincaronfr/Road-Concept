@@ -15,7 +15,7 @@ public final class MathsUtils {
         return round(value, 7);
     }
 
-    public static double round(double value, int places) {
+    private static double round(double value, int places) {
         if (places < 0) {
             throw new IllegalArgumentException();
         }

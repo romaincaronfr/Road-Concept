@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
+import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
-
 public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
@@ -23,14 +22,14 @@ public class SimulationParametersRepository extends SimulationRepository {
     private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_map = ? AND id_user = ?";
-    private static final String UPDATE_FINISH = "UPDATE simulation SET finish = ? WHERE uuid = ? AND id_user = ?";
+    private static final String UPDATE_FINISH = "UPDATE simulation SET finish = true WHERE uuid = ? AND id_user = ?";
     private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
 
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
-        try (Connection connection = getConnection()) {
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) { //NOSONAR: Parameters count
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
 
@@ -50,6 +49,7 @@ public class SimulationParametersRepository extends SimulationRepository {
 
                 try {
                     statement.execute();
+
                     simulation.setSamplingRate(samplingRate);
                     simulation.setMapID(mapID);
                     simulation.setName(name);
@@ -76,11 +76,12 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ===
 
     public List<Simulation> getAll(int userID) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, userID);
 
                 try (ResultSet result = statement.executeQuery()) {
+
                     List<Simulation> simulations = new ArrayList<>();
 
                     while (result.next()) {
@@ -110,11 +111,12 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public Simulation getFromUUID(UUID uuid) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_UUID)) {
                 statement.setString(1, uuid.toString());
 
                 try (ResultSet result = statement.executeQuery()) {
+
                     if (result.next()) {
                         Simulation simulation = new Simulation();
                         simulation.setUuid(uuid);
@@ -142,11 +144,12 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public List<Simulation> getAllFromMap(User user, int mapID) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
                 statement.setInt(2, user.getId());
                 try (ResultSet result = statement.executeQuery()) {
+
                     List<Simulation> simulations = new ArrayList<>();
 
                     while (result.next()) {
@@ -179,12 +182,12 @@ public class SimulationParametersRepository extends SimulationRepository {
     // UPDATE
     // ======
 
-    public void updateFinish(Simulation simulation, boolean newValue) {
-        try (Connection connection = getConnection()) {
+    public void finish(Simulation simulation) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE_FINISH)) {
-                statement.setBoolean(1, newValue);
-                statement.setString(2, simulation.getUuid().toString());
-                statement.setInt(3, simulation.getCreatorID());
+                statement.setString(1, simulation.getUuid().toString());
+                statement.setInt(2, simulation.getCreatorID());
+
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -204,7 +207,7 @@ public class SimulationParametersRepository extends SimulationRepository {
      * Warning: only supposed to be called on server start-up
      */
     public void deleteUnfinished() {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(DELETE_NOT_FINISH)) {
                 try (ResultSet result = statement.executeQuery()) {
 

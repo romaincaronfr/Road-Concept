@@ -14,11 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public final class IntersectionsSplitter {
+public final class IntersectionSplitter {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IntersectionsSplitter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntersectionSplitter.class);
 
-    private IntersectionsSplitter() {
+    private IntersectionSplitter() {
         // prevent instantiation
     }
 

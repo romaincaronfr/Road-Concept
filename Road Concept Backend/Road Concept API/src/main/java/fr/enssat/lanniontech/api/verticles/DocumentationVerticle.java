@@ -8,13 +8,13 @@ import io.vertx.ext.web.handler.StaticHandler;
 /**
  * Simple verticle to serve static API documentation.
  */
-public class APIDocVerticle extends AbstractVerticle {
+public class DocumentationVerticle extends AbstractVerticle {
 
     private static final String DOC_PATH = "/doc*";
 
     private Router router;
 
-    public APIDocVerticle(Router router) {
+    public DocumentationVerticle(Router router) {
         this.router = router;
     }
 

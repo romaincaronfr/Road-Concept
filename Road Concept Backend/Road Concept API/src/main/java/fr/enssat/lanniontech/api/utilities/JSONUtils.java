@@ -16,7 +16,7 @@ public class JSONUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JSONUtils.class);
 
-    private static ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     static {
         MAPPER.setSerializationInclusion(Include.NON_NULL);
@@ -24,7 +24,7 @@ public class JSONUtils {
         MAPPER.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
     }
 
-    public static String toJSON(Object object) throws JSONProcessingException {
+    public static String toJSON(Object object) {
         try {
             return MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
@@ -33,7 +33,7 @@ public class JSONUtils {
         }
     }
 
-    public static <T> T fromJSON(String jsonString, Class<T> valueType) throws JSONProcessingException {
+    public static <T> T fromJSON(String jsonString, Class<T> valueType) {
         try {
             return MAPPER.readValue(jsonString, valueType);
         } catch (IOException e) {

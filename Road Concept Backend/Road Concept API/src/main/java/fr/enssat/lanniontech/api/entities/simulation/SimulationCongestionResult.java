@@ -8,6 +8,17 @@ public class SimulationCongestionResult implements Entity {
 
     private UUID featureUUID;
     private int congestionPercentage;
+    private int timestamp;
+
+    public SimulationCongestionResult(UUID featureUUID, int congestionPercentage, int timestamp) {
+        this.featureUUID = featureUUID;
+        this.congestionPercentage = congestionPercentage;
+        this.timestamp = timestamp;
+    }
+
+    public SimulationCongestionResult() {
+
+    }
 
     public UUID getFeatureUUID() {
         return featureUUID;
@@ -25,4 +36,11 @@ public class SimulationCongestionResult implements Entity {
         this.congestionPercentage = congestionPercentage;
     }
 
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
 }
