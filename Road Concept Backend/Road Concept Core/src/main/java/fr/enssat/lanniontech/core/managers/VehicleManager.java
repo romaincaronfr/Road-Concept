@@ -105,7 +105,7 @@ public class VehicleManager {
 
         double startingPos = gen.nextInt((int) startingLane.getLength());
 
-        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 10, 20)) {
+        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 10, 50)) {
             return false;
         }
 
