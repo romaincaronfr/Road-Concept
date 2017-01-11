@@ -29,6 +29,8 @@
             android:padding="20dp"
             tools:text="Paris"
             android:fontFamily="sans-serif"
+            android:drawableStart="@drawable/ic_place"
+            android:drawablePadding="5dp"
             android:textColor="#333"
             android:textSize="18sp" />
     </LinearLayout>

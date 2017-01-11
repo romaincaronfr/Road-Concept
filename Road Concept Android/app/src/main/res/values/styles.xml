@@ -23,4 +23,9 @@
 
     <style name="AppTheme.LoginStyle.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CollapsText" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

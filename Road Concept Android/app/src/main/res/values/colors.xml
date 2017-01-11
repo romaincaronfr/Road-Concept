@@ -8,4 +8,12 @@
     <color name="colorAccentLogin">#f1494c</color>
     <color name="colorTextLoginBtn">#ffffff</color>
     <color name="backgrounGris">#f1f1f3</color>
+    <color name="backgroundCollapsText">#33000000</color>
+    <color name="black">#000000</color>
+    <color name="blackTransparentLight">#26000000</color>
+    <color name="translucent_scrim_top">#4D000000</color>
+    <color name="translucent_scrim_top_center">#1A000000</color>
+    <color name="translucent_scrim_bottom">#2A000000</color>
+    <color name="translucent_scrim_bottom_center">#0D000000</color>
+    <color name="translucent_lat_blue">#992196F3</color>
 </resources>

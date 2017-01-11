@@ -14,6 +14,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.R;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 
 /**
  * Created by Romain on 08/01/2017.
@@ -36,9 +37,7 @@ public class MapCardHolder extends RecyclerView.ViewHolder {
         if (map.getImageURL() != null && !Objects.equals(map.getImageURL(), "")){
             Log.d("MapCardHolder","if ok");
             String base64 = map.getImageURL();
-            byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imageViewMap.setImageBitmap(decodedByte);
+            imageViewMap.setImageBitmap(ImageFactory.getBitmapWithBase64(base64));
         } else {
             imageViewMap.setImageResource(R.drawable.ic_google_maps);
         }
