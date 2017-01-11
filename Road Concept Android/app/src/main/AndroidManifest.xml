@@ -17,14 +17,13 @@
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-        <activity android:name=".MapSimulationListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MapSimulationListActivity">
         </activity>
     </application>
 

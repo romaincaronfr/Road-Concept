@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.roadconceptandroid.Components;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.util.Objects;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 
 /**
  * Created by Romain on 08/01/2017.
@@ -21,10 +23,12 @@ import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 
 public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapCardHolder> {
 
-    List<Map> mapList;
+    private List<Map> mMapList;
+    private RecyclerViewClickListener mRecyclerViewClickListener;
 
-    public MapAdapter(List<Map> mapList) {
-        this.mapList = mapList;
+    public MapAdapter(List<Map> mMapList, RecyclerViewClickListener itemListener) {
+        this.mMapList = mMapList;
+        this.mRecyclerViewClickListener = itemListener;
     }
 
     @Override
@@ -35,34 +39,35 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapCardHolder> {
 
     @Override
     public void onBindViewHolder(MapCardHolder holder, int position) {
-        Map map = mapList.get(position);
+        Map map = mMapList.get(position);
         holder.bind(map);
     }
 
     @Override
     public int getItemCount() {
-        return mapList.size();
+        return mMapList.size();
     }
 
-    public List<Map> getMapList() {
-        return mapList;
+    public List<Map> getmMapList() {
+        return mMapList;
     }
 
-    public void setMapList(List<Map> mapList) {
-        this.mapList = mapList;
+    public void setmMapList(List<Map> mMapList) {
+        this.mMapList = mMapList;
         notifyDataSetChanged();
     }
 
-    class MapCardHolder extends RecyclerView.ViewHolder {
+    class MapCardHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView textViewMapName;
         private ImageView imageViewMap;
+        private Map mMap;
 
         MapCardHolder(View itemView) {
             super(itemView);
-
             textViewMapName = (TextView) itemView.findViewById(R.id.textCellCardMap);
             imageViewMap = (ImageView) itemView.findViewById(R.id.imageCellCardMap);
+            itemView.setOnClickListener(this);
         }
 
         void bind(Map map){
@@ -73,6 +78,11 @@ public class MapAdapter extends RecyclerView.Adapter<MapAdapter.MapCardHolder> {
             } else {
                 imageViewMap.setImageResource(R.drawable.ic_google_maps);
             }
+        }
+
+        @Override
+        public void onClick(View v) {
+            mRecyclerViewClickListener.recyclerViewListClicked(v,getLayoutPosition());
         }
     }
 }

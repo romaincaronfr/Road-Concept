@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +22,13 @@ import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapAdapter;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener {
+public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener{
 
     private static final int GET_MAP_LIST_REQUEST_CODE = 1500;
 
@@ -44,7 +47,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         roadConceptMapInterface = getRetrofitService(RoadConceptMapInterface.class);
         recyclerView.setLayoutManager(getLayoutManager(false));
         List<Map> test = new ArrayList<>();
-        mapAdapter = new MapAdapter(test);
+        mapAdapter = new MapAdapter(test,this);
         recyclerView.setAdapter(mapAdapter);
         setTitle("Mes cartes");
         refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
@@ -104,7 +107,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                          response.body()) {
                         Log.d(TAG,map.toString());
                     }
-                    mapAdapter.setMapList(response.body());
+                    mapAdapter.setmMapList(response.body());
                     //mapAdapter.notifyDataSetChanged();
                     //recyclerView.swapAdapter(new MapAdapter(response.body()),false);
                 } else {
@@ -170,5 +173,11 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     private Boolean getDispositionPref(){
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
         return sharedPreferences.getBoolean(Constants.SHARE_DISPOSITION, false);
+    }
+
+    @Override
+    public void recyclerViewListClicked(View v, int position) {
+        //mapAdapter.getmMapList().get(position);
+        Toast.makeText(this,mapAdapter.getmMapList().get(position).getName(),Toast.LENGTH_LONG).show();
     }
 }
