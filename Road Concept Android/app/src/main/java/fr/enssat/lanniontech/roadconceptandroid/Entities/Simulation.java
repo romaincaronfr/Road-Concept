@@ -149,4 +149,22 @@ public class Simulation {
         this.vehicleCount = vehicleCount;
     }
 
+    @Override
+    public String toString() {
+        return "Simulation{" +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", creatorID=" + creatorID +
+                ", mapID=" + mapID +
+                ", creationDate='" + creationDate + '\'' +
+                ", samplingRate=" + samplingRate +
+                ", finish=" + finish +
+                ", livingFeatureUUID='" + livingFeatureUUID + '\'' +
+                ", workingFeatureUUID='" + workingFeatureUUID + '\'' +
+                ", departureLivingS=" + departureLivingS +
+                ", departureWorkingS=" + departureWorkingS +
+                ", carPercentage=" + carPercentage +
+                ", vehicleCount=" + vehicleCount +
+                '}';
+    }
 }

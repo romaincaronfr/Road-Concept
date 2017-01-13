@@ -1,25 +1,45 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.Components.MapSimulationsAdapter;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptSimulationsInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MapSimulationListActivity extends AppCompatActivity {
+public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener{
+
+    private static final int GET_SIMULATION_LIST_REQUEST_CODE = 1003;
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.backgroundImageView) ImageView mImageView;
-    @BindView(R.id.swipeMapSimulationList) SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.swipeMapSimulationList) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.my_recycler_view) RecyclerView mRecyclerView;
+    RoadConceptSimulationsInterface roadConceptSimulationInterface;
+    MapSimulationsAdapter mMapSimulationsAdapter;
     private int mId;
 
     @Override
@@ -35,6 +55,19 @@ public class MapSimulationListActivity extends AppCompatActivity {
             mImageView.setImageBitmap(ImageFactory.getBitmapWithBase64(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE)));
         }
         mId = intent.getIntExtra(HomeActivity.INTENT_MAP_ID,-1);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        roadConceptSimulationInterface = getRetrofitService(RoadConceptSimulationsInterface.class);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        List<Simulation> simulationList = new ArrayList<>();
+        mMapSimulationsAdapter = new MapSimulationsAdapter(simulationList);
+        mRecyclerView.setAdapter(mMapSimulationsAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getSimulationList();
     }
 
     @Override
@@ -43,5 +76,51 @@ public class MapSimulationListActivity extends AppCompatActivity {
             super.onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getSimulationList(){
+        mSwipeRefreshLayout.setRefreshing(true);
+        Call<List<Simulation>> simulationList = roadConceptSimulationInterface.getSimulationsFor1Map(String.valueOf(mId));
+        simulationList.enqueue(new Callback<List<Simulation>>() {
+            @Override
+            public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {
+                if (response.isSuccessful()){
+                    mMapSimulationsAdapter.setmSimulationList(response.body());
+                } else {
+                    if (response.code() == 401){
+                        Log.d(TAG,"401,try");
+                        refreshLogin(MapSimulationListActivity.this,GET_SIMULATION_LIST_REQUEST_CODE);
+                    } else {
+                        displayNetworkErrorDialog();
+                    }
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Simulation>> call, Throwable t) {
+                mSwipeRefreshLayout.setRefreshing(false);
+                displayNetworkErrorDialog();
+            }
+        });
+    }
+
+    @Override
+    public void onRefresh() {
+        getSimulationList();
+    }
+
+    @Override
+    public void onNeedLogin(int code, boolean result) {
+        switch (code){
+            case GET_SIMULATION_LIST_REQUEST_CODE:
+                if (result) {
+                    getSimulationList();
+                } else {
+                    Intent intent = new Intent(this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+        }
     }
 }
