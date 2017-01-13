@@ -33,6 +33,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     private static final int GET_MAP_LIST_REQUEST_CODE = 1500;
     public static final String INTENT_MAP_ID = "MAP_ID";
     public static final String INTENT_MAP_NAME = "MAP_NAME";
+    public static final String INTENT_MAP_IMAGE = "MAP_IMAGE";
 
     //@BindView(R.id.swipeRefreshLayoutHome) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.itemsRecyclerViewHome) RecyclerView mRecyclerView;
@@ -183,6 +184,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         Intent intent = new Intent(this,MapSimulationListActivity.class);
         intent.putExtra(INTENT_MAP_NAME, mMapAdapter.getmMapList().get(position).getName());
         intent.putExtra(INTENT_MAP_ID, mMapAdapter.getmMapList().get(position).getId());
+        intent.putExtra(INTENT_MAP_IMAGE,mMapAdapter.getmMapList().get(position).getImageURL());
         startActivity(intent);
         //Toast.makeText(this, mMapAdapter.getmMapList().get(position).getName(),Toast.LENGTH_LONG).show();
 

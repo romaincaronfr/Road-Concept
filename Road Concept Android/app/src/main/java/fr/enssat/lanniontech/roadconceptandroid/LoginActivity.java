@@ -153,8 +153,10 @@ public class LoginActivity extends BaseActivity{
                     Me me = response.body();
                     String userName = me.getFirstName()+" "+me.getLastName();
                     String email = me.getEmail();
+                    int userId = me.getId();
                     editor.putString(Constants.SHARE_USER_NAME, userName);
                     editor.putString(Constants.SHARE_USER_EMAIL, email);
+                    editor.putInt(Constants.SHARE_USER_ID, userId);
                     editor.apply();
                     Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
                     startActivity(intent);
