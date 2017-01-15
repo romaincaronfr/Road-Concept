@@ -61,7 +61,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_maps) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -69,9 +69,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
 
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
 
         }
 
@@ -92,6 +90,8 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.getMenu().findItem(R.id.nav_camera).setChecked(true);
     }
 
 }

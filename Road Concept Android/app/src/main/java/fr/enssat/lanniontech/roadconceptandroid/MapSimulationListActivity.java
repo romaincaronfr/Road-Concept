@@ -1,5 +1,8 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +44,8 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @BindView(R.id.textViewNoSimulationOver) TextView mTextViewNoSimulationOver;
     @BindView(R.id.my_recycler_view_in_progress) RecyclerView mRecyclerViewSimulationInProgress;
     @BindView(R.id.textViewNoSimulationInProgress) TextView mTextViewNoSimulationInProgress;
+    @BindView(R.id.buttonMoreInfoSimulationOver) Button mButtonMoreInfoSimulationOver;
+    @BindView(R.id.buttonMoreInfoSimulationInProgress) Button mButtonMoreInfoSimulationInProgress;
     RoadConceptSimulationsInterface roadConceptSimulationInterface;
     MapSimulationsAdapter mMapSimulationsOverAdapter;
     MapSimulationsAdapter mMapSimulationsInProgressAdapter;
@@ -72,6 +78,18 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList);
         mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
         mRecyclerViewSimulationInProgress.setAdapter(mMapSimulationsInProgressAdapter);
+        mButtonMoreInfoSimulationInProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                printInformation(false);
+            }
+        });
+        mButtonMoreInfoSimulationOver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                printInformation(true);
+            }
+        });
     }
 
     @Override
@@ -158,5 +176,23 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
                     finish();
                 }
         }
+    }
+
+    public void printInformation(Boolean info){
+        String message = getString(R.string.info_simulation_over);
+        if (!info){
+            message = getString(R.string.info_simulation_in_progress);
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapSimulationListActivity.this);
+        builder.setMessage(message);
+        builder.setTitle(R.string.information);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }
