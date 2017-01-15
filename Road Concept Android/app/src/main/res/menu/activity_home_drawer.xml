@@ -7,17 +7,9 @@
             android:icon="@drawable/ic_place"
             android:title="@string/mes_cartes" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_simulations"
+            android:icon="@drawable/ic_directions_car"
+            android:title="@string/mes_simulations" />
     </group>
 
     <item android:title="@string/mon_compte">

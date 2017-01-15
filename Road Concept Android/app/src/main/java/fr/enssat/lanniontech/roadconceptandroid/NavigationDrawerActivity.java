@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -63,11 +64,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
 
         if (id == R.id.nav_maps) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_simulations) {
 
         } else if (id == R.id.nav_logout) {
 
@@ -91,7 +88,11 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navigationView.getMenu().findItem(R.id.nav_camera).setChecked(true);
+        Menu navigationViewMenu = navigationView.getMenu();
+
+        if (this instanceof HomeActivity){
+            navigationViewMenu.findItem(R.id.nav_maps).setChecked(true);
+        } //TODO ajouter la prochaine activité quand elle sera ok
     }
 
 }

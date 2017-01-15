@@ -34,4 +34,5 @@
     <string name="logout">Se déconnecter</string>
     <string name="mon_compte">Mon compte</string>
     <string name="mes_cartes">Mes cartes</string>
+    <string name="mes_simulations">Mes simulations</string>
 </resources>
