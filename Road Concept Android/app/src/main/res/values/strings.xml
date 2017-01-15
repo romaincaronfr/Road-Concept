@@ -36,4 +36,8 @@
     <string name="mes_cartes">Mes cartes</string>
     <string name="mes_simulations">Mes simulations</string>
     <string name="logout_in_progress">Déconnexion en cours</string>
+    <string name="logout_confirmation_message">Etes-vous sur de vouloir vous déconnecter ?</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="cancel">Annuler</string>
+    <string name="yes_logout">Se déconnecter</string>
 </resources>

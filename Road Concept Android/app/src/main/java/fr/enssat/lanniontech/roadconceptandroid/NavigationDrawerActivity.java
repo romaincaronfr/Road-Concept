@@ -1,7 +1,9 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -74,7 +76,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         } else if (id == R.id.nav_simulations) {
 
         } else if (id == R.id.nav_logout) {
-            logout();
+            confirmLogout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -100,6 +102,27 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         if (this instanceof HomeActivity){
             navigationViewMenu.findItem(R.id.nav_maps).setChecked(true);
         } //TODO ajouter la prochaine activité quand elle sera ok
+    }
+
+    private void confirmLogout(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.logout_confirmation_message);
+        builder.setTitle(R.string.confirmation);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.yes_logout), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+                logout();
+            }
+        });
+        alertDialog.show();
     }
 
     private void logout(){
