@@ -72,7 +72,9 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         int id = item.getItemId();
 
         if (id == R.id.nav_maps) {
-            // Handle the camera action
+            if (!(this instanceof HomeActivity)){
+                startActivityWithClass(HomeActivity.class);
+            }
         } else if (id == R.id.nav_simulations) {
 
         } else if (id == R.id.nav_logout) {
@@ -162,6 +164,11 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
                 displayNetworkErrorDialog();
             }
         });
+    }
+
+    private void startActivityWithClass (Class T){
+        Intent intent = new Intent(this,T);
+        startActivity(intent);
     }
 
 }
