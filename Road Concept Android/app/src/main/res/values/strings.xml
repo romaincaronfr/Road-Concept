@@ -24,4 +24,8 @@
     <string name="simulations_termin_es">Simulations terminées</string>
     <string name="description_de_la_carte">Description de la carte</string>
     <string name="aucune_simulation_termin_es_pour_cette_carte">Aucune simulation terminée pour cette carte</string>
+    <string name="aucune_simulation_en_cours_pour_cette_carte">Aucune simulation en cours pour cette carte</string>
+    <string name="en_savoir_plus">En savoir plus</string>
+    <string name="pourquoi_ne_puis_je_pas_s_lectionnner_ce_type_de_simulation">Pourquoi ne puis-je pas sélectionnner ce type de simulation ?</string>
+    <string name="simulations_en_cours">Simulations en cours</string>
 </resources>

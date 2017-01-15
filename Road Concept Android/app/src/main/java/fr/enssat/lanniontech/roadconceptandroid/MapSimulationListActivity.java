@@ -38,8 +38,10 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @BindView(R.id.my_recycler_view) RecyclerView mRecyclerViewSimulationOver;
     @BindView(R.id.textViewDescriptionMap) TextView mTextDescriptionMap;
     @BindView(R.id.textViewNoSimulationOver) TextView mTextViewNoSimulationOver;
+    @BindView(R.id.my_recycler_view_in_progress) RecyclerView mRecyclerViewSimulationInProgress;
     RoadConceptSimulationsInterface roadConceptSimulationInterface;
     MapSimulationsAdapter mMapSimulationsOverAdapter;
+    MapSimulationsAdapter mMapSimulationsInProgressAdapter;
     private int mId;
 
     @Override
@@ -52,6 +54,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(intent.getStringExtra(HomeActivity.INTENT_MAP_NAME));
         mRecyclerViewSimulationOver.setVisibility(View.GONE);
+        mRecyclerViewSimulationInProgress.setVisibility(View.GONE);
         if (intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE) != null && !Objects.equals(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE), "")){
             mImageView.setImageBitmap(ImageFactory.getBitmapWithBase64(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE)));
         }
@@ -62,9 +65,12 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         mSwipeRefreshLayout.setOnRefreshListener(this);
         roadConceptSimulationInterface = getRetrofitService(RoadConceptSimulationsInterface.class);
         mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(this,1));
+        mRecyclerViewSimulationInProgress.setLayoutManager(new GridLayoutManager(this,1));
         List<Simulation> simulationList = new ArrayList<>();
         mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList);
+        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList);
         mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
+        mRecyclerViewSimulationInProgress.setAdapter(mMapSimulationsInProgressAdapter);
     }
 
     @Override

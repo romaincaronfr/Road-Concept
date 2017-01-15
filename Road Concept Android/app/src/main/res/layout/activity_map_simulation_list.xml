@@ -209,7 +209,92 @@
                                 style="@style/TitleCardView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="En savoir plus" />
+                                android:text="@string/en_savoir_plus" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cardviewSimulationInProgress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:elevation="100dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="3dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:gravity="center_vertical"
+                            android:paddingLeft="5dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/ic_autorenew" />
+
+                            <TextView
+                                style="@style/TitleCardView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/simulations_en_cours" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@android:color/darker_gray" />
+
+                        <TextView
+                            android:text="@string/aucune_simulation_en_cours_pour_cette_carte"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/textViewNoSimulationInProgress"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_marginTop="10dp"
+                            android:textAlignment="center" />
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/my_recycler_view_in_progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@android:color/darker_gray" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:gravity="center_vertical"
+                            android:id="@+id/layoutMoreInfoSimulationInProgress"
+                            android:paddingLeft="5dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="5dp"
+                                app:srcCompat="@drawable/ic_help_outline_24dp" />
+
+                            <TextView
+                                style="@style/TitleCardView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/pourquoi_ne_puis_je_pas_s_lectionnner_ce_type_de_simulation" />
                         </LinearLayout>
                     </LinearLayout>
 
