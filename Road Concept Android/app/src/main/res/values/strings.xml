@@ -21,4 +21,23 @@
     <string name="em_il">em@il</string>
     <string name="description">Description</string>
     <string name="modifier_la_disposition">Modifier la disposition</string>
+    <string name="simulations_termin_es">Simulations terminées</string>
+    <string name="description_de_la_carte">Description de la carte</string>
+    <string name="aucune_simulation_termin_es_pour_cette_carte">Aucune simulation terminée pour cette carte</string>
+    <string name="aucune_simulation_en_cours_pour_cette_carte">Aucune simulation en cours pour cette carte</string>
+    <string name="en_savoir_plus">En savoir plus</string>
+    <string name="pourquoi_ne_puis_je_pas_s_lectionnner_ce_type_de_simulation">Pourquoi ne puis-je pas sélectionnner ce type de simulation ?</string>
+    <string name="simulations_en_cours">Simulations en cours</string>
+    <string name="info_simulation_over">Vous retrouvez ici vos simulations terminées. En en sélectionnant une, vous pourrez consulter le résultat.</string>
+    <string name="info_simulation_in_progress">Cette liste affiche les simulations en cours d\'éxécution par votre système RoadConcept. Vous pourrez les sélectionner lorsqu\'elles seront terminées.</string>
+    <string name="information">Information</string>
+    <string name="logout">Se déconnecter</string>
+    <string name="mon_compte">Mon compte</string>
+    <string name="mes_cartes">Mes cartes</string>
+    <string name="mes_simulations">Mes simulations</string>
+    <string name="logout_in_progress">Déconnexion en cours</string>
+    <string name="logout_confirmation_message">Etes-vous sur de vouloir vous déconnecter ?</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="cancel">Annuler</string>
+    <string name="yes_logout">Se déconnecter</string>
 </resources>

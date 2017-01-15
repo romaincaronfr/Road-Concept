@@ -1,17 +1,21 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +24,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapSimulationsAdapter;
-import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptSimulationsInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,9 +39,16 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.backgroundImageView) ImageView mImageView;
     @BindView(R.id.swipeMapSimulationList) SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.my_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.my_recycler_view) RecyclerView mRecyclerViewSimulationOver;
+    @BindView(R.id.textViewDescriptionMap) TextView mTextDescriptionMap;
+    @BindView(R.id.textViewNoSimulationOver) TextView mTextViewNoSimulationOver;
+    @BindView(R.id.my_recycler_view_in_progress) RecyclerView mRecyclerViewSimulationInProgress;
+    @BindView(R.id.textViewNoSimulationInProgress) TextView mTextViewNoSimulationInProgress;
+    @BindView(R.id.buttonMoreInfoSimulationOver) Button mButtonMoreInfoSimulationOver;
+    @BindView(R.id.buttonMoreInfoSimulationInProgress) Button mButtonMoreInfoSimulationInProgress;
     RoadConceptSimulationsInterface roadConceptSimulationInterface;
-    MapSimulationsAdapter mMapSimulationsAdapter;
+    MapSimulationsAdapter mMapSimulationsOverAdapter;
+    MapSimulationsAdapter mMapSimulationsInProgressAdapter;
     private int mId;
 
     @Override
@@ -51,17 +60,36 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(intent.getStringExtra(HomeActivity.INTENT_MAP_NAME));
+        mRecyclerViewSimulationOver.setVisibility(View.GONE);
+        mRecyclerViewSimulationInProgress.setVisibility(View.GONE);
         if (intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE) != null && !Objects.equals(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE), "")){
             mImageView.setImageBitmap(ImageFactory.getBitmapWithBase64(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE)));
         }
         mId = intent.getIntExtra(HomeActivity.INTENT_MAP_ID,-1);
+        String mapDescription = intent.getStringExtra(HomeActivity.INTENT_MAP_DESCRIPTION);
+        mTextDescriptionMap.setText(mapDescription);
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         roadConceptSimulationInterface = getRetrofitService(RoadConceptSimulationsInterface.class);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(this,1));
+        mRecyclerViewSimulationInProgress.setLayoutManager(new GridLayoutManager(this,1));
         List<Simulation> simulationList = new ArrayList<>();
-        mMapSimulationsAdapter = new MapSimulationsAdapter(simulationList);
-        mRecyclerView.setAdapter(mMapSimulationsAdapter);
+        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList);
+        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList);
+        mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
+        mRecyclerViewSimulationInProgress.setAdapter(mMapSimulationsInProgressAdapter);
+        mButtonMoreInfoSimulationInProgress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                printInformation(false);
+            }
+        });
+        mButtonMoreInfoSimulationOver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                printInformation(true);
+            }
+        });
     }
 
     @Override
@@ -85,7 +113,33 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
             @Override
             public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {
                 if (response.isSuccessful()){
-                    mMapSimulationsAdapter.setmSimulationList(response.body());
+                    List<Simulation> simulationList1 = response.body();
+                    List<Simulation> simulationOverList = new ArrayList<>();
+                    List<Simulation> simulationInProgressList = new ArrayList<>();
+                    for (Simulation simulation: response.body()) {
+                        if (simulation.getFinish()){
+                            simulationOverList.add(simulation);
+                        } else {
+                            simulationInProgressList.add(simulation);
+                        }
+                    }
+                    if (simulationOverList.isEmpty()){
+                        mTextViewNoSimulationOver.setVisibility(View.VISIBLE);
+                        mRecyclerViewSimulationOver.setVisibility(View.GONE);
+                    } else {
+                        mTextViewNoSimulationOver.setVisibility(View.GONE);
+                        mRecyclerViewSimulationOver.setVisibility(View.VISIBLE);
+                    }
+
+                    if (simulationInProgressList.isEmpty()){
+                        mTextViewNoSimulationInProgress.setVisibility(View.VISIBLE);
+                        mRecyclerViewSimulationInProgress.setVisibility(View.GONE);
+                    } else {
+                        mTextViewNoSimulationInProgress.setVisibility(View.GONE);
+                        mRecyclerViewSimulationInProgress.setVisibility(View.VISIBLE);
+                    }
+                    mMapSimulationsOverAdapter.setmSimulationList(simulationOverList);
+                    mMapSimulationsInProgressAdapter.setmSimulationList(simulationInProgressList);
                 } else {
                     if (response.code() == 401){
                         Log.d(TAG,"401,try");
@@ -122,5 +176,23 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
                     finish();
                 }
         }
+    }
+
+    public void printInformation(Boolean info){
+        String message = getString(R.string.info_simulation_over);
+        if (!info){
+            message = getString(R.string.info_simulation_in_progress);
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(MapSimulationListActivity.this);
+        builder.setMessage(message);
+        builder.setTitle(R.string.information);
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setButton(Dialog.BUTTON_NEGATIVE, "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

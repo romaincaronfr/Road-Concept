@@ -21,4 +21,6 @@ public interface RoadConceptUserInterface {
     @GET("api/me")
     Call<Me> getMe();
 
+    @POST("api/logout")
+    Call<Void> postLogout();
 }
