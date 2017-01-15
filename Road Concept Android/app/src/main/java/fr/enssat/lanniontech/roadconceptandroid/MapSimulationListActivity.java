@@ -39,6 +39,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @BindView(R.id.textViewDescriptionMap) TextView mTextDescriptionMap;
     @BindView(R.id.textViewNoSimulationOver) TextView mTextViewNoSimulationOver;
     @BindView(R.id.my_recycler_view_in_progress) RecyclerView mRecyclerViewSimulationInProgress;
+    @BindView(R.id.textViewNoSimulationInProgress) TextView mTextViewNoSimulationInProgress;
     RoadConceptSimulationsInterface roadConceptSimulationInterface;
     MapSimulationsAdapter mMapSimulationsOverAdapter;
     MapSimulationsAdapter mMapSimulationsInProgressAdapter;
@@ -111,7 +112,16 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
                         mTextViewNoSimulationOver.setVisibility(View.GONE);
                         mRecyclerViewSimulationOver.setVisibility(View.VISIBLE);
                     }
+
+                    if (simulationInProgressList.isEmpty()){
+                        mTextViewNoSimulationInProgress.setVisibility(View.VISIBLE);
+                        mRecyclerViewSimulationInProgress.setVisibility(View.GONE);
+                    } else {
+                        mTextViewNoSimulationInProgress.setVisibility(View.GONE);
+                        mRecyclerViewSimulationInProgress.setVisibility(View.VISIBLE);
+                    }
                     mMapSimulationsOverAdapter.setmSimulationList(simulationOverList);
+                    mMapSimulationsInProgressAdapter.setmSimulationList(simulationInProgressList);
                 } else {
                     if (response.code() == 401){
                         Log.d(TAG,"401,try");
