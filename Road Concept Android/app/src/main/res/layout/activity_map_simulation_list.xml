@@ -191,26 +191,14 @@
                             android:layout_marginTop="10dp"
                             android:background="@android:color/darker_gray" />
 
-                        <LinearLayout
+                        <Button
+                            android:text="@string/en_savoir_plus"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:id="@+id/layoutMoreInfoSimulationOver"
-                            android:paddingLeft="5dp">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginRight="5dp"
-                                app:srcCompat="@drawable/ic_help_outline_24dp" />
-
-                            <TextView
-                                style="@style/TitleCardView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/en_savoir_plus" />
-                        </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:id="@+id/buttonMoreInfoSimulationOver"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/ic_help_outline_24dp"
+                            style="@style/ButtonSimulationListMap" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
@@ -276,26 +264,14 @@
                             android:layout_marginTop="10dp"
                             android:background="@android:color/darker_gray" />
 
-                        <LinearLayout
+                        <Button
+                            android:text="@string/pourquoi_ne_puis_je_pas_s_lectionnner_ce_type_de_simulation"
                             android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:gravity="center_vertical"
-                            android:id="@+id/layoutMoreInfoSimulationInProgress"
-                            android:paddingLeft="5dp">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginRight="5dp"
-                                app:srcCompat="@drawable/ic_help_outline_24dp" />
-
-                            <TextView
-                                style="@style/TitleCardView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/pourquoi_ne_puis_je_pas_s_lectionnner_ce_type_de_simulation" />
-                        </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:id="@+id/buttonMoreInfoSimulationInProgress"
+                            android:layout_weight="1"
+                            android:drawableLeft="@drawable/ic_help_outline_24dp"
+                            style="@style/ButtonSimulationListMap" />
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
