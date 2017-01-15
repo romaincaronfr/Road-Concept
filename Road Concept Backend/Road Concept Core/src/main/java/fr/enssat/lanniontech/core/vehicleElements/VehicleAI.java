@@ -37,12 +37,15 @@ public class VehicleAI {
         A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / distanceToNext, 2));
         if(A > a || A < -b){
             System.out.print("bug");
-        }*/
+        }/**/
     }
 
     public double getDistanceDone(double time) {
         double dDone = Va * time;
         Va += A * time;
+        if(Va < 0){
+            Va = 0;
+        }
         return dDone;
     }
 

@@ -89,8 +89,10 @@ public class Simulator extends Observable implements Runnable {
 
                 if (j == samplingRate) {
                     vehicleManager.newStep(precision, true, timestamp);
-                    roadManager.saveSates(historyManager, timestamp);
-                    historyManager.commitChanges(simId);
+                    if(vehicleManager.getVehiclesNumber()>0){
+                        roadManager.saveSates(historyManager, timestamp);
+                        historyManager.commitChanges(simId);
+                    }
                     j = 1;
                 } else {
                     vehicleManager.newStep(precision, false, timestamp);

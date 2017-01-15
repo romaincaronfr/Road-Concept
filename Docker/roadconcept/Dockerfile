@@ -14,10 +14,10 @@ RUN apt-get install oracle-java8-installer -y
 
 COPY ./roadConceptDB.sql /var/
 COPY ./init.sh /var/
-COPY ./road-concept-api-0.1-SNAPSHOT-fat.jar /var/
+COPY ./road-concept.jar /var/
 
 RUN chmod +x /var/init.sh
-RUN chmod +x /var/road-concept-api-0.1-SNAPSHOT-fat.jar
+RUN chmod +x /var/road-concept.jar
 
 EXPOSE 8080
 

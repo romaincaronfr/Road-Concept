@@ -65,7 +65,7 @@ public class Vehicle {
     private double roadMaxSpeed() {
         double maxSpeed = frontSide.getMaxSpeed();
         if (type == VehicleType.TRUCK) {
-            maxSpeed = maxSpeed - 10;
+            maxSpeed = maxSpeed - 5;
         }
         return Tools.kphToMph(maxSpeed);
     }
@@ -108,7 +108,7 @@ public class Vehicle {
 
     public static Vehicle createCar(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 3.5;
-        VehicleAI AI = new VehicleAI(1, 4, 4);
+        VehicleAI AI = new VehicleAI(1, 4, 2);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.setType(VehicleType.CAR);
         return V;
@@ -116,7 +116,7 @@ public class Vehicle {
 
     public static Vehicle createTruck(int ID, Lane start, double startPos, HistoryManager historyManager, Path myPath) {
         double length = 5;
-        VehicleAI AI = new VehicleAI(0.5, 2, 10);
+        VehicleAI AI = new VehicleAI(0.5, 2, 5);
         Vehicle V = new Vehicle(ID, start, startPos, length, historyManager, myPath, AI);
         V.setType(VehicleType.TRUCK);
         return V;

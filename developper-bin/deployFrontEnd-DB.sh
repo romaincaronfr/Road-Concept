@@ -4,5 +4,5 @@ docker rmi docker_frontend;
 cp -R ../frontend ../Docker/nginx;
 cd ../Road\ Concept\ Backend/;
 cd ../Docker/roadconcept;
-docker-compose -f ../hiveship-docker-compose.yml build && docker-compose -f ../frontend-DB-docker-compose.yml up;
+docker-compose -f ../Frontend-DB-docker-compose.yml build && docker-compose -f ../Frontend-DB-docker-compose.yml up;
 cd ../../developper-bin;
