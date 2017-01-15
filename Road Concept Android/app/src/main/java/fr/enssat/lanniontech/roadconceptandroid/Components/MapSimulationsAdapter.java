@@ -35,7 +35,12 @@ public class MapSimulationsAdapter extends RecyclerView.Adapter<MapSimulationsAd
 
     @Override
     public void onBindViewHolder(MapSimulationsHolder holder, int position) {
-        holder.bind(mSimulationList.get(position));
+        Boolean printSeperator = true;
+        if (position == mSimulationList.size()-1){
+            Log.d("ADAPTER","met à false");
+            printSeperator = false;
+        }
+        holder.bind(mSimulationList.get(position),printSeperator);
     }
 
     @Override
@@ -56,15 +61,19 @@ public class MapSimulationsAdapter extends RecyclerView.Adapter<MapSimulationsAd
 
         private TextView textViewSimulationName;
         private TextView textViewSimulationDate;
+        private View separatorBar;
 
         MapSimulationsHolder(View itemView) {
             super(itemView);
             textViewSimulationName = (TextView) itemView.findViewById(R.id.textSimuName);
             textViewSimulationDate = (TextView) itemView.findViewById(R.id.textDateSimu);
-
+            separatorBar = itemView.findViewById(R.id.viewBarSeparatorOver);
         }
 
-        void bind(Simulation simulation){
+        void bind(Simulation simulation,Boolean printSeperator){
+            if (!printSeperator){
+                separatorBar.setVisibility(View.GONE);
+            }
             Log.d("SimulationHolder","bind");
             textViewSimulationName.setText(simulation.getName());
             textViewSimulationDate.setText(simulation.getCreationDate());

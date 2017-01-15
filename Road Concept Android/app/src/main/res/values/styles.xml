@@ -28,4 +28,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TitleCardView">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TitleSimulationName">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
