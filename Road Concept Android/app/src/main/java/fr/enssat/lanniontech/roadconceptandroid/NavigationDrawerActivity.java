@@ -1,5 +1,8 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -18,6 +21,10 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Romain on 07/01/2017.
@@ -67,7 +74,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         } else if (id == R.id.nav_simulations) {
 
         } else if (id == R.id.nav_logout) {
-
+            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,6 +100,45 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         if (this instanceof HomeActivity){
             navigationViewMenu.findItem(R.id.nav_maps).setChecked(true);
         } //TODO ajouter la prochaine activité quand elle sera ok
+    }
+
+    private void logout(){
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getString(R.string.logout_in_progress));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        RoadConceptUserInterface roadConceptUserInterface = getRetrofitService(RoadConceptUserInterface.class);
+        Call<Void> call = roadConceptUserInterface.postLogout();
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful() || response.code() == 401){
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove(Constants.SHARE_USERNAME);
+                    editor.remove(Constants.SHARE_PASSWORD);
+                    editor.remove(Constants.SHARE_USER_ID);
+                    editor.remove(Constants.SHARE_DISPOSITION);
+                    editor.remove(Constants.SHARE_COOKIE);
+                    editor.remove(Constants.SHARE_USER_EMAIL);
+                    editor.remove(Constants.SHARE_USER_NAME);
+                    editor.apply();
+                    Intent intent = new Intent(NavigationDrawerActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    displayNetworkErrorDialog();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                progressDialog.dismiss();
+                displayNetworkErrorDialog();
+            }
+        });
     }
 
 }
