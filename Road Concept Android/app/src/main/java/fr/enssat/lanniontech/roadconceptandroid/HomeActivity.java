@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     public static final String INTENT_MAP_ID = "MAP_ID";
     public static final String INTENT_MAP_NAME = "MAP_NAME";
     public static final String INTENT_MAP_IMAGE = "MAP_IMAGE";
+    public static final String INTENT_MAP_DESCRIPTION = "MAP_DESCRIPTION";
 
     //@BindView(R.id.swipeRefreshLayoutHome) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.itemsRecyclerViewHome) RecyclerView mRecyclerView;
@@ -185,6 +187,11 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
         intent.putExtra(INTENT_MAP_NAME, mMapAdapter.getmMapList().get(position).getName());
         intent.putExtra(INTENT_MAP_ID, mMapAdapter.getmMapList().get(position).getId());
         intent.putExtra(INTENT_MAP_IMAGE,mMapAdapter.getmMapList().get(position).getImageURL());
+        String mapDescription = "Aucune description";
+        if (mMapAdapter.getmMapList().get(position).getDescription() != null && !Objects.equals(mMapAdapter.getmMapList().get(position).getDescription(), "")){
+            mapDescription = mMapAdapter.getmMapList().get(position).getDescription();
+        }
+        intent.putExtra(INTENT_MAP_DESCRIPTION,mapDescription);
         startActivity(intent);
         //Toast.makeText(this, mMapAdapter.getmMapList().get(position).getName(),Toast.LENGTH_LONG).show();
 

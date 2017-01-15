@@ -22,4 +22,6 @@
     <string name="description">Description</string>
     <string name="modifier_la_disposition">Modifier la disposition</string>
     <string name="simulations_termin_es">Simulations terminées</string>
+    <string name="description_de_la_carte">Description de la carte</string>
+    <string name="aucune_simulation_termin_es_pour_cette_carte">Aucune simulation terminée pour cette carte</string>
 </resources>
