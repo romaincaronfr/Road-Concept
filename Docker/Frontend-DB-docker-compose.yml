@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  postgresql:
+    build: ./postgresql
+    environment:
+      POSTGRES_PASSWORD: bonjour
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  mongodb:
+    image: mongo
+    volumes:
+      - ./mongodb/data:/data/db:rw
+    ports:
+      - "27017:27017"
+  frontend:
+    build: ./nginx
+    ports:
+      - "80:80"
