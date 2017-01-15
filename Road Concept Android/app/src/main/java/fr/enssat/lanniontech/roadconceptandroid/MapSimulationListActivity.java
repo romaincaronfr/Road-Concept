@@ -35,11 +35,11 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.backgroundImageView) ImageView mImageView;
     @BindView(R.id.swipeMapSimulationList) SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.my_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.my_recycler_view) RecyclerView mRecyclerViewSimulationOver;
     @BindView(R.id.textViewDescriptionMap) TextView mTextDescriptionMap;
     @BindView(R.id.textViewNoSimulationOver) TextView mTextViewNoSimulationOver;
     RoadConceptSimulationsInterface roadConceptSimulationInterface;
-    MapSimulationsAdapter mMapSimulationsAdapter;
+    MapSimulationsAdapter mMapSimulationsOverAdapter;
     private int mId;
 
     @Override
@@ -51,7 +51,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(intent.getStringExtra(HomeActivity.INTENT_MAP_NAME));
-        mRecyclerView.setVisibility(View.GONE);
+        mRecyclerViewSimulationOver.setVisibility(View.GONE);
         if (intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE) != null && !Objects.equals(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE), "")){
             mImageView.setImageBitmap(ImageFactory.getBitmapWithBase64(intent.getStringExtra(HomeActivity.INTENT_MAP_IMAGE)));
         }
@@ -61,10 +61,10 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         roadConceptSimulationInterface = getRetrofitService(RoadConceptSimulationsInterface.class);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,1));
+        mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(this,1));
         List<Simulation> simulationList = new ArrayList<>();
-        mMapSimulationsAdapter = new MapSimulationsAdapter(simulationList);
-        mRecyclerView.setAdapter(mMapSimulationsAdapter);
+        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList);
+        mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
     }
 
     @Override
@@ -88,7 +88,24 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
             @Override
             public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {
                 if (response.isSuccessful()){
-                    mMapSimulationsAdapter.setmSimulationList(response.body());
+                    List<Simulation> simulationList1 = response.body();
+                    List<Simulation> simulationOverList = new ArrayList<>();
+                    List<Simulation> simulationInProgressList = new ArrayList<>();
+                    for (Simulation simulation: response.body()) {
+                        if (simulation.getFinish()){
+                            simulationOverList.add(simulation);
+                        } else {
+                            simulationInProgressList.add(simulation);
+                        }
+                    }
+                    if (simulationOverList.isEmpty()){
+                        mTextViewNoSimulationOver.setVisibility(View.VISIBLE);
+                        mRecyclerViewSimulationOver.setVisibility(View.GONE);
+                    } else {
+                        mTextViewNoSimulationOver.setVisibility(View.GONE);
+                        mRecyclerViewSimulationOver.setVisibility(View.VISIBLE);
+                    }
+                    mMapSimulationsOverAdapter.setmSimulationList(simulationOverList);
                 } else {
                     if (response.code() == 401){
                         Log.d(TAG,"401,try");

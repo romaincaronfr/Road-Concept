@@ -114,7 +114,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                     }
                     mMapAdapter.setmMapList(response.body());
                     //mMapAdapter.notifyDataSetChanged();
-                    //mRecyclerView.swapAdapter(new MapAdapter(response.body()),false);
+                    //mRecyclerViewSimulationOver.swapAdapter(new MapAdapter(response.body()),false);
                 } else {
                     if (response.code() == 401){
                         Log.d(TAG,"401,try");
