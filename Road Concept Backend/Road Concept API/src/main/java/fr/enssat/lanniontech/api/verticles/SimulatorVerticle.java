@@ -4,6 +4,7 @@ import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
+import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
 import fr.enssat.lanniontech.api.exceptions.ProgressUnavailableException;
@@ -173,6 +174,8 @@ public class SimulatorVerticle extends AbstractVerticle {
             activesSimulations.add(simulation);
 
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
+        } catch (EntityAlreadyExistsException e) {
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "A simulation already exists with the given name.");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
         } catch (Exception e) {
