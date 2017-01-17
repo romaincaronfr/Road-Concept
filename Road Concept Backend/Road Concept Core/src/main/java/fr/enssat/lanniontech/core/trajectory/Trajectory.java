@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.trajectory;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Congestion;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
@@ -15,13 +16,9 @@ public abstract class Trajectory {
     private double speed;
     private Position position;
     protected double length;
-    protected double notFreeSpace;
-    private List<Integer> loggedVehicles;
     protected UUID roadId;
 
     public Trajectory(UUID roadId, Position position, double speed) {
-        loggedVehicles = new ArrayList<>();
-        notFreeSpace = 0;
         this.roadId = roadId;
         this.vehiclesSides = new ArrayList<>();
         this.position = position;
@@ -90,17 +87,15 @@ public abstract class Trajectory {
 
     protected abstract double getDistanceToLast(double freeDistance);
 
-    public void addCar(double space, int carId) {
-        if (!loggedVehicles.contains(carId)) {
-            notFreeSpace += space;
+    public Congestion getCongestion() {
+        double notFreeSpace = 0;
+        for (Side s : vehiclesSides) {
+            if (s.getLength() > 0){
+                notFreeSpace += s.getLength();
+            }
         }
-    }
 
-    public double getFreeSpaceRatio() {
-        double res = notFreeSpace / length;
-        notFreeSpace = 0;
-        loggedVehicles.clear();
-        return res;
+        return new Congestion(notFreeSpace,length);
     }
 
     /**

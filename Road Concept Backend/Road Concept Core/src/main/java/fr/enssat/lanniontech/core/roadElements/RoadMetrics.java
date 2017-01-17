@@ -9,6 +9,9 @@ public class RoadMetrics {
 
     public RoadMetrics(UUID roadId, int timestamp, int congestion) {
         this.roadId = roadId;
+        if(congestion > 0){
+            System.out.println(congestion);
+        }
         this.timestamp = timestamp;
         this.congestion = congestion;
     }

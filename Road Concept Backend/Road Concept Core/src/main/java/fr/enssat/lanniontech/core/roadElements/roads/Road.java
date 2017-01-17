@@ -80,14 +80,7 @@ public abstract class Road {
         return new RoadMetrics(id, timestamp, getCongestion());
     }
 
-    private int getCongestion() {
-        Double congestion = 0.;
-        for (RoadSection section : sections) {
-            congestion = Math.max(congestion, section.getCongestion());
-        }
-        congestion *= 100;
-        return congestion.intValue();
-    }
+    public abstract int getCongestion();
 
     public abstract RoadSection get(int i);
 

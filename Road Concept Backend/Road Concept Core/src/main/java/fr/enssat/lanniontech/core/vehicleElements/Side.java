@@ -80,26 +80,6 @@ public class Side {
         } else {
             this.pos = pos;
         }
-        if (pos > 0 && pos < myTrajectory.getLength()) {
-            if (length < 0) {
-                //it's a frontside
-
-                if (pos + length < 0) {
-                    myTrajectory.addCar(pos, myVehicle.getID());
-                } else {
-                    myTrajectory.addCar(-length, myVehicle.getID());
-                }
-
-            } else {
-                //it's a backside
-                if (pos + length > myTrajectory.getLength()) {
-                    myTrajectory.addCar(myTrajectory.getLength() - pos, myVehicle.getID());
-                } else {
-                    myTrajectory.addCar(length, myVehicle.getID());
-                }
-            }
-        }
-
     }
 
     public double getDistanceToNextCar(double freeDistance) {
@@ -120,5 +100,9 @@ public class Side {
 
     public void removeFromRoad() {
         myTrajectory.getOut(this);
+    }
+
+    public double getLength() {
+        return length;
     }
 }
