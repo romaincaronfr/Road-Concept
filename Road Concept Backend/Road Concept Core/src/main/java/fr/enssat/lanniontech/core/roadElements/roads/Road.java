@@ -11,7 +11,6 @@ import java.util.UUID;
 public abstract class Road {
     private UUID id;
     private double length;
-    private double timeWeigth;
     private Position A;
     private Position B;
     private int maxSpeed;
@@ -22,7 +21,6 @@ public abstract class Road {
         this.maxSpeed = maxSpeed;
         this.sections = new ArrayList<>();
         this.length = 0;
-        this.timeWeigth = 0;
         A = null;
         B = null;
     }
@@ -32,7 +30,6 @@ public abstract class Road {
         for (RoadSection section : sections) {
             length += section.getLength();
         }
-        timeWeigth = length / maxSpeed;
     }
 
     public void addSection(RoadSection newSection) {

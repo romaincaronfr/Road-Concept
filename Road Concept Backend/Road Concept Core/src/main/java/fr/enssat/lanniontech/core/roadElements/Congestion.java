@@ -8,7 +8,7 @@ public class Congestion {
     public Congestion(double occupiedSpace, double totalSpace) {
         occupiedSpace *= 4;
         this.congestionValue = occupiedSpace;
-        this.congestionPercent = occupiedSpace/totalSpace;
+        this.congestionPercent = 100*occupiedSpace/totalSpace;
     }
 
     public double getCongestionValue() {
