@@ -76,7 +76,9 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
                 startActivityWithClass(HomeActivity.class);
             }
         } else if (id == R.id.nav_simulations) {
-
+            if (!(this instanceof SimulationActivity)){
+                startActivityWithClass(SimulationActivity.class);
+            }
         } else if (id == R.id.nav_logout) {
             confirmLogout();
         }
