@@ -18,6 +18,7 @@ app.simulationCreationView = Backbone.View.extend({
     working_feature: null,
     car_percentage: null,
     vehicle_count: null,
+    nbCouple: 1,
 
     events: {
         'click #previous': 'previous',
@@ -25,7 +26,8 @@ app.simulationCreationView = Backbone.View.extend({
         'click .removeModelSim': 'cancelUnderCreationSim',
         'click #cancelCreationSimu': 'cancelCreationSimu',
         'change #carRepart': 'showPercent',
-        'click #launch': 'launchSim'
+        'click #launch': 'launchSim',
+        'click #newCouple': 'addCouple'
     },
 
     initialize: function (options) {
@@ -34,7 +36,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.step = 0;
         console.log("step : " + this.step);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
-        console.log(this.mapDetailsCOllection);
+        //console.log(this.mapDetailsCOllection);
         this.render();
         var self = this;
         this.mapDetailsCOllection.on('sync', self.onSync, self);
@@ -123,6 +125,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.fetchCollection();
         $('#modalAvertissementSimulation').modal('show');
         $('#startSim').hide();
+        $('#newCouple').hide();
 
         $("#osmSlider").slider({
             orientation: "vertical",
@@ -161,7 +164,6 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     onAddElement: function (element) {
-        console.log("add");
         var geojsonModel = element.toGeoJSON();
         var newfeature = new ol.format.GeoJSON().readFeature(geojsonModel, {
             featureProjection: 'EPSG:3857'
@@ -507,12 +509,12 @@ app.simulationCreationView = Backbone.View.extend({
             case 0:
                 //Habitation Zone
                 var colorStyle = [0, 0, 255, 1];
-                var text = "Zone d'habitation";
+                var text = "Zone d'habitation n°" + this.nbCouple;
                 break;
             case 2:
                 //Working Zone
                 var colorStyle = [255, 0, 0, 1];
-                var text = "Zone de travail";
+                var text = "Zone de travail n°" + this.nbCouple;
                 break;
             /*case 1:
              case 3:
@@ -619,6 +621,7 @@ app.simulationCreationView = Backbone.View.extend({
                     $('#alertEmptyWork').hide();
                     $('#workZoneParam').hide();
                     $('#startSim').show();
+                    $('#newCouple').show();
                     this.returnHour = $('#returnHour').val();
                     valid = true;
                 }
@@ -627,12 +630,12 @@ app.simulationCreationView = Backbone.View.extend({
 
         if (valid) {
             $('#osmInfo').empty();
-            if (this.step < 4) {
+            if (this.step == 1) {
                 this.step++;
+                this.map.addInteraction(this.selectPointerMove);
+                this.map.addInteraction(this.selectPointer);
+                this.map.addInteraction(this.snap);
             }
-            this.map.addInteraction(this.selectPointerMove);
-            this.map.addInteraction(this.selectPointer);
-            this.map.addInteraction(this.snap);
             console.log('step : ' + this.step);
         }
     },
@@ -679,6 +682,21 @@ app.simulationCreationView = Backbone.View.extend({
 
     cancelCreationSimu: function () {
         this.step = 0;
+    },
+
+    addCouple: function () {
+        this.step = 0;
+        this.nbCouple++;
+        console.log('restart step : ' + this.step);
+
+        $('#startSim').hide();
+        $('#newCouple').hide();
+        $('#habitZone').show();
+
+        this.map.addInteraction(this.selectPointerMove);
+        this.map.addInteraction(this.selectPointer);
+        this.map.addInteraction(this.snap);
+        //TODO Ajouter/enregistrer le couple créé dans la collection
     },
 
     launchSim: function () {

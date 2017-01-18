@@ -38,11 +38,16 @@
                      title="Tous les champs doivent être renseignés" hidden>Veuillez renseigner les paramètres de votre
                     zone de travail
                 </div>
-                <span data-toggle="tooltip" data-placement="top" title="Lancer la simulation">
-                    <button id="startSim" class="btn btn-default btn-block" data-target="#modalStartSim"
-                            data-toggle="modal" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-play"></span> Simulation
-                    </button>
-                </span>
+                <div class="col-md-6 col-md-offset-0 ">
+                    <button id="newCouple" class="btn btn-default btn-block" data-toggle="tooltip" data-placement="top" title="Créer un nouveau couple : zone d'habitation + zone de travail"><span class="glyphicon glyphicon-transfer"></span> Ajouter un itinéraire</button>
+                </div>
+                <div class="col-md-6 col-md-offset-0 ">
+                    <span data-toggle="tooltip" data-placement="top" title="Lancer la simulation">
+                        <button id="startSim" class="btn btn-default btn-block" data-target="#modalStartSim"
+                                data-toggle="modal" data-backdrop="static" data-keyboard="false"><span class="glyphicon glyphicon-play"></span> Simulation
+                        </button>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
@@ -69,8 +74,7 @@
                         <li>Heure de retour</li>
                     </ul>
                     </p>
-                    <p>Une fois ces étapes passées, vous pourrez lancer la simulation. Il vous sera demandé de renseigner le nom de votre
-                        simulation et de choisir sa précision.</p>
+                    <p>Une fois ces étapes passées, vous pourrez choisir d'ajouter un nouveau couple de zones (et donc répéter les étapes précedentes une nouvelle fois) ou lancer la simulation. Pour cette dernière, il vous sera demandé de renseigner son nom et de choisir sa précision.</p>
                 </div>
                 <div class="modal-footer">
                     <button id="ready" type="button" class="btn btn-success" data-dismiss="modal">Je suis prêt !
