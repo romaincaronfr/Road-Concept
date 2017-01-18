@@ -173,7 +173,6 @@ public class SimulatorService extends AbstractService implements Observer {
         List<SimulationCongestionResult> congestions = new ArrayList<>();
         for (RoadMetrics metric : roadMetrics) {
             if (metric.getCongestion() != 0) {
-                //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
                 SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion(), metric.getTimestamp());
                 congestions.add(congestion);
             }
