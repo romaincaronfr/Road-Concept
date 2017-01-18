@@ -105,7 +105,9 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
 
         if (this instanceof HomeActivity){
             navigationViewMenu.findItem(R.id.nav_maps).setChecked(true);
-        } //TODO ajouter la prochaine activité quand elle sera ok
+        }else if (this instanceof SimulationActivity){
+            navigationViewMenu.findItem(R.id.nav_simulations).setChecked(true);
+        }
     }
 
     private void confirmLogout(){
