@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.api.verticles;
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
+import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
 import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
@@ -46,8 +47,22 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
         router.route(HttpMethod.DELETE, "/api/maps/:mapID/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/results").blockingHandler(this::processGetResultAt);
+        router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/results/congestions").blockingHandler(this::processGetCongestionsAt);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/vehicles/:vehicleID").blockingHandler(this::processGetVehiclePositionHistory);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/vehicles/:vehicleID/statistics").blockingHandler(this::processGetVehicleStatistics);
+    }
+
+    private void processGetCongestionsAt(RoutingContext routingContext) {
+        try {
+            UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
+            int timestamp = Integer.valueOf(routingContext.request().getParam("timestamp"));
+
+            List<SimulationCongestionResult> congestions = simulatorService.getMinimalCongestions(simulationUUID, timestamp);
+
+            HttpResponseBuilder.buildOkResponse(routingContext, congestions);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
     }
 
     //TODO: Handle exceptions + doc Swagger

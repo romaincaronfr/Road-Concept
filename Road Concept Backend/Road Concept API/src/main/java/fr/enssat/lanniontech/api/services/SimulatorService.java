@@ -217,6 +217,12 @@ public class SimulatorService extends AbstractService implements Observer {
         return features;
     }
 
+    public List<SimulationCongestionResult> getMinimalCongestions(UUID simulationUUID, int timestamp) {
+        Simulation simulation = get(simulationUUID);
+        checkTimestampValue(timestamp, simulation);
+        return simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
+    }
+
     private void fillVehicles(UUID simulationUUID, int timestamp, FeatureCollection features) {
         List<SimulationVehicleResult> vehicles = simulationResultRepository.getVehiclesAt(simulationUUID, timestamp);
         for (SimulationVehicleResult vehicle : vehicles) {
@@ -341,5 +347,4 @@ public class SimulatorService extends AbstractService implements Observer {
         }
         return type;
     }
-
 }
