@@ -75,10 +75,9 @@ public class SimulatorService extends AbstractService implements Observer {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
-        simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
-        simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
-
-        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
+        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(),
+                simulation.getDepartureWorkingS(), simulation.getVehicleCount(),
+                simulation.getCarPercentage(),simulation.getLivingFeatureUUID(),simulation.getWorkingFeatureUUID());
 
         return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }

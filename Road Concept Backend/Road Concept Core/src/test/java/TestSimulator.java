@@ -57,9 +57,8 @@ public class TestSimulator {
             return;
         }
 
-        Sim.getVehicleManager().setLivingArea(id1);
-        Sim.getVehicleManager().setWorkingArea(id6);
-        Sim.getVehicleManager().createTrafficGenerator(3600,36000,vehicleNumber,70);
+        Sim.getVehicleManager().createTrafficGenerator(3600,
+                36000,vehicleNumber,70,id1,id6);
 
         try {
             Thread.sleep(1000);

@@ -8,30 +8,31 @@ import java.util.List;
 
 public class DiracGenerator extends Generator {
 
-    private long startTimestamp;
-    private int quantity;
-    private int carPercentage;
+    protected long startTimestamp;
+    protected List<VehicleKernel> kernels;
 
     public DiracGenerator(int startTimestamp, int quantity, int carPercentage) {
         this.startTimestamp = startTimestamp;
-        this.quantity = quantity;
-        this.carPercentage = carPercentage;
+        kernels = new ArrayList<>();
+
+        int carCount = (int) Math.round(carPercentage / 100. * quantity);
+        for (int i = 0; i < quantity; i++) {
+            if (i >= carCount) {
+                kernels.add(new VehicleKernel(VehicleType.TRUCK));
+            } else {
+                kernels.add(new VehicleKernel(VehicleType.CAR));
+            }
+        }
+        Collections.shuffle(kernels); // Randomize apparition of cars and trucks
     }
 
     @Override
     public List<VehicleKernel> addVehicles(long timestamp) {
-        List<VehicleKernel> kernels = new ArrayList<>();
+        List<VehicleKernel> res = new ArrayList<>();
         if (timestamp == startTimestamp) {
-            int carCount = (int) Math.round(carPercentage / 100. * quantity);
-            for (int i = 0; i < quantity; i++) {
-                if (i >= carCount) {
-                    kernels.add(new VehicleKernel(VehicleType.TRUCK));
-                } else {
-                    kernels.add(new VehicleKernel(VehicleType.CAR));
-                }
-            }
+            res.addAll(kernels);
+            kernels.clear();
         }
-        Collections.shuffle(kernels); // Randomize apparition of cars and trucks
-        return kernels;
+        return res;
     }
 }

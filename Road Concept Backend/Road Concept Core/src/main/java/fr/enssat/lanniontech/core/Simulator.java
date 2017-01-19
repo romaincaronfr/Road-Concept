@@ -76,6 +76,7 @@ public class Simulator extends Observable implements Runnable {
             int j = samplingRate;
             int second = (int) (1 / precision);
             int k = second;
+            int commit = 0;
             int timestamp = -1;
             for (long i = 0; i < stepCycles; i++) {
 
@@ -91,9 +92,13 @@ public class Simulator extends Observable implements Runnable {
                     vehicleManager.newStep(precision, true, timestamp);
                     if(vehicleManager.getVehiclesNumber()>0){
                         roadManager.saveSates(historyManager, timestamp);
-                        historyManager.commitChanges(simId);
                     }
                     j = 1;
+                    commit++;
+                    if(commit == 3600){
+                        historyManager.commitChanges(simId);
+                        commit = 0;
+                    }
                 } else {
                     vehicleManager.newStep(precision, false, timestamp);
                     j++;
@@ -107,6 +112,7 @@ public class Simulator extends Observable implements Runnable {
                 }
             }
         } finally {
+            historyManager.commitChanges(simId);
             setChanged();
             notifyObservers(simId);
             progress = 1;
