@@ -1,5 +1,6 @@
 package fr.enssat.lanniontech.core.managers;
 
+import fr.enssat.lanniontech.core.exceptions.DestinationUnreachableException;
 import fr.enssat.lanniontech.core.generators.*;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
@@ -11,6 +12,7 @@ import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
+import sun.security.krb5.internal.PAData;
 
 import java.util.*;
 
@@ -39,13 +41,19 @@ public class VehicleManager {
                                        UUID A1, UUID A2) {
         Road R1 = roadManager.getRoad(A1);
         Road R2 = roadManager.getRoad(A2);
-        //Generator G = new DiracGenerator(goTimestamp, vehicles, carPercentage);
         Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage,3600);
         VehicleBuffer B = new VehicleBuffer(R1,R2);
         vehiclesBuffers.put(G,B);
 
         G = new UniformGenerator(returnTimestamp, vehicles, carPercentage,3600);
         B = new VehicleBuffer(R2,R1);
+        vehiclesBuffers.put(G,B);
+    }
+
+    public void createRandomTrafficGenerator(int start,int stop,int vehicles,int carPercentage){
+        Generator G = new UniformGenerator(start,vehicles,carPercentage,stop-start);
+        List<Road> possibleSpawns = roadManager.getRoads();
+        VehicleBuffer B = new VehicleBuffer(possibleSpawns,possibleSpawns);
         vehiclesBuffers.put(G,B);
     }
 
@@ -91,8 +99,13 @@ public class VehicleManager {
         if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 20, 40)) {
             return false;
         }
-
-        Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
+        Path myPath;
+        try{
+            myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
+        }catch (DestinationUnreachableException e){
+            e.printStackTrace();
+            return false;
+        }
         Vehicle V;
         if (kernel.getType() == VehicleType.CAR) {
             V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);
