@@ -588,10 +588,10 @@ app.simulationCreationView = Backbone.View.extend({
         switch (this.step) {
             case 1:
                 var hour = $('#startHour').val();
-                var nbCar = $('#nbHabit').val();
+                var nbCar = Math.round($('#nbHabit').val());
                 var percent = $('#carRepart').val();
 
-                if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
+                if (nbCar == "" || nbCar < 1) {
                     $('#alertEmptyHabitation').show();
                     setTimeout(function () {
                         $('#alertEmptyHabitation').hide();
@@ -687,7 +687,7 @@ app.simulationCreationView = Backbone.View.extend({
         var sampling_rate = $('#sampling_rate').val();
         var self = this;
 
-        if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
+        if (name == "" || sampling_rate == "" || sampling_rate < 0.1) {
             $('#alertEmptyStart').show();
             setTimeout(function () {
                 $('#alertEmptyStart').hide();
