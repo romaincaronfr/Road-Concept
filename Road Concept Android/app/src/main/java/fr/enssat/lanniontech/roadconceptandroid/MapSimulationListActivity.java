@@ -27,12 +27,13 @@ import fr.enssat.lanniontech.roadconceptandroid.Components.MapSimulationsAdapter
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptSimulationsInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener{
+public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener, RecyclerViewClickListener{
 
     private static final int GET_SIMULATION_LIST_REQUEST_CODE = 1003;
 
@@ -74,8 +75,8 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(this,1));
         mRecyclerViewSimulationInProgress.setLayoutManager(new GridLayoutManager(this,1));
         List<Simulation> simulationList = new ArrayList<>();
-        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList);
-        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList);
+        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList,true,this);
+        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList,false,this);
         mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
         mRecyclerViewSimulationInProgress.setAdapter(mMapSimulationsInProgressAdapter);
         mButtonMoreInfoSimulationInProgress.setOnClickListener(new View.OnClickListener() {
@@ -194,5 +195,10 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void recyclerViewListClicked(View v, int position) {
+
     }
 }
