@@ -166,7 +166,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         });
     }
 
-    private void startActivityWithClass (Class<?> T){
+    protected void startActivityWithClass (Class<?> T){
         Intent intent = new Intent(this,T);
         startActivity(intent);
     }

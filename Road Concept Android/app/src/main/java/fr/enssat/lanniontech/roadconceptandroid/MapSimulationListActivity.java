@@ -36,6 +36,12 @@ import retrofit2.Response;
 public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener, RecyclerViewClickListener{
 
     private static final int GET_SIMULATION_LIST_REQUEST_CODE = 1003;
+    public static final String INTENT_UUID_SIMULATION = "uuid_simulation";
+    public static final String INTENT_MAPID_SIMULATION = "mapid_simulation";
+    public static final String INTENT_SAMPLINGRATE_SIMULATION = "samplingRate_simulation";
+    public static final String INTENT_LIVINGUUID_SIMULATION = "livingFeatureUUID_simulation";
+    public static final String INTENT_WORKINGUUID_SIMULATION = "workingFeatureUUID_simulation";
+    public static final String INTENT_DEPARTURELIVINGS_SIMULATION = "departureLivingS_simulation";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.backgroundImageView) ImageView mImageView;
@@ -200,6 +206,14 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @Override
     public void recyclerViewListClicked(View v, int position) {
         Simulation simulation = mMapSimulationsOverAdapter.getmSimulationList().get(position);
-        
+        //TODO Changer avec la bonne activité une fois créer.
+        Intent intent = new Intent(this,HomeActivity.class);
+        intent.putExtra(INTENT_UUID_SIMULATION,simulation.getUuid());
+        intent.putExtra(INTENT_MAPID_SIMULATION,simulation.getMapID());
+        intent.putExtra(INTENT_SAMPLINGRATE_SIMULATION,simulation.getSamplingRate());
+        intent.putExtra(INTENT_LIVINGUUID_SIMULATION,simulation.getLivingFeatureUUID());
+        intent.putExtra(INTENT_WORKINGUUID_SIMULATION,simulation.getWorkingFeatureUUID());
+        intent.putExtra(INTENT_DEPARTURELIVINGS_SIMULATION,simulation.getDepartureLivingS());
+        startActivity(intent);
     }
 }
