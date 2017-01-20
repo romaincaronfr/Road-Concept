@@ -1,8 +1,4 @@
 #!/bin/bash
-docker ps -a | awk '{ print $1,$2 }' | grep docker_frontend | awk '{print $1 }' | xargs -I {} docker rm {};
+../Docker/prepare_build_all.sh
 docker rmi docker_frontend;
-cp -R ../frontend ../Docker/nginx;
-cd ../Road\ Concept\ Backend/;
-cd ../Docker/roadconcept;
-docker-compose -f ../Frontend-DB-docker-compose.yml build && docker-compose -f ../Frontend-DB-docker-compose.yml up;
-cd ../../developper-bin;
+docker-compose -f ../Docker/Frontend-DB-docker-compose.yml build && docker-compose -f ../Docker/Frontend-DB-docker-compose.yml up;

@@ -10,6 +10,7 @@ var fs = require('fs');
 var http = require('http');
 var os = require('os');
 var cluster = require('cluster');
+console.log('service ok');
 //===========================================//
 //serveur HTTP//
 var server = http.createServer(function(request, res) {

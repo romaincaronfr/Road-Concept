@@ -12,9 +12,9 @@ RUN apt-get update
 # install oracle jdk
 RUN apt-get install oracle-java8-installer -y
 
-COPY ./roadConceptDB.sql /var/
-COPY ./init.sh /var/
-COPY ./road-concept.jar /var/
+COPY ./buildData/roadConceptDB.sql /var/
+COPY ./buildData/init.sh /var/
+COPY ./buildData/road-concept.jar /var/
 
 RUN chmod +x /var/init.sh
 RUN chmod +x /var/road-concept.jar
