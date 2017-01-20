@@ -29,18 +29,18 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 
 CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"                VARCHAR(40) PRIMARY KEY,
-  "id_user"             INTEGER             NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "id_map"              INTEGER             NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
-  "name"                VARCHAR(100) UNIQUE NOT NULL,
-  "sampling"            FLOAT               NOT NULL,
-  "finish"              BOOLEAN             NOT NULL,
-  "creation_date"       VARCHAR(10)         NOT NULL,
-  "living_feature"      VARCHAR(40)         NOT NULL,
-  "working_feature"     VARCHAR(40)         NOT NULL,
-  "departure_living_s"  INTEGER             NOT NULL,
-  "departure_working_s" INTEGER             NOT NULL,
-  "car_percentage"      INTEGER             NOT NULL,
-  "vehicle_count"       INTEGER             NOT NULL
+  "id_user"             INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "id_map"              INTEGER     NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
+  "name"                VARCHAR(100),
+  "sampling"            INTEGER     NOT NULL,
+  "finish"              BOOLEAN     NOT NULL,
+  "creation_date"       VARCHAR(10) NOT NULL,
+  "living_feature"      VARCHAR(40) NOT NULL,
+  "working_feature"     VARCHAR(40) NOT NULL,
+  "departure_living_s"  INTEGER     NOT NULL,
+  "departure_working_s" INTEGER     NOT NULL,
+  "car_percentage"      INTEGER     NOT NULL,
+  "vehicle_count"       INTEGER     NOT NULL
 );
 
 -- ==============================================================================

@@ -588,10 +588,10 @@ app.simulationCreationView = Backbone.View.extend({
         switch (this.step) {
             case 1:
                 var hour = $('#startHour').val();
-                var nbCar = Math.round($('#nbHabit').val());
+                var nbCar = $('#nbHabit').val();
                 var percent = $('#carRepart').val();
 
-                if (nbCar == "" || nbCar < 1) {
+                if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
                     $('#alertEmptyHabitation').show();
                     setTimeout(function () {
                         $('#alertEmptyHabitation').hide();
@@ -687,7 +687,7 @@ app.simulationCreationView = Backbone.View.extend({
         var sampling_rate = $('#sampling_rate').val();
         var self = this;
 
-        if (name == "" || sampling_rate == "" || sampling_rate < 0.1) {
+        if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
             $('#alertEmptyStart').show();
             setTimeout(function () {
                 $('#alertEmptyStart').hide();
@@ -696,7 +696,7 @@ app.simulationCreationView = Backbone.View.extend({
             var collection = new app.collections.simulationParamsCollection({id: this.id});
             var model = new app.models.simulationParamsModel({
                 name: name,
-                sampling_rate: parseFloat(sampling_rate),
+                sampling_rate: parseInt(sampling_rate),
                 departure_living_s: this.getTotalSecond(this.startHour),
                 departure_working_s: this.getTotalSecond(this.returnHour),
                 living_feature: this.living_feature,

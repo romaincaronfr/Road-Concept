@@ -53,7 +53,7 @@ public class SimulatorService extends AbstractService implements Observer {
     // CREATE
     // ======
 
-    public Simulation create(User user, String name, int mapID, float samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
+    public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
         try {
             Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
             simulation.setSimulator(new Simulator(simulation.getUuid()));
