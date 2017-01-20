@@ -21,7 +21,7 @@ public class Simulation implements SQLEntity {
     private int mapID; //TODO: Remove it when the FrontEnd is ready to change...
     private MapInfo mapInfo;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-    private int samplingRate;
+    private float samplingRate;
     private boolean finish;
     private UUID livingFeatureUUID;
     private UUID workingFeatureUUID;
@@ -62,11 +62,11 @@ public class Simulation implements SQLEntity {
         this.name = name;
     }
 
-    public int getSamplingRate() {
+    public float getSamplingRate() {
         return samplingRate;
     }
 
-    public void setSamplingRate(int samplingRate) {
+    public void setSamplingRate(float samplingRate) {
         this.samplingRate = samplingRate;
     }
 

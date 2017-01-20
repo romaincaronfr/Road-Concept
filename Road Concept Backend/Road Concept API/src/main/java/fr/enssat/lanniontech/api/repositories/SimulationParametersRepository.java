@@ -28,7 +28,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) { //NOSONAR: Parameters count
+    public Simulation create(int creatorID, String name, int mapID, float samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) { //NOSONAR: Parameters count
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -37,7 +37,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                 statement.setInt(2, creatorID);
                 statement.setInt(3, mapID);
                 statement.setString(4, name);
-                statement.setInt(5, samplingRate);
+                statement.setFloat(5, samplingRate);
                 statement.setBoolean(6, false);
                 statement.setString(7, simulation.getCreationDate());
                 statement.setString(8, livingFeatureUUID.toString());
@@ -92,7 +92,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(result.getInt("id_map"));
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setSamplingRate(result.getInt("sampling"));
+                        simulation.setSamplingRate(result.getFloat("sampling"));
                         simulation.setDepartureLivingS(result.getInt("departure_living_s"));
                         simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
                         simulation.setCarPercentage(result.getInt("car_percentage"));
@@ -125,7 +125,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(result.getInt("id_map"));
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setSamplingRate(result.getInt("sampling"));
+                        simulation.setSamplingRate(result.getFloat("sampling"));
                         simulation.setDepartureLivingS(result.getInt("departure_living_s"));
                         simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
                         simulation.setCarPercentage(result.getInt("car_percentage"));
@@ -160,7 +160,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setMapID(mapID);
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
-                        simulation.setSamplingRate(result.getInt("sampling"));
+                        simulation.setSamplingRate(result.getFloat("sampling"));
                         simulation.setDepartureLivingS(result.getInt("departure_living_s"));
                         simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
                         simulation.setCarPercentage(result.getInt("car_percentage"));

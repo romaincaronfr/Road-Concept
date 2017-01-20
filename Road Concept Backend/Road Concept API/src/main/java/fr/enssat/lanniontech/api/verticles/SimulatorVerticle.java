@@ -175,7 +175,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             }
 
             String name = body.getString("name");
-            int samplingRate = body.getInteger("sampling_rate");
+            float samplingRate = body.getFloat("sampling_rate");
             int departureLivingS = body.getInteger("departure_living_s");
             int departureWorkingS = body.getInteger("departure_working_s");
             UUID livingFeatureUUID = UUID.fromString(body.getString("living_feature"));
