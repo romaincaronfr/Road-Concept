@@ -199,6 +199,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-
+        Simulation simulation = mMapSimulationsOverAdapter.getmSimulationList().get(position);
+        
     }
 }
