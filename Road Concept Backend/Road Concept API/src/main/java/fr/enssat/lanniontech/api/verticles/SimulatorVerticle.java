@@ -42,6 +42,7 @@ public class SimulatorVerticle extends AbstractVerticle {
         router.route(HttpMethod.POST, "/api/maps/:mapID/simulations").blockingHandler(this::processCreateSimulation);
         router.route(HttpMethod.GET, "/api/maps/:mapID/simulations").blockingHandler(this::processGetAllSimulationsForMap);
         router.route(HttpMethod.GET, "/api/users/:userID/simulations").blockingHandler(this::processGetAllSimulationsForUser);
+        router.route(HttpMethod.GET, "/api/users/:userID/simulations/pending").blockingHandler(this::processGetAllSimulationsPendingForUser);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID").blockingHandler(this::processGetSimulation);
         router.route(HttpMethod.GET, "/api/simulations/:simulationUUID/progress").blockingHandler(this::processGetSimulationProgress);
         router.route(HttpMethod.DELETE, "/api/simulations/:simulationUUID").blockingHandler(this::processDeleteSimulation);
@@ -98,6 +99,17 @@ public class SimulatorVerticle extends AbstractVerticle {
         try {
             int userID = Integer.valueOf(routingContext.request().getParam("userID"));
             List<Simulation> simulations = simulatorService.getAll(userID);
+            HttpResponseBuilder.buildOkResponse(routingContext, simulations);
+        } catch (Exception e) {
+            HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+        }
+    }
+
+    //TODO: Handle exceptions
+    private void processGetAllSimulationsPendingForUser(RoutingContext routingContext) {
+        try {
+            int userID = Integer.valueOf(routingContext.request().getParam("userID"));
+            List<Simulation> simulations = simulatorService.getAllPending(userID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulations);
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);

@@ -301,6 +301,15 @@ public class SimulatorService extends AbstractService implements Observer {
         return simulations;
     }
 
+    public List<Simulation> getAllPending(int userID) {
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+
+        simulations.removeIf(Simulation::isFinish);
+
+        return simulations;
+    }
+
     private void getMapInfos(List<Simulation> simulations) {
         for(Simulation simulation : simulations) {
             simulation.setMapInfo(mapRepository.get(simulation.getMapID()));
