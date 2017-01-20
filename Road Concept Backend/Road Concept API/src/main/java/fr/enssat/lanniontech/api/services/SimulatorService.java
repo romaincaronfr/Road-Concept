@@ -75,9 +75,7 @@ public class SimulatorService extends AbstractService implements Observer {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
-        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(),
-                simulation.getDepartureWorkingS(), simulation.getVehicleCount(),
-                simulation.getCarPercentage(),simulation.getLivingFeatureUUID(),simulation.getWorkingFeatureUUID());
+        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage(), simulation.getLivingFeatureUUID(), simulation.getWorkingFeatureUUID());
 
         /*simulation.getSimulator().getVehicleManager().createRandomTrafficGenerator(28800,64800,
                 10000,80);
@@ -304,14 +302,19 @@ public class SimulatorService extends AbstractService implements Observer {
     public List<Simulation> getAllPending(int userID) {
         List<Simulation> simulations = simulationParametersRepository.getAll(userID);
         getMapInfos(simulations);
-
         simulations.removeIf(Simulation::isFinish);
+        return simulations;
+    }
 
+    public List<Simulation> getAllFinish(int userID) {
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+        simulations.removeIf(simulation -> !simulation.isFinish());
         return simulations;
     }
 
     private void getMapInfos(List<Simulation> simulations) {
-        for(Simulation simulation : simulations) {
+        for (Simulation simulation : simulations) {
             simulation.setMapInfo(mapRepository.get(simulation.getMapID()));
         }
     }
