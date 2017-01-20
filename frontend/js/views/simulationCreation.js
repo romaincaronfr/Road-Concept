@@ -696,7 +696,7 @@ app.simulationCreationView = Backbone.View.extend({
             var collection = new app.collections.simulationParamsCollection({id: this.id});
             var model = new app.models.simulationParamsModel({
                 name: name,
-                sampling_rate: parseInt(sampling_rate),
+                sampling_rate: parseFloat(sampling_rate),
                 departure_living_s: this.getTotalSecond(this.startHour),
                 departure_working_s: this.getTotalSecond(this.returnHour),
                 living_feature: this.living_feature,
