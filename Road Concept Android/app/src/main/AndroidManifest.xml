@@ -46,7 +46,7 @@
 
         <activity
             android:name=".SimulationVisualisationActivity"
-            android:label="@string/title_activity_simulation_visualisation"></activity>
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
