@@ -40,4 +40,5 @@
     <string name="confirmation">Confirmation</string>
     <string name="cancel">Annuler</string>
     <string name="yes_logout">Se déconnecter</string>
+    <string name="title_activity_simulation_visualisation">Map</string>
 </resources>
