@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

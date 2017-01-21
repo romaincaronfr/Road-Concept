@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid.Utilities;
+package fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces;
 
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Me;

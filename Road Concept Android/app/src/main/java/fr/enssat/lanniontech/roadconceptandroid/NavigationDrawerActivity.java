@@ -14,16 +14,13 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

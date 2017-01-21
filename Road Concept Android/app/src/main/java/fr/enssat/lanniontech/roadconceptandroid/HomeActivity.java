@@ -23,7 +23,7 @@ import fr.enssat.lanniontech.roadconceptandroid.Components.MapAdapter;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptMapInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

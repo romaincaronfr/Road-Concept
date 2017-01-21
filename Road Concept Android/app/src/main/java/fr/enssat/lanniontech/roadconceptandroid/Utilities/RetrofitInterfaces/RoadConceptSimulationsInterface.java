@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid.Utilities;
+package fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces;
 
 import java.util.List;
 
