@@ -627,7 +627,7 @@ app.simulationCreationView = Backbone.View.extend({
                     this.returnHour = $('#returnHour').val();
                     valid = true;
                 }
-                
+
                 var newZone = {
                     departure_living_s: this.getTotalSecond(this.startHour),
                     departure_working_s: this.getTotalSecond(this.returnHour),
@@ -722,6 +722,7 @@ app.simulationCreationView = Backbone.View.extend({
         //Envoyer les infos au serveur (nom, précision, heures, etc.) et afficher barre chargement
         var name = $('#simName').val();
         var sampling_rate = $('#sampling_rate').val();
+        var random_traffic = $('#random_traffic').is(':checked');
         var self = this;
 
         if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
@@ -734,13 +735,8 @@ app.simulationCreationView = Backbone.View.extend({
             var model = new app.models.simulationParamsModel({
                 name: name,
                 sampling_rate: parseInt(sampling_rate),
+                random_traffic: random_traffic,
                 zones: this.zones
-                /*departure_living_s: this.getTotalSecond(this.startHour),
-                departure_working_s: this.getTotalSecond(this.returnHour),
-                living_feature: this.living_feature,
-                working_feature: this.working_feature,
-                car_percentage: parseInt(this.car_percentage),
-                vehicle_count: parseInt(this.vehicle_count)*/
             });
             console.log(model);
             collection.add(model);
