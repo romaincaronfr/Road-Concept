@@ -1,7 +1,6 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -11,7 +10,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback {
+import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.InfosMap;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptMapInterface;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback, OnNeedLoginListener {
+
+    private static final int GET_FEATURES_LIST_REQUEST_CODE = 1004;
 
     private GoogleMap mMap;
     private String mUuid;
@@ -20,6 +29,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private String mLivingFeatureUUID;
     private String mWorkingFeatureUUID;
     private int mDepartureLivingS;
+    private FeatureCollection mFeatureCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,5 +78,42 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         s = s < 10 ? '0' + s : s;
         String time = String.valueOf(h + ':' + m + ':' + s);
         return time;
+    }
+
+    private void getFeaturesCollection(){
+        RoadConceptMapInterface roadConceptMapInterface = getRetrofitService(RoadConceptMapInterface.class);
+        Call<InfosMap> infosMapCall = roadConceptMapInterface.getMapFeatures(String.valueOf(mMapID));
+        infosMapCall.enqueue(new Callback<InfosMap>() {
+            @Override
+            public void onResponse(Call<InfosMap> call, Response<InfosMap> response) {
+                if (response.isSuccessful()){
+                    mFeatureCollection = response.body().getFeatureCollection();
+                    //TODO draw les features
+                } else {
+                    if (response.code() == 401){
+                        refreshLogin(SimulationVisualisationActivity.this, GET_FEATURES_LIST_REQUEST_CODE);
+                    } else {
+                        displayNetworkErrorDialog();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InfosMap> call, Throwable t) {
+                displayNetworkErrorDialog();
+            }
+        });
+    }
+
+    @Override
+    public void onNeedLogin(int code, boolean result) {
+        switch (code){
+            case GET_FEATURES_LIST_REQUEST_CODE:
+                if (result) {
+                    getFeaturesCollection();
+                } else {
+                    goToLogin();
+                }
+        }
     }
 }

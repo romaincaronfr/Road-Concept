@@ -143,9 +143,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                     Log.d(TAG,"RESULT OK");
                     getMapList();
                 } else {
-                    Intent intent = new Intent(this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    goToLogin();
                 }
         }
     }

@@ -84,4 +84,9 @@ public abstract class AuthentActivity extends BaseActivity {
             });
         }
     }
+
+    protected void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 }

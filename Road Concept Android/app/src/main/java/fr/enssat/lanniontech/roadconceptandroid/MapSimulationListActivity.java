@@ -178,9 +178,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
                 if (result) {
                     getSimulationList();
                 } else {
-                    Intent intent = new Intent(this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    goToLogin();
                 }
         }
     }
