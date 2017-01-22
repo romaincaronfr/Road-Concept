@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.core.roadElements.roadSections;
 
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Congestion;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 
@@ -42,7 +43,7 @@ public class DualWayRoadSection extends RoadSection {
     }
 
     @Override
-    public double getCongestion() {
-        return Math.max(laneAB.getCongestion(), laneBA.getCongestion());
+    public Congestion[] getCongestion() {
+        return new Congestion[]{laneAB.getCongestion(), laneBA.getCongestion()};
     }
 }

@@ -2,6 +2,7 @@ package fr.enssat.lanniontech.core.roadElements.roadSections;
 
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
+import fr.enssat.lanniontech.core.roadElements.Congestion;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
 
@@ -40,7 +41,7 @@ public abstract class RoadSection {
         return myRoad;
     }
 
-    public abstract double getCongestion();
+    public abstract Congestion[] getCongestion();
 
     public abstract Lane getInputLane(Position P);
 

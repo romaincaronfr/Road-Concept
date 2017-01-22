@@ -61,6 +61,7 @@ public class PathFinder {
 
     public Path getPathTo(Trajectory source, UUID destination, boolean reverse) {
         Path myPath = new Path();
+        double noRoadSpeed = 20;
 
         Trajectory goal;
 
@@ -80,7 +81,7 @@ public class PathFinder {
         Map<Trajectory, Node> closedNodes = new HashMap<>();
         Node finalNode = null;
 
-        Node node = new Node(0, Position.length(source.getPosition(), goal.getPosition()), null, source);
+        Node node = new Node(0, Position.length(source.getPosition(), goal.getPosition())/noRoadSpeed, null, source);
         openNodes.add(node);
 
         while (!openNodes.isEmpty() && finalNode == null) {
@@ -92,11 +93,11 @@ public class PathFinder {
                 Trajectory t = tj.getDestination();
                 if (t != null) {
                     //calcul du cout du node
-                    double cost = node.getCost() + t.getLength();
+                    double cost = node.getCost() + (t.getLength()/t.getSpeed())*(1+t.getCongestion().getCongestionPercent()/10);
                     //on verifie que le node n'a pas deja été exploré
                     if (!closedNodes.keySet().contains(t) || closedNodes.get(t).getCost() > cost) {
                         //creation du node
-                        Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition()), node, t);
+                        Node newNode = new Node(cost, Position.length(t.getPosition(), goal.getPosition())/noRoadSpeed, node, t);
                         //si la destination est la meme que la trajectoire
                         if (t == goal) {
                             finalNode = newNode;

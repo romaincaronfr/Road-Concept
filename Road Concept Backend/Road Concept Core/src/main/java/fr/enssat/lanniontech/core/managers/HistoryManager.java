@@ -91,4 +91,10 @@ public class HistoryManager extends Observable {
         notifyObservers(simId);
     }
 
+    public boolean hasToCommit() {
+        long size = 0;
+        size += currentPositionSample.size();
+        size += currentRoadMetricsSample.size();
+        return size > 200000;
+    }
 }

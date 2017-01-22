@@ -1,8 +1,7 @@
 package fr.enssat.lanniontech.core.managers;
 
-import fr.enssat.lanniontech.core.generators.DiracGenerator;
-import fr.enssat.lanniontech.core.generators.Generator;
-import fr.enssat.lanniontech.core.generators.VehicleKernel;
+import fr.enssat.lanniontech.core.exceptions.DestinationUnreachableException;
+import fr.enssat.lanniontech.core.generators.*;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
@@ -13,79 +12,71 @@ import fr.enssat.lanniontech.core.roadElements.roads.Road;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
+import sun.security.krb5.internal.PAData;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class VehicleManager {
     private List<Vehicle> vehicles;
     private List<Vehicle> activeVehicles;
-    private Road livingArea;
-    private Road workingArea;
     private Random gen;
     private HistoryManager historyManager;
     private RoadManager roadManager;
     private PathFinder pathFinder;
-    private List<Generator> generators;
-    private List<List<VehicleKernel>> vehiclesBuffers;
+    private Map<Generator,VehicleBuffer> vehiclesBuffers;
 
     public VehicleManager(HistoryManager history, RoadManager roadManager) {
         historyManager = history;
         vehicles = new ArrayList<>();
         activeVehicles = new ArrayList<>();
-        generators = new ArrayList<>();
-        vehiclesBuffers = new ArrayList<>();
+        vehiclesBuffers = new HashMap<>();
         this.roadManager = roadManager;
         gen = new Random();
         pathFinder = new PathFinder(roadManager);
 
-        //todo replace by a better solution (hash map)
-        vehiclesBuffers.add(new LinkedList<>());//add home buffer
-        vehiclesBuffers.add(new LinkedList<>());//add work buffer
     }
 
-    public void setLivingArea(UUID id) {
-        livingArea = roadManager.getRoad(id);
+    public void createTrafficGenerator(int goTimestamp, int returnTimestamp,
+                                       int vehicles, int carPercentage,
+                                       UUID A1, UUID A2) {
+        Road R1 = roadManager.getRoad(A1);
+        Road R2 = roadManager.getRoad(A2);
+        Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage,3600);
+        VehicleBuffer B = new VehicleBuffer(R1,R2);
+        vehiclesBuffers.put(G,B);
+
+        G = new UniformGenerator(returnTimestamp, vehicles, carPercentage,3600);
+        B = new VehicleBuffer(R2,R1);
+        vehiclesBuffers.put(G,B);
     }
 
-    public void setWorkingArea(UUID id) {
-        workingArea = roadManager.getRoad(id);
+    public void createRandomTrafficGenerator(int start,int stop,int vehicles,int carPercentage){
+        Generator G = new UniformGenerator(start,vehicles,carPercentage,stop-start);
+        List<Road> possibleSpawns = roadManager.getRoads();
+        VehicleBuffer B = new VehicleBuffer(possibleSpawns,possibleSpawns);
+        vehiclesBuffers.put(G,B);
     }
 
-    public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int carPercentage) {
-        generators.add(new DiracGenerator(goTimestamp, vehicles, carPercentage));       //add the home generator
-        generators.add(new DiracGenerator(returnTimestamp, vehicles, carPercentage));   //add the work generator
-    }
+
 
     public void updateBuffers(long timestamp) {
-        for (int i = 0; i < generators.size(); i++) {
-            vehiclesBuffers.get(i).addAll(generators.get(i).addVehicles(timestamp));
+        for (Generator G : vehiclesBuffers.keySet()){
+            vehiclesBuffers.get(G).addKernels(G.addVehicles(timestamp));
         }
     }
 
     private void insertBuffers() {
-        Iterator<VehicleKernel> iterator = vehiclesBuffers.get(0).iterator();
-        while (iterator.hasNext()) {
-            VehicleKernel kernel = iterator.next();
-            if (addVehicle(kernel, livingArea, workingArea)) {
-                iterator.remove();
-            } else {
-                break;
-            }
-        }
-
-        iterator = vehiclesBuffers.get(1).iterator();
-
-        while (iterator.hasNext()) {
-            VehicleKernel kernel = iterator.next();
-            if (addVehicle(kernel, workingArea, livingArea)) {
-                iterator.remove();
-            } else {
-                break;
+        int attempts;
+        boolean res;
+        for(VehicleBuffer B : vehiclesBuffers.values()){
+            attempts = 0;
+            while(!B.isEmpty() && attempts < 5){
+                res = addVehicle(B.getKernel(),B.getSource(),B.getDestination());
+                if(res){
+                    B.removeKernel();
+                }else {
+                    attempts ++;
+                }
             }
         }
     }
@@ -105,11 +96,16 @@ public class VehicleManager {
 
         double startingPos = gen.nextInt((int) startingLane.getLength());
 
-        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 10, 40)) {
+        if (!startingLane.getInsertTrajectory().rangeIsFree(startingPos, 20, 40)) {
             return false;
         }
-
-        Path myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
+        Path myPath;
+        try{
+            myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
+        }catch (DestinationUnreachableException e){
+            e.printStackTrace();
+            return false;
+        }
         Vehicle V;
         if (kernel.getType() == VehicleType.CAR) {
             V = Vehicle.createCar(vehicles.size(), startingLane, startingPos, historyManager, myPath);

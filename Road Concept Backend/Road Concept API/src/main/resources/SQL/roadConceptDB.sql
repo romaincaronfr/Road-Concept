@@ -35,7 +35,19 @@ CREATE TABLE IF NOT EXISTS "simulation" (
   "sampling"               INTEGER             NOT NULL,
   "finish"                 BOOLEAN             NOT NULL,
   "creation_date"          VARCHAR(10)         NOT NULL,
-  "min_departure_living_s" INTEGER             NOT NULL
+  "min_departure_living_s" INTEGER             NOT NULL,
+  "random_traffic"         BOOLEAN             NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "simulation_zone" (
+  "id"                  SERIAL PRIMARY KEY,
+  "simulation_uuid"     VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
+  "living_feature"      VARCHAR(40) NOT NULL,
+  "working_feature"     VARCHAR(40) NOT NULL,
+  "departure_living_s"  INTEGER     NOT NULL,
+  "departure_working_s" INTEGER     NOT NULL,
+  "car_percentage"      INTEGER     NOT NULL,
+  "vehicle_count"       INTEGER     NOT NULL
 );
 
 -- ==============================================================================

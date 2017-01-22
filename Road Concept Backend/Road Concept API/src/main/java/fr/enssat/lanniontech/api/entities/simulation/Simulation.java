@@ -1,6 +1,7 @@
 package fr.enssat.lanniontech.api.entities.simulation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.enssat.lanniontech.api.entities.SQLEntity;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.SimulatorUnavailableException;
@@ -8,6 +9,7 @@ import fr.enssat.lanniontech.core.Simulator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class Simulation implements SQLEntity {
@@ -23,7 +25,10 @@ public class Simulation implements SQLEntity {
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     private int samplingRate;
     private boolean finish;
+    private boolean includeRandomTraffic;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int minDepartureLivingS; // a garder (prendre le min)
+    private List<SimulationZone> zones;
 
     public UUID getUuid() {
         return uuid;
@@ -108,6 +113,22 @@ public class Simulation implements SQLEntity {
         this.simulator = simulator;
     }
 
+    public List<SimulationZone> getZones() {
+        return zones;
+    }
+
+    public void setZones(List<SimulationZone> zones) {
+        this.zones = zones;
+    }
+
+    public boolean isIncludeRandomTraffic() {
+        return includeRandomTraffic;
+    }
+
+    public void setIncludeRandomTraffic(boolean includeRandomTraffic) {
+        this.includeRandomTraffic = includeRandomTraffic;
+    }
+
     @Override
     public Object getIdentifierValue() {
         return uuid;
@@ -117,4 +138,5 @@ public class Simulation implements SQLEntity {
     public String getIdentifierName() {
         return "uuid";
     }
+
 }

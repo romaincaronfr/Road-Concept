@@ -1,4 +1,4 @@
 FROM nginx
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY frontend /data/www
+COPY buildData/nginx.conf /etc/nginx/conf.d/default.conf
+COPY buildData/frontend /data/www

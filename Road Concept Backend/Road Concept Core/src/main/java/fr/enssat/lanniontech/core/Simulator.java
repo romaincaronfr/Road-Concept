@@ -91,9 +91,11 @@ public class Simulator extends Observable implements Runnable {
                     vehicleManager.newStep(precision, true, timestamp);
                     if(vehicleManager.getVehiclesNumber()>0){
                         roadManager.saveSates(historyManager, timestamp);
-                        historyManager.commitChanges(simId);
                     }
                     j = 1;
+                    if(historyManager.hasToCommit()){
+                        historyManager.commitChanges(simId);
+                    }
                 } else {
                     vehicleManager.newStep(precision, false, timestamp);
                     j++;
@@ -107,6 +109,7 @@ public class Simulator extends Observable implements Runnable {
                 }
             }
         } finally {
+            historyManager.commitChanges(simId);
             setChanged();
             notifyObservers(simId);
             progress = 1;

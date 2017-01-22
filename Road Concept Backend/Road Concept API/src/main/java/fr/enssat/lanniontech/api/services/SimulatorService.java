@@ -22,6 +22,7 @@ import fr.enssat.lanniontech.api.repositories.MapInfoRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationParametersRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationRepository;
 import fr.enssat.lanniontech.api.repositories.SimulationResultRepository;
+import fr.enssat.lanniontech.api.repositories.SimulationZonesRepository;
 import fr.enssat.lanniontech.core.Simulator;
 import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.positioning.Position;
@@ -46,6 +47,7 @@ public class SimulatorService extends AbstractService implements Observer {
     private SimulationRepository simulationGlobalRepository = new SimulationRepository();
     private SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
     private SimulationResultRepository simulationResultRepository = new SimulationResultRepository();
+    private SimulationZonesRepository simulationZonesRepository = new SimulationZonesRepository();
     private MapInfoRepository mapRepository = new MapInfoRepository();
 
     private MapService mapService = new MapService();
@@ -54,7 +56,7 @@ public class SimulatorService extends AbstractService implements Observer {
     // CREATE
     // ======
 
-    public Simulation create(User user, String name, int mapID, int samplingRate, List<SimulationZone> simulationZones) {
+    public Simulation create(User user, String name, int mapID, int samplingRate, List<SimulationZone> simulationZones, boolean randomTraffic) {
         try {
             int minDepartureLivingS = Integer.MAX_VALUE;
             for (SimulationZone zone : simulationZones) {
@@ -63,7 +65,12 @@ public class SimulatorService extends AbstractService implements Observer {
                 }
             }
 
-            Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, minDepartureLivingS);
+            Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, minDepartureLivingS, randomTraffic);
+            for (SimulationZone zone : simulationZones) {
+                simulationZonesRepository.create(simulation, zone);
+                simulation.getZones().add(zone);
+            }
+
             simulation.setSimulator(new Simulator(simulation.getUuid()));
 
             simulationGlobalRepository.duplicateFeatures(simulation);
@@ -71,7 +78,7 @@ public class SimulatorService extends AbstractService implements Observer {
             simulation.getSimulator().addObserver(this); // Being notified when the simulation is finish
             simulation.getSimulator().getHistoryManager().addObserver(this); // Being notified at each result step
 
-            start(simulation);
+            start(simulation, randomTraffic);
 
             return simulation;
         } catch (EntityStillInUseException e) { //FIXME: The repository should not throw an EntityStillInUseException if the map does not exist
@@ -79,14 +86,17 @@ public class SimulatorService extends AbstractService implements Observer {
         }
     }
 
-    private boolean start(Simulation simulation) {
+    private boolean start(Simulation simulation, boolean randomTraffic) {
         Map map = mapService.getMap(simulation.getCreatorID(), simulation.getMapID());
         sendFeatures(simulation, map.getFeatures());
 
-        simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
-        simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
+        for (SimulationZone zone : simulation.getZones()) {
+            simulation.getSimulator().getVehicleManager().createTrafficGenerator(zone.getDepartureLivingS(), zone.getDepartureWorkingS(), zone.getVehicleCount(), zone.getCarPercentage(), zone.getLivingFeatureUUID(), zone.getWorkingFeatureUUID());
+        }
 
-        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getMinDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
+        if (randomTraffic) {
+            simulation.getSimulator().getVehicleManager().createRandomTrafficGenerator(28800, 64800, 10000, 80);
+        }
 
         return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }
@@ -97,7 +107,7 @@ public class SimulatorService extends AbstractService implements Observer {
                 LineString geometry = (LineString) feature.getGeometry();
 
                 if (feature.isRoad()) {
-                    sendRoads(simulation, feature, geometry);
+                    sendRoad(simulation, feature, geometry);
                 } else if (feature.isRoundabout()) {
                     sendRoundabout(simulation, feature, geometry);
                 }
@@ -117,7 +127,7 @@ public class SimulatorService extends AbstractService implements Observer {
         simulation.getSimulator().getRoadManager().addRoundAbout(roundaboutPositions, feature.getUuid());
     }
 
-    private void sendRoads(Simulation simulation, Feature feature, LineString road) {
+    private void sendRoad(Simulation simulation, Feature feature, LineString road) {
         Coordinates last = road.getCoordinates().get(0);
 
         for (int i = 1; i < road.getCoordinates().size(); i++) { // avoid the first feature
@@ -181,8 +191,7 @@ public class SimulatorService extends AbstractService implements Observer {
         List<SimulationCongestionResult> congestions = new ArrayList<>();
         for (RoadMetrics metric : roadMetrics) {
             if (metric.getCongestion() != 0) {
-                //FIXME: Quick and ugly fix. Voir avec Antoine et retirer le /10
-                SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion() / 10, metric.getTimestamp());
+                SimulationCongestionResult congestion = new SimulationCongestionResult(metric.getRoadId(), metric.getCongestion(), metric.getTimestamp());
                 congestions.add(congestion);
             }
         }
@@ -225,6 +234,12 @@ public class SimulatorService extends AbstractService implements Observer {
         fillCongestions(simulationUUID, timestamp, features);
         fillVehicles(simulationUUID, timestamp, features);
         return features;
+    }
+
+    public List<SimulationCongestionResult> getMinimalCongestions(UUID simulationUUID, int timestamp) {
+        Simulation simulation = get(simulationUUID);
+        checkTimestampValue(timestamp, simulation);
+        return simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
     }
 
     private void fillVehicles(UUID simulationUUID, int timestamp, FeatureCollection features) {
@@ -302,8 +317,22 @@ public class SimulatorService extends AbstractService implements Observer {
         return simulations;
     }
 
+    public List<Simulation> getAllPending(int userID) {
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+        simulations.removeIf(Simulation::isFinish);
+        return simulations;
+    }
+
+    public List<Simulation> getAllFinish(int userID) {
+        List<Simulation> simulations = simulationParametersRepository.getAll(userID);
+        getMapInfos(simulations);
+        simulations.removeIf(simulation -> !simulation.isFinish());
+        return simulations;
+    }
+
     private void getMapInfos(List<Simulation> simulations) {
-        for(Simulation simulation : simulations) {
+        for (Simulation simulation : simulations) {
             simulation.setMapInfo(mapRepository.get(simulation.getMapID()));
         }
     }
@@ -351,5 +380,4 @@ public class SimulatorService extends AbstractService implements Observer {
         }
         return type;
     }
-
 }

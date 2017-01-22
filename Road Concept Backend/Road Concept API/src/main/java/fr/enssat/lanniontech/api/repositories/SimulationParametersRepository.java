@@ -18,17 +18,17 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
 
-    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s FROM simulation WHERE uuid = ?";
-    private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, min_departure_living_s FROM simulation WHERE id_map = ? AND id_user = ?";
+    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s, random_traffic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s, random_traffic FROM simulation WHERE uuid = ?";
+    private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, min_departure_living_s random_traffic FROM simulation WHERE id_user = ?";
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, min_departure_living_s, random_traffic FROM simulation WHERE id_map = ? AND id_user = ?";
     private static final String UPDATE_FINISH = "UPDATE simulation SET finish = true WHERE uuid = ? AND id_user = ?";
     private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
 
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int minDepartureLivingS) { //NOSONAR: Parameters count
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int minDepartureLivingS, boolean randomTraffic) { //NOSONAR: Parameters count
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -41,6 +41,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                 statement.setBoolean(6, false);
                 statement.setString(7, simulation.getCreationDate());
                 statement.setInt(8, minDepartureLivingS);
+                statement.setBoolean(9, randomTraffic);
 
                 try {
                     statement.execute();
@@ -51,6 +52,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                     simulation.setCreatorID(creatorID);
                     simulation.setFinish(false);
                     simulation.setMinDepartureLivingS(minDepartureLivingS);
+                    simulation.setIncludeRandomTraffic(randomTraffic);
                     return simulation;
                 } finally {
                     statement.close();
@@ -84,6 +86,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
                         simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         simulations.add(simulation);
                     }
@@ -112,6 +115,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
                         simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         return simulation;
                     }
@@ -142,6 +146,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
                         simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         simulations.add(simulation);
                     }
