@@ -19,5 +19,5 @@ cd $SCRIPTPATH
 
 ./clean_all.sh
 ./roadconcept/prepare_build.sh
-./nginx/prepare_build.sh $0
+./nginx/prepare_build.sh $1
 ./NodeJS/prepare_build.sh

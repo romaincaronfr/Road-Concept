@@ -12,6 +12,6 @@ fi
 cp -r ../../frontend/ ./buildData/frontend/
 if [ $1 -ne 0 ]
 then
-    sed -ri.bak 's/(http:\/\/localhost:8080)/http:\/\/roadconcept\.4r3\.fr:8081/' ./nginx/frontend/js/app.js
-    rm ./nginx/frontend/js/app.js.bak
+    sed -ri.bak 's/(http:\/\/localhost:8080)/http:\/\/roadconcept\.4r3\.fr:8081/' ./buildData/frontend/js/app.js
+    rm ./buildData/frontend/js/app.js.bak
 fi
