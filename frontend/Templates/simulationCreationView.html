@@ -74,7 +74,7 @@
                         <li>Heure de retour</li>
                     </ul>
                     </p>
-                    <p>Une fois ces étapes passées, vous pourrez choisir d'ajouter un nouveau couple de zones (et donc répéter les étapes précedentes une nouvelle fois) ou lancer la simulation. Pour cette dernière, il vous sera demandé de renseigner son nom et de choisir sa précision.</p>
+                    <p>Une fois ces étapes passées, vous pourrez choisir d'ajouter un nouveau couple de zones (et donc répéter les étapes précedentes une nouvelle fois) ou lancer la simulation. Pour cette dernière, il vous sera demandé de renseigner son nom, de choisir sa précision et d'ajouter ou non du traffic aléatoire.</p>
                 </div>
                 <div class="modal-footer">
                     <button id="ready" type="button" class="btn btn-success" data-dismiss="modal">Je suis prêt !
@@ -111,8 +111,22 @@
                             <div class="col-sm-10">
                                 <input type="number" min="1" placeholder="ex: 30" class="form-control"
                                        id="sampling_rate"/>
+<<<<<<< HEAD
                                 <p class="help-block">intervale entre chaque snapshot (en secondes)</p>
                                 <p class="help-block">1s au minimum</p>
+=======
+                                <p class="help-block">intervale entre chaque snapshot (à partir de 1s)</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sampling_rate" class="col-sm-2 control-label">
+                                Traffic aléatoire
+                            </label>
+                            <div class="col-sm-10">
+                                <div class="radio">
+                                    <input type="checkbox" id="random_traffic" data-toggle="tooltip" data-placement="right" title="Ajoute de la circulation supplémentaire">
+                                </div>
+>>>>>>> origin/feature/ROADC-240
                             </div>
                         </div>
                         <div class="alert alert-danger" id="alertEmptyStart" hidden>
