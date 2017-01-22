@@ -46,12 +46,11 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         ButterKnife.bind(this);
         mButtonBack.setOnClickListener(this);
         mButtonNext.setOnClickListener(this);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         mUuid = intent.getStringExtra(MapSimulationListActivity.INTENT_UUID_SIMULATION);
         mMapID = intent.getIntExtra(MapSimulationListActivity.INTENT_MAPID_SIMULATION,-1);
         mSamplingRate = intent.getIntExtra(MapSimulationListActivity.INTENT_SAMPLINGRATE_SIMULATION,-1);
-        mLivingFeatureUUID = intent.getStringExtra(MapSimulationListActivity.INTENT_LIVINGUUID_SIMULATION);
-        mWorkingFeatureUUID = intent.getStringExtra(MapSimulationListActivity.INTENT_WORKINGUUID_SIMULATION);
         mCurrentTimestamp = intent.getIntExtra(MapSimulationListActivity.INTENT_DEPARTURELIVINGS_SIMULATION,-1);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

@@ -209,8 +209,6 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         intent.putExtra(INTENT_UUID_SIMULATION,simulation.getUuid());
         intent.putExtra(INTENT_MAPID_SIMULATION,simulation.getMapID());
         intent.putExtra(INTENT_SAMPLINGRATE_SIMULATION,simulation.getSamplingRate());
-        intent.putExtra(INTENT_LIVINGUUID_SIMULATION,simulation.getLivingFeatureUUID());
-        intent.putExtra(INTENT_WORKINGUUID_SIMULATION,simulation.getWorkingFeatureUUID());
         intent.putExtra(INTENT_DEPARTURELIVINGS_SIMULATION,simulation.getDepartureLivingS());
         startActivity(intent);
     }
