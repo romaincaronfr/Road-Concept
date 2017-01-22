@@ -95,7 +95,7 @@ public class SimulatorService extends AbstractService implements Observer {
         }
 
         if (randomTraffic) {
-            simulation.getSimulator().getVehicleManager().createRandomTrafficGenerator(28800, 64800, 10000, 80);
+            simulation.getSimulator().getVehicleManager().createRandomTrafficGenerator(28800, 64800, 1000, 80);
         }
 
         return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
@@ -302,6 +302,7 @@ public class SimulatorService extends AbstractService implements Observer {
         if (simulation == null) {
             throw new EntityNotExistingException(Simulation.class);
         }
+        simulation.setZones(simulationZonesRepository.getAll(simulation.getUuid()));
         return simulation;
     }
 

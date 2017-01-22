@@ -51,7 +51,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                     simulation.setName(name);
                     simulation.setCreatorID(creatorID);
                     simulation.setFinish(false);
-                    simulation.setMinDepartureLivingS(minDepartureLivingS);
+                    simulation.setDepartureLivingS(minDepartureLivingS);
                     simulation.setIncludeRandomTraffic(randomTraffic);
                     return simulation;
                 } finally {
@@ -85,7 +85,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setDepartureLivingS(result.getInt("min_departure_living_s"));
                         simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         simulations.add(simulation);
@@ -114,7 +114,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setDepartureLivingS(result.getInt("min_departure_living_s"));
                         simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         return simulation;
@@ -145,7 +145,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
+                        simulation.setDepartureLivingS(result.getInt("min_departure_living_s"));
                         simulation.setIncludeRandomTraffic(result.getBoolean("random_traffic"));
 
                         simulations.add(simulation);

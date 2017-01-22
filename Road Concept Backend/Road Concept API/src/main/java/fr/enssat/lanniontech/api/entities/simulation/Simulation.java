@@ -8,6 +8,7 @@ import fr.enssat.lanniontech.api.exceptions.SimulatorUnavailableException;
 import fr.enssat.lanniontech.core.Simulator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -23,12 +24,14 @@ public class Simulation implements SQLEntity {
     private int mapID; //TODO: Remove it when the FrontEnd is ready to change...
     private MapInfo mapInfo;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    @JsonProperty("sampling_rate")
     private int samplingRate;
     private boolean finish;
+    @JsonProperty("random_traffic")
     private boolean includeRandomTraffic;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private int minDepartureLivingS; // a garder (prendre le min)
-    private List<SimulationZone> zones;
+   // @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private int departureLivingS; // a garder (prendre le min)
+    private List<SimulationZone> zones = new ArrayList<>();
 
     public UUID getUuid() {
         return uuid;
@@ -86,12 +89,12 @@ public class Simulation implements SQLEntity {
         this.creationDate = creationDate;
     }
 
-    public int getMinDepartureLivingS() {
-        return minDepartureLivingS;
+    public int getDepartureLivingS() {
+        return departureLivingS;
     }
 
-    public void setMinDepartureLivingS(int departureLivingS) {
-        this.minDepartureLivingS = departureLivingS;
+    public void setDepartureLivingS(int departureLivingS) {
+        this.departureLivingS = departureLivingS;
     }
 
     public MapInfo getMapInfo() {

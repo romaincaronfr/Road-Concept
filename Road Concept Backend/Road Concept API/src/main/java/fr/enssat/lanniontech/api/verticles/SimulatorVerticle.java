@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.api.entities.geojson.FeatureCollection;
 import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
+import fr.enssat.lanniontech.api.entities.simulation.SimulationZone;
 import fr.enssat.lanniontech.api.exceptions.EntityAlreadyExistsException;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
@@ -192,28 +193,15 @@ public class SimulatorVerticle extends AbstractVerticle {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             int mapID = Integer.parseInt(routingContext.request().getParam("mapID"));
 
-//            JsonObject body = routingContext.getBodyAsJson();
-//            if (body == null) {
-//                throw new BadRequestException();
-//            }
-//
-//            String name = body.getString("name");
-//            int samplingRate = body.getInteger("sampling_rate");
-//            boolean randomTraffic = body.getBoolean("random_traffic");
-//            JsonArray zonesReceive = body.getJsonArray("zones");
-//            LOGGER.debug("ZONES AS LIST = " + zonesReceive.getList());
-
-            LOGGER.debug("@@@ BODY STRING = " + routingContext.getBodyAsString());
             Simulation test = JSONUtils.fromJSON(routingContext.getBodyAsString(), Simulation.class);
 
+            List<SimulationZone> simulationZones = test.getZones();
+            Simulation simulation = simulatorService.create(currentUser, test.getName(), mapID, test.getSamplingRate(), simulationZones, test.isIncludeRandomTraffic());
 
-           // List<SimulationZone> simulationZones = new ArrayList<>();
-           // Simulation simulation = simulatorService.create(currentUser, name, mapID, samplingRate, simulationZones, randomTraffic);
+            List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
+            activesSimulations.add(simulation);
 
-           // List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
-           // activesSimulations.add(simulation);
-
-         //   HttpResponseBuilder.buildOkResponse(routingContext, simulation);
+            HttpResponseBuilder.buildOkResponse(routingContext, simulation);
         } catch (EntityAlreadyExistsException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "A simulation already exists with the given name.");
         } catch (EntityNotExistingException e) {
@@ -232,7 +220,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, features);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        } catch (InvalidParameterException e) {
+        } catch (NumberFormatException | InvalidParameterException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "The timestamp value is not coherent with the sampling rate.");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
