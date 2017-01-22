@@ -20,7 +20,8 @@ app.simulationCreationView = Backbone.View.extend({
     car_percentage: null,
     vehicle_count: null,
     nbCouple: 1,
-    colorsCouple: ['',''],
+    colorsCoupleIndex: 0,
+    colorsCouple: null,
 
     events: {
         'click #previous': 'previous',
@@ -39,6 +40,7 @@ app.simulationCreationView = Backbone.View.extend({
         console.log("step : " + this.step);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         this.zones = [];
+        this.colorsCouple = [[0, 0, 255, 1],[255, 0, 0, 1],[0, 200, 0, 1],[127, 0, 255, 1],[255, 0, 127, 1]];
         this.render();
         var self = this;
         this.mapDetailsCOllection.on('sync', self.onSync, self);
@@ -160,6 +162,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.mapDetailsCOllection.id = id;
         this.zones = [];
         this.nbCouple = 1;
+        this.colorsCoupleIndex = 0;
     },
 
     showPercent: function () {
@@ -484,6 +487,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     generateZoneStyle: function (feature, resolution) {
         var type = feature.getProperties().type;
+        var colorStyle = this.colorsCouple[this.colorsCoupleIndex];
         var oneway = 1;
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
             oneway = 0.5;
@@ -512,12 +516,10 @@ app.simulationCreationView = Backbone.View.extend({
         switch (this.step) {
             case 0:
                 //Habitation Zone
-                var colorStyle = [0, 0, 255, 1];
                 var text = "Zone d'habitation n°" + this.nbCouple;
                 break;
             case 2:
                 //Working Zone
-                var colorStyle = [255, 0, 0, 1];
                 var text = "Zone de travail n°" + this.nbCouple;
                 break;
             default:
@@ -634,8 +636,6 @@ app.simulationCreationView = Backbone.View.extend({
                     vehicle_count: parseInt(this.vehicle_count)
                 };
                 this.zones.push(newZone);
-
-                this.colorCouple++;
                 console.log(this.zones);
                 break;
         }
@@ -711,6 +711,12 @@ app.simulationCreationView = Backbone.View.extend({
         this.working_feature = null;
         this.car_percentage = null;
         this.vehicle_count = null;
+
+        if (this.colorsCoupleIndex < this.colorsCouple.length-1) {
+            this.colorsCoupleIndex++;
+        } else {
+            this.colorsCoupleIndex = 0;
+        }
 
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
