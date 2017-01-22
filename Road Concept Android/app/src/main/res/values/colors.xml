@@ -15,5 +15,6 @@
     <color name="translucent_scrim_top_center">#1A000000</color>
     <color name="translucent_scrim_bottom">#2A000000</color>
     <color name="translucent_scrim_bottom_center">#0D000000</color>
+    <color name="translucent_white">#2Affffff</color>
     <color name="translucent_lat_blue">#992196F3</color>
 </resources>

@@ -18,21 +18,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:background="@color/translucent_white"
         android:layout_alignParentStart="true">
 
         <Button
-            android:text="Button"
+            android:text="@string/pr_c_dent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button5"
-            android:layout_weight="1" />
+            android:id="@+id/buttonBackSImu"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_fast_rewind"
+            style="@style/Widget.AppCompat.Button.Borderless" />
 
         <Button
-            android:text="Button"
+            android:text="@string/suivant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button4"
-            android:layout_weight="1" />
+            android:id="@+id/buttonNextSimu"
+            android:drawableRight="@drawable/ic_fast_forward"
+            android:layout_weight="1"
+            style="@style/Widget.AppCompat.Button.Borderless" />
     </LinearLayout>
 
 </RelativeLayout>
