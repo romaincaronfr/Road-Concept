@@ -103,6 +103,81 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     @Override
+    public List<TrajectoryInformation> getInformations(Side side,double distanceOut) {
+        List<TrajectoryInformation> trajectoryInformations = new ArrayList<>();
+        int pos = vehiclesSides.indexOf(side);
+        if (pos == vehiclesSides.size() - 1) {
+            //if we are the last car
+            for (TrajectoryJunction TJ : destinationsTrajectories.values()){
+
+                TrajectoryInformation I = new TrajectoryInformation(distanceOut);
+                I.addToExplored(this);
+
+                if(I.addToDistance(TJ.getDestinationPos()-side.getPos())){
+                    trajectoryInformations.addAll(TJ.getDestination().getInformations(I,TJ.getSourcePos()));
+                }else{
+                    trajectoryInformations.add(I);
+                }
+            }
+        }else {
+            TrajectoryInformation I = new TrajectoryInformation(distanceOut);
+            I.addToDistance(vehiclesSides.get(pos + 1).getPos() - side.getPos());
+            I.setSpeed(vehiclesSides.get(pos + 1).getMyVehicle().getSpeed());
+            trajectoryInformations.add(I);
+        }
+
+        return trajectoryInformations;
+    }
+
+    @Override
+    public List<TrajectoryInformation> getInformations(TrajectoryInformation I, double pos) {
+        List<TrajectoryInformation> trajectoryInformations = new ArrayList<>();
+        TrajectoryInformation TI;
+        I.addToExplored(this);
+        if(vehiclesSides.isEmpty()){
+            for(TrajectoryJunction J : sourcesTrajectories.values()){
+                if(!I.isExplored(J.getSource())){
+                    TI = I.clone();
+                    if(TI.addToDistance(J.getSourcePos()-pos)){
+                        trajectoryInformations.addAll(J.getSource().getInformations(TI,J.getSourcePos()));
+                    }else {
+                        trajectoryInformations.add(I);
+                    }
+                }
+            }
+
+            for(TrajectoryJunction J : destinationsTrajectories.values()){
+                if(!I.isExplored(J.getDestination())){
+                    TI = I.clone();
+                    if(TI.addToDistance(J.getDestinationPos()-pos)){
+                        trajectoryInformations.addAll(J.getDestination().getInformations(TI,J.getDestinationPos()));
+                    }else {
+                        trajectoryInformations.add(I);
+                    }
+                }
+            }
+        }else{
+            Side nearestSide = vehiclesSides.get(0);
+            for (int i = 1; i < vehiclesSides.size(); i++) {
+                if(Math.abs(nearestSide.getPos()-pos) >
+                        Math.abs(vehiclesSides.get(i).getPos()-pos)){
+                    nearestSide = vehiclesSides.get(i);
+                }
+            }
+            I.addToDistance(Math.abs(nearestSide.getPos()-pos));
+            double speed = nearestSide.getMyVehicle().getSpeed();
+            if(nearestSide.getLength()>0){
+                I.setSpeed(speed);
+            }else {
+                I.setSpeed(-speed);
+            }
+
+        }
+
+        return trajectoryInformations;
+    }
+
+    @Override
     public double getSpeedOfFirst() {
         if (vehiclesSides.isEmpty()) {
             if (getDestinationsTrajectories().isEmpty()) {

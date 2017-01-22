@@ -133,24 +133,32 @@ public abstract class Trajectory {
      */
     public abstract TrajectoryJunction getNext(UUID destination);
 
+    public abstract List<TrajectoryInformation> getInformations(Side side,double distanceOut);
+
+    public abstract List<TrajectoryInformation> getInformations(TrajectoryInformation I,double pos);
+
     /**
      * return the speed of the vehicle ahead
      */
+    @Deprecated
     public abstract double getNextCarSpeed(Side side);
 
     /**
      * return the speed of the first car on the trajectory
      */
+    @Deprecated
     public abstract double getSpeedOfFirst();
 
     /**
      * return the distance of the vehicle ahead
      */
+    @Deprecated
     public abstract double getDistanceToNext(Side side, double freeDistance);
 
     /**
      * return the distance to the first vehicle
      */
+    @Deprecated
     public abstract double getDistanceToFirst(double freeDistance);
 
     /**
@@ -164,7 +172,7 @@ public abstract class Trajectory {
     public abstract void explore(Map<Trajectory, Boolean> trajectoryMap);
 
     /**
-     * return the position of the next intersection
+     * return the next intersection
      */
     public abstract Intersection getNextIntersection();
 

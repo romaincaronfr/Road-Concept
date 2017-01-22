@@ -34,6 +34,7 @@ public class PathFinder {
         gen = new Random();
     }
 
+    @Deprecated
     public Path getRandomPath(Trajectory source, int length) {
         Path myPath = new Path();
         UUID step = source.getRoadId();
