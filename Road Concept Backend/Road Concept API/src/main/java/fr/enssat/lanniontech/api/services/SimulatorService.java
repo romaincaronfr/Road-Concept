@@ -12,6 +12,7 @@ import fr.enssat.lanniontech.api.entities.simulation.Simulation;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationCongestionResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleResult;
 import fr.enssat.lanniontech.api.entities.simulation.SimulationVehicleStatistics;
+import fr.enssat.lanniontech.api.entities.simulation.SimulationZone;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
 import fr.enssat.lanniontech.api.exceptions.EntityStillInUseException;
 import fr.enssat.lanniontech.api.exceptions.InvalidParameterException;
@@ -53,9 +54,16 @@ public class SimulatorService extends AbstractService implements Observer {
     // CREATE
     // ======
 
-    public Simulation create(User user, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) {
+    public Simulation create(User user, String name, int mapID, int samplingRate, List<SimulationZone> simulationZones) {
         try {
-            Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, departureLivingS, departureWorkingS, livingFeatureUUID, workingFeatureUUID, carPercentage, vehicleCount);
+            int minDepartureLivingS = Integer.MAX_VALUE;
+            for (SimulationZone zone : simulationZones) {
+                if (zone.getDepartureLivingS() < minDepartureLivingS) {
+                    minDepartureLivingS = zone.getDepartureLivingS();
+                }
+            }
+
+            Simulation simulation = simulationParametersRepository.create(user.getId(), name, mapID, samplingRate, minDepartureLivingS);
             simulation.setSimulator(new Simulator(simulation.getUuid()));
 
             simulationGlobalRepository.duplicateFeatures(simulation);
@@ -78,7 +86,7 @@ public class SimulatorService extends AbstractService implements Observer {
         simulation.getSimulator().getVehicleManager().setLivingArea(simulation.getLivingFeatureUUID());
         simulation.getSimulator().getVehicleManager().setWorkingArea(simulation.getWorkingFeatureUUID());
 
-        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
+        simulation.getSimulator().getVehicleManager().createTrafficGenerator(simulation.getMinDepartureLivingS(), simulation.getDepartureWorkingS(), simulation.getVehicleCount(), simulation.getCarPercentage());
 
         return simulation.getSimulator().launchSimulation(86400, 0.01, 100 * simulation.getSamplingRate()); // 86400 is the count of seconds in one day
     }

@@ -18,17 +18,17 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimulationParametersRepository.class);
 
-    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE uuid = ?";
+    private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s FROM simulation WHERE uuid = ?";
     private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_user = ?";
-    private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, living_feature, working_feature, departure_living_s, departure_working_s, car_percentage, vehicle_count FROM simulation WHERE id_map = ? AND id_user = ?";
+    private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, min_departure_living_s FROM simulation WHERE id_map = ? AND id_user = ?";
     private static final String UPDATE_FINISH = "UPDATE simulation SET finish = true WHERE uuid = ? AND id_user = ?";
     private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
 
     // CREATE
     // ------
 
-    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int departureLivingS, int departureWorkingS, UUID livingFeatureUUID, UUID workingFeatureUUID, int carPercentage, int vehicleCount) { //NOSONAR: Parameters count
+    public Simulation create(int creatorID, String name, int mapID, int samplingRate, int minDepartureLivingS) { //NOSONAR: Parameters count
         try (Connection connection = DatabaseConnector.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
@@ -40,12 +40,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                 statement.setInt(5, samplingRate);
                 statement.setBoolean(6, false);
                 statement.setString(7, simulation.getCreationDate());
-                statement.setString(8, livingFeatureUUID.toString());
-                statement.setString(9, workingFeatureUUID.toString());
-                statement.setInt(10, departureLivingS);
-                statement.setInt(11, departureWorkingS);
-                statement.setInt(12, carPercentage);
-                statement.setInt(13, vehicleCount);
+                statement.setInt(8, minDepartureLivingS);
 
                 try {
                     statement.execute();
@@ -55,12 +50,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                     simulation.setName(name);
                     simulation.setCreatorID(creatorID);
                     simulation.setFinish(false);
-                    simulation.setDepartureLivingS(departureLivingS);
-                    simulation.setDepartureWorkingS(departureWorkingS);
-                    simulation.setCarPercentage(carPercentage);
-                    simulation.setLivingFeatureUUID(livingFeatureUUID);
-                    simulation.setWorkingFeatureUUID(workingFeatureUUID);
-                    simulation.setVehicleCount(vehicleCount);
+                    simulation.setMinDepartureLivingS(minDepartureLivingS);
                     return simulation;
                 } finally {
                     statement.close();
@@ -93,12 +83,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setDepartureLivingS(result.getInt("departure_living_s"));
-                        simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
-                        simulation.setCarPercentage(result.getInt("car_percentage"));
-                        simulation.setLivingFeatureUUID(UUID.fromString(result.getString("living_feature")));
-                        simulation.setWorkingFeatureUUID(UUID.fromString(result.getString("working_feature")));
-                        simulation.setVehicleCount(result.getInt("vehicle_count"));
+                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
 
                         simulations.add(simulation);
                     }
@@ -126,12 +111,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setDepartureLivingS(result.getInt("departure_living_s"));
-                        simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
-                        simulation.setCarPercentage(result.getInt("car_percentage"));
-                        simulation.setLivingFeatureUUID(UUID.fromString(result.getString("living_feature")));
-                        simulation.setWorkingFeatureUUID(UUID.fromString(result.getString("working_feature")));
-                        simulation.setVehicleCount(result.getInt("vehicle_count"));
+                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
 
                         return simulation;
                     }
@@ -161,12 +141,7 @@ public class SimulationParametersRepository extends SimulationRepository {
                         simulation.setCreationDate(result.getString("creation_date"));
                         simulation.setFinish(result.getBoolean("finish"));
                         simulation.setSamplingRate(result.getInt("sampling"));
-                        simulation.setDepartureLivingS(result.getInt("departure_living_s"));
-                        simulation.setDepartureWorkingS(result.getInt("departure_working_s"));
-                        simulation.setCarPercentage(result.getInt("car_percentage"));
-                        simulation.setLivingFeatureUUID(UUID.fromString(result.getString("living_feature")));
-                        simulation.setWorkingFeatureUUID(UUID.fromString(result.getString("working_feature")));
-                        simulation.setVehicleCount(result.getInt("vehicle_count"));
+                        simulation.setMinDepartureLivingS(result.getInt("min_departure_living_s"));
 
                         simulations.add(simulation);
                     }
