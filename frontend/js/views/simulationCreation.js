@@ -11,6 +11,7 @@ app.simulationCreationView = Backbone.View.extend({
     vectorLayer: null,
     snap: null,
     mapDetailsCOllection: null,
+    zones: null,
     step: 0,
     startHour: null,
     returnHour: null,
@@ -36,7 +37,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.step = 0;
         console.log("step : " + this.step);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
-        //console.log(this.mapDetailsCOllection);
+        this.zones = [];
         this.render();
         var self = this;
         this.mapDetailsCOllection.on('sync', self.onSync, self);
@@ -156,6 +157,7 @@ app.simulationCreationView = Backbone.View.extend({
     changeID: function (id) {
         this.id = id;
         this.mapDetailsCOllection.id = id;
+        this.zones = [];
     },
 
     showPercent: function () {
@@ -625,6 +627,17 @@ app.simulationCreationView = Backbone.View.extend({
                     this.returnHour = $('#returnHour').val();
                     valid = true;
                 }
+                
+                var newZone = {
+                    departure_living_s: this.getTotalSecond(this.startHour),
+                    departure_working_s: this.getTotalSecond(this.returnHour),
+                    living_feature: this.living_feature,
+                    working_feature: this.working_feature,
+                    car_percentage: parseInt(this.car_percentage),
+                    vehicle_count: parseInt(this.vehicle_count)
+                };
+                this.zones.push(newZone);
+                console.log(this.zones);
                 break;
         }
 
@@ -693,10 +706,16 @@ app.simulationCreationView = Backbone.View.extend({
         $('#newCouple').hide();
         $('#habitZone').show();
 
+        this.startHour = null;
+        this.returnHour = null;
+        this.living_feature = null;
+        this.working_feature = null;
+        this.car_percentage = null;
+        this.vehicle_count = null;
+
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
         this.map.addInteraction(this.snap);
-        //TODO Ajouter/enregistrer le couple créé dans la collection
     },
 
     launchSim: function () {
@@ -715,12 +734,13 @@ app.simulationCreationView = Backbone.View.extend({
             var model = new app.models.simulationParamsModel({
                 name: name,
                 sampling_rate: parseInt(sampling_rate),
-                departure_living_s: this.getTotalSecond(this.startHour),
+                zones: this.zones
+                /*departure_living_s: this.getTotalSecond(this.startHour),
                 departure_working_s: this.getTotalSecond(this.returnHour),
                 living_feature: this.living_feature,
                 working_feature: this.working_feature,
                 car_percentage: parseInt(this.car_percentage),
-                vehicle_count: parseInt(this.vehicle_count)
+                vehicle_count: parseInt(this.vehicle_count)*/
             });
             console.log(model);
             collection.add(model);
