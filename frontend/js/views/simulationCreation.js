@@ -20,6 +20,7 @@ app.simulationCreationView = Backbone.View.extend({
     car_percentage: null,
     vehicle_count: null,
     nbCouple: 1,
+    colorsCouple: ['',''],
 
     events: {
         'click #previous': 'previous',
@@ -158,6 +159,7 @@ app.simulationCreationView = Backbone.View.extend({
         this.id = id;
         this.mapDetailsCOllection.id = id;
         this.zones = [];
+        this.nbCouple = 1;
     },
 
     showPercent: function () {
@@ -518,11 +520,6 @@ app.simulationCreationView = Backbone.View.extend({
                 var colorStyle = [255, 0, 0, 1];
                 var text = "Zone de travail n°" + this.nbCouple;
                 break;
-            /*case 1:
-             case 3:
-             case 4:
-             var colorStyle = originColor;
-             break;*/
             default:
                 var colorStyle = originColor;
                 break;
@@ -592,10 +589,10 @@ app.simulationCreationView = Backbone.View.extend({
         switch (this.step) {
             case 1:
                 var hour = $('#startHour').val();
-                var nbCar = Math.round($('#nbHabit').val());
+                var nbCar = $('#nbHabit').val();
                 var percent = $('#carRepart').val();
 
-                if (nbCar == "" || nbCar < 1) {
+                if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
                     $('#alertEmptyHabitation').show();
                     setTimeout(function () {
                         $('#alertEmptyHabitation').hide();
@@ -637,6 +634,8 @@ app.simulationCreationView = Backbone.View.extend({
                     vehicle_count: parseInt(this.vehicle_count)
                 };
                 this.zones.push(newZone);
+
+                this.colorCouple++;
                 console.log(this.zones);
                 break;
         }
@@ -721,15 +720,11 @@ app.simulationCreationView = Backbone.View.extend({
     launchSim: function () {
         //Envoyer les infos au serveur (nom, précision, heures, etc.) et afficher barre chargement
         var name = $('#simName').val();
-<<<<<<< HEAD
-        var sampling_rate = Math.round($('#sampling_rate').val());
-=======
         var sampling_rate = $('#sampling_rate').val();
         var random_traffic = $('#random_traffic').is(':checked');
->>>>>>> origin/feature/ROADC-240
         var self = this;
 
-        if (name == "" || sampling_rate == "" || sampling_rate < 1) {
+        if (name == "" || sampling_rate == "" || sampling_rate < 0 || sampling_rate > 920) {
             $('#alertEmptyStart').show();
             setTimeout(function () {
                 $('#alertEmptyStart').hide();
@@ -767,13 +762,13 @@ app.simulationCreationView = Backbone.View.extend({
     getProgressSimu: function (id) {
         var self = this;
         $.ajax({
-                url: Backbone.Collection.prototype.absURL + "/api/simulations/"+id+"/progress",
-                type: "GET",
-                headers: {
-                    "Content-Type": "application/json; charset=utf-8",
-                },
-                contentType: "application/json"
-            })
+            url: Backbone.Collection.prototype.absURL + "/api/simulations/"+id+"/progress",
+            type: "GET",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            contentType: "application/json"
+        })
             .done(function (data, textStatus, jqXHR) {
                 console.log(data);
                 if (parseInt(data) < 100) {
@@ -863,4 +858,3 @@ app.simulationCreationView = Backbone.View.extend({
         console.log('cancel, step:' + this.step);
     }
 });
-
