@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.BaseActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Me;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
@@ -22,7 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends BaseActivity{
+public class LoginActivity extends BaseActivity {
 
 
     @BindView(R.id.email_login) EditText mEmailText;

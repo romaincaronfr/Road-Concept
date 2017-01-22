@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid;
+package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import fr.enssat.lanniontech.roadconceptandroid.HomeActivity;
+import fr.enssat.lanniontech.roadconceptandroid.LoginActivity;
+import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;
 import retrofit2.Call;

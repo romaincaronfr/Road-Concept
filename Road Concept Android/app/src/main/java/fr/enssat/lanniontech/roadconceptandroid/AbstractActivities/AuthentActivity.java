@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid;
+package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
+import fr.enssat.lanniontech.roadconceptandroid.LoginActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;

@@ -18,6 +18,7 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.NavigationDrawerActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapAdapter;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;

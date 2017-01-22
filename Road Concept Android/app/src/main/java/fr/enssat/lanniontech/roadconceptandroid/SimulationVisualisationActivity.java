@@ -10,6 +10,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.InfosMap;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;

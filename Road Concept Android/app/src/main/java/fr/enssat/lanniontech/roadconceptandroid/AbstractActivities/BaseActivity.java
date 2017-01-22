@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid;
+package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.AddCookiesInterceptor;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ReceivedCookiesInterceptor;
