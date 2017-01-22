@@ -4,9 +4,11 @@ package fr.enssat.lanniontech.core.vehicleElements;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Side {
@@ -104,5 +106,9 @@ public class Side {
 
     public double getLength() {
         return length;
+    }
+
+    public List<TrajectoryInformation> getInformations(double distanceOut){
+        return myTrajectory.getInformations(this,distanceOut);
     }
 }

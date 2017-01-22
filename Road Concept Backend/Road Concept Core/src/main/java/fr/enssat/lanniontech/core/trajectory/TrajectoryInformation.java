@@ -45,7 +45,7 @@ public class TrajectoryInformation implements Cloneable{
         return distance > distanceOut;
     }
 
-    static TrajectoryInformation getNearest(List<TrajectoryInformation> Infos){
+    public static TrajectoryInformation getNearest(List<TrajectoryInformation> Infos){
         TrajectoryInformation nearest = Infos.get(0);
         for (int i = 1; i < Infos.size(); i++) {
             if(nearest.getDistance() > Infos.get(i).getDistance()){

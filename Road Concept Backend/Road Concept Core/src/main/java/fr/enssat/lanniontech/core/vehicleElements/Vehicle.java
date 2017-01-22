@@ -5,9 +5,11 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.trajectory.TrajectoryInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Vehicle {
@@ -53,13 +55,14 @@ public class Vehicle {
      */
     public void updateAcceleration() {
         double freeDistance = AI.getFreeDistance(roadMaxSpeed());
-        double nextCarDist = frontSide.getDistanceToNextCar(freeDistance);
+        List<TrajectoryInformation> informations = frontSide.getInformations(freeDistance);
+        TrajectoryInformation information = TrajectoryInformation.getNearest(informations);
 
         double nextCarSpeed = AI.getSpeed();
-        if (nextCarDist < freeDistance) {
-            nextCarSpeed = getFrontSide().getNextCarSpeed();
+        if (!information.isFree()) {
+            nextCarSpeed = information.getSpeed();
         }
-        getAI().updateAcceleration(nextCarDist, nextCarSpeed, roadMaxSpeed());
+        getAI().updateAcceleration(information.getDistance(), nextCarSpeed, roadMaxSpeed());
     }
 
     private double roadMaxSpeed() {
