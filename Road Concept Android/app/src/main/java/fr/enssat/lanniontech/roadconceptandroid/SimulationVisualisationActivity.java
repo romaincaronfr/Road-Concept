@@ -2,6 +2,8 @@ package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,6 +12,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.InfosMap;
@@ -19,9 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback, OnNeedLoginListener {
+public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback, OnNeedLoginListener, View.OnClickListener {
 
     private static final int GET_FEATURES_LIST_REQUEST_CODE = 1004;
+
+    @BindView(R.id.buttonBackSImu) Button mButtonBack;
+    @BindView(R.id.buttonNextSimu) Button mButtonNext;
 
     private GoogleMap mMap;
     private String mUuid;
@@ -29,25 +36,28 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private int mSamplingRate;
     private String mLivingFeatureUUID;
     private String mWorkingFeatureUUID;
-    private int mDepartureLivingS;
+    private int mCurrentTimestamp;
     private FeatureCollection mFeatureCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation_visualisation);
+        ButterKnife.bind(this);
+        mButtonBack.setOnClickListener(this);
+        mButtonNext.setOnClickListener(this);
         Intent intent = getIntent();
         mUuid = intent.getStringExtra(MapSimulationListActivity.INTENT_UUID_SIMULATION);
         mMapID = intent.getIntExtra(MapSimulationListActivity.INTENT_MAPID_SIMULATION,-1);
         mSamplingRate = intent.getIntExtra(MapSimulationListActivity.INTENT_SAMPLINGRATE_SIMULATION,-1);
         mLivingFeatureUUID = intent.getStringExtra(MapSimulationListActivity.INTENT_LIVINGUUID_SIMULATION);
         mWorkingFeatureUUID = intent.getStringExtra(MapSimulationListActivity.INTENT_WORKINGUUID_SIMULATION);
-        mDepartureLivingS = intent.getIntExtra(MapSimulationListActivity.INTENT_DEPARTURELIVINGS_SIMULATION,-1);
+        mCurrentTimestamp = intent.getIntExtra(MapSimulationListActivity.INTENT_DEPARTURELIVINGS_SIMULATION,-1);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        setTitle(mDepartureLivingS);
+        setTitle(getSecondInStringFormat(mCurrentTimestamp));
     }
 
 
@@ -74,11 +84,13 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         int h = (int) Math.floor(seconds / 3600);
         int m = (int) Math.floor((seconds % 3600) / 60);
         int s = (seconds % 3600) % 60;
-        h = h < 10 ? '0' + h : h;
-        m = m < 10 ? '0' + m : m;
-        s = s < 10 ? '0' + s : s;
-        String time = String.valueOf(h + ':' + m + ':' + s);
-        return time;
+        String hString = String.valueOf(h);
+        String mString = String.valueOf(m);
+        String sString = String.valueOf(s);
+        hString = h<10 ? '0'+hString : hString;
+        mString = m<10 ? '0'+mString : mString;
+        sString = s<10 ? '0'+sString : sString;
+        return hString+ ":"+mString+":"+sString;
     }
 
     private void getFeaturesCollection(){
@@ -89,7 +101,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
             public void onResponse(Call<InfosMap> call, Response<InfosMap> response) {
                 if (response.isSuccessful()){
                     mFeatureCollection = response.body().getFeatureCollection();
-                    //TODO draw les features
+                    //TODO créer une fonction pour draw les features
                 } else {
                     if (response.code() == 401){
                         refreshLogin(SimulationVisualisationActivity.this, GET_FEATURES_LIST_REQUEST_CODE);
@@ -116,5 +128,31 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                     goToLogin();
                 }
         }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case (R.id.buttonBackSImu):
+                if (mCurrentTimestamp > 0){
+                    //DO SOMETHING
+                }
+                break;
+            case (R.id.buttonNextSimu):
+                if (mCurrentTimestamp < 86400){
+                    //DO SOMETHING
+                }
+                break;
+        }
+    }
+
+    private void disableElements(){
+        mButtonBack.setEnabled(false);
+        mButtonNext.setEnabled(false);
+    }
+
+    private void enableElements(){
+        mButtonBack.setEnabled(true);
+        mButtonNext.setEnabled(true);
     }
 }

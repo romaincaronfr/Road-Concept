@@ -205,7 +205,6 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     @Override
     public void recyclerViewListClicked(View v, int position) {
         Simulation simulation = mMapSimulationsOverAdapter.getmSimulationList().get(position);
-        //TODO Changer avec la bonne activité une fois créer.
         Intent intent = new Intent(this,SimulationVisualisationActivity.class);
         intent.putExtra(INTENT_UUID_SIMULATION,simulation.getUuid());
         intent.putExtra(INTENT_MAPID_SIMULATION,simulation.getMapID());
