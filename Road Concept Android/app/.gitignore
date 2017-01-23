@@ -84,4 +84,5 @@ captures/
 
 # Keystore files
 *.jks
-/src/main/res/values/api_keys.xml
+/src/release/res/values/google_maps_api.xml
+/src/debug/res/values/google_maps_api.xml
