@@ -112,26 +112,26 @@ public class SimpleTrajectory extends Trajectory {
         double distance;
 
         int pos = vehiclesSides.indexOf(side);
-        if (pos == vehiclesSides.size() - 1) {
-            for (TrajectoryJunction destination : destinationsTrajectories.values()) {
-                distance = Math.abs(side.getPos() - destination.getSourcePos());
-                if(distance < distanceOut){
-                    informator.addJunction(distance,destination);
-                }else{
-                    informator.addInformation(
-                            new TrajectoryInformation(
-                                    distance,
-                                    0,
-                                    InformationType.FREE));
-                }
-            }
-        } else {
+        if (pos != vehiclesSides.size() - 1) {
             distance = Math.abs(vehiclesSides.get(pos + 1).getPos() - side.getPos());
             informator.addInformation(
                     new TrajectoryInformation(
                             distance,
                             vehiclesSides.get(pos + 1).getMyVehicle().getSpeed(),
                             InformationType.VEHICLE));
+        }
+
+        for (TrajectoryJunction destination : destinationsTrajectories.values()) {
+            distance = Math.abs(side.getPos() - destination.getSourcePos());
+            if(distance < distanceOut){
+                informator.addJunction(distance,destination);
+            }else{
+                informator.addInformation(
+                        new TrajectoryInformation(
+                                distance,
+                                0,
+                                InformationType.FREE));
+            }
         }
         informator.computeInformations();
 
@@ -166,28 +166,28 @@ public class SimpleTrajectory extends Trajectory {
                                 nearestSide.getMyVehicle().getSpeed(),
                                 InformationType.VEHICLE));
             }
-        }else{
-            for (TrajectoryJunction source : sourcesTrajectories.values()) {
-                tempDistance = Math.abs(source.getDestinationPos() - pos);
-                if(tempDistance != 0){
-                    tempDistance += distance;
-                    if(tempDistance > informator.getDistanceOut()){
-                        informator.addInformation(new TrajectoryInformation(tempDistance,0,InformationType.FREE));
-                    }else {
-                        informator.addJunction(tempDistance,source);
-                    }
+        }
+
+        for (TrajectoryJunction source : sourcesTrajectories.values()) {
+            tempDistance = Math.abs(source.getDestinationPos() - pos);
+            if(tempDistance != 0){
+                tempDistance += distance;
+                if(tempDistance > informator.getDistanceOut()){
+                    informator.addInformation(new TrajectoryInformation(tempDistance,0,InformationType.FREE));
+                }else {
+                    informator.addJunction(tempDistance,source);
                 }
             }
+        }
 
-            for (TrajectoryJunction source : sourcesTrajectories.values()) {
-                tempDistance = Math.abs(source.getSourcePos() - pos);
-                if(tempDistance != 0){
-                    tempDistance += distance;
-                    if(tempDistance > informator.getDistanceOut()){
-                        informator.addInformation(new TrajectoryInformation(tempDistance,0,InformationType.FREE));
-                    }else {
-                        informator.addJunction(tempDistance,source);
-                    }
+        for (TrajectoryJunction source : sourcesTrajectories.values()) {
+            tempDistance = Math.abs(source.getSourcePos() - pos);
+            if(tempDistance != 0){
+                tempDistance += distance;
+                if(tempDistance > informator.getDistanceOut()){
+                    informator.addInformation(new TrajectoryInformation(tempDistance,0,InformationType.FREE));
+                }else {
+                    informator.addJunction(tempDistance,source);
                 }
             }
         }
