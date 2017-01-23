@@ -116,7 +116,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
 
     private void getSimulationList(){
         mSwipeRefreshLayout.setRefreshing(true);
-        Call<List<Simulation>> simulationList = roadConceptSimulationInterface.getSimulationsFor1Map(String.valueOf(mId));
+        Call<List<Simulation>> simulationList = roadConceptSimulationInterface.getSimulationsFor1Map(mId);
         simulationList.enqueue(new Callback<List<Simulation>>() {
             @Override
             public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {

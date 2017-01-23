@@ -34,8 +34,6 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private String mUuid;
     private int mMapID;
     private int mSamplingRate;
-    private String mLivingFeatureUUID;
-    private String mWorkingFeatureUUID;
     private int mCurrentTimestamp;
     private FeatureCollection mFeatureCollection;
 
@@ -57,6 +55,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         setTitle(getSecondInStringFormat(mCurrentTimestamp));
+        disableElements();
     }
 
 
@@ -77,6 +76,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        getFeaturesCollection();
     }
 
     private String getSecondInStringFormat(int seconds){
@@ -94,13 +94,13 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
 
     private void getFeaturesCollection(){
         RoadConceptMapInterface roadConceptMapInterface = getRetrofitService(RoadConceptMapInterface.class);
-        Call<InfosMap> infosMapCall = roadConceptMapInterface.getMapFeatures(String.valueOf(mMapID));
+        Call<InfosMap> infosMapCall = roadConceptMapInterface.getMapFeatures(mMapID);
         infosMapCall.enqueue(new Callback<InfosMap>() {
             @Override
             public void onResponse(Call<InfosMap> call, Response<InfosMap> response) {
                 if (response.isSuccessful()){
                     mFeatureCollection = response.body().getFeatureCollection();
-                    //TODO créer une fonction pour draw les features
+                    getZones();
                 } else {
                     if (response.code() == 401){
                         refreshLogin(SimulationVisualisationActivity.this, GET_FEATURES_LIST_REQUEST_CODE);
@@ -134,15 +134,33 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         switch (view.getId()){
             case (R.id.buttonBackSImu):
                 if (mCurrentTimestamp > 0){
-                    //DO SOMETHING
+                    mCurrentTimestamp -= mSamplingRate;
+                    disableElements();
+                    updateCongestion();
                 }
                 break;
             case (R.id.buttonNextSimu):
                 if (mCurrentTimestamp < 86400){
-                    //DO SOMETHING
+                    mCurrentTimestamp += mSamplingRate;
+                    disableElements();
+                    updateCongestion();
                 }
                 break;
         }
+    }
+
+    private void getZones(){
+        //TODO récupérer les zones et mettre les marques
+
+        //A ajouter dans le response.isSuccessfull
+        updateCongestion();
+    }
+
+    private void updateCongestion(){
+        //TODO Récupérer les nouvelles congestions
+
+        //A faire (que la requêtes soit ok ou non
+        enableElements();
     }
 
     private void disableElements(){

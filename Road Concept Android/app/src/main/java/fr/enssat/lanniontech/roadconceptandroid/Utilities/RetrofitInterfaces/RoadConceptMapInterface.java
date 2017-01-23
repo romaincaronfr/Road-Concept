@@ -18,5 +18,5 @@ public interface RoadConceptMapInterface {
     Call<List<Map>> getMapList();
 
     @GET("api/maps/{mapID}")
-    Call<InfosMap> getMapFeatures(@Path("mapID") String mapID);
+    Call<InfosMap> getMapFeatures(@Path("mapID") int mapID);
 }

@@ -14,5 +14,5 @@ import retrofit2.http.Path;
 public interface RoadConceptSimulationsInterface {
 
     @GET("api/maps/{mapID}/simulations")
-    Call<List<Simulation>> getSimulationsFor1Map(@Path("mapID") String mapId);
+    Call<List<Simulation>> getSimulationsFor1Map(@Path("mapID") int mapId);
 }
