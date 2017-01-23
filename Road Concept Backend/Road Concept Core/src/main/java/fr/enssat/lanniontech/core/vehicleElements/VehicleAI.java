@@ -5,7 +5,7 @@ public class VehicleAI {
     private final double b;           //deceleration
     private final double T;           //gap time between two car
     private final double lambda = 4;  //function coefficient
-    private final double s0 = 2;      //minimum distance between two cars
+    private final double s0 = 5;      //minimum distance between two cars
 
     private double A;           //acceleration
     private double Va = 0;      //speed in m/s

@@ -102,7 +102,7 @@ public class VehicleManager {
         }
         Path myPath;
         try{
-            myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), false);
+            myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), gen.nextBoolean());
         }catch (DestinationUnreachableException e){
             e.printStackTrace();
             return false;
