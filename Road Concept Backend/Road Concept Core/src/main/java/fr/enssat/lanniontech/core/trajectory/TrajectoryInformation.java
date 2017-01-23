@@ -3,22 +3,24 @@ package fr.enssat.lanniontech.core.trajectory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrajectoryInformation implements Cloneable{
+public class TrajectoryInformation{
     private double distance;
     private double speed;
     private List<Trajectory> exploredTrajectories;
     private double distanceOut;
+    private int hopOut;
 
     public TrajectoryInformation(double distanceOut){
         this.distanceOut = distanceOut;
         distance = 0;
         speed = 0;
         exploredTrajectories = new ArrayList<>();
+        hopOut = 0;
     }
 
     public boolean addToDistance(double d){
         distance+=Math.abs(d);
-        return distance < distanceOut;
+        return !isFree();
     }
 
     public void addToExplored(Trajectory T){
@@ -42,7 +44,7 @@ public class TrajectoryInformation implements Cloneable{
     }
 
     public boolean isFree(){
-        return distance > distanceOut;
+        return distance > distanceOut || hopOut > 10;
     }
 
     public static TrajectoryInformation getNearest(List<TrajectoryInformation> Infos){
@@ -61,6 +63,7 @@ public class TrajectoryInformation implements Cloneable{
         for (Trajectory trajectory : exploredTrajectories) {
             T.addToExplored(trajectory);
         }
+        T.hopOut = hopOut;
         return T;
     }
 }
