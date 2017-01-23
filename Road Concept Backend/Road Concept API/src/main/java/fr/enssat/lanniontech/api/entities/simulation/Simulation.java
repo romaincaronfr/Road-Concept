@@ -24,7 +24,6 @@ public class Simulation implements SQLEntity {
     private int mapID; //TODO: Remove it when the FrontEnd is ready to change...
     private MapInfo mapInfo;
     private String creationDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-    @JsonProperty("sampling_rate")
     private int samplingRate;
     private boolean finish;
     @JsonProperty("random_traffic")
@@ -65,10 +64,12 @@ public class Simulation implements SQLEntity {
         this.name = name;
     }
 
+    @JsonProperty("samplingRate")
     public int getSamplingRate() {
         return samplingRate;
     }
 
+    @JsonProperty("sampling_rate")
     public void setSamplingRate(int samplingRate) {
         this.samplingRate = samplingRate;
     }
