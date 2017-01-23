@@ -32,7 +32,7 @@ public class TrajectoryInformator {
     }
 
     public void addJunction(Double distance,TrajectoryJunction junction){
-            if(exploredTrajectories.contains(junction.getSource())&&
+            if(exploredTrajectories.contains(junction.getSource()) &&
                     exploredTrajectories.contains(junction.getDestination())) {
                 junctions.put(distance,junction);
             }
@@ -52,11 +52,11 @@ public class TrajectoryInformator {
             TrajectoryJunction value = junctions.get(key);
 
             if(!exploredTrajectories.contains(value.getSource())){
-                //todo get junction & information
+                value.getSource().getInformations(value.getSourcePos(),key,this);
             }
 
             if(!exploredTrajectories.contains(value.getDestination())){
-                //todo get junction & information
+                value.getDestination().getInformations(value.getDestinationPos(),key,this);
             }
 
             junctions.remove(key);
