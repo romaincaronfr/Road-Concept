@@ -140,18 +140,6 @@ public abstract class Trajectory {
     public abstract void getInformations(double pos,double distance,TrajectoryInformator informator);
 
     /**
-     * return the speed of the vehicle ahead
-     */
-    @Deprecated
-    public abstract double getNextCarSpeed(Side side);
-
-    /**
-     * return the speed of the first car on the trajectory
-     */
-    @Deprecated
-    public abstract double getSpeedOfFirst();
-
-    /**
      * return the distance of the vehicle ahead
      */
     @Deprecated

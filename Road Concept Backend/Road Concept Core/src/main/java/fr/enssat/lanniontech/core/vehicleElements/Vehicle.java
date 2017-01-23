@@ -6,6 +6,7 @@ import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +56,8 @@ public class Vehicle {
      */
     public void updateAcceleration() {
         double freeDistance = AI.getFreeDistance(roadMaxSpeed());
-        List<TrajectoryInformation> informations = frontSide.getInformations(freeDistance);
-        TrajectoryInformation information = TrajectoryInformation.getNearest(informations);
+        TrajectoryInformator informator = frontSide.getInformations(freeDistance);
+        TrajectoryInformation information = informator.getNearest();
 
         double nextCarSpeed = AI.getSpeed();
         if (!information.isFree()) {

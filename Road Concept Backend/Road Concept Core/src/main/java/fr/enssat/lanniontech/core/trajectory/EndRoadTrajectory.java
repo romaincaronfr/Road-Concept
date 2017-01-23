@@ -45,13 +45,6 @@ public class EndRoadTrajectory extends Trajectory {
 
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            distance = Math.abs(vehiclesSides.get(pos + 1).getPos() - side.getPos());
-            informator.addInformation(
-                    new TrajectoryInformation(
-                            distance,
-                            vehiclesSides.get(pos + 1).getMyVehicle().getSpeed(),
-                            InformationType.VEHICLE));
-        } else {
             distance = Math.abs(side.getPos() - destination.getSourcePos());
             if(distance < distanceOut){
                 informator.addJunction(distance,destination);
@@ -62,6 +55,13 @@ public class EndRoadTrajectory extends Trajectory {
                                 0,
                                 InformationType.FREE));
             }
+        } else {
+            distance = Math.abs(vehiclesSides.get(pos + 1).getPos() - side.getPos());
+            informator.addInformation(
+                    new TrajectoryInformation(
+                            distance,
+                            vehiclesSides.get(pos + 1).getMyVehicle().getSpeed(),
+                            InformationType.VEHICLE));
         }
         informator.computeInformations();
 
@@ -118,25 +118,6 @@ public class EndRoadTrajectory extends Trajectory {
                     informator.addJunction(tempDistance,destination);
                 }
             }
-        }
-    }
-
-    @Override
-    public double getSpeedOfFirst() {
-        if (vehiclesSides.isEmpty()) {
-            return destination.getDestination().getSpeedOfFirst();
-        } else {
-            return vehiclesSides.get(0).getMyVehicle().getSpeed();
-        }
-    }
-
-    @Override
-    public double getNextCarSpeed(Side side) {
-        int pos = vehiclesSides.indexOf(side);
-        if (pos == vehiclesSides.size() - 1) {
-            return destination.getDestination().getSpeedOfFirst();
-        } else {
-            return vehiclesSides.get(pos + 1).getMyVehicle().getSpeed();
         }
     }
 

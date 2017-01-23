@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,14 +85,6 @@ public class Side {
         }
     }
 
-    public double getDistanceToNextCar(double freeDistance) {
-        return myTrajectory.getDistanceToNext(this, freeDistance);
-    }
-
-    public double getNextCarSpeed() {
-        return myTrajectory.getNextCarSpeed(this);
-    }
-
     public Position getGPS() {
         return myTrajectory.getGPS(pos);
     }
@@ -108,7 +101,7 @@ public class Side {
         return length;
     }
 
-    public List<TrajectoryInformation> getInformations(double distanceOut){
+    public TrajectoryInformator getInformations(double distanceOut){
         return myTrajectory.getInformations(this,distanceOut);
     }
 }
