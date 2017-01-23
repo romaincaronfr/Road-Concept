@@ -3,6 +3,8 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Congestion;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
 import java.util.ArrayList;
@@ -133,9 +135,9 @@ public abstract class Trajectory {
      */
     public abstract TrajectoryJunction getNext(UUID destination);
 
-    public abstract List<TrajectoryInformation> getInformations(Side side,double distanceOut);
+    public abstract TrajectoryInformator getInformations(Side side, double distanceOut);
 
-    public abstract List<TrajectoryInformation> getInformations(TrajectoryInformation I,double pos);
+    public abstract void getInformations(double pos,double distance,TrajectoryInformator informator);
 
     /**
      * return the speed of the vehicle ahead

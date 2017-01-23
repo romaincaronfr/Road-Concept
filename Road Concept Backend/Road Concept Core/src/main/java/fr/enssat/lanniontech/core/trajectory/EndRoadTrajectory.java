@@ -3,12 +3,12 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.trajectory.informations.InformationType;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class EndRoadTrajectory extends Trajectory {
     private TrajectoryJunction destination;
@@ -38,72 +38,47 @@ public class EndRoadTrajectory extends Trajectory {
     }
 
     @Override
-    public List<TrajectoryInformation> getInformations(Side side,double distanceOut) {
-        List<TrajectoryInformation> trajectoryInformations = new ArrayList<>();
+    public TrajectoryInformator getInformations(Side side, double distanceOut) {
+        TrajectoryInformator informator = new TrajectoryInformator(distanceOut);
+        double distance;
+
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {
-            //if we are the last car
-            TrajectoryInformation I = new TrajectoryInformation(distanceOut);
-            I.addToExplored(this);
-
-            if(I.addToDistance(destination.getDestinationPos()-side.getPos())){
-                trajectoryInformations.addAll(destination.getDestination().
-                        getInformations(I,destination.getSourcePos()));
-            }else{
-                trajectoryInformations.add(I);
+            distance = Math.abs(vehiclesSides.get(pos + 1).getPos() - side.getPos());
+            if(distance < distanceOut){
+                informator.addInformation(
+                        new TrajectoryInformation(
+                                distance,
+                                vehiclesSides.get(pos + 1).getMyVehicle().getSpeed(),
+                                InformationType.VEHICLE));
+            }else {
+                informator.addInformation(
+                        new TrajectoryInformation(
+                                distance,
+                                0,
+                                InformationType.FREE));
             }
-        }else {
-            TrajectoryInformation I = new TrajectoryInformation(distanceOut);
-            I.addToDistance(vehiclesSides.get(pos + 1).getPos() - side.getPos());
-            I.setSpeed(vehiclesSides.get(pos + 1).getMyVehicle().getSpeed());
-            trajectoryInformations.add(I);
+        } else {
+            distance = Math.abs(side.getPos() - destination.getSourcePos());
+            if(distance < distanceOut){
+                informator.addJunction(distance,destination);
+            }else{
+                informator.addInformation(
+                        new TrajectoryInformation(
+                                distance,
+                                0,
+                                InformationType.FREE));
+            }
         }
+        informator.setExplored(this);
+        informator.computeInformations();
 
-        return trajectoryInformations;
+        return informator;
     }
 
     @Override
-    public List<TrajectoryInformation> getInformations(TrajectoryInformation I, double pos) {
-        List<TrajectoryInformation> trajectoryInformations = new ArrayList<>();
-        TrajectoryInformation TI;
-        I.addToExplored(this);
-        if(vehiclesSides.isEmpty()){
-            if(!I.isExplored(source.getSource())){
-                TI = I.clone();
-                if(TI.addToDistance(source.getSourcePos()-pos)){
-                    trajectoryInformations.addAll(source.getSource().getInformations(TI,source.getSourcePos()));
-                }else {
-                    trajectoryInformations.add(I);
-                }
-            }
-
-            if(!I.isExplored(destination.getDestination())){
-                TI = I.clone();
-                if(TI.addToDistance(destination.getDestinationPos()-pos)){
-                    trajectoryInformations.addAll(destination.getDestination().getInformations(TI,destination.getDestinationPos()));
-                }else {
-                    trajectoryInformations.add(I);
-                }
-            }
-        }else{
-            Side nearestSide = vehiclesSides.get(0);
-            for (int i = 1; i < vehiclesSides.size(); i++) {
-                if(Math.abs(nearestSide.getPos()-pos) >
-                        Math.abs(vehiclesSides.get(i).getPos()-pos)){
-                    nearestSide = vehiclesSides.get(i);
-                }
-            }
-            I.addToDistance(Math.abs(nearestSide.getPos()-pos));
-            double speed = nearestSide.getMyVehicle().getSpeed();
-            if(nearestSide.getLength()>0){
-                I.setSpeed(speed);
-            }else {
-                I.setSpeed(-speed);
-            }
-
-        }
-
-        return trajectoryInformations;
+    public void getInformations(double pos, double distance, TrajectoryInformator informator) {
+        Map<Double, TrajectoryJunction> trajectoryJunctionMap = new HashMap<>();
     }
 
     @Override

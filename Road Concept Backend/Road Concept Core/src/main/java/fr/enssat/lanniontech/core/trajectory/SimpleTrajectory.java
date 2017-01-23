@@ -3,6 +3,7 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.PosFunction;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,7 +104,7 @@ public class SimpleTrajectory extends Trajectory {
     }
 
     @Override
-    public List<TrajectoryInformation> getInformations(Side side,double distanceOut) {
+    public List<TrajectoryInformation> getInformations(Side side, double distanceOut) {
         List<TrajectoryInformation> trajectoryInformations = new ArrayList<>();
         int pos = vehiclesSides.indexOf(side);
         if (pos == vehiclesSides.size() - 1) {

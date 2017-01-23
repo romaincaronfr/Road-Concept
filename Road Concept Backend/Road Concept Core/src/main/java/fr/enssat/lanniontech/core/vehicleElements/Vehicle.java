@@ -5,7 +5,7 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
-import fr.enssat.lanniontech.core.trajectory.TrajectoryInformation;
+import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
