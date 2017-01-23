@@ -39,8 +39,6 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
     public static final String INTENT_UUID_SIMULATION = "uuid_simulation";
     public static final String INTENT_MAPID_SIMULATION = "mapid_simulation";
     public static final String INTENT_SAMPLINGRATE_SIMULATION = "samplingRate_simulation";
-    public static final String INTENT_LIVINGUUID_SIMULATION = "livingFeatureUUID_simulation";
-    public static final String INTENT_WORKINGUUID_SIMULATION = "workingFeatureUUID_simulation";
     public static final String INTENT_DEPARTURELIVINGS_SIMULATION = "departureLivingS_simulation";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
