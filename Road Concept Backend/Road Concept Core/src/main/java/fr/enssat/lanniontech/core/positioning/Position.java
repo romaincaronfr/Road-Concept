@@ -4,7 +4,7 @@ import fr.enssat.lanniontech.core.Tools;
 
 public class Position {
 
-    private final double E = 0.00000001;
+    private final double E = 0.000001;
 
     private Double latitude;
     private Double longitude;
