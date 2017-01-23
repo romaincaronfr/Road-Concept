@@ -41,7 +41,8 @@ public class VehicleManager {
                                        UUID A1, UUID A2) {
         Road R1 = roadManager.getRoad(A1);
         Road R2 = roadManager.getRoad(A2);
-        Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage,3600);
+        //Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage,vehicles/10.);
+        Generator G = new DiracGenerator(goTimestamp, vehicles, carPercentage);
         VehicleBuffer B = new VehicleBuffer(R1,R2);
         vehiclesBuffers.put(G,B);
 
