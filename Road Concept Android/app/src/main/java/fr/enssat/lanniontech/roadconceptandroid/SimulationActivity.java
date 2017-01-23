@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.NavigationDrawerActivity;
 
 public class SimulationActivity extends NavigationDrawerActivity {
 
