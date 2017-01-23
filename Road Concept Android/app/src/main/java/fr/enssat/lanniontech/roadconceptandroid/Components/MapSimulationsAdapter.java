@@ -14,6 +14,7 @@ import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 
 /**
  * Created by Romain on 13/01/2017.
@@ -22,15 +23,19 @@ import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 public class MapSimulationsAdapter extends RecyclerView.Adapter<MapSimulationsAdapter.MapSimulationsHolder> {
 
     private List<Simulation> mSimulationList;
+    private Boolean mPutListener;
+    private RecyclerViewClickListener mRecyclerViewClickListener;
 
-    public MapSimulationsAdapter(List<Simulation> mSimulationList) {
+    public MapSimulationsAdapter(List<Simulation> mSimulationList, Boolean putListener, RecyclerViewClickListener itemListener) {
         this.mSimulationList = mSimulationList;
+        this.mPutListener = putListener;
+        this.mRecyclerViewClickListener = itemListener;
     }
 
     @Override
     public MapSimulationsHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cell_map_simulation_list_card,parent,false);
-        return new MapSimulationsHolder(view);
+        return new MapSimulationsHolder(view,mPutListener);
     }
 
     @Override
@@ -57,17 +62,20 @@ public class MapSimulationsAdapter extends RecyclerView.Adapter<MapSimulationsAd
         notifyDataSetChanged();
     }
 
-    class MapSimulationsHolder extends RecyclerView.ViewHolder {
+    class MapSimulationsHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView textViewSimulationName;
         private TextView textViewSimulationDate;
         private View separatorBar;
 
-        MapSimulationsHolder(View itemView) {
+        MapSimulationsHolder(View itemView, Boolean putListener) {
             super(itemView);
             textViewSimulationName = (TextView) itemView.findViewById(R.id.textSimuName);
             textViewSimulationDate = (TextView) itemView.findViewById(R.id.textDateSimu);
             separatorBar = itemView.findViewById(R.id.viewBarSeparatorOver);
+            if (putListener) {
+                itemView.setOnClickListener(this);
+            }
         }
 
         void bind(Simulation simulation,Boolean printSeperator){
@@ -77,6 +85,11 @@ public class MapSimulationsAdapter extends RecyclerView.Adapter<MapSimulationsAd
             Log.d("SimulationHolder","bind");
             textViewSimulationName.setText(simulation.getName());
             textViewSimulationDate.setText(simulation.getCreationDate());
+        }
+
+        @Override
+        public void onClick(View v) {
+            mRecyclerViewClickListener.recyclerViewListClicked(v,getLayoutPosition());
         }
     }
 }

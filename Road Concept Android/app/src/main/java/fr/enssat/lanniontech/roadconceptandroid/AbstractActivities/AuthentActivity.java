@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid;
+package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
+import fr.enssat.lanniontech.roadconceptandroid.LoginActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,5 +84,10 @@ public abstract class AuthentActivity extends BaseActivity {
                 }
             });
         }
+    }
+
+    protected void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }

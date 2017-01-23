@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +18,18 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.NavigationDrawerActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapAdapter;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptMapInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptMapInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener{
+public class HomeActivity extends NavigationDrawerActivity implements OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener, RecyclerViewClickListener {
 
     private static final int GET_MAP_LIST_REQUEST_CODE = 1500;
     public static final String INTENT_MAP_ID = "MAP_ID";
@@ -144,9 +144,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                     Log.d(TAG,"RESULT OK");
                     getMapList();
                 } else {
-                    Intent intent = new Intent(this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    goToLogin();
                 }
         }
     }

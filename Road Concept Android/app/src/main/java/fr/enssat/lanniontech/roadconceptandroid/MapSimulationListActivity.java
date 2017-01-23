@@ -23,18 +23,26 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapSimulationsAdapter;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptSimulationsInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptSimulationsInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener{
+public class MapSimulationListActivity extends AuthentActivity implements SwipeRefreshLayout.OnRefreshListener, OnNeedLoginListener, RecyclerViewClickListener{
 
     private static final int GET_SIMULATION_LIST_REQUEST_CODE = 1003;
+    public static final String INTENT_UUID_SIMULATION = "uuid_simulation";
+    public static final String INTENT_MAPID_SIMULATION = "mapid_simulation";
+    public static final String INTENT_SAMPLINGRATE_SIMULATION = "samplingRate_simulation";
+    public static final String INTENT_LIVINGUUID_SIMULATION = "livingFeatureUUID_simulation";
+    public static final String INTENT_WORKINGUUID_SIMULATION = "workingFeatureUUID_simulation";
+    public static final String INTENT_DEPARTURELIVINGS_SIMULATION = "departureLivingS_simulation";
 
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.backgroundImageView) ImageView mImageView;
@@ -74,8 +82,8 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
         mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(this,1));
         mRecyclerViewSimulationInProgress.setLayoutManager(new GridLayoutManager(this,1));
         List<Simulation> simulationList = new ArrayList<>();
-        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList);
-        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList);
+        mMapSimulationsOverAdapter = new MapSimulationsAdapter(simulationList,true,this);
+        mMapSimulationsInProgressAdapter = new MapSimulationsAdapter(simulationList,false,this);
         mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
         mRecyclerViewSimulationInProgress.setAdapter(mMapSimulationsInProgressAdapter);
         mButtonMoreInfoSimulationInProgress.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +116,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
 
     private void getSimulationList(){
         mSwipeRefreshLayout.setRefreshing(true);
-        Call<List<Simulation>> simulationList = roadConceptSimulationInterface.getSimulationsFor1Map(String.valueOf(mId));
+        Call<List<Simulation>> simulationList = roadConceptSimulationInterface.getSimulationsFor1Map(mId);
         simulationList.enqueue(new Callback<List<Simulation>>() {
             @Override
             public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {
@@ -171,9 +179,7 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
                 if (result) {
                     getSimulationList();
                 } else {
-                    Intent intent = new Intent(this,LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    goToLogin();
                 }
         }
     }
@@ -194,5 +200,16 @@ public class MapSimulationListActivity extends AuthentActivity implements SwipeR
             }
         });
         alertDialog.show();
+    }
+
+    @Override
+    public void recyclerViewListClicked(View v, int position) {
+        Simulation simulation = mMapSimulationsOverAdapter.getmSimulationList().get(position);
+        Intent intent = new Intent(this,SimulationVisualisationActivity.class);
+        intent.putExtra(INTENT_UUID_SIMULATION,simulation.getUuid());
+        intent.putExtra(INTENT_MAPID_SIMULATION,simulation.getMapID());
+        intent.putExtra(INTENT_SAMPLINGRATE_SIMULATION,simulation.getSamplingRate());
+        intent.putExtra(INTENT_DEPARTURELIVINGS_SIMULATION,simulation.getDepartureLivingS());
+        startActivity(intent);
     }
 }

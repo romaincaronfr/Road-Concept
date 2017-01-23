@@ -1,4 +1,4 @@
-package fr.enssat.lanniontech.roadconceptandroid;
+package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,16 +14,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import fr.enssat.lanniontech.roadconceptandroid.HomeActivity;
+import fr.enssat.lanniontech.roadconceptandroid.LoginActivity;
+import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.Constants;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.RoadConceptUserInterface;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptUserInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -166,7 +166,7 @@ public abstract class NavigationDrawerActivity extends AuthentActivity implement
         });
     }
 
-    private void startActivityWithClass (Class<?> T){
+    protected void startActivityWithClass (Class<?> T){
         Intent intent = new Intent(this,T);
         startActivity(intent);
     }
