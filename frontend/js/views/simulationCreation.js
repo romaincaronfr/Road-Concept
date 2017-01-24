@@ -594,7 +594,7 @@ app.simulationCreationView = Backbone.View.extend({
                 var nbCar = $('#nbHabit').val();
                 var percent = $('#carRepart').val();
 
-                if (nbCar == "" || nbCar < 0 || nbCar > 1000) {
+                if (nbCar == "" || nbCar < 1) {
                     $('#alertEmptyHabitation').show();
                     setTimeout(function () {
                         $('#alertEmptyHabitation').hide();
