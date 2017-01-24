@@ -104,4 +104,14 @@ public class Side {
     public TrajectoryInformator getInformations(double distanceOut){
         return myTrajectory.getInformations(this,distanceOut);
     }
+
+    public Trajectory getMyTrajectory() {
+        return myTrajectory;
+    }
+
+    public void resetPath(){
+        pathStep = 1;
+        myRoad = myVehicle.getPathStep(0);
+        nextRoad = myVehicle.getPathStep(pathStep);
+    }
 }

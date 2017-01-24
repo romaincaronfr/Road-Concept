@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.core.managers.HistoryManager;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.positioning.SpaceTimePosition;
 import fr.enssat.lanniontech.core.roadElements.Lane;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import org.slf4j.Logger;
@@ -198,5 +199,19 @@ public class Vehicle {
         double AvgSpeed = Tools.mpsToKph(distanceDone / timeAlive);
         VehicleStats stats = new VehicleStats(this.ID, (int) AvgSpeed, (int) timeAlive, (int) distanceDone);
         return stats;
+    }
+
+    public Trajectory getTrajectory(){
+        if (backSide.getMyTrajectory() == frontSide.getMyTrajectory()){
+            return frontSide.getMyTrajectory();
+        }else {
+            return null;
+        }
+    }
+
+    public void updatePath(Path p) {
+        myPath = p;
+        frontSide.resetPath();
+        backSide.resetPath();
     }
 }

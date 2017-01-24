@@ -9,6 +9,7 @@ import fr.enssat.lanniontech.core.roadElements.roadSections.DualWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.OneWayRoadSection;
 import fr.enssat.lanniontech.core.roadElements.roadSections.RoadSection;
 import fr.enssat.lanniontech.core.roadElements.roads.Road;
+import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
@@ -153,5 +154,17 @@ public class VehicleManager {
             stats.add(V.getStats());
         }
         return stats;
+    }
+
+    public void updatePath(){
+        for (Vehicle activeVehicle : activeVehicles) {
+            Trajectory t = activeVehicle.getTrajectory();
+            if(t != null){
+                Path p = pathFinder.getPathTo(
+                        t, activeVehicle.getMyPath().getDestination().getRoadId(), gen.nextBoolean());
+
+                activeVehicle.updatePath(p);
+            }
+        }
     }
 }

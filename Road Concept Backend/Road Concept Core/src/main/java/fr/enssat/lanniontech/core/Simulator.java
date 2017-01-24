@@ -76,6 +76,7 @@ public class Simulator extends Observable implements Runnable {
             int j = samplingRate;
             int second = (int) (1 / precision);
             int k = second;
+            int l = 10;
             int timestamp = -1;
             for (long i = 0; i < stepCycles; i++) {
 
@@ -83,6 +84,13 @@ public class Simulator extends Observable implements Runnable {
                     timestamp++;
                     vehicleManager.updateBuffers(timestamp);
                     k = 1;
+                    l++;
+                    if(l == 10){
+                        l=1;
+                        vehicleManager.updatePath();
+                    }else {
+                        l++;
+                    }
                 } else {
                     k++;
                 }
