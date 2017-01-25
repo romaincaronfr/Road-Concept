@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageCellCardSimulation"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/ic_google_maps"
+            android:contentDescription="@string/description" />
+
+        <TextView
+            android:id="@+id/textCellCardMapSimulation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="20dp"
+            tools:text="Paris"
+            android:fontFamily="sans-serif"
+            android:drawableStart="@drawable/ic_place"
+            android:drawablePadding="5dp"
+            android:textColor="#333"
+            android:textSize="18sp"
+            android:textAlignment="viewStart" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textCellCardNameSimulation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                tools:text="Super simu"
+                android:fontFamily="sans-serif"
+                android:drawableStart="@drawable/ic_directions_car_24dp"
+                android:drawablePadding="5dp"
+                android:textColor="#333"
+                android:textSize="18sp"
+                android:layout_weight="1" />
+            <TextView
+                android:id="@+id/textCellCardDateSimulation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                tools:text="19 mai 2016"
+                android:fontFamily="sans-serif"
+                android:drawableStart="@drawable/ic_query_builder_black_24dp"
+                android:drawablePadding="5dp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="18sp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
