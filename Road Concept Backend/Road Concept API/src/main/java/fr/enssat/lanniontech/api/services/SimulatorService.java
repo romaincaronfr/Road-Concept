@@ -248,10 +248,9 @@ public class SimulatorService extends AbstractService implements Observer {
                 missing.setCongestionPercentage(0);
                 missing.setFeatureUUID(feature.getUuid());
                 missing.setTimestamp(timestamp);
-                congestions.add(missing)
+                congestions.add(missing);
             }
         }
-
         return congestions;
     }
 
