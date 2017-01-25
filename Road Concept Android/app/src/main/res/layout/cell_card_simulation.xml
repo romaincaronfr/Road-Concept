@@ -40,13 +40,16 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/textCellCardNameSimulation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
                 tools:text="Super simu"
                 android:fontFamily="sans-serif"
                 android:drawableStart="@drawable/ic_directions_car_24dp"
@@ -58,7 +61,6 @@
                 android:id="@+id/textCellCardDateSimulation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
                 tools:text="19 mai 2016"
                 android:fontFamily="sans-serif"
                 android:drawableStart="@drawable/ic_query_builder_black_24dp"
