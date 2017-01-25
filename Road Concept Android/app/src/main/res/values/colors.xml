@@ -17,4 +17,16 @@
     <color name="translucent_scrim_bottom_center">#0D000000</color>
     <color name="translucent_white">#B3ffffff</color>
     <color name="translucent_lat_blue">#992196F3</color>
+
+    <color name="congestion1">#33FF00</color>
+    <color name="congestion2">#66FD00</color>
+    <color name="congestion3">#99FF00</color>
+    <color name="congestion4">#CCFF00</color>
+    <color name="congestion5">#FFFF00</color>
+    <color name="congestion6">#FFCC00</color>
+    <color name="congestion7">#FF9900</color>
+    <color name="congestion8">#FF6600</color>
+    <color name="congestion9">#FF3300</color>
+    <color name="congestion10">#FF0000</color>
+
 </resources>

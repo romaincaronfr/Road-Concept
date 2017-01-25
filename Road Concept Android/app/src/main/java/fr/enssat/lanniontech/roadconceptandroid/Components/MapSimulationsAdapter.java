@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
-
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.R;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
+
+import java.util.List;
 
 /**
  * Created by Romain on 13/01/2017.
