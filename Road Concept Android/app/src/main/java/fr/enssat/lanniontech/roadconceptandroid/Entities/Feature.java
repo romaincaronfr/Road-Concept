@@ -1,8 +1,5 @@
 package fr.enssat.lanniontech.roadconceptandroid.Entities;
 
-/**
- * Created by Romain on 22/01/2017.
- */
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,9 +14,6 @@ public class Feature {
     @SerializedName("geometry")
     @Expose
     private Geometry geometry;
-    @SerializedName("id")
-    @Expose
-    private String id;
 
     public String getType() {
         return type;
@@ -43,14 +37,6 @@ public class Feature {
 
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
 }

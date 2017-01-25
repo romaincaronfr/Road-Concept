@@ -8,12 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
 
-import fr.enssat.lanniontech.roadconceptandroid.Entities.Map;
-import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.R;
-import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 
 /**

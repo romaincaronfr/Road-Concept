@@ -16,18 +16,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
 import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
-import fr.enssat.lanniontech.roadconceptandroid.Entities.Coordinates;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Feature;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.InfosMap;
+import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RetrofitInterfaces.RoadConceptMapInterface;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -55,6 +59,8 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation_visualisation);
+        mBoundsBuilder = new LatLngBounds.Builder();
+        mPolylines = new HashMap<>();
         ButterKnife.bind(this);
         mButtonBack.setOnClickListener(this);
         mButtonNext.setOnClickListener(this);
@@ -76,9 +82,34 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         handleMaxZoom();
-
+        handleMapTransparency();
         getFeaturesCollection();
+        updateMapTransparency(0.5f);
+    }
 
+    /**
+     * Value must be > 0 and < 1
+     * 1 => map background is fully visible
+     * 0 => map background is invisible
+     */
+    private void updateMapTransparency(float value) {
+        mTileOverlay.setTransparency(value);
+    }
+
+    private void handleMapTransparency() {
+        TileProvider tileProvider = new TileProvider() {
+            @Override
+            public Tile getTile(int i, int i1, int i2) {
+                byte[] bytes = ImageFactory.drawableToBytes(getResources().getDrawable(R.drawable.white_square, null));
+                View mapFragment = findViewById(R.id.map);
+                return new Tile(mapFragment.getWidth(), mapFragment.getHeight(), bytes);
+            }
+        };
+
+        TileOverlayOptions tileOverlayOptions = new TileOverlayOptions();
+        tileOverlayOptions.tileProvider(tileProvider);
+
+        mTileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
     }
 
     private void fitZoom() {
@@ -153,17 +184,17 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         for (Feature feature : mFeatureCollection) {
             PolylineOptions options = new PolylineOptions();
 
-            List<Coordinates> coordinates = feature.getGeometry().getCoordinates();
-            for (Coordinates coordinate : coordinates) {
+            List<List<Double>> coordinates = feature.getGeometry().getCoordinates();
+            for (List<Double> coordinate : coordinates) {
                 // can't use "addAll(...) since 'coordinates' are not instance of 'LatLng'
-                LatLng point = new LatLng(coordinate.getLatitude(), coordinate.getLongitude());
+                LatLng point = new LatLng(coordinate.get(1), coordinate.get(0));
                 options.add(point);
                 mBoundsBuilder.include(point);
                 options.color(Color.BLACK);
             }
             Polyline polyline = mMap.addPolyline(options);
             polyline.setZIndex(1000); // Any high value
-            mPolylines.put(UUID.fromString(feature.getId()), polyline);
+            mPolylines.put(feature.getProperties().getId(), polyline);
         }
     }
 

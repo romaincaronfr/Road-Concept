@@ -28,13 +28,20 @@ CREATE TABLE IF NOT EXISTS "map_info" (
 -- ==============================================================================
 
 CREATE TABLE IF NOT EXISTS "simulation" (
-  "uuid"                VARCHAR(40) PRIMARY KEY,
-  "id_user"             INTEGER     NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
-  "id_map"              INTEGER     NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
-  "name"                VARCHAR(100),
-  "sampling"            INTEGER     NOT NULL,
-  "finish"              BOOLEAN     NOT NULL,
-  "creation_date"       VARCHAR(10) NOT NULL,
+  "uuid"                   VARCHAR(40) PRIMARY KEY,
+  "id_user"                INTEGER             NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
+  "id_map"                 INTEGER             NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
+  "name"                   VARCHAR(100) UNIQUE NOT NULL,
+  "sampling"               INTEGER             NOT NULL,
+  "finish"                 BOOLEAN             NOT NULL,
+  "creation_date"          VARCHAR(10)         NOT NULL,
+  "min_departure_living_s" INTEGER             NOT NULL,
+  "random_traffic"         BOOLEAN             NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS "simulation_zone" (
+  "id"                  SERIAL PRIMARY KEY,
+  "simulation_uuid"     VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
   "living_feature"      VARCHAR(40) NOT NULL,
   "working_feature"     VARCHAR(40) NOT NULL,
   "departure_living_s"  INTEGER     NOT NULL,
@@ -42,6 +49,8 @@ CREATE TABLE IF NOT EXISTS "simulation" (
   "car_percentage"      INTEGER     NOT NULL,
   "vehicle_count"       INTEGER     NOT NULL
 );
+CREATE INDEX IF NOT EXISTS index_simulation_zone_simulation_uuid
+  ON simulation_zone (simulation_uuid);
 
 -- ==============================================================================
 -- SIMULATION RESULTS
@@ -57,6 +66,9 @@ CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_vehicle" (
   "type"            INTEGER CHECK ("type" IN (6, 7)),
   PRIMARY KEY (simulation_uuid, vehicle_id, timestamp_s)
 );
+CREATE INDEX IF NOT EXISTS index_simulation_vehicle
+  ON simulation_vehicle (simulation_uuid, timestamp_s);
+
 
 CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_congestion" (
   "simulation_uuid"       VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,
@@ -65,6 +77,8 @@ CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_congestion" (
   "timestamp_s"           INTEGER     NOT NULL,
   PRIMARY KEY (feature_uuid, simulation_uuid, timestamp_s)
 );
+CREATE INDEX IF NOT EXISTS simulation_congestion
+  ON simulation_vehicle (simulation_uuid, timestamp_s);
 
 CREATE UNLOGGED TABLE IF NOT EXISTS "simulation_vehicle_statistics" (
   "simulation_uuid" VARCHAR(40) NOT NULL REFERENCES "simulation" (uuid) ON DELETE CASCADE,

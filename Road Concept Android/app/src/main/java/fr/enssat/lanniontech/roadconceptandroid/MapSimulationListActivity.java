@@ -25,7 +25,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
 import fr.enssat.lanniontech.roadconceptandroid.Components.MapSimulationsAdapter;
-import fr.enssat.lanniontech.roadconceptandroid.Entities.Simulation;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;

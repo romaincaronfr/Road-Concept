@@ -16,7 +16,7 @@ public class ImageFactory {
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
-    private static byte[] drawableToBytes(Drawable drawable) {
+    public static byte[] drawableToBytes(Drawable drawable) {
         final int width = !drawable.getBounds().isEmpty() ? drawable.getBounds().width() : drawable.getIntrinsicWidth();
         final int height = !drawable.getBounds().isEmpty() ? drawable.getBounds().height() : drawable.getIntrinsicHeight();
         final Bitmap bitmap = Bitmap.createBitmap(width <= 0 ? 1 : width, height <= 0 ? 1 : height, Bitmap.Config.ARGB_8888);

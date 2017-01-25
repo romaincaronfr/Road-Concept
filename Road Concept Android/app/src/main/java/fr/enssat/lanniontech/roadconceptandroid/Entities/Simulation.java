@@ -3,6 +3,8 @@ package fr.enssat.lanniontech.roadconceptandroid.Entities;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Simulation {
 
     @SerializedName("uuid")
@@ -20,30 +22,21 @@ public class Simulation {
     @SerializedName("creationDate")
     @Expose
     private String creationDate;
-    @SerializedName("samplingRate")
-    @Expose
-    private Integer samplingRate;
     @SerializedName("finish")
     @Expose
     private Boolean finish;
-    @SerializedName("livingFeatureUUID")
-    @Expose
-    private String livingFeatureUUID;
-    @SerializedName("workingFeatureUUID")
-    @Expose
-    private String workingFeatureUUID;
     @SerializedName("departureLivingS")
     @Expose
     private Integer departureLivingS;
-    @SerializedName("departureWorkingS")
+    @SerializedName("zones")
     @Expose
-    private Integer departureWorkingS;
-    @SerializedName("carPercentage")
+    private List<Zone> zones = null;
+    @SerializedName("samplingRate")
     @Expose
-    private Integer carPercentage;
-    @SerializedName("vehicleCount")
+    private Integer samplingRate;
+    @SerializedName("random_traffic")
     @Expose
-    private Integer vehicleCount;
+    private Boolean randomTraffic;
 
     public String getUuid() {
         return uuid;
@@ -85,36 +78,12 @@ public class Simulation {
         this.creationDate = creationDate;
     }
 
-    public Integer getSamplingRate() {
-        return samplingRate;
-    }
-
-    public void setSamplingRate(Integer samplingRate) {
-        this.samplingRate = samplingRate;
-    }
-
     public Boolean getFinish() {
         return finish;
     }
 
     public void setFinish(Boolean finish) {
         this.finish = finish;
-    }
-
-    public String getLivingFeatureUUID() {
-        return livingFeatureUUID;
-    }
-
-    public void setLivingFeatureUUID(String livingFeatureUUID) {
-        this.livingFeatureUUID = livingFeatureUUID;
-    }
-
-    public String getWorkingFeatureUUID() {
-        return workingFeatureUUID;
-    }
-
-    public void setWorkingFeatureUUID(String workingFeatureUUID) {
-        this.workingFeatureUUID = workingFeatureUUID;
     }
 
     public Integer getDepartureLivingS() {
@@ -125,46 +94,28 @@ public class Simulation {
         this.departureLivingS = departureLivingS;
     }
 
-    public Integer getDepartureWorkingS() {
-        return departureWorkingS;
+    public List<Zone> getZones() {
+        return zones;
     }
 
-    public void setDepartureWorkingS(Integer departureWorkingS) {
-        this.departureWorkingS = departureWorkingS;
+    public void setZones(List<Zone> zones) {
+        this.zones = zones;
     }
 
-    public Integer getCarPercentage() {
-        return carPercentage;
+    public Integer getSamplingRate() {
+        return samplingRate;
     }
 
-    public void setCarPercentage(Integer carPercentage) {
-        this.carPercentage = carPercentage;
+    public void setSamplingRate(Integer samplingRate) {
+        this.samplingRate = samplingRate;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Boolean getRandomTraffic() {
+        return randomTraffic;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setRandomTraffic(Boolean randomTraffic) {
+        this.randomTraffic = randomTraffic;
     }
 
-    @Override
-    public String toString() {
-        return "Simulation{" +
-                "uuid='" + uuid + '\'' +
-                ", name='" + name + '\'' +
-                ", creatorID=" + creatorID +
-                ", mapID=" + mapID +
-                ", creationDate='" + creationDate + '\'' +
-                ", samplingRate=" + samplingRate +
-                ", finish=" + finish +
-                ", livingFeatureUUID='" + livingFeatureUUID + '\'' +
-                ", workingFeatureUUID='" + workingFeatureUUID + '\'' +
-                ", departureLivingS=" + departureLivingS +
-                ", departureWorkingS=" + departureWorkingS +
-                ", carPercentage=" + carPercentage +
-                ", vehicleCount=" + vehicleCount +
-                '}';
-    }
 }
