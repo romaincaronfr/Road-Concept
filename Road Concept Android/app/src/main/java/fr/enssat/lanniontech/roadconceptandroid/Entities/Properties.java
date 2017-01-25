@@ -27,6 +27,9 @@ public class Properties {
     @SerializedName("oneway")
     @Expose
     private String oneway;
+    @SerializedName("congestion")
+    @Expose
+    private String congestion;
 
     public String getName() {
         return name;
@@ -76,4 +79,11 @@ public class Properties {
         this.oneway = oneway;
     }
 
+    public String getCongestion() {
+        return congestion;
+    }
+
+    public void setCongestion(String congestion) {
+        this.congestion = congestion;
+    }
 }

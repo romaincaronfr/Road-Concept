@@ -1,22 +1,20 @@
 package fr.enssat.lanniontech.roadconceptandroid.Entities;
 
-/**
- * Created by Romain on 22/01/2017.
- */
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Iterator;
 import java.util.List;
 
-public class FeatureCollection {
+public class FeatureCollection implements Iterable<Feature> {
 
     @SerializedName("type")
     @Expose
     private String type;
     @SerializedName("features")
     @Expose
-    private List<Feature> features = null;
+    private List<Feature> features;
 
     public String getType() {
         return type;
@@ -34,4 +32,8 @@ public class FeatureCollection {
         this.features = features;
     }
 
+    @Override
+    public Iterator<Feature> iterator() {
+        return getFeatures().iterator();
+    }
 }

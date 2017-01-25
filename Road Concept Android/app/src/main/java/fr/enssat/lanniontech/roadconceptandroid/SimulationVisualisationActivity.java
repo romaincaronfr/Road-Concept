@@ -1,20 +1,25 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.TileOverlay;
 import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Coordinates;
+import fr.enssat.lanniontech.roadconceptandroid.Entities.Feature;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.InfosMap;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.OnNeedLoginListener;
@@ -23,19 +28,28 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback, OnNeedLoginListener, View.OnClickListener {
 
     private static final int GET_FEATURES_LIST_REQUEST_CODE = 1004;
 
-    @BindView(R.id.buttonBackSImu) Button mButtonBack;
-    @BindView(R.id.buttonNextSimu) Button mButtonNext;
-
+    @BindView(R.id.buttonBackSImu)
+    Button mButtonBack;
+    @BindView(R.id.buttonNextSimu)
+    Button mButtonNext;
     private GoogleMap mMap;
     private String mUuid;
     private int mMapID;
     private int mSamplingRate;
     private int mCurrentTimestamp;
+
     private FeatureCollection mFeatureCollection;
+    private Map<UUID, Polyline> mPolylines;
+    private LatLngBounds.Builder mBoundsBuilder;
+    private TileOverlay mTileOverlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,25 +72,35 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         disableElements();
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        handleMaxZoom();
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         getFeaturesCollection();
+
+    }
+
+    private void fitZoom() {
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(mBoundsBuilder.build(), 30));
+            }
+        });
+    }
+
+    private void handleMaxZoom() {
+        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int i) {
+                float maxZoom = 18.0f; // Max zoom to don't see offset bettwen Google Maps and Open Street Map
+                if (mMap.getCameraPosition().zoom > 18.0f) {
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(maxZoom));
+                }
+                Log.d("ZOOM = ", Float.toString(mMap.getCameraPosition().zoom));
+            }
+        });
     }
 
     private String getSecondInStringFormat(int seconds){
@@ -101,6 +125,9 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                 if (response.isSuccessful()){
                     mFeatureCollection = response.body().getFeatureCollection();
                     getZones();
+
+                    drawFeatures();
+                    fitZoom();
                 } else {
                     if (response.code() == 401){
                         refreshLogin(SimulationVisualisationActivity.this, GET_FEATURES_LIST_REQUEST_CODE);
@@ -112,9 +139,36 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
 
             @Override
             public void onFailure(Call<InfosMap> call, Throwable t) {
+                t.printStackTrace();
                 displayNetworkErrorDialog();
             }
         });
+    }
+
+    /**
+     * Use the FeatureCollection to draw all the mPolylines on the Google Map.
+     * Store the coordinates (LatLng) into the mBoundsBuilder
+     */
+    private void drawFeatures() {
+        for (Feature feature : mFeatureCollection) {
+            PolylineOptions options = new PolylineOptions();
+
+            List<Coordinates> coordinates = feature.getGeometry().getCoordinates();
+            for (Coordinates coordinate : coordinates) {
+                // can't use "addAll(...) since 'coordinates' are not instance of 'LatLng'
+                LatLng point = new LatLng(coordinate.getLatitude(), coordinate.getLongitude());
+                options.add(point);
+                mBoundsBuilder.include(point);
+                options.color(Color.BLACK);
+            }
+            Polyline polyline = mMap.addPolyline(options);
+            polyline.setZIndex(1000); // Any high value
+            mPolylines.put(UUID.fromString(feature.getId()), polyline);
+        }
+    }
+
+    private LatLng getPolylineMiddlePoint(Polyline polyline) {
+        return polyline.getPoints().get((polyline.getPoints().size() - 1) / 2);
     }
 
     @Override

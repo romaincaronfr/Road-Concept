@@ -1,12 +1,9 @@
 package fr.enssat.lanniontech.roadconceptandroid.Entities;
 
-/**
- * Created by Romain on 22/01/2017.
- */
-
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class Geometry {
 
@@ -15,7 +12,7 @@ public class Geometry {
     private String type;
     @SerializedName("coordinates")
     @Expose
-    private List<List<Double>> coordinates = null;
+    private List<Coordinates> coordinates;
 
     public String getType() {
         return type;
@@ -25,11 +22,11 @@ public class Geometry {
         this.type = type;
     }
 
-    public List<List<Double>> getCoordinates() {
+    public List<Coordinates> getCoordinates() {
         return coordinates;
     }
 
-    public void setCoordinates(List<List<Double>> coordinates) {
+    public void setCoordinates(List<Coordinates> coordinates) {
         this.coordinates = coordinates;
     }
 
