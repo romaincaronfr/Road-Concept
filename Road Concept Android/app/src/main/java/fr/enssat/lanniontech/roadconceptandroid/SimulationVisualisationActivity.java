@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static fr.enssat.lanniontech.roadconceptandroid.R.id.map;
+
 public class SimulationVisualisationActivity extends AuthentActivity implements OnMapReadyCallback, OnNeedLoginListener, View.OnClickListener {
 
     private static final int GET_FEATURES_LIST_REQUEST_CODE = 1004;
@@ -79,8 +81,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         mSamplingRate = intent.getIntExtra(MapSimulationListActivity.INTENT_SAMPLINGRATE_SIMULATION,-1);
         mCurrentTimestamp = intent.getIntExtra(MapSimulationListActivity.INTENT_DEPARTURELIVINGS_SIMULATION,-1);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(map);
         mapFragment.getMapAsync(this);
         setTitle(getSecondInStringFormat(mCurrentTimestamp));
         disableElements();
@@ -109,7 +110,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
             @Override
             public Tile getTile(int i, int i1, int i2) {
                 byte[] bytes = ImageFactory.drawableToBytes(getResources().getDrawable(R.drawable.white_square, null));
-                View mapFragment = findViewById(R.id.map);
+                View mapFragment = findViewById(map);
                 return new Tile(mapFragment.getWidth(), mapFragment.getHeight(), bytes);
             }
         };
@@ -133,8 +134,8 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
             @Override
             public void onCameraMoveStarted(int i) {
-                float maxZoom = 18.0f; // Max zoom to don't see offset bettwen Google Maps and Open Street Map
-                if (mMap.getCameraPosition().zoom > 18.0f) {
+                float maxZoom = 17.0f; // Max zoom to don't see offset bettwen Google Maps and Open Street Map
+                if (mMap.getCameraPosition().zoom > maxZoom) {
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(maxZoom));
                     Log.d("DANS LE SACRE IF !!", Float.toString(mMap.getCameraPosition().zoom));
                 }
@@ -312,7 +313,6 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                 if (response.isSuccessful()) {
                     for (CongestionResult congestion : response.body()) {
                         Polyline polyline = mPolylines.get(UUID.fromString(congestion.getFeatureUUID()));
-
                         if (congestion.getCongestionPercentage() < 10) {
                             polyline.setColor(getResources().getColor(R.color.congestion1));
                         } else if (congestion.getCongestionPercentage() < 20) {
