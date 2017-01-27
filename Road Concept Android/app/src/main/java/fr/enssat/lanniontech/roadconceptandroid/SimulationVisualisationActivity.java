@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SeekBar;
 
@@ -437,6 +438,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
         dialog.show();
     }
 }
