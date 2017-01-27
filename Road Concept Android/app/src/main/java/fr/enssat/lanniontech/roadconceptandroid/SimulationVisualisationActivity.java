@@ -1,14 +1,18 @@
 package fr.enssat.lanniontech.roadconceptandroid;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -63,6 +67,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private int mMapID;
     private int mSamplingRate;
     private int mCurrentTimestamp;
+    private float mTransparency;
 
     private FeatureCollection mFeatureCollection;
     private Map<UUID, Polyline> mPolylines;
@@ -89,6 +94,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         mapFragment.getMapAsync(this);
         setTitle(getSecondInStringFormat(mCurrentTimestamp));
         disableElements();
+        mTransparency = 0.5f;
     }
 
     @Override
@@ -97,7 +103,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         handleMaxZoom();
         handleMapTransparency();
         getFeaturesCollection();
-        updateMapTransparency(0.5f);
+        updateMapTransparency();
     }
 
     /**
@@ -105,8 +111,8 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
      * 1 => map background is fully visible
      * 0 => map background is invisible
      */
-    private void updateMapTransparency(float value) {
-        mTileOverlay.setTransparency(value);
+    private void updateMapTransparency() {
+        mTileOverlay.setTransparency(mTransparency);
     }
 
     private void handleMapTransparency() {
@@ -408,6 +414,29 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     }
 
     private void launchAlertTransparence(){
-        //TODO quelque chose
+        final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
+        final SeekBar seek = new SeekBar(this);
+        seek.setMax(10);
+        seek.setProgress((int) (mTransparency*10));
+
+        popDialog.setTitle("Oppacité");
+        popDialog.setView(seek);
+        final AlertDialog dialog = popDialog.create();
+        seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            public void onProgressChanged(SeekBar seekBar, int progressV, boolean fromUser) {
+                mTransparency = (float) progressV/10;
+                updateMapTransparency();
+            }
+
+
+            public void onStartTrackingTouch(SeekBar arg0) {
+            }
+
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        dialog.show();
     }
 }
