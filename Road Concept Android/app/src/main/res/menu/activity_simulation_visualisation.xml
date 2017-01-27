@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_timePicker"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_access_time_24dp"
+        android:title="@string/s_lectionner_l_heure"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_transparence"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_exposure_24dp"
+        android:title="@string/transparence"
+        app:showAsAction="ifRoom" />
+</menu>

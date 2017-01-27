@@ -43,4 +43,6 @@
     <string name="title_activity_simulation_visualisation">Map</string>
     <string name="pr_c_dent">Précédent</string>
     <string name="suivant">Suivant</string>
+    <string name="s_lectionner_l_heure">Sélectionner l\'heure</string>
+    <string name="transparence">Transparence</string>
 </resources>
