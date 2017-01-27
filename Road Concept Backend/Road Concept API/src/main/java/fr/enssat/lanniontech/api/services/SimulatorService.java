@@ -242,8 +242,14 @@ public class SimulatorService extends AbstractService implements Observer {
 
         checkTimestampValue(timestamp, simulation);
         List<SimulationCongestionResult> congestions = simulationResultRepository.getCongestionAt(simulationUUID, timestamp);
+
+        List<UUID> uuids = new ArrayList<>();
+        for (SimulationCongestionResult truc : congestions) {
+            uuids.add(truc.getFeatureUUID());
+        }
+
         for (Feature feature : features) {
-            if (!congestions.contains(feature.getUuid())) {
+            if (!uuids.contains(feature.getUuid())) {
                 SimulationCongestionResult missing = new SimulationCongestionResult();
                 missing.setCongestionPercentage(0);
                 missing.setFeatureUUID(feature.getUuid());

@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -131,13 +132,12 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     }
 
     private void handleMaxZoom() {
-        mMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
-            public void onCameraMoveStarted(int i) {
+            public void onCameraChange(CameraPosition cameraPosition) {
                 float maxZoom = 17.0f; // Max zoom to don't see offset bettwen Google Maps and Open Street Map
                 if (mMap.getCameraPosition().zoom > maxZoom) {
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(maxZoom));
-                    Log.d("DANS LE SACRE IF !!", Float.toString(mMap.getCameraPosition().zoom));
                 }
                 Log.d("ZOOM = ", Float.toString(mMap.getCameraPosition().zoom));
             }
@@ -179,7 +179,6 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
 
             @Override
             public void onFailure(Call<InfosMap> call, Throwable t) {
-                t.printStackTrace();
                 displayNetworkErrorDialog();
             }
         });
@@ -313,26 +312,34 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                 if (response.isSuccessful()) {
                     for (CongestionResult congestion : response.body()) {
                         Polyline polyline = mPolylines.get(UUID.fromString(congestion.getFeatureUUID()));
-                        if (congestion.getCongestionPercentage() < 10) {
-                            polyline.setColor(getResources().getColor(R.color.congestion1));
-                        } else if (congestion.getCongestionPercentage() < 20) {
-                            polyline.setColor(getResources().getColor(R.color.congestion2));
-                        } else if (congestion.getCongestionPercentage() < 30) {
-                            polyline.setColor(getResources().getColor(R.color.congestion4));
-                        } else if (congestion.getCongestionPercentage() < 40) {
-                            polyline.setColor(getResources().getColor(R.color.congestion4));
-                        } else if (congestion.getCongestionPercentage() < 50) {
-                            polyline.setColor(getResources().getColor(R.color.congestion5));
-                        } else if (congestion.getCongestionPercentage() < 60) {
-                            polyline.setColor(getResources().getColor(R.color.congestion6));
-                        } else if (congestion.getCongestionPercentage() < 70) {
-                            polyline.setColor(getResources().getColor(R.color.congestion7));
-                        } else if (congestion.getCongestionPercentage() < 80) {
-                            polyline.setColor(getResources().getColor(R.color.congestion8));
-                        } else if (congestion.getCongestionPercentage() < 90) {
-                            polyline.setColor(getResources().getColor(R.color.congestion9));
+                        int value = congestion.getCongestionPercentage();
+                        int color = polyline.getColor();
+
+                        if (value > 0 && value <= 10 ) {
+                            color = getResources().getColor(R.color.congestion1);
+                        } else if (value > 10 && value <= 20) {
+                            color = getResources().getColor(R.color.congestion2);
+                        } else if (value > 20 && value <= 30) {
+                            color = getResources().getColor(R.color.congestion3);
+                        } else if (value > 30 && value <= 40) {
+                            color = getResources().getColor(R.color.congestion4);
+                        } else if (value > 40 && value <= 50) {
+                            color = getResources().getColor(R.color.congestion5);
+                        } else if (value > 50 && value <= 60) {
+                            color = getResources().getColor(R.color.congestion6);
+                        } else if (value > 60 && value <= 70) {
+                            color = getResources().getColor(R.color.congestion7);
+                        } else if (value > 70 && value <= 80) {
+                            color = getResources().getColor(R.color.congestion8);
+                        } else if (value > 80 && value <= 90) {
+                            color = getResources().getColor(R.color.congestion9);
+                        } else if (value > 90 && value <= 100) {
+                            color = getResources().getColor(R.color.congestion10);
                         } else {
-                            polyline.setColor(getResources().getColor(R.color.congestion10));
+                            Log.e(TAG, "ERROR ON CONGESTION VALUE");
+                        }
+                        if(color != polyline.getColor()){
+                            polyline.setColor(color);
                         }
                     }
                     setTitle(getSecondInStringFormat(mCurrentTimestamp));
