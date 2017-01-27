@@ -315,7 +315,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                         int value = congestion.getCongestionPercentage();
                         int color = polyline.getColor();
 
-                        if (value > 0 && value <= 10 ) {
+                        if (value >= 0 && value <= 10 ) {
                             color = getResources().getColor(R.color.congestion1);
                         } else if (value > 10 && value <= 20) {
                             color = getResources().getColor(R.color.congestion2);
@@ -333,7 +333,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                             color = getResources().getColor(R.color.congestion8);
                         } else if (value > 80 && value <= 90) {
                             color = getResources().getColor(R.color.congestion9);
-                        } else if (value > 90 && value <= 100) {
+                        } else if (value > 90) {
                             color = getResources().getColor(R.color.congestion10);
                         } else {
                             Log.e(TAG, "ERROR ON CONGESTION VALUE");
