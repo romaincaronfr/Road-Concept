@@ -20,7 +20,7 @@ public class SimulationParametersRepository extends SimulationRepository {
 
     private static final String INSERT = "INSERT INTO simulation(uuid, id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s, random_traffic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_FROM_UUID = "SELECT id_user, id_map, name, sampling, finish, creation_date, min_departure_living_s, random_traffic FROM simulation WHERE uuid = ?";
-    private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, min_departure_living_s random_traffic FROM simulation WHERE id_user = ?";
+    private static final String SELECT_ALL = "SELECT uuid, id_map, name, sampling, finish, creation_date, min_departure_living_s, random_traffic FROM simulation WHERE id_user = ?";
     private static final String SELECT_FROM_MAP = "SELECT uuid, name, sampling, finish, creation_date, min_departure_living_s, random_traffic FROM simulation WHERE id_map = ? AND id_user = ?";
     private static final String UPDATE_FINISH = "UPDATE simulation SET finish = true WHERE uuid = ? AND id_user = ?";
     private static final String DELETE_NOT_FINISH = "DELETE FROM simulation WHERE finish = false RETURNING uuid";
