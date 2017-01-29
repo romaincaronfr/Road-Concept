@@ -27,10 +27,21 @@ public class TrajectoryInformation implements Comparable{
         return type == InformationType.FREE;
     }
 
+    public double nearestScore(){
+        if(isFree()){
+            return distance / 30;
+        }
+        double score = distance / Math.abs(speed);
+        if(type == InformationType.INCOMING_VEHICLE){
+            score *= 5;
+        }
+        return score;
+    }
+
     @Override
     public int compareTo(Object o) {
         TrajectoryInformation information = (TrajectoryInformation)o;
 
-        return (int)(distance - information.getDistance());
+        return (int)(100*(nearestScore() - information.nearestScore()));
     }
 }

@@ -32,12 +32,7 @@ public class VehicleAI {
         double safeDistance = s0 + timeGap + breakGap;
         double busyRoadCoeff = Math.pow(safeDistance / distanceToNext, 2);
         double coeff = 1 - freeRoadCoeff - busyRoadCoeff;
-        A = a * coeff;/*
-        double Sprime = s0 + Va * T + (Va * (Va - speedOfNext)) / (2 * Math.sqrt(a * b));
-        A = a * (1 - Math.pow(Va / v0, lambda) - Math.pow(Sprime / distanceToNext, 2));
-        if(A > a || A < -b){
-            System.out.print("bug");
-        }/**/
+        A = a * coeff;
     }
 
     public double getDistanceDone(double time) {

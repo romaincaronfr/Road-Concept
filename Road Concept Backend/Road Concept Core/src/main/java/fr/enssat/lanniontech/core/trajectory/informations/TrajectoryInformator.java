@@ -60,4 +60,5 @@ public class TrajectoryInformator {
     public TrajectoryInformation getNearest() {
         return informations.first();
     }
+
 }
