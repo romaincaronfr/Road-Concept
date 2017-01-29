@@ -9,7 +9,7 @@ then
     set "0"
 fi
 
-cp -r ../../frontend/ ./buildData/frontend/
+cp -r ../../Road\ Concept\ Frontend/ ./buildData/frontend/
 if [ $1 -ne 0 ]
 then
     sed -ri.bak 's/(http:\/\/localhost:8080)/http:\/\/roadconcept\.4r3\.fr:8081/' ./buildData/frontend/js/app.js
