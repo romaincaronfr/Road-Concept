@@ -305,7 +305,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
         int index = 1;
         float[] colors = {0.0F, 30.0F, 60.0F, 120.0F, 180.0F, 210.0F, 240.0F, 270.0F, 300.0F, 330.0F};
         for (Zone zone : zones) {
-            float color = colors[index-1%colors.length];
+            float color = colors[index%colors.length];
             addZoneMarker(UUID.fromString(zone.getLivingFeature()), color, "Zone d'habitation " + index);
             addZoneMarker(UUID.fromString(zone.getWorkingFeature()), color, "Zone de travail " + index);
             index++;
