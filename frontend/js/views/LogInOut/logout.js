@@ -23,7 +23,7 @@ app.logoutView = Backbone.View.extend({
             .done(function (data, textStatus, jqXHR) {
                 $('#waitLogout').addClass('hidden');
                 $('#alertLogout').removeClass('hidden');
-                app.router.checkAndDestroyNavbar();
+                app.router.navigate('login', {trigger: true});
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
                 $('#danger-text-modal').html("Erreur lors de la déconnexion. Merci de réessayer.");
