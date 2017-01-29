@@ -31,7 +31,10 @@ import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.gms.maps.model.TileProvider;
+
 import fr.enssat.lanniontech.roadconceptandroid.AbstractActivities.AuthentActivity;
+import fr.enssat.lanniontech.roadconceptandroid.Components.TimePicker;
+import fr.enssat.lanniontech.roadconceptandroid.Components.TimePickerDialogWithSeconds;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.CongestionResult;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Feature;
 import fr.enssat.lanniontech.roadconceptandroid.Entities.FeatureCollection;
@@ -46,6 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -411,7 +415,56 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     }
 
     private void launchTimePicker(){
-        //TODO Timepicker
+        int[] result = getSeperateTime(mCurrentTimestamp);
+        Log.d(TAG,"result = "+String.valueOf(result[0])+":"+String.valueOf(result[1])+":"+String.valueOf(result[2]));
+        final TimePickerDialogWithSeconds myTimePickerDialog = new TimePickerDialogWithSeconds(this, result[0],result[1],result[2], true);
+        myTimePickerDialog.setOnTimeSetListener(new TimePickerDialogWithSeconds.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute, int seconds) {
+                myTimePickerDialog.dismiss();
+                int time = (hourOfDay * 3600) + (minute * 60) + seconds;
+                Log.d(TAG, String.valueOf(time));
+                int verifStep = (time % mSamplingRate);
+                Log.d(TAG, String.valueOf(verifStep));
+                if (verifStep != 0) {
+                    if (verifStep < mSamplingRate/2){
+                        time -= verifStep;
+                    } else {
+                        time += (mSamplingRate -verifStep);
+                    }
+                    int[] result = getSeperateTime(time);
+                    //Log.d(TAG,"Nouvelle heure = "+String.valueOf(result[0])+":"+String.valueOf(result[1])+":"+String.valueOf(result[2]));
+                    myTimePickerDialog.updateTime(result[0],result[1],result[2]);
+                }
+            }
+        });
+        myTimePickerDialog.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute, int seconds) {
+                myTimePickerDialog.updateTitle(hourOfDay,minute,seconds);
+                String mytime = String.valueOf(hourOfDay)+":"+String.valueOf(minute)+":"+String.valueOf(seconds);
+                //Log.d(TAG,"OnTimeChanges info = "+mytime);
+                int time = (hourOfDay * 3600) + (minute * 60) + seconds;
+                Log.d(TAG, String.valueOf(time));
+                int verifStep = (time % mSamplingRate);
+                Log.d(TAG, String.valueOf(verifStep));
+                if (verifStep != 0) {
+                        time += (mSamplingRate -verifStep);
+                    int[] result = getSeperateTime(time);
+                    //Log.d(TAG,"Nouvelle heure = "+String.valueOf(result[0])+":"+String.valueOf(result[1])+":"+String.valueOf(result[2]));
+                    myTimePickerDialog.updateTime(result[0],result[1],result[2]);
+                }
+            }
+        });
+        myTimePickerDialog.show();
+        myTimePickerDialog.updateTime(1,1,3);
+    }
+
+    private int[] getSeperateTime(int seconds){
+        int h = (int) Math.floor(seconds / 3600);
+        int m = (int) Math.floor((seconds % 3600) / 60);
+        int s = (seconds % 3600) % 60;
+        return new int[]{h,m,s};
     }
 
     private void launchAlertTransparence(){
