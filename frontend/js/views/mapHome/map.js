@@ -4,13 +4,13 @@
 app.mapView = Backbone.View.extend({
 
     el: '#content',
-
     events: {
         'click #submitCreateMap': 'clickOnCreateNewMap',
         'click .remove_map': 'clickOnRemove',
         'click .print_map': 'clickOnPrintMap',
-        'click .remove_map_confirm': 'clickOnremove_map_confirm'
+        'click .remove_map_confirm': 'clickOnremove_map_confirm',
     },
+    imageBase64 : null,
 
     initialize: function () {
         this.mapCollection = new app.collections.mapCollection;
@@ -34,11 +34,69 @@ app.mapView = Backbone.View.extend({
 
     clickOnCreateNewMap: function () {
         var self = this;
-        $('#submitCreateMap').prop("disabled", true);
+        // $('#submitCreateMap').prop("disabled", true);
         var name = $('#mapName').val();
         var description = $('#mapDescription').val();
-        var urlImg = $('#mapImgURL').val();
-        var newMapModel = new app.models.mapModel({'name': name, 'description': description, 'image_url': urlImg});
+        var urlImg = null;
+
+        var file = $('input[type=file]')[0].files[0];
+
+        console.log(file);
+
+        if (file && file.length != 0 && file.type.match('image.*')) {
+
+            var img = document.createElement("img");
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result
+            }
+            reader.readAsDataURL(file);
+
+            img.onload = function () {
+                console.log("Chargement de l'image");
+                // Création du canevas pour resize l'image
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+
+                var MAX_WIDTH = 1000;
+                var MAX_HEIGHT = 1000;
+                var width = img.width;
+                var height = img.height;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, width, height);
+
+                urlImg = canvas.toDataURL(file.type);
+                self.sendCreateNewMap(name,description,urlImg);
+            }
+        } else {
+            self.sendCreateNewMap(name,description,urlImg);
+        }
+
+    },
+
+    sendCreateNewMap: function(name,description,urlImg){
+        var self = this;
+        var newMapModel;
+        if (urlImg){
+            newMapModel = new app.models.mapModel({'name': name, 'description': description, 'image_url': urlImg});
+        } else {
+            newMapModel = new app.models.mapModel({'name': name, 'description': description});
+        }
         newMapModel.save(null, {
             success: (function () {
                 $('#mapName').val('');
@@ -87,5 +145,4 @@ app.mapView = Backbone.View.extend({
         var model = this.mapCollection.get(id);
         model.destroy({wait: true});
     }
-
 });
