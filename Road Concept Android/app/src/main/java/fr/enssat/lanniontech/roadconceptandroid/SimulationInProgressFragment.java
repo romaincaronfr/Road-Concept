@@ -30,7 +30,11 @@ import static fr.enssat.lanniontech.roadconceptandroid.MapSimulationListActivity
 import static fr.enssat.lanniontech.roadconceptandroid.MapSimulationListActivity.INTENT_SAMPLINGRATE_SIMULATION;
 import static fr.enssat.lanniontech.roadconceptandroid.MapSimulationListActivity.INTENT_UUID_SIMULATION;
 
-public class SimulationOverFragment extends BaseFragment implements RecyclerViewClickListener, OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener {
+/**
+ * Created by Romain on 29/01/2017 for Road Concept Android project.
+ */
+
+public class SimulationInProgressFragment extends BaseFragment implements RecyclerViewClickListener, OnNeedLoginListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final int GET_SIMULATION_LIST_REQUEST_CODE = 1003;
 
@@ -39,7 +43,7 @@ public class SimulationOverFragment extends BaseFragment implements RecyclerView
     SimulationAdapter mMapSimulationsOverAdapter;
 
 
-    public SimulationOverFragment() {
+    public SimulationInProgressFragment() {
         // Required empty public constructor
     }
 
@@ -67,7 +71,7 @@ public class SimulationOverFragment extends BaseFragment implements RecyclerView
         RoadConceptSimulationsInterface roadConceptSimulationsInterface = getRetrofitService(RoadConceptSimulationsInterface.class);
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARE_PREF_NAME,MODE_PRIVATE);
         int id = sharedPreferences.getInt(Constants.SHARE_USER_ID,-1);
-        Call<List<Simulation>> listCall = roadConceptSimulationsInterface.getSimulationUserFinish(id);
+        Call<List<Simulation>> listCall = roadConceptSimulationsInterface.getSimulationUserInProgress(id);
         listCall.enqueue(new Callback<List<Simulation>>() {
             @Override
             public void onResponse(Call<List<Simulation>> call, Response<List<Simulation>> response) {
@@ -75,7 +79,7 @@ public class SimulationOverFragment extends BaseFragment implements RecyclerView
                     mMapSimulationsOverAdapter.setmSimulationList(response.body());
                 } else {
                     if (response.code() == 401){
-                        refreshLogin(SimulationOverFragment.this,GET_SIMULATION_LIST_REQUEST_CODE);
+                        refreshLogin(SimulationInProgressFragment.this,GET_SIMULATION_LIST_REQUEST_CODE);
                     } else {
                         displayNetworkErrorDialog();
                     }
@@ -97,7 +101,7 @@ public class SimulationOverFragment extends BaseFragment implements RecyclerView
         mSwipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swiperefreshSimulationOver);
         mRecyclerViewSimulationOver = (RecyclerView) getView().findViewById(R.id.itemsRecyclerViewSimulationOver);
         List<Simulation> simulationList = new ArrayList<>();
-        mMapSimulationsOverAdapter = new SimulationAdapter(simulationList,true,this);
+        mMapSimulationsOverAdapter = new SimulationAdapter(simulationList,false,this);
         mRecyclerViewSimulationOver.setLayoutManager(new GridLayoutManager(getContext(),1));
         mRecyclerViewSimulationOver.setAdapter(mMapSimulationsOverAdapter);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -105,13 +109,7 @@ public class SimulationOverFragment extends BaseFragment implements RecyclerView
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-        Simulation simulation = mMapSimulationsOverAdapter.getmSimulationList().get(position);
-        Intent intent = new Intent(getActivity(),SimulationVisualisationActivity.class);
-        intent.putExtra(INTENT_UUID_SIMULATION,simulation.getUuid());
-        intent.putExtra(INTENT_MAPID_SIMULATION,simulation.getMapID());
-        intent.putExtra(INTENT_SAMPLINGRATE_SIMULATION,simulation.getSamplingRate());
-        intent.putExtra(INTENT_DEPARTURELIVINGS_SIMULATION,simulation.getDepartureLivingS());
-        startActivity(intent);
+        //Nothing to do
     }
 
     @Override

@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             tools:text="Paris"
             android:fontFamily="sans-serif"
             android:drawableStart="@drawable/ic_place"

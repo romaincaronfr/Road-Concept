@@ -18,7 +18,7 @@ import fr.enssat.lanniontech.roadconceptandroid.Utilities.ImageFactory;
 import fr.enssat.lanniontech.roadconceptandroid.Utilities.RecyclerViewClickListener;
 
 /**
- * Created by Romain on 29/01/2017.
+ * Created by Romain on 29/01/2017 for Road Concept Android project.
  */
 
 public class SimulationAdapter extends RecyclerView.Adapter<SimulationAdapter.MapSimulationsHolder> {

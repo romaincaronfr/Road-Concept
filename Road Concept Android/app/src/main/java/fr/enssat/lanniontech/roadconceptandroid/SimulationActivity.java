@@ -50,6 +50,7 @@ public class SimulationActivity extends NavigationDrawerActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new SimulationOverFragment(), "Terminées");
+        adapter.addFrag(new SimulationInProgressFragment(), "En cours");
         viewPager.setAdapter(adapter);
     }
 

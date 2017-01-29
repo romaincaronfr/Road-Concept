@@ -17,6 +17,11 @@ import fr.enssat.lanniontech.roadconceptandroid.Components.TimePicker.OnTimeChan
 import fr.enssat.lanniontech.roadconceptandroid.R;
 
 /**
+ * Using TimePicker with seconds from https://github.com/IvanKovac/TimePickerWithSeconds
+ * Thanks to IvanKovac
+ */
+
+/**
  * A dialog that prompts the user for the time of day using a {@link TimePicker}.
  */
 public class TimePickerDialogWithSeconds extends AlertDialog implements OnClickListener,

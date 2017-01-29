@@ -2,6 +2,8 @@ package fr.enssat.lanniontech.roadconceptandroid.Components;
 
 /**
  * Created by Romain on 29/01/2017.
+ * Using TimePicker with seconds from https://github.com/IvanKovac/TimePickerWithSeconds
+ * Thanks to IvanKovac
  */
 
 import java.text.DateFormatSymbols;
