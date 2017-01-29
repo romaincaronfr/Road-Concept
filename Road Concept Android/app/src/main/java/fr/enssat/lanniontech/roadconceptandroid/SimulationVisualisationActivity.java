@@ -73,6 +73,7 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private int mSamplingRate;
     private int mCurrentTimestamp;
     private float mTransparency;
+    private Menu mMenu;
 
     private FeatureCollection mFeatureCollection;
     private Map<UUID, Polyline> mPolylines;
@@ -380,17 +381,24 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
     private void disableElements(){
         mButtonBack.setEnabled(false);
         mButtonNext.setEnabled(false);
+        if (mMenu != null){
+            mMenu.findItem(R.id.action_timePicker).setEnabled(false);
+        }
     }
 
     private void enableElements(){
         mButtonBack.setEnabled(true);
         mButtonNext.setEnabled(true);
+        if (mMenu != null){
+            mMenu.findItem(R.id.action_timePicker).setEnabled(true);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_simulation_visualisation, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -423,9 +431,9 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
             public void onTimeSet(TimePicker view, int hourOfDay, int minute, int seconds) {
                 myTimePickerDialog.dismiss();
                 int time = (hourOfDay * 3600) + (minute * 60) + seconds;
-                Log.d(TAG, String.valueOf(time));
+                //Log.d(TAG, String.valueOf(time));
                 int verifStep = (time % mSamplingRate);
-                Log.d(TAG, String.valueOf(verifStep));
+                //Log.d(TAG, String.valueOf(verifStep));
                 if (verifStep != 0) {
                     if (verifStep < mSamplingRate/2){
                         time -= verifStep;
@@ -436,6 +444,9 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
                     //Log.d(TAG,"Nouvelle heure = "+String.valueOf(result[0])+":"+String.valueOf(result[1])+":"+String.valueOf(result[2]));
                     myTimePickerDialog.updateTime(result[0],result[1],result[2]);
                 }
+                mCurrentTimestamp = time;
+                disableElements();
+                updateCongestion();
             }
         });
         myTimePickerDialog.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
@@ -457,7 +468,10 @@ public class SimulationVisualisationActivity extends AuthentActivity implements 
             }
         });
         myTimePickerDialog.show();
-        myTimePickerDialog.updateTime(1,1,3);
+    }
+
+    private int getSecondFormat(int hour, int minute, int second){
+        return hour*3600+minute*60+second;
     }
 
     private int[] getSeperateTime(int seconds){

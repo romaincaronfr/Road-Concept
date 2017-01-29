@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -60,6 +61,7 @@ public class TimePickerDialogWithSeconds extends AlertDialog implements OnClickL
                                        int hourOfDay, int minute, int seconds, boolean is24HourView) {
 
         this(context, 0, hourOfDay, minute, seconds, is24HourView);
+        Log.d("TimePicker", String.valueOf(hourOfDay)+String.valueOf(minute)+String.valueOf(seconds));
     }
 
     /**
@@ -78,6 +80,7 @@ public class TimePickerDialogWithSeconds extends AlertDialog implements OnClickL
         mInitialMinute = minute;
         mInitialSeconds = seconds;
         mIs24HourView = is24HourView;
+        Log.d("TimePicker", String.valueOf(mInitialHourOfDay)+String.valueOf(mInitialMinute)+String.valueOf(mInitialSeconds));
 
         mDateFormat = DateFormat.getTimeFormat(context);
         mCalendar = Calendar.getInstance();
@@ -97,8 +100,8 @@ public class TimePickerDialogWithSeconds extends AlertDialog implements OnClickL
 //        mTimePicker.setCurrentHour(mInitialHourOfDay);
 //        mTimePicker.setCurrentMinute(mInitialMinute);
 //        mTimePicker.setCurrentSecond(mInitialSeconds);
-        mTimePicker.setHoursMinutesSeconds(mInitialHourOfDay,mInitialMinute,mInitialSeconds);
         mTimePicker.setIs24HourView(mIs24HourView);
+        updateTime(mInitialHourOfDay,mInitialMinute,mInitialSeconds);
     }
 
     public void setOnTimeSetListener(OnTimeSetListener callBack){
@@ -132,6 +135,7 @@ public class TimePickerDialogWithSeconds extends AlertDialog implements OnClickL
         mCalendar.set(Calendar.HOUR_OF_DAY, hour);
         mCalendar.set(Calendar.MINUTE, minute);
         mCalendar.set(Calendar.SECOND, seconds);
+        Log.d("TimePicker",mDateFormat.format(mCalendar.getTime()) + ":" + String.format("%02d" , seconds));
         setTitle(mDateFormat.format(mCalendar.getTime()) + ":" + String.format("%02d" , seconds));
     }
 
