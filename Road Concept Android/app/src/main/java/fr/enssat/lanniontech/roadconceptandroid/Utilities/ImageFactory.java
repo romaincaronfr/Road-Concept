@@ -12,7 +12,8 @@ import java.io.ByteArrayOutputStream;
 public class ImageFactory {
 
     public static Bitmap getBitmapWithBase64 (String base64){
-        byte[] decodedString = Base64.decode(base64, Base64.DEFAULT);
+        String imageString = removeBase64inString(base64);
+        byte[] decodedString = Base64.decode(imageString, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
@@ -26,5 +27,14 @@ public class ImageFactory {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
+    }
+
+    public static String removeBase64inString(String base64){
+        String[] array = base64.split(",");
+        if (array.length == 1){
+            return array[0];
+        } else {
+            return array[1];
+        }
     }
 }

@@ -21,4 +21,7 @@ public interface RoadConceptSimulationsInterface {
 
     @GET("/api/simulations/{simulationUUID}")
     Call<Simulation> getZones(@Path("simulationUUID") String simulationUUID);
+
+    @GET("api/users/{userID}/simulations")
+    Call<List<Simulation>> getSimulationUser(@Path("userID") int userID);
 }

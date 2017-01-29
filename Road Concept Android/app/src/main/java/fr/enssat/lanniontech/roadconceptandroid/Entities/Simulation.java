@@ -37,6 +37,17 @@ public class Simulation {
     @SerializedName("random_traffic")
     @Expose
     private Boolean randomTraffic;
+    @SerializedName("mapInfo")
+    @Expose
+    private Map map;
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
 
     public String getUuid() {
         return uuid;

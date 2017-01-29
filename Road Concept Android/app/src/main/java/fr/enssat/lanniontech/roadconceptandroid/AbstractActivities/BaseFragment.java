@@ -2,11 +2,11 @@ package fr.enssat.lanniontech.roadconceptandroid.AbstractActivities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import fr.enssat.lanniontech.roadconceptandroid.Entities.Login;
 import fr.enssat.lanniontech.roadconceptandroid.LoginActivity;
@@ -30,7 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Romain on 23/01/2017.
  */
 
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
 
     private Retrofit mRetrofit;
 
