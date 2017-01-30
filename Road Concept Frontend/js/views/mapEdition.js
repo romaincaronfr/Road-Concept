@@ -818,7 +818,7 @@ app.mapEditionView = Backbone.View.extend({
             var re = /(?:\.([^.]+))?$/;
             extentionFile = re.exec(f.name)[1];
         }
-        switch (extentionFile) {
+        /*switch (extentionFile) {
             case 'osm':
                 $('#importModalFooter').addClass('hidden');
                 $('#formImport').addClass('hidden');
@@ -835,8 +835,15 @@ app.mapEditionView = Backbone.View.extend({
             default:
                 $('#alertImport').removeClass('hidden');
                 break;
+        }*/
+        if (extentionFile == 'osm' || extentionFile == 'json'){
+            $('#importModalFooter').addClass('hidden');
+            $('#formImport').addClass('hidden');
+            $('#waitImport').removeClass('hidden');
+            this.sendImportData(f);
+        } else {
+            $('#alertImport').removeClass('hidden');
         }
-
     },
 
     encodeOSMtoGeoJSON: function (osm) {
