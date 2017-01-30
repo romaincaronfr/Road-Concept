@@ -11,7 +11,7 @@ Pour pouvoir compiler et éxécuter le projet en local sur votre poste, les dép
 * [Docker Compose] - Utilitaire Docker pour gérer des applications multi conteneurs
 
 ## Architecture
-![Architecture](./misc/architecture.jpeg)
+![Architecture](./misc/architecture.png)
 
 > Architecture du projet
 
@@ -27,17 +27,19 @@ $ cd developper-bin/
 ```
 Lancer le deamon Docker. La commande dépends de votre système d'exploitation.
 
-Lancer le script de déploiement du projet :
+Lancer le script de déploiement du projet (vérifiez bien que votre utilisateur disposes des droits d'éxécution, sinon : ```chmod u+x deployAllLocal.sh``` ).
 ```sh
-$ ./updateAndDeployDocker.sh
+$ ./deployAllLocal.sh
 ```
+Cela démarre un environement iso-prod.
 
 Cette commande va lalancer les conteneurs suivants :
 * Un serveur ```mongodb```, écoutant sur le port ```"27017```
 * Un serveur ```postgresql```, écoutant sur le port ```5432```
 * Un serveur HTTP ```Vert.x```, écoutant sur le port ```8080```
+* Un serveur HTTP ```nginx```, écoutant sur le port ```80```
     
-[Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc```
+[Documentation API] La documentation de l'API est disponible sur ```http://localhost:8080/doc``` (remplacer localhost par votre base URL en cas de déploiement distant)
 
 L'administrateur par défaut de l'application est :
 ```
@@ -51,7 +53,7 @@ $ rm - rf ../Docker/mongodb/data;
 $ rm - rf ../Docker/postgresql/data
 ```
 
-Pour supprimer définitivement les conteneurs et images Docker associés au projet :
+Pour supprimer définitivement les conteneurs et images Docker (ATTENTION : cela stop et supprime tous les conteneurs Docker présent sur votre machine !) :
 ```sh
 $ ./dockerRemoveAll.sh
 ```
@@ -59,7 +61,6 @@ $ ./dockerRemoveAll.sh
 **Free Software, Hell Yeah!**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
 
    [Maven]: <https://maven.apache.org/>
    [Oracle JDK8]: <http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html>
