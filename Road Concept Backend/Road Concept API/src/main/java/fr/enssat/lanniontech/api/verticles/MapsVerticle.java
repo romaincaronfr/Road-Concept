@@ -203,16 +203,14 @@ public class MapsVerticle extends AbstractVerticle {
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
             String data = uploadedFile.toString();
 
-            if (data.startsWith("<")) { //XML Data that need to be converted
+            if (data.startsWith("<")) { // message.body() is XML Data that need to be converted
                 vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
-                HttpResponseBuilder.buildOkResponse(routingContext, -1);
 
-                // TODO: Refacto ce code dégeu
                 MessageConsumer<String> consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
                 consumer.handler(message -> {
-                    System.out.println("JAVA RECEIVE : " + message.body());
                     try {
-                        mapService.importFromOSM(currentUser, mapID, message.body());
+                        int importedCount = mapService.importFromOSM(currentUser, mapID, message.body());
+                        HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
                     } catch (Exception e) {
                         HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
                     }
@@ -234,4 +232,3 @@ public class MapsVerticle extends AbstractVerticle {
     }
 }
 
-}
