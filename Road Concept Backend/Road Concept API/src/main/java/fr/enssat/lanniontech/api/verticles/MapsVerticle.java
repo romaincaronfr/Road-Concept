@@ -13,6 +13,7 @@ import fr.enssat.lanniontech.api.utilities.HttpResponseBuilder;
 import fr.enssat.lanniontech.api.utilities.JSONUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.DecodeException;
 import io.vertx.core.json.JsonObject;
@@ -200,12 +201,29 @@ public class MapsVerticle extends AbstractVerticle {
             FileUpload fileUpload = fileUploadIterator.next(); // We expect only one file
 
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
+            String data = uploadedFile.toString();
 
-            int importedCount = mapService.importFromOSM(currentUser, mapID, uploadedFile.toString());
+            if (data.startsWith("<")) { //XML Data that need to be converted
+                vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
+                HttpResponseBuilder.buildOkResponse(routingContext, -1);
+
+                // TODO: Refacto ce code dégeu
+                MessageConsumer<String> consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
+                consumer.handler(message -> {
+                    System.out.println("JAVA RECEIVE : " + message.body());
+                    try {
+                        mapService.importFromOSM(currentUser, mapID, message.body());
+                    } catch (Exception e) {
+                        HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+                    }
+                });
+            } else {
+                int importedCount = mapService.importFromOSM(currentUser, mapID, uploadedFile.toString());
+                HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
+            }
 
             vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
 
-            HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
         } catch (NoSuchElementException e) {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Nothing to process");
         } catch (EntityNotExistingException e) {
@@ -214,4 +232,6 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
+}
+
 }
