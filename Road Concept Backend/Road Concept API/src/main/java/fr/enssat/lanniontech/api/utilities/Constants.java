@@ -32,6 +32,13 @@ public final class Constants {
     public static final String POSTGRESQL_FOREIGN_KEY_VIOLATION = "23503";
     public static final String POSTGRESQL_UNIQUE_VIOLATION = "23505";
 
+    // =========
+    // EVENT BUS
+    // =========
+
+    public static final String BUS_OSMTOGEOJSON_SEND = "osmtogeojson-from-java";
+    public static final String BUS_OSMTOGEOJSON_RECEIVE = "osmtogeojson-from-js";
+
     // ====================
     // SINGLETON MANAGEMENT
     // ====================
