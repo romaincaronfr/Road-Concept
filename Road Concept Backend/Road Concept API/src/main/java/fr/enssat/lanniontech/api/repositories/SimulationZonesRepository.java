@@ -32,8 +32,8 @@ public class SimulationZonesRepository extends SimulationRepository {
                 statement.setString(3, zone.getWorkingFeatureUUID().toString());
                 statement.setInt(4, zone.getDepartureLivingS());
                 statement.setInt(5, zone.getDepartureWorkingS());
-                statement.setInt(6, zone.getCarPercentage() );
-                statement.setInt(7, zone.getVehicleCount() );
+                statement.setInt(6, zone.getCarPercentage());
+                statement.setInt(7, zone.getVehicleCount());
 
                 try {
                     statement.execute();

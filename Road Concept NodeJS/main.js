@@ -1,6 +1,3 @@
-/**
- * Created by paul on 18/01/17.
- */
 
 //===========================================//
 //Lib
@@ -15,7 +12,6 @@ console.log('Démmarage du serveur NodeJS : OK');
 
 
 var server = http.createServer(function (request, res) {
-    var method = request.method;
     var body = '';
     request.on('error', function (err) {
         console.error(err);
@@ -32,7 +28,6 @@ var server = http.createServer(function (request, res) {
         }
         parsefile = osmtogeojson(parsefile);
         parsefile = JSON.stringify(parsefile);
-        console.log(parsefile.length);
         res.writeHead(200, {
             "Content-Type": "text/html"
         });

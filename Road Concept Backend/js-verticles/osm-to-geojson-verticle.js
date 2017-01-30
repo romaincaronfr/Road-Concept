@@ -1,11 +1,4 @@
-/**
- * Created by paul on 30/01/17.
- */
-
-
 require("vertx-js/vertx");
-var Buffer = require("vertx-js/buffer");
-var totalebuffer = Buffer.buffer();
 
 var eb = vertx.eventBus();
 eb.consumer("osmtogeojson-from-java", function (message) {
