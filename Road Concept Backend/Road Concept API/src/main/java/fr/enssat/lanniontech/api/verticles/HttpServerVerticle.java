@@ -25,9 +25,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
-    private static final int KB = 1024;
-    private static final int MB = 1024 * KB;
-
     @Override
     public void start() {
         Router router = Router.router(vertx);
@@ -42,7 +39,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new MapsVerticle(router));
         vertx.deployVerticle(new SimulatorVerticle(router));
         vertx.deployVerticle(new UserVerticle(router));
-        vertx.deployVerticle("js-verticles/osm-geojson-converter-verticle.js");
+        vertx.deployVerticle("js-verticles/osm-to-geojson-verticle.js");
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
         LOGGER.warn("Road Concept API successfully started !");
@@ -53,7 +50,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         configureCORS(corsHandler);
         router.route().handler(corsHandler); // Allows cross domain origin request
 
-        router.route().handler(BodyHandler.create().setBodyLimit(50 * MB));
+        router.route().handler(BodyHandler.create());
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx))); // All request *MUST* terminate on the same server
 
