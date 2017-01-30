@@ -42,7 +42,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         vertx.deployVerticle(new MapsVerticle(router));
         vertx.deployVerticle(new SimulatorVerticle(router));
         vertx.deployVerticle(new UserVerticle(router));
-        vertx.deployVerticle("Road Concept Backend/js-verticles/osm_to_geojson_verticle");
+        vertx.deployVerticle("js-verticles/osm-geojson-converter-verticle.js");
 
         vertx.createHttpServer().requestHandler(router::accept).listen(Constants.HTTP_SERVER_PORT);
         LOGGER.warn("Road Concept API successfully started !");
