@@ -26,5 +26,5 @@ RUN npm install
 # Bundle app source
 COPY buildData/main.js /usr/src/app
 
-EXPOSE 8889
+EXPOSE 8888
 CMD [ "npm", "start" ]

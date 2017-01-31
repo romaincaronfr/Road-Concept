@@ -73,7 +73,7 @@ var server = http.createServer(function (request, res) {
         });
     });
 });
-server.listen(8889);
+server.listen(8888);
 
 function osm2geojson(filepath, options) {
     var file = new osmium.File(path.resolve(filepath));
