@@ -35,9 +35,7 @@ app.simulationCreationView = Backbone.View.extend({
 
     initialize: function (options) {
         this.id = options.id;
-        console.log('id:' + this.id);
         this.step = 0;
-        console.log("step : " + this.step);
         this.mapDetailsCOllection = new app.collections.mapDetailsCollection({id: this.id});
         this.zones = [];
         this.colorsCouple = [[0, 0, 255, 1],[255, 0, 0, 1],[0, 200, 0, 1],[127, 0, 255, 1],[255, 0, 127, 1]];
@@ -179,14 +177,12 @@ app.simulationCreationView = Backbone.View.extend({
     },
 
     onRemoveElement: function (element) {
-        console.log("remove");
         $('#osmInfo').empty();
         this.vectorSource.removeFeature(this.vectorSource.getFeatureById(element.attributes.id));
         this.selectPointer.getFeatures().clear();
     },
 
     onSync: function () {
-        console.log('sync');
         this.step = 0;
         /*if (this.mapDetailsCOllection.length > 0) {
          this.vectorSource.clear();
@@ -328,7 +324,6 @@ app.simulationCreationView = Backbone.View.extend({
             })
         });
         if (feature.getProperties().oneway && feature.getProperties().oneway == true) {
-            console.log("oneway true");
             oneway = 0.5;
         }
         switch (type) {
@@ -397,7 +392,6 @@ app.simulationCreationView = Backbone.View.extend({
                 break;
             case 5:
                 //RED_LIGHT
-                console.log(resolution);
                 var style = new ol.style.Style({
                     image: new ol.style.Icon({
                         anchor: [0.5, 0.5],
@@ -411,7 +405,6 @@ app.simulationCreationView = Backbone.View.extend({
                 return style;
                 break;
             default:
-                console.log("default");
                 break;
         }
     },
@@ -578,7 +571,6 @@ app.simulationCreationView = Backbone.View.extend({
             if (this.step < 4) {
                 this.step++;
             }
-            console.log('step : ' + this.step);
 
             this.map.removeInteraction(this.selectPointerMove);
             this.map.removeInteraction(this.selectPointer);
@@ -636,7 +628,6 @@ app.simulationCreationView = Backbone.View.extend({
                     vehicle_count: parseInt(this.vehicle_count)
                 };
                 this.zones.push(newZone);
-                console.log(this.zones);
                 break;
         }
 
@@ -648,7 +639,6 @@ app.simulationCreationView = Backbone.View.extend({
                 this.map.addInteraction(this.selectPointer);
                 this.map.addInteraction(this.snap);
             }
-            console.log('step : ' + this.step);
         }
     },
 
@@ -686,7 +676,6 @@ app.simulationCreationView = Backbone.View.extend({
         $('#osmInfo').empty();
         this.value = 'None';
         this.step--;
-        console.log('step : ' + this.step);
         this.map.addInteraction(this.selectPointerMove);
         this.map.addInteraction(this.selectPointer);
         this.map.addInteraction(this.snap);
@@ -699,7 +688,6 @@ app.simulationCreationView = Backbone.View.extend({
     addCouple: function () {
         this.step = 0;
         this.nbCouple++;
-        console.log('restart step : ' + this.step);
 
         $('#startSim').hide();
         $('#newCouple').hide();
@@ -743,18 +731,15 @@ app.simulationCreationView = Backbone.View.extend({
                 random_traffic: random_traffic,
                 zones: this.zones
             });
-            console.log(model);
             collection.add(model);
             model.save(null, {
                 success: function (result) {
-                    console.log(result);
                     //$('#alertEmptyStart').hide();
                     //$('#modalStartSim').modal('hide');
                     $('#modalStartSim').modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    console.log("success");
                     var simuId = result.attributes.uuid;
                     $('#titleModalStartSimu').text('Simulation en cours de progression');
                     $('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris">0%</div></div>');
@@ -776,7 +761,6 @@ app.simulationCreationView = Backbone.View.extend({
             contentType: "application/json"
         })
             .done(function (data, textStatus, jqXHR) {
-                console.log(data);
                 if (parseInt(data) < 100) {
                     //$('#startSimulationModalBody').html('<div class="progress"><div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="'+data+'" aria-valuemin="0" aria-valuemax="100" style="width:'+data+'%">'+data+'%</div></div>');
                     $('#progressSimulationWithBoostrapAuMoinsCeNomDIDNeseraPasPris').prop('style','width:'+data+'%');
@@ -844,7 +828,6 @@ app.simulationCreationView = Backbone.View.extend({
                 pass = true;
                 break;
             default:
-                console.log('step > 3 ou < 0');
                 break;
         }
 
@@ -861,6 +844,5 @@ app.simulationCreationView = Backbone.View.extend({
                 this.step--;
             }
         }
-        console.log('cancel, step:' + this.step);
     }
 });

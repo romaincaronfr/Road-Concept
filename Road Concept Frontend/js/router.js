@@ -154,7 +154,6 @@ app.Router = Backbone.Router.extend({
     },
 
     homeSimulation: function (id) {
-        console.log("home simulation");
         this.checkAndDestroyMap();
         this.checkAndInitNavBar();
         if (!this.homeSimuV) {

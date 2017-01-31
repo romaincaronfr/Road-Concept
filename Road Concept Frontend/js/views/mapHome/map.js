@@ -51,7 +51,6 @@ app.mapView = Backbone.View.extend({
             reader.readAsDataURL(file);
 
             img.onload = function () {
-                console.log("Chargement de l'image");
                 // Création du canevas pour resize l'image
                 var canvas = document.createElement('canvas');
                 var ctx = canvas.getContext("2d");

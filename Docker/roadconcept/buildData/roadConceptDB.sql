@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "simulation" (
   "uuid"                   VARCHAR(40) PRIMARY KEY,
   "id_user"                INTEGER             NOT NULL REFERENCES "final_user" (id) ON DELETE CASCADE,
   "id_map"                 INTEGER             NOT NULL REFERENCES "map_info" (id) ON DELETE CASCADE,
-  "name"                   VARCHAR(100) UNIQUE NOT NULL,
+  "name"                   VARCHAR(100)        NOT NULL,
   "sampling"               INTEGER             NOT NULL,
   "finish"                 BOOLEAN             NOT NULL,
   "creation_date"          VARCHAR(10)         NOT NULL,
