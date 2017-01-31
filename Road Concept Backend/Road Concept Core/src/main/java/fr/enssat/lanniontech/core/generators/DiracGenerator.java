@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DiracGenerator extends Generator {
+public class DiracGenerator implements Generator {
 
     protected long startTimestamp;
     protected List<VehicleKernel> kernels;

@@ -3,7 +3,12 @@ package fr.enssat.lanniontech.core.trajectory.informations;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class TrajectoryInformator {
     private List<Trajectory> exploredTrajectories;
@@ -14,38 +19,37 @@ public class TrajectoryInformator {
     public TrajectoryInformator(double distanceOut) {
         exploredTrajectories = new ArrayList<>();
         junctions = new TreeMap<>();
-        informations =new TreeSet<>();
+        informations = new TreeSet<>();
         this.distanceOut = distanceOut;
     }
 
-    public void addJunction(Double distance,TrajectoryJunction junction){
-            if(exploredTrajectories.contains(junction.getSource()) &&
-                    exploredTrajectories.contains(junction.getDestination())) {
-                junctions.put(distance,junction);
-            }
+    public void addJunction(Double distance, TrajectoryJunction junction) {
+        if (exploredTrajectories.contains(junction.getSource()) && exploredTrajectories.contains(junction.getDestination())) {
+            junctions.put(distance, junction);
+        }
     }
 
-    public void addInformation(TrajectoryInformation information){
+    public void addInformation(TrajectoryInformation information) {
         this.informations.add(information);
     }
 
-    public void computeInformations(){
-        while(!junctions.isEmpty()){
+    public void computeInformations() {
+        while (!junctions.isEmpty()) {
             Double key = junctions.firstKey();
             TrajectoryJunction value = junctions.get(key);
 
-            if(!exploredTrajectories.contains(value.getSource())){
-                value.getSource().getInformations(value.getSourcePos(),key,this);
+            if (!exploredTrajectories.contains(value.getSource())) {
+                value.getSource().getInformations(value.getSourcePos(), key, this);
             }
 
-            if(!exploredTrajectories.contains(value.getDestination())){
-                value.getDestination().getInformations(value.getDestinationPos(),key,this);
+            if (!exploredTrajectories.contains(value.getDestination())) {
+                value.getDestination().getInformations(value.getDestinationPos(), key, this);
             }
 
             junctions.remove(key);
         }
-        if(informations.isEmpty()){
-            informations.add(new TrajectoryInformation(distanceOut,0,InformationType.FREE));
+        if (informations.isEmpty()) {
+            informations.add(new TrajectoryInformation(distanceOut, 0, InformationType.FREE));
         }
     }
 
@@ -53,7 +57,7 @@ public class TrajectoryInformator {
         return distanceOut;
     }
 
-    public void setExplored(Trajectory t){
+    public void setExplored(Trajectory t) {
         exploredTrajectories.add(t);
     }
 

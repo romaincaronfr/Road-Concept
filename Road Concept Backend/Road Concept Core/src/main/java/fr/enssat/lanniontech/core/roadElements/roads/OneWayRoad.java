@@ -18,9 +18,9 @@ public class OneWayRoad extends Road {
     @Override
     public int getCongestion() {
         double occupiedSpace = 0;
-        for (RoadSection rs : sections){
+        for (RoadSection rs : sections) {
             occupiedSpace += rs.getCongestion()[0].getCongestionValue();
         }
-        return (int)(100 * occupiedSpace / getLength());
+        return (int) (100 * occupiedSpace / getLength());
     }
 }

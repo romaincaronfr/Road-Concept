@@ -4,12 +4,10 @@ package fr.enssat.lanniontech.core.vehicleElements;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Lane;
 import fr.enssat.lanniontech.core.trajectory.Trajectory;
-import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Side {
@@ -101,15 +99,15 @@ public class Side {
         return length;
     }
 
-    public TrajectoryInformator getInformations(double distanceOut){
-        return myTrajectory.getInformations(this,distanceOut);
+    public TrajectoryInformator getInformations(double distanceOut) {
+        return myTrajectory.getInformations(this, distanceOut);
     }
 
     public Trajectory getMyTrajectory() {
         return myTrajectory;
     }
 
-    public void resetPath(){
+    public void resetPath() {
         pathStep = 1;
         myRoad = myVehicle.getPathStep(0);
         nextRoad = myVehicle.getPathStep(pathStep);

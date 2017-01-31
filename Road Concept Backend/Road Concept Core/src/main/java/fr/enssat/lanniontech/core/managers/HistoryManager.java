@@ -46,7 +46,7 @@ public class HistoryManager extends Observable {
     }
 
     public List<RoadMetrics> getRoadMetricsSample() {
-        List<RoadMetrics> sample = null;
+        List<RoadMetrics> sample;
         try {
             lock.readLock().lock();
             sample = roadMetricsHistoryFiFo.get(0);
@@ -57,7 +57,7 @@ public class HistoryManager extends Observable {
     }
 
     public List<SpaceTimePosition> getPositionSample() {
-        List<SpaceTimePosition> sample = null;
+        List<SpaceTimePosition> sample;
         try {
             lock.readLock().lock();
             sample = positionHistoryFiFo.get(0);

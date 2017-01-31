@@ -19,7 +19,12 @@ import fr.enssat.lanniontech.core.trajectory.TrajectoryJunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class RoadManager {
@@ -501,14 +506,14 @@ public class RoadManager {
         }
     }
 
-    public List<Road> getRoads(){
+    public List<Road> getRoads() {
         List<Road> res = new ArrayList<>();
         Road R;
         res.addAll(roads.values());
         Iterator<Road> I = res.iterator();
-        while(I.hasNext()){
-            R =I.next();
-            if(R instanceof RoundAbout){
+        while (I.hasNext()) {
+            R = I.next();
+            if (R instanceof RoundAbout) {
                 I.remove();
             }
         }

@@ -1,11 +1,11 @@
 package fr.enssat.lanniontech.core.trajectory.informations;
 
-public class TrajectoryInformation implements Comparable{
+public class TrajectoryInformation implements Comparable {
     private double distance;
     private double speed;
     private InformationType type;
 
-    public TrajectoryInformation(double distance,double speed,InformationType type){
+    public TrajectoryInformation(double distance, double speed, InformationType type) {
         this.distance = distance;
         this.speed = speed;
         this.type = type;
@@ -23,16 +23,16 @@ public class TrajectoryInformation implements Comparable{
         return type;
     }
 
-    public boolean isFree(){
+    public boolean isFree() {
         return type == InformationType.FREE;
     }
 
-    public double nearestScore(){
-        if(isFree()){
+    public double nearestScore() {
+        if (isFree()) {
             return distance / 30;
         }
         double score = distance / Math.abs(speed);
-        if(type == InformationType.INCOMING_VEHICLE){
+        if (type == InformationType.INCOMING_VEHICLE) {
             score *= 5;
         }
         return score;
@@ -40,8 +40,8 @@ public class TrajectoryInformation implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-        TrajectoryInformation information = (TrajectoryInformation)o;
+        TrajectoryInformation information = (TrajectoryInformation) o;
 
-        return (int)(100*(nearestScore() - information.nearestScore()));
+        return (int) (100 * (nearestScore() - information.nearestScore()));
     }
 }

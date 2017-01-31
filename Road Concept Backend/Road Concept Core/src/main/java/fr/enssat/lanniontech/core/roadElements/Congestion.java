@@ -8,7 +8,7 @@ public class Congestion {
     public Congestion(double occupiedSpace, double totalSpace) {
         occupiedSpace *= 4;
         this.congestionValue = occupiedSpace;
-        this.congestionPercent = 100*occupiedSpace/totalSpace;
+        this.congestionPercent = 100 * occupiedSpace / totalSpace;
     }
 
     public double getCongestionValue() {
@@ -20,9 +20,9 @@ public class Congestion {
     }
 
     public static Congestion max(Congestion congestion, Congestion congestion1) {
-        if(congestion.getCongestionValue()>congestion1.getCongestionValue()){
+        if (congestion.getCongestionValue() > congestion1.getCongestionValue()) {
             return congestion;
-        }else {
+        } else {
             return congestion1;
         }
     }

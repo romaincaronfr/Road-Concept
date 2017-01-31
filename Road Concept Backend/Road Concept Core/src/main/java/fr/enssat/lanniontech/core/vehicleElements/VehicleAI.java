@@ -38,7 +38,7 @@ public class VehicleAI {
     public double getDistanceDone(double time) {
         double dDone = Va * time;
         Va += A * time;
-        if(Va < 0){
+        if (Va < 0) {
             Va = 0;
         }
         return dDone;

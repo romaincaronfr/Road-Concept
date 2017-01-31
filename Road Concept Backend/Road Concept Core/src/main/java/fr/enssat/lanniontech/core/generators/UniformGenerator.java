@@ -5,13 +5,13 @@ import java.util.List;
 
 public class UniformGenerator extends DiracGenerator {
 
-    double step;
-    double delta;
+    private double step;
+    private double delta;
 
     public UniformGenerator(int startTimestamp, //in seconds
-                            int quantity, int carPercentage,double length){
-        super(startTimestamp,quantity,carPercentage);
-        step = quantity/length;
+                            int quantity, int carPercentage, double length) {
+        super(startTimestamp, quantity, carPercentage);
+        step = quantity / length;
         delta = 0;
     }
 
@@ -23,7 +23,7 @@ public class UniformGenerator extends DiracGenerator {
             int quantityToAdd = (int) delta;
             delta -= quantityToAdd;
             int i = 0;
-            while(i<quantityToAdd && !kernels.isEmpty()){
+            while (i < quantityToAdd && !kernels.isEmpty()) {
                 res.add(kernels.get(0));
                 kernels.remove(0);
                 i++;

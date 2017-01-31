@@ -54,11 +54,6 @@ public class Simulator extends Observable implements Runnable {
         if (simulatorThread.isAlive()) {
             return false;
         } else {
-            //  UncaughtExceptionHandler h = (Thread th, Throwable ex) -> {
-            //      LOGGER.error("Exception in child thread");
-            //      ex.printStackTrace();
-            //  };
-            //   simulatorThread.setUncaughtExceptionHandler(h);
             this.samplingRate = samplingRate;
             this.length = length;
             this.precision = precision;
@@ -85,10 +80,10 @@ public class Simulator extends Observable implements Runnable {
                     vehicleManager.updateBuffers(timestamp);
                     k = 1;
                     l++;
-                    if(l == 10){
-                        l=1;
+                    if (l == 10) {
+                        l = 1;
                         vehicleManager.updatePath();
-                    }else {
+                    } else {
                         l++;
                     }
                 } else {
@@ -97,11 +92,11 @@ public class Simulator extends Observable implements Runnable {
 
                 if (j == samplingRate) {
                     vehicleManager.newStep(precision, true, timestamp);
-                    if(vehicleManager.getVehiclesNumber()>0){
+                    if (vehicleManager.getVehiclesNumber() > 0) {
                         roadManager.saveSates(historyManager, timestamp);
                     }
                     j = 1;
-                    if(historyManager.hasToCommit()){
+                    if (historyManager.hasToCommit()) {
                         historyManager.commitChanges(simId);
                     }
                 } else {
