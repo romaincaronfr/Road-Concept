@@ -17,6 +17,7 @@ console.log('Démmarage du serveur NodeJS : OK');
 
 var server = http.createServer(function (request, res) {
     var body = '';
+    var wait = true;
     var file_id = os.uptime();
     var ws = fs.createWriteStream(file_id + ".osm");
     console.log(file_id);
@@ -25,34 +26,49 @@ var server = http.createServer(function (request, res) {
     });
     request.on('data', function (data) {
         ws.write(data);
+        console.log("writing");
     });
 
-    request.on('end', function () {
-        try {
-            osm2geojson(file_id + '.osm')
-                .on('fail', function(err) { throw err; })
-                .on('error', function(err) { throw err; })
-                .pipe(geojson.stringify())
-                .on('error', function(err) { throw err; })
-                .pipe(fs.createWriteStream(file_id + '.json'));
+    request.on('end', function() {
+        ws.end();
+        console.log('waiting');
+        ws.on('close', function () {
+            console.log('reading');
+            try {
+                var ws2 = fs.createWriteStream(file_id + '.json');
 
-            res.writeHead(200, {
-                "Content-Type": "text/html"
-            });
+                osm2geojson(file_id + '.osm')
+                    .on('fail', function (err) {
+                        throw err;
+                    })
+                    .on('error', function (err) {
+                        throw err;
+                    })
+                    .pipe(geojson.stringify())
+                    .on('error', function (err) {
+                        throw err;
+                    })
+                    .pipe(ws2).on("finish",function () {
+                    console.log("restart");
 
-            fs.createReadStream(file_id + '.json').pipe(res);
+                    res.writeHead(200, {
+                        "Content-Type": "text/html"
+                    });
 
-            res.end();
-        } catch (e){
-            res.writeHead(500, {
-                "Content-Type": "text/html"
-            });
-            res.end();
-        }
+                    fs.createReadStream(file_id + '.json').pipe(res);
 
-        fs.unlink(file_id + '.osm');
-        fs.unlink(file_id + '.json');
+                    fs.unlink(file_id + '.osm');
+                    fs.unlink(file_id + '.json')
+                });
 
+            } catch (e) {
+                res.writeHead(500, {
+                    "Content-Type": "text/html"
+                });
+                res.end();
+            }
+
+        });
     });
 });
 server.listen(8889);
