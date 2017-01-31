@@ -32,7 +32,7 @@ public class MapService extends AbstractService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MapService.class);
 
-    private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road" /*, "traffic_signals"*/};
+    private static final String[] OSM_HIGHWAY_TO_CONSERVE = {"motorway", "trunk", "primary", "secondary", "tertiary", "residential", "motorway_link", "trunk_link", "primary_link", "secondary_link", "tertiary_link", "road" /*, "traffic_signals"*/};
 
     private MapInfoRepository mapInfoRepository = new MapInfoRepository();
     private MapFeatureRepository mapFeatureRepository = new MapFeatureRepository();
@@ -295,7 +295,7 @@ public class MapService extends AbstractService {
                     break;
             }
         }
-        return Integer.MIN_VALUE;
+        return 50; // Default value
     }
 
     //    private Integer getRedLightTime(Map<String, Object> properties) {
@@ -316,10 +316,7 @@ public class MapService extends AbstractService {
 
         Map<UUID, Feature> tab = new HashMap<>();
         Map<UUID, List<Boolean>> tabBool = new HashMap<>();
-
-        //List<Boolean> splitNewFeatureAt = new ArrayList<>(Arrays.asList(new Boolean[createdRoad.getCoordinates().size()]));
-        //Collections.fill(splitNewFeatureAt, Boolean.FALSE);
-
+        
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
 
         //regarde le tableau des intersection potentielles
@@ -354,7 +351,6 @@ public class MapService extends AbstractService {
                         firstPointRoadB = new Coordinates(createdRoad.getCoordinates().get(i).getLongitude(), createdRoad.getCoordinates().get(i).getLatitude());
                         boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB);
                         if (intersectionPoint) {
-                            //splitNewFeatureAt.set(i, true);
                             coordinaToCheck.getCoordinates().add(j + 1, createdRoad.getCoordinates().get(i));
                             tabBool.get(uuid).add(j + 1, true);
                             break;
