@@ -87,7 +87,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
             int progress = simulatorService.getExecutionProgress(simulationUUID, activesSimulations);
             HttpResponseBuilder.buildOkResponse(routingContext, progress);
-        } catch (ProgressUnavailableException e) {
+        } catch (ProgressUnavailableException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "The given simulation is not currently available :( (not in the session)");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -196,7 +196,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             activesSimulations.add(simulation);
 
             HttpResponseBuilder.buildOkResponse(routingContext, simulation);
-        } catch (EntityAlreadyExistsException e) {
+        } catch (EntityAlreadyExistsException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "A simulation already exists with the given name.");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
@@ -214,7 +214,7 @@ public class SimulatorVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildOkResponse(routingContext, features);
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        } catch (NumberFormatException | InvalidParameterException e) {
+        } catch (NumberFormatException | InvalidParameterException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "The timestamp value is not coherent with the sampling rate.");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);

@@ -55,9 +55,9 @@ public class UserVerticle extends AbstractVerticle {
             int id = Integer.parseInt(routingContext.request().getParam("userID"));
             userService.delete(id);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
-        } catch (PrivilegeLevelException e) {
+        } catch (PrivilegeLevelException e) { //NOSONAR
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid ID");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -70,9 +70,9 @@ public class UserVerticle extends AbstractVerticle {
             int id = Integer.parseInt(routingContext.request().getParam("userID"));
             User user = userService.get(id);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
-        } catch (PrivilegeLevelException e) {
+        } catch (PrivilegeLevelException e) { //NOSONAR
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid ID");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
@@ -101,15 +101,15 @@ public class UserVerticle extends AbstractVerticle {
 
             User user = userService.create(email, password, lastName, firstName, type);
             HttpResponseBuilder.buildCreatedResponse(routingContext, user);
-        } catch (DecodeException e) {
+        } catch (DecodeException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
-        } catch (PrivilegeLevelException e) {
+        } catch (PrivilegeLevelException e) { //NOSONAR
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
-        } catch (ClassCastException e) {
+        } catch (ClassCastException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Bad format for parameters. Check the API documentation.");
-        } catch (InvalidParameterException e) {
+        } catch (InvalidParameterException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, e.getMessage());
-        } catch (EntityAlreadyExistsException e) {
+        } catch (EntityAlreadyExistsException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "An user already exists for this email");
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
@@ -143,9 +143,9 @@ public class UserVerticle extends AbstractVerticle {
             }
 
             HttpResponseBuilder.buildOkResponse(routingContext, updated);
-        } catch (DecodeException e) {
+        } catch (DecodeException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Invalid JSON format");
-        } catch (PrivilegeLevelException e) {
+        } catch (PrivilegeLevelException e) { //NOSONAR
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
@@ -159,7 +159,7 @@ public class UserVerticle extends AbstractVerticle {
             checkAdminLevel(routingContext);
             List<User> users = userService.getAll();
             HttpResponseBuilder.buildOkResponse(routingContext, users);
-        } catch (PrivilegeLevelException e) {
+        } catch (PrivilegeLevelException e) { //NOSONAR
             HttpResponseBuilder.buildForbiddenResponse(routingContext, "You must be an administrator to do this action.");
         } catch (Exception e) {
             LOGGER.error(ExceptionUtils.getStackTrace(e));
