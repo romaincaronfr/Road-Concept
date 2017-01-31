@@ -58,7 +58,8 @@ var server = http.createServer(function (request, res) {
                     fs.createReadStream(file_id + '.json').pipe(res);
 
                     fs.unlink(file_id + '.osm');
-                    fs.unlink(file_id + '.json')
+                    fs.unlink(file_id + '.json');
+                    console.log("convert done");
                 });
 
             } catch (e) {
@@ -66,6 +67,7 @@ var server = http.createServer(function (request, res) {
                     "Content-Type": "text/html"
                 });
                 res.end();
+                console.error("convert failed");
             }
 
         });
