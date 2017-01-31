@@ -2,7 +2,6 @@ package fr.enssat.lanniontech.api.repositories;
 
 import fr.enssat.lanniontech.api.entities.User;
 import fr.enssat.lanniontech.api.entities.UserType;
-import fr.enssat.lanniontech.api.exceptions.DatabaseOperationException;
 import fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,7 @@ public class UserRepository extends AbstractRepository {
     // ======
 
     public User create(String email, String lastName, String firstName, String password, UserType type) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setString(1, email);
                 statement.setString(2, password);
@@ -78,7 +77,7 @@ public class UserRepository extends AbstractRepository {
     // ===
 
     public List<User> getAll() {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 try (ResultSet result = statement.executeQuery()) {
                     List<User> users = new ArrayList<>();
@@ -103,7 +102,7 @@ public class UserRepository extends AbstractRepository {
     }
 
     public User getFromId(int id) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
                 statement.setInt(1, id);
 
@@ -126,8 +125,8 @@ public class UserRepository extends AbstractRepository {
         }
     }
 
-    public User getFromEmail(String email) throws DatabaseOperationException {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+    public User getFromEmail(String email) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_EMAIL)) {
                 statement.setString(1, email);
 

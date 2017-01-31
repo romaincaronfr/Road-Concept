@@ -17,6 +17,7 @@ public class SimulationVehicleStatistics implements Entity {
     }
 
     public SimulationVehicleStatistics() {
+        // Needed by Jackson
     }
 
     public int getVehicleID() {

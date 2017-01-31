@@ -204,17 +204,7 @@ public class MapsVerticle extends AbstractVerticle {
             String data = uploadedFile.toString();
 
             if (data.startsWith("<")) { // message.body() is XML Data that need to be converted
-                vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
-
-                MessageConsumer<String> consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
-                consumer.handler(message -> {
-                    try {
-                        int importedCount = mapService.importFromOSM(currentUser, mapID, message.body());
-                        HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
-                    } catch (Exception e) {
-                        HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
-                    }
-                });
+                convertXMLAndImport(routingContext, mapID, currentUser, data);
             } else {
                 int importedCount = mapService.importFromOSM(currentUser, mapID, uploadedFile.toString());
                 HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
@@ -229,6 +219,20 @@ public class MapsVerticle extends AbstractVerticle {
         } catch (Exception e) {
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
+    }
+
+    private void convertXMLAndImport(RoutingContext routingContext, Integer mapID, User currentUser, String data) {
+        vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
+
+        MessageConsumer<String> consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
+        consumer.handler(message -> {
+            try {
+                int importedCount = mapService.importFromOSM(currentUser, mapID, message.body());
+                HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
+            } catch (Exception e) {
+                HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
+            }
+        });
     }
 }
 

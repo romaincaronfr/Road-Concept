@@ -62,7 +62,7 @@ public class HttpServerVerticle extends AbstractVerticle {
             if (routingContext.session() == null || routingContext.session().get(Constants.SESSION_CURRENT_USER) == null) {
                 HttpResponseBuilder.buildUnauthorizedResponse(routingContext);
             } else {
-                checkActivesSimulations(routingContext); //TODO: Do it here ? Really ?
+                checkActivesSimulations(routingContext); //TODO: Do it here ?
                 routingContext.next(); // process the next handler, if any
             }
         });
@@ -85,13 +85,13 @@ public class HttpServerVerticle extends AbstractVerticle {
         corsHandler.allowCredentials(true);
     }
 
-    //TODO: Pas idéal d'instancier un repository dans les verticles
+    //TODO: Pas idéal d'instancier un repository dans les verticles, faire un passage par la couche service ?
     private void cleanUpData() {
         try {
             SimulationParametersRepository simulationParametersRepository = new SimulationParametersRepository();
             simulationParametersRepository.deleteUnfinished();
         } catch (Exception e) {
-            LOGGER.error("Cannot clean up data [ " + e.getClass() + " ]");
+            LOGGER.error("Cannot clean up data due to [ " + e.getClass() + " ]");
         }
     }
 

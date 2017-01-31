@@ -21,7 +21,6 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,7 +56,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     private void processGetCongestionsAt(RoutingContext routingContext) {
         try {
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
-            int timestamp = Integer.valueOf(routingContext.request().getParam("timestamp"));
+            int timestamp = Integer.parseInt(routingContext.request().getParam("timestamp"));
 
             List<SimulationCongestionResult> congestions = simulatorService.getMinimalCongestions(simulationUUID, timestamp);
 
@@ -98,7 +97,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     //TODO: Handle exceptions
     private void processGetAllSimulationsForUser(RoutingContext routingContext) {
         try {
-            int userID = Integer.valueOf(routingContext.request().getParam("userID"));
+            int userID = Integer.parseInt(routingContext.request().getParam("userID"));
             List<Simulation> simulations = simulatorService.getAll(userID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulations);
         } catch (Exception e) {
@@ -109,7 +108,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     //TODO: Handle exceptions
     private void processGetAllSimulationsPendingForUser(RoutingContext routingContext) {
         try {
-            int userID = Integer.valueOf(routingContext.request().getParam("userID"));
+            int userID = Integer.parseInt(routingContext.request().getParam("userID"));
             List<Simulation> simulations = simulatorService.getAllPending(userID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulations);
         } catch (Exception e) {
@@ -120,7 +119,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     //TODO: Handle exceptions
     private void processGetAllSimulationsFinishForUser(RoutingContext routingContext) {
         try {
-            int userID = Integer.valueOf(routingContext.request().getParam("userID"));
+            int userID = Integer.parseInt(routingContext.request().getParam("userID"));
             List<Simulation> simulations = simulatorService.getAllFinish(userID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulations);
         } catch (Exception e) {
@@ -149,12 +148,7 @@ public class SimulatorVerticle extends AbstractVerticle {
 
             // Remove the given simulation from the session scope, if present
             List<Simulation> activesSimulations = routingContext.session().get("actives_simulations");
-            for (Iterator<Simulation> iterator = activesSimulations.iterator(); iterator.hasNext(); ) {
-                Simulation simulation = iterator.next();
-                if (simulation.getUuid().equals(simulationUUID)) {
-                    iterator.remove();
-                }
-            }
+            activesSimulations.removeIf(simulation -> simulation.getUuid().equals(simulationUUID));
 
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (Exception e) {
@@ -166,7 +160,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     private void processGetAllSimulationsForMap(RoutingContext routingContext) {
         try {
             User currentUser = routingContext.session().get(Constants.SESSION_CURRENT_USER);
-            int mapID = Integer.valueOf(routingContext.request().getParam("mapID"));
+            int mapID = Integer.parseInt(routingContext.request().getParam("mapID"));
             List<Simulation> simulations = simulatorService.getAll(currentUser, mapID);
             HttpResponseBuilder.buildOkResponse(routingContext, simulations);
         } catch (Exception e) {
@@ -177,7 +171,7 @@ public class SimulatorVerticle extends AbstractVerticle {
     //TODO: Handle exceptions + doc Swagger
     private void processGetVehiclePositionHistory(RoutingContext routingContext) {
         try {
-            int vehicleID = Integer.valueOf(routingContext.request().getParam("vehicleID"));
+            int vehicleID = Integer.parseInt(routingContext.request().getParam("vehicleID"));
             UUID simulationUUID = UUID.fromString(routingContext.request().getParam("simulationUUID"));
 
             FeatureCollection positionsHistory = simulatorService.getVehiculePositionsHistory(simulationUUID, vehicleID);

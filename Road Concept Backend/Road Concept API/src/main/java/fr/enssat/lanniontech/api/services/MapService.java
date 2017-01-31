@@ -122,7 +122,7 @@ public class MapService extends AbstractService {
             mapFeatureRepository.createAll(mapID, toAdd);
         }
 
-        LOGGER.info("Duplicated features : " + (importedFeatures.getFeatures().size() - toAdd.getFeatures().size()));
+        LOGGER.info("Duplicated features : " + (importedFeatures.getFeatures().size() - toAdd.getFeatures().size()) + " | Total imported features : " + toAdd.getFeatures().size());
         return toAdd.getFeatures().size();
     }
 
@@ -231,20 +231,14 @@ public class MapService extends AbstractService {
     }
 
     private Object getName(Map<String, Object> properties) {
-        if (properties.containsKey("name")) {
-            return properties.get("name");
-        }
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("name")) {
             return tags.get("name");
         }
-        return "Unnamed unit road";
+        return "Route sans nom";
     }
 
     private String getOneWay(Map<String, Object> properties) {
-        if (properties.containsKey("oneway")) {
-            return (String) properties.get("oneway");
-        }
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("oneway")) {
             return (String) tags.get("oneway");
@@ -253,12 +247,6 @@ public class MapService extends AbstractService {
     }
 
     private boolean getBridge(Map<String, Object> properties) {
-        if (properties.containsKey("bridge")) {
-            String oneway = (String) properties.get("bridge");
-            if ("yes".equals(oneway)) {
-                return true;
-            }
-        }
         if (properties.containsKey("tags")) {
             Map tags = (LinkedHashMap) properties.get("tags");
             if (tags.containsKey("bridge")) {
@@ -272,9 +260,6 @@ public class MapService extends AbstractService {
     }
 
     private Integer getMaxSpeed(Map<String, Object> properties) {
-        if (properties.containsKey("maxspeed")) {
-            return Integer.valueOf((String) properties.get("maxspeed"));
-        }
         Map tags = (LinkedHashMap) properties.get("tags");
         if (tags.containsKey("maxspeed")) {
             return Integer.valueOf((String) tags.get("maxspeed"));
@@ -316,7 +301,7 @@ public class MapService extends AbstractService {
 
         Map<UUID, Feature> tab = new HashMap<>();
         Map<UUID, List<Boolean>> tabBool = new HashMap<>();
-        
+
         List<List<String>> potentialIntersections = (List<List<String>>) feature.getProperties().get("intersections");
 
         //regarde le tableau des intersection potentielles
@@ -341,17 +326,17 @@ public class MapService extends AbstractService {
                     Feature duplicatedFeatureToCheck = tab.get(uuid);
 
                     //recup de coordonées
-                    LineString coordinaToCheck = (LineString) duplicatedFeatureToCheck.getGeometry();
+                    LineString coordinatesToCheck = (LineString) duplicatedFeatureToCheck.getGeometry();
 
-                    for (int j = 0; j < coordinaToCheck.getCoordinates().size() - 1; j++) {
-                        Coordinates firstPointRoadA = coordinaToCheck.getCoordinates().get(j); // A = to check
-                        Coordinates lastPointRoadA = coordinaToCheck.getCoordinates().get(j + 1);
+                    for (int j = 0; j < coordinatesToCheck.getCoordinates().size() - 1; j++) {
+                        Coordinates firstPointRoadA = coordinatesToCheck.getCoordinates().get(j); // A = to check
+                        Coordinates lastPointRoadA = coordinatesToCheck.getCoordinates().get(j + 1);
 
                         Coordinates firstPointRoadB;
                         firstPointRoadB = new Coordinates(createdRoad.getCoordinates().get(i).getLongitude(), createdRoad.getCoordinates().get(i).getLatitude());
                         boolean intersectionPoint = MathsUtils.intersect(firstPointRoadA, lastPointRoadA, firstPointRoadB);
                         if (intersectionPoint) {
-                            coordinaToCheck.getCoordinates().add(j + 1, createdRoad.getCoordinates().get(i));
+                            coordinatesToCheck.getCoordinates().add(j + 1, createdRoad.getCoordinates().get(i));
                             tabBool.get(uuid).add(j + 1, true);
                             break;
                         }

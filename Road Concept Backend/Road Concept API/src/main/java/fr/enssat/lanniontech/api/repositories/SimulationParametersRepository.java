@@ -29,7 +29,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ------
 
     public Simulation create(int creatorID, String name, int mapID, int samplingRate, int minDepartureLivingS, boolean randomTraffic) { //NOSONAR: Parameters count
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 Simulation simulation = new Simulation();
 
@@ -68,7 +68,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ===
 
     public List<Simulation> getAll(int userID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, userID);
 
@@ -99,7 +99,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public Simulation getFromUUID(UUID uuid) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_UUID)) {
                 statement.setString(1, uuid.toString());
 
@@ -128,7 +128,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     }
 
     public List<Simulation> getAllFromMap(User user, int mapID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_MAP)) {
                 statement.setInt(1, mapID);
                 statement.setInt(2, user.getId());
@@ -163,7 +163,7 @@ public class SimulationParametersRepository extends SimulationRepository {
     // ======
 
     public void finish(Simulation simulation) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(UPDATE_FINISH)) {
                 statement.setString(1, simulation.getUuid().toString());
                 statement.setInt(2, simulation.getCreatorID());
@@ -187,7 +187,7 @@ public class SimulationParametersRepository extends SimulationRepository {
      * Warning: only supposed to be called on server start-up
      */
     public void deleteUnfinished() {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(DELETE_NOT_FINISH)) {
                 try (ResultSet result = statement.executeQuery()) {
 

@@ -17,7 +17,7 @@ public class SimulationCongestionResult implements Entity {
     }
 
     public SimulationCongestionResult() {
-
+        // Needed by Jackson
     }
 
     public UUID getFeatureUUID() {

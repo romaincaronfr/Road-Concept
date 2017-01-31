@@ -28,7 +28,6 @@ public class Simulation implements SQLEntity {
     private boolean finish;
     @JsonProperty("random_traffic")
     private boolean includeRandomTraffic;
-    // @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private int departureLivingS; // a garder (prendre le min)
     private List<SimulationZone> zones = new ArrayList<>();
 

@@ -39,7 +39,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // ==========
 
     public void addRoadMetric(UUID simulationUUID, List<SimulationCongestionResult> data) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_ROAD_METRIC)) {
                 for (SimulationCongestionResult item : data) {
 
@@ -57,7 +57,7 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     public List<SimulationCongestionResult> getCongestionAt(UUID simulationUUID, int timestamp) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_CONGESTION_AT)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, timestamp);
@@ -85,7 +85,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // ========
 
     public void addVehicleInfo(UUID simulationUUID, List<SimulationVehicleResult> data) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_POSITION)) {
                 for (SimulationVehicleResult item : data) {
                     statement.setString(1, simulationUUID.toString());
@@ -105,7 +105,7 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     public List<SimulationVehicleResult> getItineraryFor(UUID simulationUUID, int vehicleID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ITINERARY_FOR)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, vehicleID);
@@ -134,7 +134,7 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     public List<SimulationVehicleResult> getVehiclesAt(UUID simulationUUID, int timestamp) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_VEHICLES_AT)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, timestamp);
@@ -167,7 +167,7 @@ public class SimulationResultRepository extends SimulationRepository {
     // ==========
 
     public SimulationVehicleStatistics getStatistics(UUID simulationUUID, int vehicleID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_VEHICLE_STATISTICS)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.setInt(2, vehicleID);
@@ -190,7 +190,7 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     public void addVehicleStatistics(UUID simulationUUID, List<SimulationVehicleStatistics> data) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT_VEHICLE_STATISTICS)) {
                 for (SimulationVehicleStatistics item : data) {
                     statement.setString(1, simulationUUID.toString());
@@ -222,7 +222,7 @@ public class SimulationResultRepository extends SimulationRepository {
     }
 
     private void delete(UUID simulationUUID, String query, Class<? extends Entity> clazz) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, simulationUUID.toString());
                 statement.executeUpdate();

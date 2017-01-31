@@ -21,7 +21,6 @@ public class DocumentationVerticle extends AbstractVerticle {
     @Override
     public void start() {
         StaticHandler staticHandler = StaticHandler.create();
-        staticHandler.setCachingEnabled(false); // TODO: Remove in production mode
         staticHandler.setAllowRootFileSystemAccess(true);
         router.route(DOC_PATH).handler(staticHandler);
         // An "application/json" content type have been set by default. We must re-set a "text/html" one.

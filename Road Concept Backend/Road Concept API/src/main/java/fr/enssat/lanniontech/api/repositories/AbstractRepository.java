@@ -16,7 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getConnection;
+import static fr.enssat.lanniontech.api.repositories.connectors.DatabaseConnector.getSQLConnection;
 
 public abstract class AbstractRepository {
 
@@ -31,7 +31,7 @@ public abstract class AbstractRepository {
     // ===================
 
     protected void updateStringField(String tableName, String columnName, SQLEntity entity, String newValue) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
                 statement.setString(1, newValue);
                 statement.setObject(2, entity.getIdentifierValue());
@@ -43,7 +43,7 @@ public abstract class AbstractRepository {
     }
 
     protected void updateIntField(String tableName, String columnName, SQLEntity entity, int newValue) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(computeUpdateSQLQuery(tableName, columnName, entity.getIdentifierName()))) {
                 statement.setInt(1, newValue);
                 statement.setObject(2, entity.getIdentifierValue());
@@ -65,7 +65,7 @@ public abstract class AbstractRepository {
     // ===================
 
     protected final int delete(String tableName, SQLEntity entity) {
-        try (Connection connection = getConnection()) {
+        try (Connection connection = getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement("DELETE FROM \"" + sanitize(tableName) + "\" WHERE " + entity.getIdentifierName() + " = ?")) {
                 if (entity.getIdentifierValue() instanceof UUID) {
                     statement.setObject(1, entity.getIdentifierValue().toString());

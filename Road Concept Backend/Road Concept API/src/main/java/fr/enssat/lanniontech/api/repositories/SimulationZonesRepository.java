@@ -25,7 +25,7 @@ public class SimulationZonesRepository extends SimulationRepository {
     // ------
 
     public SimulationZone create(Simulation simulation, SimulationZone zone) { //NOSONAR: Parameters count
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setString(1, simulation.getUuid().toString());
                 statement.setString(2, zone.getLivingFeatureUUID().toString());
@@ -52,7 +52,7 @@ public class SimulationZonesRepository extends SimulationRepository {
     // ===
 
     public List<SimulationZone> getAll(UUID simulationUUID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_SIMULATION)) {
                 statement.setString(1, simulationUUID.toString());
 

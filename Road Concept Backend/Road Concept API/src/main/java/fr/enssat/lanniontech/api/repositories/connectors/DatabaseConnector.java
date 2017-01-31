@@ -38,7 +38,7 @@ public final class DatabaseConnector {
     /**
      * WARNING: This connection *NEEDS* TO BE CLOSED AFTER USAGE !
      */
-    public static Connection getConnection() throws SQLException {
+    public static Connection getSQLConnection() throws SQLException {
         return DATA_SOURCE.getConnection();
     }
 
@@ -57,7 +57,7 @@ public final class DatabaseConnector {
 
     private static void setUpSQL() {
         configurePostgreSQL();
-        try (Connection initConnection = getConnection()) {
+        try (Connection initConnection = getSQLConnection()) {
             initializeDeveloppmentSchema(initConnection);
             new UserService().create("admin@enssat.fr", "admin", "Admin", "Admin", UserType.ADMINISTRATOR);
             LOGGER.info("Default administrator account has been created.");

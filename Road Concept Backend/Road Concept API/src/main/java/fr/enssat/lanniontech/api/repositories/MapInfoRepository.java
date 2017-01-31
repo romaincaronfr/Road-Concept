@@ -28,7 +28,7 @@ public class MapInfoRepository extends MapRepository {
     // ------
 
     public MapInfo create(User user, String name, String imageURL, String description) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(INSERT)) {
                 statement.setInt(1, user.getId());
                 statement.setString(2, name);
@@ -58,7 +58,7 @@ public class MapInfoRepository extends MapRepository {
     // ---
 
     public List<MapInfo> getAll(User user) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
                 statement.setInt(1, user.getId());
 
@@ -84,7 +84,7 @@ public class MapInfoRepository extends MapRepository {
     }
 
     public MapInfo get(int mapID) {
-        try (Connection connection = DatabaseConnector.getConnection()) {
+        try (Connection connection = DatabaseConnector.getSQLConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SELECT_FROM_ID)) {
                 statement.setInt(1, mapID);
 

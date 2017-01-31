@@ -52,7 +52,7 @@ public class UserVerticle extends AbstractVerticle {
         try {
             checkAdminLevel(routingContext);
 
-            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            int id = Integer.parseInt(routingContext.request().getParam("userID"));
             userService.delete(id);
             HttpResponseBuilder.buildNoContentResponse(routingContext);
         } catch (PrivilegeLevelException e) {
@@ -67,7 +67,7 @@ public class UserVerticle extends AbstractVerticle {
     private void processGetUser(RoutingContext routingContext) {
         try {
             checkAdminLevel(routingContext);
-            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            int id = Integer.parseInt(routingContext.request().getParam("userID"));
             User user = userService.get(id);
             HttpResponseBuilder.buildOkResponse(routingContext, user);
         } catch (PrivilegeLevelException e) {
@@ -123,7 +123,7 @@ public class UserVerticle extends AbstractVerticle {
                 throw new BadRequestException();
             }
 
-            int id = Integer.valueOf(routingContext.request().getParam("userID"));
+            int id = Integer.parseInt(routingContext.request().getParam("userID"));
             User logged = routingContext.session().get(Constants.SESSION_CURRENT_USER);
             if (id != logged.getId()) {
                 checkAdminLevel(routingContext);
