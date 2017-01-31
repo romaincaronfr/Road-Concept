@@ -8,7 +8,7 @@ app.mapView = Backbone.View.extend({
         'click #submitCreateMap': 'clickOnCreateNewMap',
         'click .remove_map': 'clickOnRemove',
         'click .print_map': 'clickOnPrintMap',
-        'click .remove_map_confirm': 'clickOnremove_map_confirm',
+        'click .remove_map_confirm': 'clickOnremove_map_confirm'
     },
     imageBase64 : null,
 
@@ -41,15 +41,13 @@ app.mapView = Backbone.View.extend({
 
         var file = $('input[type=file]')[0].files[0];
 
-        console.log(file);
-
         if (file && file.length != 0 && file.type.match('image.*')) {
 
             var img = document.createElement("img");
             var reader = new FileReader();
             reader.onload = function (e) {
                 img.src = e.target.result
-            }
+            };
             reader.readAsDataURL(file);
 
             img.onload = function () {
@@ -77,7 +75,6 @@ app.mapView = Backbone.View.extend({
                 }
                 canvas.width = width;
                 canvas.height = height;
-                var ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
 
                 urlImg = canvas.toDataURL(file.type);

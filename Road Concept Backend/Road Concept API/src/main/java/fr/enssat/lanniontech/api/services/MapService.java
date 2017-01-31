@@ -96,6 +96,7 @@ public class MapService extends AbstractService {
             throw new EntityNotExistingException(MapInfo.class);
         }
         FeatureCollection importedFeatures = JSONUtils.fromJSON(fileData, FeatureCollection.class);
+        fileData = null; // memory
         fromOSMAdaptation(importedFeatures);
 
         importedFeatures = IntersectionSplitter.process(importedFeatures);

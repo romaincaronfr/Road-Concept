@@ -818,51 +818,13 @@ app.mapEditionView = Backbone.View.extend({
             var re = /(?:\.([^.]+))?$/;
             extentionFile = re.exec(f.name)[1];
         }
-        /*switch (extentionFile) {
-            case 'osm':
-                $('#importModalFooter').addClass('hidden');
-                $('#formImport').addClass('hidden');
-                $('#parseMessage').removeClass('hidden');
-                $('#waitImport').removeClass('hidden');
-                this.encodeOSMtoGeoJSON(f);
-                break;
-            case 'json':
-                $('#importModalFooter').addClass('hidden');
-                $('#formImport').addClass('hidden');
-                $('#waitImport').removeClass('hidden');
-                this.sendImportData(f);
-                break;
-            default:
-                $('#alertImport').removeClass('hidden');
-                break;
-        }*/
-        if (extentionFile == 'osm' || extentionFile == 'json'){
+        if ((extentionFile == 'osm' || extentionFile == 'json') && f.size/1024/1024 < 250){
             $('#importModalFooter').addClass('hidden');
             $('#formImport').addClass('hidden');
             $('#waitImport').removeClass('hidden');
             this.sendImportData(f);
         } else {
             $('#alertImport').removeClass('hidden');
-        }
-    },
-
-    encodeOSMtoGeoJSON: function (osm) {
-        if (osm) {
-            var r = new FileReader();
-            var self = this;
-            r.onload = function (e) {
-                var contents = e.target.result;
-                var parser = new DOMParser();
-                var xmlDoc = parser.parseFromString(contents, "text/xml");
-                contents = osmtogeojson(xmlDoc);
-                contents = JSON.stringify(contents);
-                contents = new File([contents, "import.json"], {type: "application/json"});
-                $('#parseMessage').addClass('hidden');
-                self.sendImportData(contents);
-            };
-            r.readAsText(osm);
-        } else {
-            alert("Failed to load file");
         }
     },
 

@@ -225,7 +225,7 @@ public class MapsVerticle extends AbstractVerticle {
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "File " + e.getMessage() + " is to large to be process. Maximum size is " + Constants.MAX_FILE_UPLOAD_SIZE_MO+"Mo");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        } catch (Exception e) { // look a OutOfMemoryError if suspicious behavior
+        } catch (Throwable e) { // look OutOfMemoryError if suspicious behavior
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
