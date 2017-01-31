@@ -63,11 +63,11 @@ var server = http.createServer(function (request, res) {
                 });
 
             } catch (e) {
+                console.log("convert failed");
                 res.writeHead(500, {
                     "Content-Type": "text/html"
                 });
                 res.end();
-                console.error("convert failed");
             }
 
         });
@@ -108,17 +108,14 @@ function osm2geojson(filepath, options) {
             if (_.difference(keys, ignore).length === 0) return callback();
         }
 
-        ['type', 'id', 'version', 'changeset', 'timestamp', 'user', 'uid']
+        ['type', 'id']
             .forEach(function(key) {
                 feature.properties['osm:' + key] = key === 'type' ? type : osm[key];
             });
 
-        feature.properties['osm:timestamp'] = osm.timestamp();
-
         try {
             feature.geometry = osm.geojson();
-        }
-        catch (err) {
+        } catch (err) {
             err.osmId = feature.id;
             err.message = feature.id + ' | ' + err.message;
 

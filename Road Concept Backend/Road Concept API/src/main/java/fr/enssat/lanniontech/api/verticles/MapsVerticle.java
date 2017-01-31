@@ -5,6 +5,7 @@ import fr.enssat.lanniontech.api.entities.geojson.Feature;
 import fr.enssat.lanniontech.api.entities.map.Map;
 import fr.enssat.lanniontech.api.entities.map.MapInfo;
 import fr.enssat.lanniontech.api.exceptions.EntityNotExistingException;
+import fr.enssat.lanniontech.api.exceptions.FileTooLargeException;
 import fr.enssat.lanniontech.api.exceptions.InconsistentException;
 import fr.enssat.lanniontech.api.exceptions.JSONProcessingException;
 import fr.enssat.lanniontech.api.services.MapService;
@@ -37,6 +38,7 @@ public class MapsVerticle extends AbstractVerticle {
     private MapService mapService = new MapService();
 
     private Router router;
+    private MessageConsumer<String> consumer;
 
     public MapsVerticle(Router router) {
         this.router = router;
@@ -55,6 +57,8 @@ public class MapsVerticle extends AbstractVerticle {
         router.route(HttpMethod.DELETE, "/api/maps/:mapID/features/:featureUUID").blockingHandler(this::processDeleteFeature);
 
         router.route(HttpMethod.POST, "/api/maps/:mapID/import").blockingHandler(this::processImportFromOSM);
+
+        consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
     }
 
     private void processCreateFeature(RoutingContext routingContext) {
@@ -199,6 +203,10 @@ public class MapsVerticle extends AbstractVerticle {
             Set<FileUpload> fileUploadSet = routingContext.fileUploads();
             Iterator<FileUpload> fileUploadIterator = fileUploadSet.iterator();
             FileUpload fileUpload = fileUploadIterator.next(); // We expect only one file
+            if (fileUpload.size() > 1024*1024*Constants.MAX_FILE_UPLOAD_SIZE_MO) {
+                LOGGER.info("File " + fileUpload.uploadedFileName() + " size is too large");
+                throw new FileTooLargeException(fileUpload.uploadedFileName());
+            }
 
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
             String data = uploadedFile.toString();
@@ -211,20 +219,20 @@ public class MapsVerticle extends AbstractVerticle {
             }
 
             vertx.fileSystem().deleteBlocking(fileUpload.uploadedFileName());
-
         } catch (NoSuchElementException e) { //NOSONAR
             HttpResponseBuilder.buildBadRequestResponse(routingContext, "Nothing to process");
+        } catch (FileTooLargeException e) { //NOSONAR
+            HttpResponseBuilder.buildBadRequestResponse(routingContext, "File " + e.getMessage() + " is to large to be process. Maximum size is " + Constants.MAX_FILE_UPLOAD_SIZE_MO+"Mo");
         } catch (EntityNotExistingException e) {
             HttpResponseBuilder.buildNotFoundException(routingContext, e);
-        } catch (Exception e) {
+        } catch (Exception e) { // look a OutOfMemoryError if suspicious behavior
             HttpResponseBuilder.buildUnexpectedErrorResponse(routingContext, e);
         }
     }
 
     private void convertXMLAndImport(RoutingContext routingContext, Integer mapID, User currentUser, String data) {
         vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
-
-        MessageConsumer<String> consumer = vertx.eventBus().consumer(Constants.BUS_OSMTOGEOJSON_RECEIVE);
+        data = null; // memory
         consumer.handler(message -> {
             try {
                 int importedCount = mapService.importFromOSM(currentUser, mapID, message.body());

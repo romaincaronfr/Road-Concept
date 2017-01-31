@@ -38,6 +38,8 @@ public final class Constants {
     public static final String BUS_OSMTOGEOJSON_SEND = "osmtogeojson-from-java";
     public static final String BUS_OSMTOGEOJSON_RECEIVE = "osmtogeojson-from-js";
 
+    public static final int MAX_FILE_UPLOAD_SIZE_MO = 250;
+
     // ====================
     // SINGLETON MANAGEMENT
     // ====================
