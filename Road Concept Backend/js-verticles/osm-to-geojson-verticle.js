@@ -8,7 +8,7 @@ eb.consumer("osmtogeojson-from-java", function (message) {
         // Send to Vert.x event bus
         response.bodyHandler(function (totalBuffer) {
             var rep = totalBuffer.toString();
-            console.log("Response => " + rep);
+            //console.log("Response => " + rep);
             eb.send("osmtogeojson-from-js", rep);
         });
     });
