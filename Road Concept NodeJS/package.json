@@ -1,0 +1,10 @@
+{
+  "name": "osm-converter",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "osmium": "latest",
+    "geojson-stream": "latest",
+    "underscore": "latest"
+  }
+}

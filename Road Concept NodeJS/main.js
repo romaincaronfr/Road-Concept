@@ -4,8 +4,12 @@
 var http = require('http');
 var os = require('os');
 var fs = require('fs');
-var osmtogeojson = require('osmtogeojson');
-var dOMParser = require('xmldom').DOMParser;
+var osmium = require('osmium');
+var _ = require('underscore');
+var stream = require('stream');
+var geojson = require('geojson-stream');
+var path = require('path');
+
 console.log('Démmarage du serveur NodeJS : OK');
 
 //===========================================//
@@ -13,26 +17,103 @@ console.log('Démmarage du serveur NodeJS : OK');
 
 var server = http.createServer(function (request, res) {
     var body = '';
+    var file_id = os.uptime();
+    var ws = fs.createWriteStream(file_id + ".osm");
+    console.log(file_id);
     request.on('error', function (err) {
         console.error(err);
     });
     request.on('data', function (data) {
-        body += data
+        ws.write(data);
     });
 
     request.on('end', function () {
         try {
-            var parsefile = new dOMParser().parseFromString(body.toString(), "text/xml");
-        } catch (error) {
-            console.error(error + "parsefiletest")
+            osm2geojson(file_id + '.osm')
+                .on('fail', function(err) { throw err; })
+                .on('error', function(err) { throw err; })
+                .pipe(geojson.stringify())
+                .on('error', function(err) { throw err; })
+                .pipe(fs.createWriteStream(file_id + '.json'));
+
+            res.writeHead(200, {
+                "Content-Type": "text/html"
+            });
+
+            fs.createReadStream(file_id + '.json').pipe(res);
+
+            res.end();
+        } catch (e){
+            res.writeHead(500, {
+                "Content-Type": "text/html"
+            });
+            res.end();
         }
-        parsefile = osmtogeojson(parsefile);
-        parsefile = JSON.stringify(parsefile);
-        res.writeHead(200, {
-            "Content-Type": "text/html"
-        });
-        res.end(parsefile);
+
+        fs.unlink(file_id + '.osm');
+        fs.unlink(file_id + '.json');
 
     });
 });
-server.listen(8888);
+server.listen(8889);
+
+function osm2geojson(filepath, options) {
+    var file = new osmium.File(path.resolve(filepath));
+    var locator = new osmium.LocationHandler();
+    var osmiumStream = new osmium.Stream(new osmium.Reader(file, locator));
+    var toGeoJSON = new stream.Transform({ objectMode: true});
+    options = options || {};
+
+    toGeoJSON._transform = function(osm, enc, callback) {
+        if (osm.type === 'relation') return callback();
+        if (osm.type === 'area'){
+            return callback();
+        }
+        if (osm.type === 'node'){
+            return callback();
+        }
+
+        var type = osm.type;
+        if (type === 'area') type = osm.from_way ? 'way' : 'relation';
+
+        var temptags = osm.tags();
+
+        var feature = {
+            type: 'Feature',
+            id: [type, osm.id].join('/'),
+            properties: {type:type,id:osm.id,tags : temptags}
+        };
+
+        if (!options.allNodes && osm.type === 'node') {
+            var ignore = ['source', 'created_by'];
+            var keys = Object.keys(feature.properties);
+            if (_.difference(keys, ignore).length === 0) return callback();
+        }
+
+        ['type', 'id', 'version', 'changeset', 'timestamp', 'user', 'uid']
+            .forEach(function(key) {
+                feature.properties['osm:' + key] = key === 'type' ? type : osm[key];
+            });
+
+        feature.properties['osm:timestamp'] = osm.timestamp();
+
+        try {
+            feature.geometry = osm.geojson();
+        }
+        catch (err) {
+            err.osmId = feature.id;
+            err.message = feature.id + ' | ' + err.message;
+
+            if (options.failEvents) {
+                toGeoJSON.emit('fail', err);
+                return callback();
+            }
+
+            return callback();
+        }
+
+        callback(null, feature);
+    };
+
+    return osmiumStream.pipe(toGeoJSON);
+}

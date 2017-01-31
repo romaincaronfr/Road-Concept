@@ -4,7 +4,7 @@ var eb = vertx.eventBus();
 eb.consumer("osmtogeojson-from-java", function (message) {
 
     var client = vertx.createHttpClient();
-    var request = client.post(8888, "localhost", "/", function (response) {
+    var request = client.post(8889, "localhost", "/", function (response) {
 
         // Send to Vert.x event bus
         response.bodyHandler(function (totalBuffer) {
