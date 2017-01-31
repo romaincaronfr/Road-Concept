@@ -6,5 +6,9 @@
     "osmium": "latest",
     "geojson-stream": "latest",
     "underscore": "latest"
+  },
+  "scripts": {
+    "start": "node main.js"
   }
+
 }

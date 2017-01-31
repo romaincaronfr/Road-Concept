@@ -101,3 +101,5 @@ Docker/hiveship-docker-compose.yml
 developper-bin/deployMaelig.sh
 
 Docker/startProd.sh
+
+Road Concept NodeJS/npm-debug\.log

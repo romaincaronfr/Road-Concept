@@ -9,3 +9,4 @@ roadconcept/buildData/*.jar
 NodeJS/buildData/main.js
 
 *.log
+/NodeJS/buildData/package.json
