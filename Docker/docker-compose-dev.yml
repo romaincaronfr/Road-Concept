@@ -8,7 +8,6 @@ services:
     links:
       - "postgresql"
       - "mongodb"
-      - "node"
   postgresql:
     build: ./postgresql
     environment:
@@ -27,8 +26,3 @@ services:
     build: ./nginx
     ports:
       - "80:80"
-  node:
-    build: ./NodeJS
-    ports:
-      - "8888:8888"
-

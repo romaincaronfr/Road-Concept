@@ -5,4 +5,3 @@ echo $SCRIPTPATH
 
 $SCRIPTPATH/roadconcept/clean.sh
 $SCRIPTPATH/nginx/clean.sh
-$SCRIPTPATH/NodeJS/clean.sh

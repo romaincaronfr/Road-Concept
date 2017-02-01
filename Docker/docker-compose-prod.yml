@@ -14,7 +14,6 @@ services:
     links:
       - "postgresql"
       - "mongodb"
-      - "node"
   postgresql:
     build: ./postgresql
     environment:
@@ -25,7 +24,5 @@ services:
     build: ./mongodb
     volumes:
       - /var/roadconcept/mongodb/data:/data/db:rw
-  node:
-    build: ./NodeJS
 
 
