@@ -49,7 +49,7 @@ public class Lane {
     }
 
     public Congestion getCongestion() {
-        Congestion congestion = new Congestion(0,1);
+        Congestion congestion = new Congestion(0, 1);
         for (SimpleTrajectory trajectory : trajectories) {
             congestion = Congestion.max(trajectory.getCongestion(), congestion);
         }

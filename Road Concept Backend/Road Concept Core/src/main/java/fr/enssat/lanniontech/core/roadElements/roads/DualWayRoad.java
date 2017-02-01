@@ -19,12 +19,12 @@ public class DualWayRoad extends Road {
     public int getCongestion() {
         double occupiedSpace1 = 0;
         double occupiedSpace2 = 0;
-        for (RoadSection rs : sections){
+        for (RoadSection rs : sections) {
             occupiedSpace1 += rs.getCongestion()[0].getCongestionValue();
             occupiedSpace2 += rs.getCongestion()[1].getCongestionValue();
         }
-        double occupiedSpace = Math.max(occupiedSpace1,occupiedSpace2);
-        return (int)(100 * occupiedSpace / getLength());
+        double occupiedSpace = Math.max(occupiedSpace1, occupiedSpace2);
+        return (int) (100 * occupiedSpace / getLength());
     }
 
 }

@@ -1,7 +1,10 @@
 package fr.enssat.lanniontech.core.managers;
 
 import fr.enssat.lanniontech.core.exceptions.DestinationUnreachableException;
-import fr.enssat.lanniontech.core.generators.*;
+import fr.enssat.lanniontech.core.generators.Generator;
+import fr.enssat.lanniontech.core.generators.UniformGenerator;
+import fr.enssat.lanniontech.core.generators.VehicleBuffer;
+import fr.enssat.lanniontech.core.generators.VehicleKernel;
 import fr.enssat.lanniontech.core.pathFinding.Path;
 import fr.enssat.lanniontech.core.pathFinding.PathFinder;
 import fr.enssat.lanniontech.core.roadElements.Lane;
@@ -13,9 +16,13 @@ import fr.enssat.lanniontech.core.trajectory.Trajectory;
 import fr.enssat.lanniontech.core.vehicleElements.Vehicle;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleStats;
 import fr.enssat.lanniontech.core.vehicleElements.VehicleType;
-import sun.security.krb5.internal.PAData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class VehicleManager {
     private List<Vehicle> vehicles;
@@ -24,7 +31,7 @@ public class VehicleManager {
     private HistoryManager historyManager;
     private RoadManager roadManager;
     private PathFinder pathFinder;
-    private Map<Generator,VehicleBuffer> vehiclesBuffers;
+    private Map<Generator, VehicleBuffer> vehiclesBuffers;
 
     public VehicleManager(HistoryManager history, RoadManager roadManager) {
         historyManager = history;
@@ -37,30 +44,27 @@ public class VehicleManager {
 
     }
 
-    public void createTrafficGenerator(int goTimestamp, int returnTimestamp,
-                                       int vehicles, int carPercentage,
-                                       UUID A1, UUID A2) {
+    public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int carPercentage, UUID A1, UUID A2) {
         Road R1 = roadManager.getRoad(A1);
         Road R2 = roadManager.getRoad(A2);
-        Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage,vehicles/6);
-        VehicleBuffer B = new VehicleBuffer(R1,R2);
-        vehiclesBuffers.put(G,B);
-        G = new UniformGenerator(returnTimestamp, vehicles, carPercentage,vehicles/6);
-        B = new VehicleBuffer(R2,R1);
-        vehiclesBuffers.put(G,B);
+        Generator G = new UniformGenerator(goTimestamp, vehicles, carPercentage, vehicles / 6);
+        VehicleBuffer B = new VehicleBuffer(R1, R2);
+        vehiclesBuffers.put(G, B);
+        G = new UniformGenerator(returnTimestamp, vehicles, carPercentage, vehicles / 6);
+        B = new VehicleBuffer(R2, R1);
+        vehiclesBuffers.put(G, B);
     }
 
-    public void createRandomTrafficGenerator(int start,int stop,int vehicles,int carPercentage){
-        Generator G = new UniformGenerator(start,vehicles,carPercentage,stop-start);
+    public void createRandomTrafficGenerator(int start, int stop, int vehicles, int carPercentage) {
+        Generator G = new UniformGenerator(start, vehicles, carPercentage, stop - start);
         List<Road> possibleSpawns = roadManager.getRoads();
-        VehicleBuffer B = new VehicleBuffer(possibleSpawns,possibleSpawns);
-        vehiclesBuffers.put(G,B);
+        VehicleBuffer B = new VehicleBuffer(possibleSpawns, possibleSpawns);
+        vehiclesBuffers.put(G, B);
     }
-
 
 
     public void updateBuffers(long timestamp) {
-        for (Generator G : vehiclesBuffers.keySet()){
+        for (Generator G : vehiclesBuffers.keySet()) {
             vehiclesBuffers.get(G).addKernels(G.addVehicles(timestamp));
         }
     }
@@ -68,14 +72,14 @@ public class VehicleManager {
     private void insertBuffers() {
         int attempts;
         boolean res;
-        for(VehicleBuffer B : vehiclesBuffers.values()){
+        for (VehicleBuffer B : vehiclesBuffers.values()) {
             attempts = 0;
-            while(!B.isEmpty() && attempts < 5){
-                res = addVehicle(B.getKernel(),B.getSource(),B.getDestination());
-                if(res){
+            while (!B.isEmpty() && attempts < 5) {
+                res = addVehicle(B.getKernel(), B.getSource(), B.getDestination());
+                if (res) {
                     B.removeKernel();
-                }else {
-                    attempts ++;
+                } else {
+                    attempts++;
                 }
             }
         }
@@ -100,9 +104,9 @@ public class VehicleManager {
             return false;
         }
         Path myPath;
-        try{
+        try {
             myPath = pathFinder.getPathTo(startingLane.getInsertTrajectory(), stop.getId(), gen.nextBoolean());
-        }catch (DestinationUnreachableException e){
+        } catch (DestinationUnreachableException e) {
             e.printStackTrace();
             return false;
         }
@@ -156,12 +160,11 @@ public class VehicleManager {
         return stats;
     }
 
-    public void updatePath(){
+    public void updatePath() {
         for (Vehicle activeVehicle : activeVehicles) {
             Trajectory t = activeVehicle.getTrajectory();
-            if(t != null){
-                Path p = pathFinder.getPathTo(
-                        t, activeVehicle.getMyPath().getDestination().getRoadId(), gen.nextBoolean());
+            if (t != null) {
+                Path p = pathFinder.getPathTo(t, activeVehicle.getMyPath().getDestination().getRoadId(), gen.nextBoolean());
 
                 activeVehicle.updatePath(p);
             }

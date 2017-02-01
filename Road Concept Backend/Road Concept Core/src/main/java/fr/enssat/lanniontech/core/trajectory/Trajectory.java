@@ -3,7 +3,6 @@ package fr.enssat.lanniontech.core.trajectory;
 import fr.enssat.lanniontech.core.positioning.Position;
 import fr.enssat.lanniontech.core.roadElements.Congestion;
 import fr.enssat.lanniontech.core.roadElements.intersections.Intersection;
-import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformation;
 import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import fr.enssat.lanniontech.core.vehicleElements.Side;
 
@@ -92,12 +91,12 @@ public abstract class Trajectory {
     public Congestion getCongestion() {
         double notFreeSpace = 0;
         for (Side s : vehiclesSides) {
-            if (s.getLength() > 0){
+            if (s.getLength() > 0) {
                 notFreeSpace += s.getLength();
             }
         }
 
-        return new Congestion(notFreeSpace,length);
+        return new Congestion(notFreeSpace, length);
     }
 
     /**
@@ -137,7 +136,7 @@ public abstract class Trajectory {
 
     public abstract TrajectoryInformator getInformations(Side side, double distanceOut);
 
-    public abstract void getInformations(double pos,double distance,TrajectoryInformator informator);
+    public abstract void getInformations(double pos, double distance, TrajectoryInformator informator);
 
     /**
      * return the distance of the vehicle ahead

@@ -11,7 +11,6 @@ import fr.enssat.lanniontech.core.trajectory.informations.TrajectoryInformator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.UUID;
 
 public class Vehicle {
@@ -201,10 +200,10 @@ public class Vehicle {
         return stats;
     }
 
-    public Trajectory getTrajectory(){
-        if (backSide.getMyTrajectory() == frontSide.getMyTrajectory()){
+    public Trajectory getTrajectory() {
+        if (backSide.getMyTrajectory() == frontSide.getMyTrajectory()) {
             return frontSide.getMyTrajectory();
-        }else {
+        } else {
             return null;
         }
     }
