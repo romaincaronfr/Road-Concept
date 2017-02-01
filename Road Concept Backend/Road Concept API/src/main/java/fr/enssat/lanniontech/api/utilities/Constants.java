@@ -10,8 +10,8 @@ public final class Constants {
     // =======
 
     public static final String MONGODB_DATABASE_NAME = "RoadConcept";
-    //public static final String MONGODB_SERVER_URL = "mongodb";
-    public static final String MONGODB_SERVER_URL = "localhost";
+    public static final String MONGODB_SERVER_URL = "mongodb";
+    //public static final String MONGODB_SERVER_URL = "localhost";
     public static final int MONGODB_SERVER_PORT = 27017;
 
     // ==========
@@ -21,11 +21,10 @@ public final class Constants {
     public static final String POSTGRESQL_DATABASE_NAME = "roadconcept";
     public static final String POSTGRESQL_USER_NAME = "roadconcept";
     public static final String POSTGRESQL_USER_PASSWORD = "roadconcept"; //NOSONAR
-    //public static final String POSTGRESQL_SERVER_HOST = "postgresql";
-    public static final String POSTGRESQL_SERVER_HOST = "localhost";
+    public static final String POSTGRESQL_SERVER_HOST = "postgresql";
+    //public static final String POSTGRESQL_SERVER_HOST = "localhost";
 
     public static final int POSTGRESQL_MAX_CONNECTIONS = 100;
-    public static final int QUERY_PER_SQL_COMMIT = 30;
 
     // ERROR CODES
     // -----------
