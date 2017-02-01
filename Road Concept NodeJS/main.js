@@ -22,7 +22,7 @@ var server = http.createServer(function (request, res) {
     var ws = fs.createWriteStream(file_id + ".osm");
     console.log(file_id);
     request.on('error', function (err) {
-        console.error(err);
+        console.log(err);
     });
     request.on('data', function (data) {
         ws.write(data);

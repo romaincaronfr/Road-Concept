@@ -207,9 +207,13 @@ public class MapsVerticle extends AbstractVerticle {
                 LOGGER.info("File " + fileUpload.uploadedFileName() + " size is too large");
                 throw new FileTooLargeException(fileUpload.uploadedFileName());
             }
+            LOGGER.debug("@@@ IMPORT CHECKS OK");
 
             Buffer uploadedFile = vertx.fileSystem().readFileBlocking(fileUpload.uploadedFileName());
+            LOGGER.debug("@@@ UPLOADED FILE OK");
+
             String data = uploadedFile.toString();
+            LOGGER.debug("@@@ DATA OK");
 
             if (data.startsWith("<")) { // message.body() is XML Data that need to be converted
                 convertXMLAndImport(routingContext, mapID, currentUser, data);
@@ -232,9 +236,13 @@ public class MapsVerticle extends AbstractVerticle {
 
     private void convertXMLAndImport(RoutingContext routingContext, Integer mapID, User currentUser, String data) {
         vertx.eventBus().publish(Constants.BUS_OSMTOGEOJSON_SEND, data);
+        LOGGER.debug("@@@ PUBLISH OK");
+
         data = null; // memory
         consumer.handler(message -> {
             try {
+                LOGGER.debug("@@@ JAVA RECEIVE FROM JS");
+
                 int importedCount = mapService.importFromOSM(currentUser, mapID, message.body());
                 HttpResponseBuilder.buildOkResponse(routingContext, importedCount);
             } catch (Exception e) {
