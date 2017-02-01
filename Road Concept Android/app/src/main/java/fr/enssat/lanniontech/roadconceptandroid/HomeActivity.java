@@ -45,7 +45,6 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG,"Oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
@@ -89,7 +88,6 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
             GridLayoutManager gridLayoutManager = getLayoutManager(true);
             int size = gridLayoutManager.getSpanCount();
             mRecyclerView.setLayoutManager(gridLayoutManager);
-            Log.d(TAG, String.valueOf(size));
             if (size == 1){
                 item.setIcon(R.drawable.ic_view_module_white);
             } else {
@@ -117,7 +115,6 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
                     //mRecyclerViewSimulationOver.swapAdapter(new MapAdapter(response.body()),false);
                 } else {
                     if (response.code() == 401){
-                        Log.d(TAG,"401,try");
                         refreshLogin(HomeActivity.this,GET_MAP_LIST_REQUEST_CODE);
                     } else {
                         displayNetworkErrorDialog();
@@ -139,9 +136,7 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
     public void onNeedLogin(int code, boolean result) {
         switch (code){
             case GET_MAP_LIST_REQUEST_CODE:
-                Log.d(TAG,"onNeedLogin, GET_MAP_LIST_REQUEST_CODE");
                 if (result) {
-                    Log.d(TAG,"RESULT OK");
                     getMapList();
                 } else {
                     goToLogin();
@@ -151,7 +146,6 @@ public class HomeActivity extends NavigationDrawerActivity implements OnNeedLogi
 
     @Override
     public void onRefresh() {
-        Log.d(TAG,"onRefresh");
         getMapList();
     }
 
