@@ -2,6 +2,6 @@ package fr.enssat.lanniontech.core.generators;
 
 import java.util.List;
 
-public interface Generator {
-    List<VehicleKernel> addVehicles(long timestamp);
+public abstract class Generator {
+    public abstract List<VehicleKernel> addVehicles(long timestamp);
 }

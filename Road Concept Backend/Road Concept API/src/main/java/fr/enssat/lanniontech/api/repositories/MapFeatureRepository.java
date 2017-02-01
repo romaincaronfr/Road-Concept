@@ -52,7 +52,6 @@ public class MapFeatureRepository extends MapRepository {
             for (Feature feature : features) {
                 documents.add(Document.parse(JSONUtils.toJSON(feature)));
             }
-            LOGGER.debug("@@@ REPOSITORY - GOING TO INSERT IN COLLECTION");
             collection.insertMany(documents);
         }
     }

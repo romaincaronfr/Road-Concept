@@ -20,7 +20,6 @@ public class Position {
         return Tools.round(Math.sqrt(dX * dX + dY * dY) * 1000 * 40000 / 360, 1);
     }
 
-    @Override
     public String toString() {
         return "Longitude: " + longitude + " , Latitude: " + latitude;
     }
@@ -33,13 +32,12 @@ public class Position {
         return longitude;
     }
 
-    @Override
     public boolean equals(Object pos) {
-        return pos instanceof Position && equalsPos((Position) pos);
+        return pos instanceof Position && equals((Position) pos);
     }
 
-    private boolean equalsPos(Position pos) {
-        return pos != null && Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude - pos.getLongitude()) < E;
+    public boolean equals(Position pos) {
+        return Math.abs(latitude - pos.getLatitude()) < E && Math.abs(longitude - pos.getLongitude()) < E;
     }
 
     public static Position getMean(Position P1, Position P2) {

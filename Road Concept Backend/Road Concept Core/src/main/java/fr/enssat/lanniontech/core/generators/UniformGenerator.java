@@ -5,8 +5,8 @@ import java.util.List;
 
 public class UniformGenerator extends DiracGenerator {
 
-    private double step;
-    private double delta;
+    double step;
+    double delta;
 
     public UniformGenerator(int startTimestamp, //in seconds
                             int quantity, int carPercentage, double length) {

@@ -54,6 +54,11 @@ public class Simulator extends Observable implements Runnable {
         if (simulatorThread.isAlive()) {
             return false;
         } else {
+            //  UncaughtExceptionHandler h = (Thread th, Throwable ex) -> {
+            //      LOGGER.error("Exception in child thread");
+            //      ex.printStackTrace();
+            //  };
+            //   simulatorThread.setUncaughtExceptionHandler(h);
             this.samplingRate = samplingRate;
             this.length = length;
             this.precision = precision;

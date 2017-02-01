@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class VehicleBuffer {
-    private List<Road> sources;
-    private List<Road> destinations;
-    private List<VehicleKernel> kernels;
-    private Random gen;
+    List<Road> sources;
+    List<Road> destinations;
+    List<VehicleKernel> kernels;
+    Random gen;
 
     public VehicleBuffer() {
         this(new ArrayList<Road>(), new ArrayList<Road>());

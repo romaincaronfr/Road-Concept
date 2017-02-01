@@ -41,6 +41,7 @@ public class VehicleManager {
         this.roadManager = roadManager;
         gen = new Random();
         pathFinder = new PathFinder(roadManager);
+
     }
 
     public void createTrafficGenerator(int goTimestamp, int returnTimestamp, int vehicles, int carPercentage, UUID A1, UUID A2) {
